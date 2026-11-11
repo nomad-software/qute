@@ -340,3 +340,36 @@ func NewQAudioBufferInputWith(v QAudioBufferInputSubclass, parent qtcore.QObject
 	C.qute_QAudioBufferInput_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QAudioBufferInput
 }
+
+// NewQAudioBufferInputWithAudioFormatWith is NewQAudioBufferInputWithAudioFormat for a Go subclass: it constructs a QAudioBufferInput whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQAudioBufferInputWithAudioFormatWith(v QAudioBufferInputSubclass, format *QAudioFormat, parent qtcore.QObjectLike) *QAudioBufferInput {
+	rt.CheckThread("NewQAudioBufferInputWithAudioFormatWith")
+	base := v.quteQAudioBufferInputBase()
+	if base.QAudioBufferInput != nil {
+		panic("NewQAudioBufferInputWithAudioFormatWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQAudioBufferInputWithAudioFormatWith")
+	}
+	p := C.qute_QAudioBufferInput_new_shim_1(rt.UseArg(unsafe.Pointer(format), "NewQAudioBufferInputWithAudioFormatWith"), parentPtr)
+	runtime.KeepAlive(format)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QAudioBufferInput", mode)
+	base.QAudioBufferInput = rt.View[QAudioBufferInput](h, p)
+	id := h.SetSelf(v, qAudioBufferInputVTable)
+	mask := rt.Mask(v, qAudioBufferInputVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAudioBufferInput_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAudioBufferInput
+}

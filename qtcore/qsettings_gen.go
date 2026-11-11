@@ -730,3 +730,163 @@ func NewQSettingsWith(v QSettingsSubclass, parent QObjectLike) *QSettings {
 	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSettings
 }
+
+// NewQSettingsWithOrganizationWith is NewQSettingsWithOrganization for a Go subclass: it constructs a QSettings whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSettingsWithOrganizationWith(v QSettingsSubclass, organization string, application string, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithOrganizationWith")
+	base := v.quteQSettingsBase()
+	if base.QSettings != nil {
+		panic("NewQSettingsWithOrganizationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithOrganizationWith")
+	}
+	p := C.qute_QSettings_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSettings", mode)
+	base.QSettings = rt.View[QSettings](h, p)
+	id := h.SetSelf(v, qSettingsVTable)
+	mask := rt.Mask(v, qSettingsVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSettings
+}
+
+// NewQSettingsWithScopeWith is NewQSettingsWithScope for a Go subclass: it constructs a QSettings whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSettingsWithScopeWith(v QSettingsSubclass, scope QSettingsScope, organization string, application string, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithScopeWith")
+	base := v.quteQSettingsBase()
+	if base.QSettings != nil {
+		panic("NewQSettingsWithScopeWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScopeWith")
+	}
+	p := C.qute_QSettings_new_shim_2(C.int64_t(scope), (*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSettings", mode)
+	base.QSettings = rt.View[QSettings](h, p)
+	id := h.SetSelf(v, qSettingsVTable)
+	mask := rt.Mask(v, qSettingsVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSettings
+}
+
+// NewQSettingsWithFormatWith is NewQSettingsWithFormat for a Go subclass: it constructs a QSettings whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSettingsWithFormatWith(v QSettingsSubclass, format QSettingsFormat, scope QSettingsScope, organization string, application string, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithFormatWith")
+	base := v.quteQSettingsBase()
+	if base.QSettings != nil {
+		panic("NewQSettingsWithFormatWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithFormatWith")
+	}
+	p := C.qute_QSettings_new_shim_3(C.int64_t(format), C.int64_t(scope), (*C.char)(unsafe.Pointer(unsafe.StringData(organization))), C.ptrdiff_t(len(organization)), (*C.char)(unsafe.Pointer(unsafe.StringData(application))), C.ptrdiff_t(len(application)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSettings", mode)
+	base.QSettings = rt.View[QSettings](h, p)
+	id := h.SetSelf(v, qSettingsVTable)
+	mask := rt.Mask(v, qSettingsVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSettings
+}
+
+// NewQSettingsWithFileNameWith is NewQSettingsWithFileName for a Go subclass: it constructs a QSettings whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSettingsWithFileNameWith(v QSettingsSubclass, fileName string, format QSettingsFormat, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithFileNameWith")
+	base := v.quteQSettingsBase()
+	if base.QSettings != nil {
+		panic("NewQSettingsWithFileNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithFileNameWith")
+	}
+	p := C.qute_QSettings_new_shim_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), C.int64_t(format), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSettings", mode)
+	base.QSettings = rt.View[QSettings](h, p)
+	id := h.SetSelf(v, qSettingsVTable)
+	mask := rt.Mask(v, qSettingsVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSettings
+}
+
+// NewQSettingsWithScopeOnlyWith is NewQSettingsWithScopeOnly for a Go subclass: it constructs a QSettings whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSettingsWithScopeOnlyWith(v QSettingsSubclass, scope QSettingsScope, parent QObjectLike) *QSettings {
+	rt.CheckThread("NewQSettingsWithScopeOnlyWith")
+	base := v.quteQSettingsBase()
+	if base.QSettings != nil {
+		panic("NewQSettingsWithScopeOnlyWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSettingsWithScopeOnlyWith")
+	}
+	p := C.qute_QSettings_new_shim_5(C.int64_t(scope), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSettings", mode)
+	base.QSettings = rt.View[QSettings](h, p)
+	id := h.SetSelf(v, qSettingsVTable)
+	mask := rt.Mask(v, qSettingsVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSettings_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSettings
+}

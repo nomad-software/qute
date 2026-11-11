@@ -294,9 +294,27 @@ func QVersionNumberCommonPrefix(v1 *QVersionNumber, v2 *QVersionNumber) *QVersio
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; QVersionNumberFromStringFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qversionnumber.html#fromString
 func QVersionNumberFromString(stringArg string) *QVersionNumber {
 	rt.CheckThread("QVersionNumberFromString")
 	r := C.qute_QVersionNumber_fromString((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
 	return rt.View[QVersionNumber](rt.WrapClass(r, "QVersionNumber", rt.TakeOwned), r)
+}
+
+// QVersionNumberFromStringFull wraps QVersionNumber::fromString.
+//
+//	C++: QVersionNumber QVersionNumber::fromString(QAnyStringView string, qsizetype * suffixIndex = …)
+//
+// Ownership: the result is an Owned copy.
+//
+// QVersionNumberFromStringFull is QVersionNumberFromString with every argument, including those QVersionNumberFromString leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qversionnumber.html#fromString
+func QVersionNumberFromStringFull(stringArg string) (*QVersionNumber, int64) {
+	rt.CheckThread("QVersionNumberFromStringFull")
+	var suffixIndexOut C.longlong
+	r := C.qute_QVersionNumber_fromString_1((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)), &suffixIndexOut)
+	return rt.View[QVersionNumber](rt.WrapClass(r, "QVersionNumber", rt.TakeOwned), r), int64(suffixIndexOut)
 }

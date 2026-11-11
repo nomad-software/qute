@@ -1761,3 +1761,35 @@ func NewQMenuWith(v QMenuSubclass, parent QWidgetLike) *QMenu {
 	C.qute_QMenu_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QMenu
 }
+
+// NewQMenuWithTitleWith is NewQMenuWithTitle for a Go subclass: it constructs a QMenu whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQMenuWithTitleWith(v QMenuSubclass, title string, parent QWidgetLike) *QMenu {
+	rt.CheckThread("NewQMenuWithTitleWith")
+	base := v.quteQMenuBase()
+	if base.QMenu != nil {
+		panic("NewQMenuWithTitleWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQMenuWithTitleWith")
+	}
+	p := C.qute_QMenu_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMenu", mode)
+	base.QMenu = rt.View[QMenu](h, p)
+	id := h.SetSelf(v, qMenuVTable)
+	mask := rt.Mask(v, qMenuVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QMenu_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QMenu
+}

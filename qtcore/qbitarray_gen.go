@@ -320,6 +320,8 @@ func (this *QBitArray) Bits() string {
 //
 //	C++: quint32 QBitArray::toUInt32(QSysInfo::Endian endianness, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToUInt32Full takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qbitarray.html#toUInt32
 func (this *QBitArray) ToUInt32(endianness QSysInfoEndian) uint {
 	self := rt.Use(unsafe.Pointer(this), "QBitArray.ToUInt32")
@@ -340,6 +342,21 @@ func (this *QBitArray) FillFull(aval bool, asize int) bool {
 	r := C.qute_QBitArray_fill_2(self, C.bool(aval), C.longlong(asize))
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// ToUInt32Full wraps QBitArray::toUInt32.
+//
+//	C++: quint32 QBitArray::toUInt32(QSysInfo::Endian endianness, bool * ok = …) const
+//
+// ToUInt32Full is ToUInt32 with every argument, including those ToUInt32 leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitarray.html#toUInt32
+func (this *QBitArray) ToUInt32Full(endianness QSysInfoEndian) (uint, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QBitArray.ToUInt32Full")
+	var okOut C.bool
+	r := C.qute_QBitArray_toUInt32_1(self, C.int64_t(endianness), &okOut)
+	runtime.KeepAlive(this)
+	return uint(r), bool(okOut)
 }
 
 // QBitArrayFromBits wraps QBitArray::fromBits.

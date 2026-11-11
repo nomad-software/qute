@@ -25,7 +25,7 @@ type QMouseEventLike interface{ AsQMouseEvent() *QMouseEvent }
 func (this *QMouseEvent) AsQMouseEvent() *QMouseEvent { return this }
 
 func init() {
-	rt.RegisterClass("QMouseEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QMouseEvent_delete(p) })
+	rt.RegisterClass("QMouseEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QMouseEvent_delete(p) })
 }
 
 // QMouseEventFromPtr wraps an existing C++ QMouseEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,129 @@ func QMouseEventCast(e qtcore.QEventLike) *QMouseEvent {
 	r := rt.View[QMouseEvent](rt.WrapClassFrom(p, "QMouseEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQMouseEvent wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQMouseEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEvent(typeArg qtcore.QEventType, localPos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QMouseEvent {
+	rt.CheckThread("NewQMouseEvent")
+	p := C.qute_QMouseEvent_new(C.int64_t(typeArg), cQPointF(localPos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers))
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	return rt.View[QMouseEvent](h, p)
+}
+
+// NewQMouseEventWithScenePos wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQMouseEventWithScenePosFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEventWithScenePos(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QMouseEvent {
+	rt.CheckThread("NewQMouseEventWithScenePos")
+	p := C.qute_QMouseEvent_new_1(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers))
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	return rt.View[QMouseEvent](h, p)
+}
+
+// NewQMouseEventWithSource wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::MouseEventSource source, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQMouseEventWithSourceFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEventWithSource(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, source qtcore.MouseEventSource) *QMouseEvent {
+	rt.CheckThread("NewQMouseEventWithSource")
+	p := C.qute_QMouseEvent_new_2(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(source))
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	return rt.View[QMouseEvent](h, p)
+}
+
+// NewQMouseEventFull wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQMouseEventFull is NewQMouseEvent with every argument, including those NewQMouseEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEventFull(typeArg qtcore.QEventType, localPos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, device QPointingDeviceLike) *QMouseEvent {
+	rt.CheckThread("NewQMouseEventFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQMouseEventFull")
+	}
+	p := C.qute_QMouseEvent_new_3(C.int64_t(typeArg), cQPointF(localPos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
+	return rt.View[QMouseEvent](h, p)
+}
+
+// NewQMouseEventWithScenePosFull wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQMouseEventWithScenePosFull is NewQMouseEventWithScenePos with every argument, including those NewQMouseEventWithScenePos leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEventWithScenePosFull(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, device QPointingDeviceLike) *QMouseEvent {
+	rt.CheckThread("NewQMouseEventWithScenePosFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQMouseEventWithScenePosFull")
+	}
+	p := C.qute_QMouseEvent_new_4(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
+	return rt.View[QMouseEvent](h, p)
+}
+
+// NewQMouseEventWithSourceFull wraps the QMouseEvent constructor.
+//
+//	C++: QMouseEvent::QMouseEvent(Type type, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::MouseEventSource source, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQMouseEventWithSourceFull is NewQMouseEventWithSource with every argument, including those NewQMouseEventWithSource leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmouseevent.html#QMouseEvent
+func NewQMouseEventWithSourceFull(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, source qtcore.MouseEventSource, device QPointingDeviceLike) *QMouseEvent {
+	rt.CheckThread("NewQMouseEventWithSourceFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQMouseEventWithSourceFull")
+	}
+	p := C.qute_QMouseEvent_new_5(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(source), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
+	return rt.View[QMouseEvent](h, p)
 }
 
 // Pos wraps QMouseEvent::pos.

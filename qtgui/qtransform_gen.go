@@ -359,6 +359,8 @@ func (this *QTransform) SetMatrix(m11 float64, m12 float64, m13 float64, m21 flo
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; InvertedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qtransform.html#inverted
 func (this *QTransform) Inverted() *QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QTransform.Inverted")
@@ -644,6 +646,23 @@ func (this *QTransform) MapRectF(rectF qtcore.QRectF) qtcore.QRectF {
 	r := C.qute_QTransform_mapRect_1(self, cQRectF(rectF))
 	runtime.KeepAlive(this)
 	return goQRectF(r)
+}
+
+// InvertedFull wraps QTransform::inverted.
+//
+//	C++: QTransform QTransform::inverted(bool * invertible = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// InvertedFull is Inverted with every argument, including those Inverted leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#inverted
+func (this *QTransform) InvertedFull() (*QTransform, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.InvertedFull")
+	var invertibleOut C.bool
+	r := C.qute_QTransform_inverted_1(self, &invertibleOut)
+	runtime.KeepAlive(this)
+	return rt.View[QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r), bool(invertibleOut)
 }
 
 // RotateFull wraps QTransform::rotate.

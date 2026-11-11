@@ -75,6 +75,16 @@ extern "C" void qute_rt_watch(void *obj) {
     });
 }
 
+namespace {
+// d_ptr is protected; a pointer to member taken through a subclass reads it
+// on any QObject without a cast to a type the object is not.
+struct DPeek : QObject {
+    static QObjectData *of(QObject *o) { return (o->*(&DPeek::d_ptr)).data(); }
+};
+} // namespace
+
+extern "C" bool qute_rt_dying(void *obj) { return DPeek::of(static_cast<QObject *>(obj))->wasDeleted; }
+
 extern "C" bool qute_rt_has_parent(void *obj) { return static_cast<QObject *>(obj)->parent() != nullptr; }
 
 extern "C" void *qute_rt_root(void *obj) {

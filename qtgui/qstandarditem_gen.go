@@ -1487,3 +1487,73 @@ func NewQStandardItemWith(v QStandardItemSubclass) *QStandardItem {
 	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QStandardItem
 }
+
+// NewQStandardItemWithTextWith is NewQStandardItemWithText for a Go subclass: it constructs a QStandardItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStandardItemWithTextWith(v QStandardItemSubclass, text string) *QStandardItem {
+	rt.CheckThread("NewQStandardItemWithTextWith")
+	base := v.quteQStandardItemBase()
+	if base.QStandardItem != nil {
+		panic("NewQStandardItemWithTextWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QStandardItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	base.QStandardItem = rt.View[QStandardItem](h, p)
+	id := h.SetSelf(v, qStandardItemVTable)
+	mask := rt.Mask(v, qStandardItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStandardItem
+}
+
+// NewQStandardItemWithIconWith is NewQStandardItemWithIcon for a Go subclass: it constructs a QStandardItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStandardItemWithIconWith(v QStandardItemSubclass, icon *QIcon, text string) *QStandardItem {
+	rt.CheckThread("NewQStandardItemWithIconWith")
+	base := v.quteQStandardItemBase()
+	if base.QStandardItem != nil {
+		panic("NewQStandardItemWithIconWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QStandardItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(icon)
+	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	base.QStandardItem = rt.View[QStandardItem](h, p)
+	id := h.SetSelf(v, qStandardItemVTable)
+	mask := rt.Mask(v, qStandardItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStandardItem
+}
+
+// NewQStandardItemWithRowsWith is NewQStandardItemWithRows for a Go subclass: it constructs a QStandardItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStandardItemWithRowsWith(v QStandardItemSubclass, rows int) *QStandardItem {
+	rt.CheckThread("NewQStandardItemWithRowsWith")
+	base := v.quteQStandardItemBase()
+	if base.QStandardItem != nil {
+		panic("NewQStandardItemWithRowsWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QStandardItem_new_shim_3(C.int(rows))
+	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	base.QStandardItem = rt.View[QStandardItem](h, p)
+	id := h.SetSelf(v, qStandardItemVTable)
+	mask := rt.Mask(v, qStandardItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStandardItem
+}

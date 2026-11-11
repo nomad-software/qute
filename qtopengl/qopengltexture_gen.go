@@ -681,8 +681,6 @@ func (this *QOpenGLTexture) SetCompressedData(dataSize int, data unsafe.Pointer)
 //
 //	C++: void QOpenGLTexture::setData(const QImage & image, MipMapGeneration genMipMaps = …)
 //
-// Arguments with C++ defaults are left at them; SetDataFull takes every argument.
-//
 // Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#setData
 func (this *QOpenGLTexture) SetData(image *qtgui.QImage) {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetData")
@@ -1247,20 +1245,6 @@ func (this *QOpenGLTexture) ReleaseWithUnitFull(unit uint, reset QOpenGLTextureT
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.ReleaseWithUnitFull")
 	C.qute_QOpenGLTexture_release_2(self, C.uint(unit), C.int64_t(reset))
 	runtime.KeepAlive(this)
-}
-
-// SetDataFull wraps QOpenGLTexture::setData.
-//
-//	C++: void QOpenGLTexture::setData(const QImage & image, MipMapGeneration genMipMaps = …)
-//
-// SetDataFull is SetData with every argument, including those SetData leaves at their C++ defaults.
-//
-// Qt docs: https://doc.qt.io/qt-6/qopengltexture.html#setData
-func (this *QOpenGLTexture) SetDataFull(image *qtgui.QImage, genMipMaps QOpenGLTextureMipMapGeneration) {
-	self := rt.Use(unsafe.Pointer(this), "QOpenGLTexture.SetDataFull")
-	C.qute_QOpenGLTexture_setData_11(self, rt.UseArg(unsafe.Pointer(image), "QOpenGLTexture.SetDataFull"), C.int64_t(genMipMaps))
-	runtime.KeepAlive(this)
-	runtime.KeepAlive(image)
 }
 
 // GenerateMipMapsWithBaseLevelFull wraps QOpenGLTexture::generateMipMaps.

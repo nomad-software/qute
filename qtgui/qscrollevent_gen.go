@@ -25,7 +25,7 @@ type QScrollEventLike interface{ AsQScrollEvent() *QScrollEvent }
 func (this *QScrollEvent) AsQScrollEvent() *QScrollEvent { return this }
 
 func init() {
-	rt.RegisterClass("QScrollEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QScrollEvent_delete(p) })
+	rt.RegisterClass("QScrollEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QScrollEvent_delete(p) })
 }
 
 // QScrollEventFromPtr wraps an existing C++ QScrollEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QScrollEventCast(e qtcore.QEventLike) *QScrollEvent {
 	r := rt.View[QScrollEvent](rt.WrapClassFrom(p, "QScrollEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQScrollEventWithPointF wraps the QScrollEvent constructor.
+//
+//	C++: QScrollEvent::QScrollEvent(const QPointF & contentPos, const QPointF & overshoot, ScrollState scrollState)
+//
+// Qt docs: https://doc.qt.io/qt-6/qscrollevent.html#QScrollEvent
+func NewQScrollEventWithPointF(contentPos qtcore.QPointF, overshoot qtcore.QPointF, scrollState QScrollEventScrollState) *QScrollEvent {
+	rt.CheckThread("NewQScrollEventWithPointF")
+	p := C.qute_QScrollEvent_new(cQPointF(contentPos), cQPointF(overshoot), C.int64_t(scrollState))
+	h := rt.WrapClass(p, "QScrollEvent", rt.NewOwned)
+	return rt.View[QScrollEvent](h, p)
 }
 
 // ContentPos wraps QScrollEvent::contentPos.

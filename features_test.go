@@ -234,3 +234,29 @@ func TestEveryGUIVariantKindRoundTrips(t *testing.T) {
 		}
 	})
 }
+
+// A defaulted out-parameter (bool *ok) is a result of the method's Full
+// form: these used to have no Full form at all.
+func TestDefaultedOutParameters(t *testing.T) {
+	qutetest.Run(t, func() {
+		loc := qtcore.NewQLocale()
+		if n, ok := loc.ToIntFull("12"); n != 12 || !ok {
+			t.Errorf(`ToIntFull("12") = %d, %v`, n, ok)
+		}
+		if _, ok := loc.ToIntFull("twelve"); ok {
+			t.Error(`ToIntFull("twelve") reported ok`)
+		}
+		if _, ok := qtcore.NewQVariantWithString("x").ToIntFull(); ok {
+			t.Error(`a QVariant of "x" converted to an int`)
+		}
+		singular := qtgui.NewQTransformAffine(0, 0, 0, 0, 0, 0)
+		if _, ok := singular.InvertedFull(); ok {
+			t.Error("a singular transform reported invertible")
+		}
+		l := qtcore.NewQLineFWithPointF(qtcore.QPointF{}, qtcore.QPointF{X: 10, Y: 10})
+		kind, at := l.IntersectsFull(qtcore.NewQLineFWithPointF(qtcore.QPointF{Y: 10}, qtcore.QPointF{X: 10}))
+		if kind != qtcore.QLineFBoundedIntersection || at != (qtcore.QPointF{X: 5, Y: 5}) {
+			t.Errorf("IntersectsFull = %v, %v, want a bounded intersection at (5, 5)", kind, at)
+		}
+	})
+}

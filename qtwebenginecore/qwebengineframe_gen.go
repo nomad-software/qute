@@ -185,12 +185,15 @@ func (this *QWebEngineFrame) IsMainFrame() bool {
 // Qt docs: https://doc.qt.io/qt-6/qwebengineframe.html#runJavaScript
 func (this *QWebEngineFrame) RunJavaScriptWithFunc(script string, callback func(*qtcore.QVariant)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineFrame.RunJavaScriptWithFunc")
-	callbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		callback(p0)
-	})
+	var callbackID uintptr
+	if callback != nil {
+		callbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			callback(p0)
+		})
+	}
 	C.qute_QWebEngineFrame_runJavaScript(self, (*C.char)(unsafe.Pointer(unsafe.StringData(script))), C.ptrdiff_t(len(script)), C.uintptr_t(callbackID))
 	runtime.KeepAlive(this)
 }
@@ -202,12 +205,15 @@ func (this *QWebEngineFrame) RunJavaScriptWithFunc(script string, callback func(
 // Qt docs: https://doc.qt.io/qt-6/qwebengineframe.html#runJavaScript
 func (this *QWebEngineFrame) RunJavaScriptWithWorldId(script string, worldId uint, callback func(*qtcore.QVariant)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineFrame.RunJavaScriptWithWorldId")
-	callbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		callback(p0)
-	})
+	var callbackID uintptr
+	if callback != nil {
+		callbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			callback(p0)
+		})
+	}
 	C.qute_QWebEngineFrame_runJavaScript_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(script))), C.ptrdiff_t(len(script)), C.uint(worldId), C.uintptr_t(callbackID))
 	runtime.KeepAlive(this)
 }
@@ -243,12 +249,15 @@ func (this *QWebEngineFrame) PrintToPdf(filePath string) {
 // Qt docs: https://doc.qt.io/qt-6/qwebengineframe.html#printToPdf
 func (this *QWebEngineFrame) PrintToPdfFunc(callback func([]byte)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineFrame.PrintToPdfFunc")
-	callbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := quteBytes(*(*C.qute_str)(a[0]))
-		_ = ret
-		callback(p0)
-	})
+	var callbackID uintptr
+	if callback != nil {
+		callbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := quteBytes(*(*C.qute_str)(a[0]))
+			_ = ret
+			callback(p0)
+		})
+	}
 	C.qute_QWebEngineFrame_printToPdf_1(self, C.uintptr_t(callbackID))
 	runtime.KeepAlive(this)
 }

@@ -981,6 +981,10 @@ void * qute_QGraphicsSvgItem_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QGraphicsSvgItem *>(new qute_QGraphicsSvgItem(static_cast<QGraphicsItem *>(a0)));
 }
+void * qute_QGraphicsSvgItem_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QGraphicsSvgItem *>(new qute_QGraphicsSvgItem(QString::fromUtf8(a0, a0_len), static_cast<QGraphicsItem *>(a1)));
+}
 void qute_QGraphicsSvgItem_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QGraphicsSvgItem *>(static_cast<QGraphicsSvgItem *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -1222,6 +1226,10 @@ void * qute_QSvgWidget_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 void * qute_QSvgWidget_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QSvgWidget *>(new qute_QSvgWidget(static_cast<QWidget *>(a0)));
+}
+void * qute_QSvgWidget_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QSvgWidget *>(new qute_QSvgWidget(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void qute_QSvgWidget_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();

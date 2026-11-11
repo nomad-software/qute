@@ -150,6 +150,10 @@ void * qute_QSvgGenerator_new_shim(void) {
 	qute_gui_only();
 	return static_cast<QSvgGenerator *>(new qute_QSvgGenerator());
 }
+void * qute_QSvgGenerator_new_shim_1(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QSvgGenerator *>(new qute_QSvgGenerator(static_cast<QSvgGenerator::SvgVersion>(a0)));
+}
 void qute_QSvgGenerator_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QSvgGenerator *>(static_cast<QSvgGenerator *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -251,6 +255,18 @@ void * qute_QSvgRenderer_new_3(void * a0, void * a1) {
 void * qute_QSvgRenderer_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(static_cast<QObject *>(a0)));
+}
+void * qute_QSvgRenderer_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+}
+void * qute_QSvgRenderer_new_shim_2(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(QByteArray(a0, a0_len), static_cast<QObject *>(a1)));
+}
+void * qute_QSvgRenderer_new_shim_3(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(static_cast<QXmlStreamReader *>(a0), static_cast<QObject *>(a1)));
 }
 void qute_QSvgRenderer_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();

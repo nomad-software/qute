@@ -439,3 +439,42 @@ func NewQPropertyAnimationWith(v QPropertyAnimationSubclass, parent QObjectLike)
 	C.qute_QPropertyAnimation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QPropertyAnimation
 }
+
+// NewQPropertyAnimationWithObjectWith is NewQPropertyAnimationWithObject for a Go subclass: it constructs a QPropertyAnimation whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPropertyAnimationWithObjectWith(v QPropertyAnimationSubclass, target QObjectLike, propertyName []byte, parent QObjectLike) *QPropertyAnimation {
+	rt.CheckThread("NewQPropertyAnimationWithObjectWith")
+	base := v.quteQPropertyAnimationBase()
+	if base.QPropertyAnimation != nil {
+		panic("NewQPropertyAnimationWithObjectWith: value is already constructed; use a fresh value")
+	}
+	var targetPtr unsafe.Pointer
+	var targetH *rt.Handle
+	if target != nil {
+		targetPtr, targetH = rt.Arg(unsafe.Pointer(target.AsQObject()), "NewQPropertyAnimationWithObjectWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQPropertyAnimationWithObjectWith")
+	}
+	p := C.qute_QPropertyAnimation_new_shim_1(targetPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(propertyName))), C.ptrdiff_t(len(propertyName)), parentPtr)
+	runtime.KeepAlive(target)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QPropertyAnimation", mode)
+	rt.KeepArg(h, "target", targetH, false)
+	base.QPropertyAnimation = rt.View[QPropertyAnimation](h, p)
+	id := h.SetSelf(v, qPropertyAnimationVTable)
+	mask := rt.Mask(v, qPropertyAnimationVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPropertyAnimation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPropertyAnimation
+}

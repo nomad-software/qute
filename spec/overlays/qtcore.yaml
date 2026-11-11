@@ -59,7 +59,21 @@ QChildEvent:
   child: { return: borrowed }
 
 QEvent:
-  clone: { return: transfer-to-go, doc: "Returns a new copy; the caller owns it.", test: "skip: event objects cannot be constructed from Go" }
+  QEvent: { name: NewQEvent, doc: "A custom event (a type from QEventRegisterEventType, or QEventUser and above) to send or post." }
+  clone:
+    return: transfer-to-go
+    doc: "Returns a new copy; the caller owns it."
+    test: |
+      e := qtcore.NewQEvent(qtcore.QEventUser)
+      c := e.Clone()
+      if got := c.Ownership(); got != qtcore.Owned {
+      	t.Errorf("clone: %v, want Owned", got)
+      }
+      if c.Type() != qtcore.QEventUser {
+      	t.Errorf("clone type: %v", c.Type())
+      }
+      c.Delete()
+      e.Delete()
 
 QItemSelectionModel:
   emitSelectionChanged: { name: EmitSelectionChangedBetween, doc: "Emits selectionChanged with the differences between newSelection and oldSelection." }
@@ -75,6 +89,7 @@ QPersistentModelIndex:
   model: { return: borrowed }
 
 QDate:
+  weekNumber: { args: { yearNum: out } }
   fromString(QStringView, QStringView, QCalendar): { skip: "use the QString overload" }
   fromString(QStringView, QStringView, int, QCalendar): { name: QDateFromStringFormatYearCalendar }
   fromString(const QString&, const QString&, QCalendar): { name: QDateFromStringFormatCalendar }
@@ -114,6 +129,8 @@ QTime:
   fromString(const QString&, const QString&): { name: QTimeFromStringFormat }
 
 QFile:
+  moveToTrash(const QString&, QString*): { args: { pathInTrash: out } }
+  copy: { no-full: "a std::optional permissions argument; set them with SetPermissions after copying" }
   open(QIODeviceBase::OpenMode, QFileDevice::Permissions): { name: OpenWithPermissions }
   open(int, QIODeviceBase::OpenMode, QFileDevice::FileHandleFlags): { name: OpenFd }
   decodeName(const char*): { skip: "use the []byte overload" }
@@ -131,6 +148,13 @@ QSettings:
   value(QAnyStringView): { name: Value }
 
 QVariant:
+  toInt: { args: { ok: out } }
+  toUInt: { args: { ok: out } }
+  toLongLong: { args: { ok: out } }
+  toULongLong: { args: { ok: out } }
+  toDouble: { args: { ok: out } }
+  toFloat: { args: { ok: out } }
+  toReal: { args: { ok: out } }
   QVariant(const QStringList&): { name: NewQVariantWithStrings }
   load: { reviewed: true }
   save: { reviewed: true }
@@ -140,6 +164,16 @@ QVariant:
   QVariant(const QPersistentModelIndex&): { name: NewQVariantWithPersistentIndex }
 
 QLocale:
+  toShort: { args: { ok: out } }
+  toUShort: { args: { ok: out } }
+  toInt: { args: { ok: out } }
+  toUInt: { args: { ok: out } }
+  toLong: { args: { ok: out } }
+  toULong: { args: { ok: out } }
+  toLongLong: { args: { ok: out } }
+  toULongLong: { args: { ok: out } }
+  toFloat: { args: { ok: out } }
+  toDouble: { args: { ok: out } }
   toString(int, int, char32_t): { name: ToStringPadded }
   toString(long, int, char32_t): { name: ToStringLongPadded }
   toString(qlonglong, int, char32_t): { name: ToStringInt64Padded }
@@ -390,6 +424,7 @@ QObjectCleanupHandler:
       o.Delete()
 
 QProcess:
+  startDetached: { args: { pid: out } }
   setChildProcessModifier: { skip: "on purpose: the modifier runs in the forked child, where the Go runtime cannot run" }
   failChildProcessModifier: { skip: "on purpose: only valid inside a child process modifier, which is not bound" }
   setStandardOutputProcess: { args: { destination: keep }, reviewed: true }
@@ -428,6 +463,7 @@ QTemporaryFile:
   createNativeFile: { return: transfer-to-go, reviewed: true, doc: "Returns a new temporary file, or nil if the file is already native; the caller owns it." }
 
 QVersionNumber:
+  fromString: { args: { suffixIndex: out } }
   QVersionNumber(QSpan<const int>): { skip: "use the major, minor and micro constructors" }
 
 QXmlStreamReader:
@@ -446,6 +482,8 @@ QXmlStreamWriter:
   QXmlStreamWriter(QString*): { skip: "on purpose: the writer keeps a pointer to the string, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data())" }
 
 QMetaEnum:
+  keyToValue: { args: { ok: out } }
+  keysToValue: { args: { ok: out } }
   enclosingMetaObject: { return: borrowed }
   value64: { skip: "an optional integer result; use Value" }
   keyToValue64: { skip: "an optional integer result; use KeyToValue" }
@@ -494,3 +532,13 @@ QTranslator:
       	t.Errorf("translation %q after the caller changed its slice, want %q", got, "Bonjour")
       }
       tr.Delete()
+
+QDir:
+  mkdir: { no-full: "a std::optional permissions argument; set them with QFile.SetPermissions after making the folder" }
+  mkpath: { no-full: "a std::optional permissions argument; set them with QFile.SetPermissions after making the folders" }
+
+QLineF:
+  intersects: { args: { intersectionPoint: out } }
+
+QBitArray:
+  toUInt32: { args: { ok: out } }

@@ -25,7 +25,7 @@ type QGestureEventLike interface{ AsQGestureEvent() *QGestureEvent }
 func (this *QGestureEvent) AsQGestureEvent() *QGestureEvent { return this }
 
 func init() {
-	rt.RegisterClass("QGestureEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGestureEvent_delete(p) })
+	rt.RegisterClass("QGestureEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGestureEvent_delete(p) })
 }
 
 // QGestureEventFromPtr wraps an existing C++ QGestureEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,27 @@ func QGestureEventCast(e qtcore.QEventLike) *QGestureEvent {
 	r := rt.View[QGestureEvent](rt.WrapClassFrom(p, "QGestureEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGestureEventWithGestures wraps the QGestureEvent constructor.
+//
+//	C++: QGestureEvent::QGestureEvent(const QList<QGesture *> & gestures)
+//
+// Ownership: gestures is borrowed for the call only.
+//
+// The event does not own the gestures; keep them alive while the event lives.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgestureevent.html#QGestureEvent
+func NewQGestureEventWithGestures(gestures []*QGesture) *QGestureEvent {
+	rt.CheckThread("NewQGestureEventWithGestures")
+	gesturesC := make([]unsafe.Pointer, len(gestures))
+	for i := range gestures {
+		gesturesC[i] = rt.UseArg(unsafe.Pointer(gestures[i]), "NewQGestureEventWithGestures")
+	}
+	p := C.qute_QGestureEvent_new(unsafe.Pointer(unsafe.SliceData(gesturesC)), C.ptrdiff_t(len(gestures)))
+	runtime.KeepAlive(gestures)
+	h := rt.WrapClass(p, "QGestureEvent", rt.NewOwned)
+	return rt.View[QGestureEvent](h, p)
 }
 
 // Gestures wraps QGestureEvent::gestures.

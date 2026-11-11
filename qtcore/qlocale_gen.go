@@ -233,6 +233,8 @@ func (this *QLocale) NativeTerritoryName() string {
 //
 //	C++: short QLocale::toShort(const QString & s, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToShortFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toShort
 func (this *QLocale) ToShort(sArg string) int16 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToShort")
@@ -244,6 +246,8 @@ func (this *QLocale) ToShort(sArg string) int16 {
 // ToUShort wraps QLocale::toUShort.
 //
 //	C++: ushort QLocale::toUShort(const QString & s, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToUShortFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toUShort
 func (this *QLocale) ToUShort(sArg string) uint16 {
@@ -257,6 +261,8 @@ func (this *QLocale) ToUShort(sArg string) uint16 {
 //
 //	C++: int QLocale::toInt(const QString & s, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToIntFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toInt
 func (this *QLocale) ToInt(sArg string) int {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToInt")
@@ -268,6 +274,8 @@ func (this *QLocale) ToInt(sArg string) int {
 // ToUInt wraps QLocale::toUInt.
 //
 //	C++: uint QLocale::toUInt(const QString & s, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToUIntFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toUInt
 func (this *QLocale) ToUInt(sArg string) uint {
@@ -281,6 +289,8 @@ func (this *QLocale) ToUInt(sArg string) uint {
 //
 //	C++: long QLocale::toLong(const QString & s, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToLongFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toLong
 func (this *QLocale) ToLong(sArg string) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLong")
@@ -292,6 +302,8 @@ func (this *QLocale) ToLong(sArg string) int64 {
 // ToULong wraps QLocale::toULong.
 //
 //	C++: ulong QLocale::toULong(const QString & s, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToULongFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toULong
 func (this *QLocale) ToULong(sArg string) uint64 {
@@ -305,6 +317,8 @@ func (this *QLocale) ToULong(sArg string) uint64 {
 //
 //	C++: qlonglong QLocale::toLongLong(const QString & s, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToLongLongFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toLongLong
 func (this *QLocale) ToLongLong(sArg string) int64 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLongLong")
@@ -316,6 +330,8 @@ func (this *QLocale) ToLongLong(sArg string) int64 {
 // ToULongLong wraps QLocale::toULongLong.
 //
 //	C++: qulonglong QLocale::toULongLong(const QString & s, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToULongLongFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toULongLong
 func (this *QLocale) ToULongLong(sArg string) uint64 {
@@ -329,6 +345,8 @@ func (this *QLocale) ToULongLong(sArg string) uint64 {
 //
 //	C++: float QLocale::toFloat(const QString & s, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToFloatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toFloat
 func (this *QLocale) ToFloat(sArg string) float32 {
 	self := rt.Use(unsafe.Pointer(this), "QLocale.ToFloat")
@@ -340,6 +358,8 @@ func (this *QLocale) ToFloat(sArg string) float32 {
 // ToDouble wraps QLocale::toDouble.
 //
 //	C++: double QLocale::toDouble(const QString & s, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToDoubleFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDouble
 func (this *QLocale) ToDouble(sArg string) float64 {
@@ -1369,6 +1389,156 @@ func (this *QLocale) Bcp47NameFull(separator QLocaleTagSeparator) string {
 	r := C.qute_QLocale_bcp47Name_1(self, C.int64_t(separator))
 	runtime.KeepAlive(this)
 	return quteStr(r)
+}
+
+// ToShortFull wraps QLocale::toShort.
+//
+//	C++: short QLocale::toShort(const QString & s, bool * ok = …) const
+//
+// ToShortFull is ToShort with every argument, including those ToShort leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toShort
+func (this *QLocale) ToShortFull(sArg string) (int16, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToShortFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toShort_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return int16(r), bool(okOut)
+}
+
+// ToUShortFull wraps QLocale::toUShort.
+//
+//	C++: ushort QLocale::toUShort(const QString & s, bool * ok = …) const
+//
+// ToUShortFull is ToUShort with every argument, including those ToUShort leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toUShort
+func (this *QLocale) ToUShortFull(sArg string) (uint16, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToUShortFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toUShort_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return uint16(r), bool(okOut)
+}
+
+// ToIntFull wraps QLocale::toInt.
+//
+//	C++: int QLocale::toInt(const QString & s, bool * ok = …) const
+//
+// ToIntFull is ToInt with every argument, including those ToInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toInt
+func (this *QLocale) ToIntFull(sArg string) (int, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToIntFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toInt_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return int(r), bool(okOut)
+}
+
+// ToUIntFull wraps QLocale::toUInt.
+//
+//	C++: uint QLocale::toUInt(const QString & s, bool * ok = …) const
+//
+// ToUIntFull is ToUInt with every argument, including those ToUInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toUInt
+func (this *QLocale) ToUIntFull(sArg string) (uint, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToUIntFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toUInt_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return uint(r), bool(okOut)
+}
+
+// ToLongFull wraps QLocale::toLong.
+//
+//	C++: long QLocale::toLong(const QString & s, bool * ok = …) const
+//
+// ToLongFull is ToLong with every argument, including those ToLong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toLong
+func (this *QLocale) ToLongFull(sArg string) (int64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLongFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toLong_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return int64(r), bool(okOut)
+}
+
+// ToULongFull wraps QLocale::toULong.
+//
+//	C++: ulong QLocale::toULong(const QString & s, bool * ok = …) const
+//
+// ToULongFull is ToULong with every argument, including those ToULong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toULong
+func (this *QLocale) ToULongFull(sArg string) (uint64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToULongFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toULong_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return uint64(r), bool(okOut)
+}
+
+// ToLongLongFull wraps QLocale::toLongLong.
+//
+//	C++: qlonglong QLocale::toLongLong(const QString & s, bool * ok = …) const
+//
+// ToLongLongFull is ToLongLong with every argument, including those ToLongLong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toLongLong
+func (this *QLocale) ToLongLongFull(sArg string) (int64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToLongLongFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toLongLong_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return int64(r), bool(okOut)
+}
+
+// ToULongLongFull wraps QLocale::toULongLong.
+//
+//	C++: qulonglong QLocale::toULongLong(const QString & s, bool * ok = …) const
+//
+// ToULongLongFull is ToULongLong with every argument, including those ToULongLong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toULongLong
+func (this *QLocale) ToULongLongFull(sArg string) (uint64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToULongLongFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toULongLong_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return uint64(r), bool(okOut)
+}
+
+// ToFloatFull wraps QLocale::toFloat.
+//
+//	C++: float QLocale::toFloat(const QString & s, bool * ok = …) const
+//
+// ToFloatFull is ToFloat with every argument, including those ToFloat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toFloat
+func (this *QLocale) ToFloatFull(sArg string) (float32, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToFloatFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toFloat_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return float32(r), bool(okOut)
+}
+
+// ToDoubleFull wraps QLocale::toDouble.
+//
+//	C++: double QLocale::toDouble(const QString & s, bool * ok = …) const
+//
+// ToDoubleFull is ToDouble with every argument, including those ToDouble leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlocale.html#toDouble
+func (this *QLocale) ToDoubleFull(sArg string) (float64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QLocale.ToDoubleFull")
+	var okOut C.bool
+	r := C.qute_QLocale_toDouble_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)), &okOut)
+	runtime.KeepAlive(this)
+	return float64(r), bool(okOut)
 }
 
 // ToStringFloat64Full wraps QLocale::toString.

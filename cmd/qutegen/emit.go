@@ -232,13 +232,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			}
 			add(decl, body)
 		}
-		if pc := primaryCtor(c); pc != nil {
-			var args []string
-			for _, p := range pc.Params {
-				args = append(args, g.cppArg(p.T, p.CName))
-			}
-			add(cDecl("void *", "qute_"+cls+"_new_shim", methodCParams(pc, false)),
-				fmt.Sprintf("return static_cast<%s *>(new qute_%s(%s));", cpp, cls, strings.Join(args, ", ")))
+		for _, sc := range c.SubCtors {
+			pre, args, _ := g.cppCall(sc.M.Params)
+			add(cDecl("void *", sc.CName, methodCParams(sc.M, false)),
+				strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(new qute_%s(%s));", cpp, cls, strings.Join(args, ", "))), "\n\t"))
 		}
 		add(cDecl("void", "qute_"+cls+"_shim_init", []string{"void *self", "uintptr_t id", "const uint64_t *mask"}),
 			fmt.Sprintf("auto s = static_cast<qute_%s *>(static_cast<%s *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));", cls, cpp))
@@ -269,6 +266,11 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	if c.QBase {
 		add(cDecl("void *", "qute_"+cls+"_qobject", []string{"void *self"}),
 			fmt.Sprintf("return static_cast<void *>(dynamic_cast<QObject *>(%s));", self))
+	}
+	if c.Opts.Inline {
+		add(cDecl("void", "qute_"+cls+"_construct", []string{"void *p"}), fmt.Sprintf("new (p) %s();", cpp))
+		add(cDecl("int64_t", "qute_"+cls+"_sizeof", nil),
+			fmt.Sprintf("static_assert(std::is_trivially_copyable_v<%s> && std::is_trivially_destructible_v<%s>, \"inline: %s must be trivially copyable and destructible\");\n\treturn static_cast<int64_t>(sizeof(%s));", cpp, cpp, cls, cpp))
 	}
 	if c.Opts.Memory != nil {
 		add(cDecl("int64_t", "qute_"+cls+"_memory", []string{"void *self"}),
@@ -367,7 +369,12 @@ func (g *Gen) signalCFunc(c *Class, sg *Method) cFunc {
 	var lparams, conv, refs []string
 	for i, p := range sg.Params {
 		lparams = append(lparams, fmt.Sprintf("%s %s", p.T.cpp, p.CName))
-		conv = append(conv, fmt.Sprintf("%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName)))
+		if inlineVal(p.T) {
+			// lent for the call: Go copies its bytes (rt.CopyInline)
+			conv = append(conv, fmt.Sprintf("void * c%d = const_cast<void *>(static_cast<const void *>(&%s));", i, p.CName))
+		} else {
+			conv = append(conv, fmt.Sprintf("%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName)))
+		}
 		refs = append(refs, fmt.Sprintf("&c%d", i))
 	}
 	args := "nullptr"
@@ -579,6 +586,9 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 				b.p("\t\t\tvoid * c%d = static_cast<void *>(&%s);", i, p.CName)
 			case p.View:
 				b.p("\t\t\tvoid * c%d = static_cast<void *>(%s);", i, p.CName)
+			case inlineVal(p.T):
+				// lent for the call: Go copies its bytes (rt.CopyInline)
+				b.p("\t\t\tvoid * c%d = const_cast<void *>(static_cast<const void *>(&%s));", i, p.CName)
 			default:
 				b.p("\t\t\t%s c%d = %s;", cType(p.T), i, g.cppRet(p.T, p.CName))
 			}
@@ -598,12 +608,18 @@ func (g *Gen) emitShimClass(c *Class, b *buf) {
 		if v.Ret.k == kVoid {
 			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, nullptr)) {%s\n\t\t\t\treturn;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb)
 		} else {
-			if v.Ret.k == kValue || v.Ret.k == kObj {
+			if inlineVal(v.Ret) {
+				// Go copies the value it returns into r (rt.CopyValueOut)
+				b.p("\t\t\t%s r{};", v.Ret.cls.Cpp)
+				b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn r;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb)
+			} else if v.Ret.k == kValue || v.Ret.k == kObj {
 				b.p("\t\t\t%s r = nullptr;", cType(v.Ret))
 			} else {
 				b.p("\t\t\t%s r{};", cType(v.Ret))
 			}
-			b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb, g.cppVirtRet(v.Ret, "r"))
+			if !inlineVal(v.Ret) {
+				b.p("\t\t\tif (qute_%s_virtual(qute_id, %d, %s, &r)) {%s\n\t\t\t\treturn %s;\n\t\t\t}", c.Module.Pkg, v.VIndex, args, wb, g.cppVirtRet(v.Ret, "r"))
+			}
 		}
 		for _, x := range free {
 			b.p("\t\t\t%s // not taken: Go emptied it, or never ran", x)
@@ -1022,6 +1038,10 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
+	if c.Opts.Inline {
+		b.p("// A %s is an inline value: its bytes are kept in Go memory.", cls)
+		b.p("func init() {\n\trt.RegisterInline(%q, int(C.qute_%s_sizeof()), func(p unsafe.Pointer) { C.qute_%s_construct(p) })\n}\n", cls, cls, cls)
+	}
 	if hint := parentedDelete(c); hint != "" {
 		b.p("// A Parented %s is in a container that does not notice its destructor.", cls)
 		b.p("func init() {\n\trt.RegisterParentedDelete(%q, %q)\n}\n", cls, hint)
@@ -1590,6 +1610,8 @@ func (g *Gen) unpackArgs(c *Class, mm *Method, b *buf, indent string) []string {
 			b.p("%s%s := rt.WrapClass(%sP, %q, rt.NewScoped)", indent, hn, p.GoName, p.T.cls.Name)
 			b.p("%sdefer %s.Expire()", indent, hn)
 			b.p("%s%s := rt.View[%s](%s, %sP)", indent, p.GoName, cls, hn, p.GoName)
+		} else if inlineVal(p.T) {
+			b.p("%s%s := %s", indent, p.GoName, g.wrapExpr(p.T.cls, cv, "rt.CopyInline", m, ""))
 		} else {
 			b.p("%s%s := %s", indent, p.GoName, g.goRet(p.T, cv, "rt.KeepOrBorrow", m))
 		}
@@ -1664,8 +1686,7 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	cls := c.Name
 	lower := "qute" + cls
 	vt := strings.ToLower(cls[:1]) + cls[1:] + "VTable"
-	pc := primaryCtor(c)
-	if pc == nil {
+	if len(c.SubCtors) == 0 {
 		return
 	}
 	// dispatch table
@@ -1693,7 +1714,9 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 		} else {
 			b.p("\t\t\t%s := %s", strings.Join(results, ", "), call)
 		}
-		if v.Ret.k != kVoid {
+		if inlineVal(v.Ret) {
+			b.p("\t\t\trt.CopyValueOut(ret, unsafe.Pointer(r), %q, %q)", v.Ret.cls.Name, cls+"."+v.GoName)
+		} else if v.Ret.k != kVoid {
 			ex, _ := g.goVirtRet(v.Ret, "r", cls+"."+v.GoName, m)
 			b.p("\t\t\t*(*%s)(ret) = %s", g.cgoType(v.Ret), ex)
 			if v.RetRule != "" {
@@ -1787,26 +1810,39 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 			b.p("\treturn %s\n}\n", g.goRet(v.Ret, "r", retMode(v), m))
 		}
 	}
-	// constructor
-	gc := g.prepCall(c, pc, "New"+cls+"With", false)
-	b.p("// New%sWith constructs a %s whose virtual methods dispatch to v. The", cls, cls)
+	// constructors
+	for _, sc := range c.SubCtors {
+		g.emitSubCtor(c, sc, vt, lower, b)
+	}
+}
+
+// emitSubCtor writes one constructor of a Go subclass (see subCtors).
+func (g *Gen) emitSubCtor(c *Class, sc subCtor, vt, lower string, b *buf) {
+	cls, pc, name := c.Name, sc.M, sc.GoName
+	gc := g.prepCall(c, pc, name, false)
+	if name == "New"+cls+"With" {
+		b.p("// %s constructs a %s whose virtual methods dispatch to v. The", name, cls)
+	} else {
+		b.p("// %s is %s for a Go subclass: it constructs a %s whose", name, pc.GoName, cls)
+		b.p("// virtual methods dispatch to v. The")
+	}
 	b.p("// object holds v for as long as it lives, so v's Go state survives even when")
 	b.p("// only Qt refers to it: through its window's handle, or pinned (Delete it when")
 	b.p("// done) if it has no parent.")
-	b.p("func New%sWith(%s) *%s {", cls, strings.Join(append([]string{"v " + cls + "Subclass"}, gc.params...), ", "), cls)
-	b.p("\trt.CheckThread(%q)", "New"+cls+"With")
+	b.p("func %s(%s) *%s {", name, strings.Join(append([]string{"v " + cls + "Subclass"}, gc.params...), ", "), cls)
+	b.p("\trt.CheckThread(%q)", name)
 	b.p("\tbase := v.%sBase()", lower)
-	b.p("\tif base.%s != nil {\n\t\tpanic(%q)\n\t}", cls, "New"+cls+"With: value is already constructed; use a fresh value")
+	b.p("\tif base.%s != nil {\n\t\tpanic(%q)\n\t}", cls, name+": value is already constructed; use a fresh value")
 	for _, v := range c.Virtuals {
 		if v.Overlay != nil && v.Overlay.Required != "" && v.IR.Pure {
 			// checked before the C++ object exists, so a panic leaks nothing
-			b.p("\trt.RequireOverride(v, %s, %q, %q, %q)", vt, "New"+cls+"With", v.GoName, v.Overlay.Required)
+			b.p("\trt.RequireOverride(v, %s, %q, %q, %q)", vt, name, v.GoName, v.Overlay.Required)
 		}
 	}
 	for _, s := range gc.pre {
 		b.p("\t%s", s)
 	}
-	b.p("\tp := C.qute_%s_new_shim(%s)", cls, strings.Join(gc.args, ", "))
+	b.p("\tp := C.%s(%s)", sc.CName, strings.Join(gc.args, ", "))
 	for _, s := range keepAlive("", gc) {
 		b.p("\t%s", s)
 	}

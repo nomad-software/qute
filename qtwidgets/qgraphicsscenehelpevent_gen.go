@@ -29,7 +29,7 @@ func (this *QGraphicsSceneHelpEvent) AsQGraphicsSceneHelpEvent() *QGraphicsScene
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneHelpEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneHelpEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneHelpEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneHelpEvent_delete(p) })
 }
 
 // QGraphicsSceneHelpEventFromPtr wraps an existing C++ QGraphicsSceneHelpEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,34 @@ func QGraphicsSceneHelpEventCast(e qtcore.QEventLike) *QGraphicsSceneHelpEvent {
 	r := rt.View[QGraphicsSceneHelpEvent](rt.WrapClassFrom(p, "QGraphicsSceneHelpEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneHelpEvent wraps the QGraphicsSceneHelpEvent constructor.
+//
+//	C++: QGraphicsSceneHelpEvent::QGraphicsSceneHelpEvent(Type type = …)
+//
+// Arguments with C++ defaults are left at them; NewQGraphicsSceneHelpEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenehelpevent.html#QGraphicsSceneHelpEvent
+func NewQGraphicsSceneHelpEvent() *QGraphicsSceneHelpEvent {
+	rt.CheckThread("NewQGraphicsSceneHelpEvent")
+	p := C.qute_QGraphicsSceneHelpEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneHelpEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneHelpEvent](h, p)
+}
+
+// NewQGraphicsSceneHelpEventFull wraps the QGraphicsSceneHelpEvent constructor.
+//
+//	C++: QGraphicsSceneHelpEvent::QGraphicsSceneHelpEvent(Type type = …)
+//
+// NewQGraphicsSceneHelpEventFull is NewQGraphicsSceneHelpEvent with every argument, including those NewQGraphicsSceneHelpEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenehelpevent.html#QGraphicsSceneHelpEvent
+func NewQGraphicsSceneHelpEventFull(typeArg qtcore.QEventType) *QGraphicsSceneHelpEvent {
+	rt.CheckThread("NewQGraphicsSceneHelpEventFull")
+	p := C.qute_QGraphicsSceneHelpEvent_new_1(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneHelpEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneHelpEvent](h, p)
 }
 
 // ScenePos wraps QGraphicsSceneHelpEvent::scenePos.

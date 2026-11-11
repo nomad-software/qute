@@ -233,12 +233,15 @@ func (this *QLabel) SetTextFormat(textFormat qtcore.TextFormat) {
 // Qt docs: https://doc.qt.io/qt-6/qlabel.html#setResourceProvider
 func (this *QLabel) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QLabel.SetResourceProvider")
-	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		r := provider(p0)
-		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLabel.SetResourceProvider")
-	})
+	var providerID uintptr
+	if provider != nil {
+		providerID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := provider(p0)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLabel.SetResourceProvider")
+		})
+	}
 	C.qute_QLabel_setResourceProvider(self, C.uintptr_t(providerID))
 	runtime.KeepAlive(this)
 }
@@ -1513,6 +1516,38 @@ func NewQLabelWith(v QLabelSubclass, parent QWidgetLike) *QLabel {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWith")
 	}
 	p := C.qute_QLabel_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QLabel", mode)
+	base.QLabel = rt.View[QLabel](h, p)
+	id := h.SetSelf(v, qLabelVTable)
+	mask := rt.Mask(v, qLabelVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QLabel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QLabel
+}
+
+// NewQLabelWithTextWith is NewQLabelWithText for a Go subclass: it constructs a QLabel whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQLabelWithTextWith(v QLabelSubclass, text string, parent QWidgetLike) *QLabel {
+	rt.CheckThread("NewQLabelWithTextWith")
+	base := v.quteQLabelBase()
+	if base.QLabel != nil {
+		panic("NewQLabelWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLabelWithTextWith")
+	}
+	p := C.qute_QLabel_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

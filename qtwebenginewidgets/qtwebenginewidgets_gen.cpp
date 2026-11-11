@@ -535,6 +535,14 @@ void * qute_QWebEngineView_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWidget *>(a0)));
 }
+void * qute_QWebEngineView_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWebEngineProfile *>(a0), static_cast<QWidget *>(a1)));
+}
+void * qute_QWebEngineView_new_shim_2(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWebEnginePage *>(a0), static_cast<QWidget *>(a1)));
+}
 void qute_QWebEngineView_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QWebEngineView *>(static_cast<QWebEngineView *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -813,7 +821,7 @@ void qute_QWebEngineView_printToPdf(void *self, const char *a0, ptrdiff_t a0_len
 }
 void qute_QWebEngineView_printToPdf_1(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QWebEngineView *>(self)->printToPdf(std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineView *>(self)->printToPdf((a0 ? std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QByteArray &)>()));
 }
 void qute_QWebEngineView_stop(void *self) {
 	qute_gui_only();
@@ -897,7 +905,7 @@ void qute_QWebEngineView_triggerPageAction_1(void *self, int64_t a0, bool a1) {
 }
 void qute_QWebEngineView_findText_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEngineView *>(self)->findText(QString::fromUtf8(a0, a0_len), QFlags<QWebEnginePage::FindFlag>::fromInt(static_cast<QFlags<QWebEnginePage::FindFlag>::Int>(a1)), std::function<void (const QWebEngineFindTextResult &)>([s = std::make_shared<GoSlot>(a2)](const QWebEngineFindTextResult & p0) -> void { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineView *>(self)->findText(QString::fromUtf8(a0, a0_len), QFlags<QWebEnginePage::FindFlag>::fromInt(static_cast<QFlags<QWebEnginePage::FindFlag>::Int>(a1)), (a2 ? std::function<void (const QWebEngineFindTextResult &)>([s = std::make_shared<GoSlot>(a2)](const QWebEngineFindTextResult & p0) -> void { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QWebEngineFindTextResult &)>()));
 }
 void * qute_QWebEngineView_forPage(void * a0) {
 	qute_gui_only();

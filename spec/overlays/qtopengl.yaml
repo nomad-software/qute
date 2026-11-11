@@ -1,6 +1,8 @@
 # Ownership overlays for qtopengl. See spec/overlays/qtwidgets.yaml for the rules.
 
 QOpenGLTexture:
+  setData: { no-full: "the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply" }
+  setCompressedData: { no-full: "the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply" }
   setData(PixelFormat, PixelType, const void *, const QOpenGLPixelTransferOptions *const): { name: SetDataRaw }
   setData(int, PixelFormat, PixelType, const void *, const QOpenGLPixelTransferOptions *const): { name: SetMipLevelData }
   setData(int, int, PixelFormat, PixelType, const void *, const QOpenGLPixelTransferOptions *const): { name: SetLayerData }

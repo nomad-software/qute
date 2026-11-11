@@ -25,7 +25,7 @@ type QInputEventLike interface{ AsQInputEvent() *QInputEvent }
 func (this *QInputEvent) AsQInputEvent() *QInputEvent { return this }
 
 func init() {
-	rt.RegisterClass("QInputEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QInputEvent_delete(p) })
+	rt.RegisterClass("QInputEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QInputEvent_delete(p) })
 }
 
 // QInputEventFromPtr wraps an existing C++ QInputEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,56 @@ func QInputEventCast(e qtcore.QEventLike) *QInputEvent {
 	r := rt.View[QInputEvent](rt.WrapClassFrom(p, "QInputEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQInputEventWithType wraps the QInputEvent constructor.
+//
+//	C++: QInputEvent::QInputEvent(Type type, const QInputDevice * m_dev, Qt::KeyboardModifiers modifiers = …)
+//
+// Ownership: m_dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQInputEventWithTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputevent.html#QInputEvent
+func NewQInputEventWithType(typeArg qtcore.QEventType, m_dev QInputDeviceLike) *QInputEvent {
+	rt.CheckThread("NewQInputEventWithType")
+	var m_devPtr unsafe.Pointer
+	var m_devH *rt.Handle
+	if m_dev != nil {
+		m_devPtr, m_devH = rt.Arg(unsafe.Pointer(m_dev.AsQInputDevice()), "NewQInputEventWithType")
+	}
+	p := C.qute_QInputEvent_new(C.int64_t(typeArg), m_devPtr)
+	runtime.KeepAlive(m_dev)
+	h := rt.WrapClass(p, "QInputEvent", rt.NewOwned)
+	rt.KeepArg(h, "QInputEvent.m_dev", m_devH, true)
+	return rt.View[QInputEvent](h, p)
+}
+
+// NewQInputEventWithTypeFull wraps the QInputEvent constructor.
+//
+//	C++: QInputEvent::QInputEvent(Type type, const QInputDevice * m_dev, Qt::KeyboardModifiers modifiers = …)
+//
+// Ownership: m_dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQInputEventWithTypeFull is NewQInputEventWithType with every argument, including those NewQInputEventWithType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputevent.html#QInputEvent
+func NewQInputEventWithTypeFull(typeArg qtcore.QEventType, m_dev QInputDeviceLike, modifiers qtcore.KeyboardModifiers) *QInputEvent {
+	rt.CheckThread("NewQInputEventWithTypeFull")
+	var m_devPtr unsafe.Pointer
+	var m_devH *rt.Handle
+	if m_dev != nil {
+		m_devPtr, m_devH = rt.Arg(unsafe.Pointer(m_dev.AsQInputDevice()), "NewQInputEventWithTypeFull")
+	}
+	p := C.qute_QInputEvent_new_1(C.int64_t(typeArg), m_devPtr, C.int64_t(modifiers))
+	runtime.KeepAlive(m_dev)
+	h := rt.WrapClass(p, "QInputEvent", rt.NewOwned)
+	rt.KeepArg(h, "QInputEvent.m_dev", m_devH, true)
+	return rt.View[QInputEvent](h, p)
 }
 
 // Device wraps QInputEvent::device.

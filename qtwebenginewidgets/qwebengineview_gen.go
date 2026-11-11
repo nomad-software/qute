@@ -463,12 +463,15 @@ func (this *QWebEngineView) PrintToPdf(filePath string) {
 // Qt docs: https://doc.qt.io/qt-6/qwebengineview.html#printToPdf
 func (this *QWebEngineView) PrintToPdfFunc(resultCallback func([]byte)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.PrintToPdfFunc")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := quteBytes(*(*C.qute_str)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := quteBytes(*(*C.qute_str)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEngineView_printToPdf_1(self, C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -714,12 +717,15 @@ func (this *QWebEngineView) TriggerPageActionFull(action qtwebenginecore.QWebEng
 // Qt docs: https://doc.qt.io/qt-6/qwebengineview.html#findText
 func (this *QWebEngineView) FindTextFull(subString string, options qtwebenginecore.QWebEnginePageFindFlags, resultCallback func(*qtwebenginecore.QWebEngineFindTextResult)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.FindTextFull")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtwebenginecore.QWebEngineFindTextResult](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWebEngineFindTextResult", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtwebenginecore.QWebEngineFindTextResult](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWebEngineFindTextResult", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEngineView_findText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), C.int64_t(options), C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -1848,6 +1854,84 @@ func NewQWebEngineViewWith(v QWebEngineViewSubclass, parent qtwidgets.QWidgetLik
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QWebEngineView", mode)
+	base.QWebEngineView = rt.View[QWebEngineView](h, p)
+	id := h.SetSelf(v, qWebEngineViewVTable)
+	mask := rt.Mask(v, qWebEngineViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QWebEngineView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QWebEngineView
+}
+
+// NewQWebEngineViewWithProfileWith is NewQWebEngineViewWithProfile for a Go subclass: it constructs a QWebEngineView whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQWebEngineViewWithProfileWith(v QWebEngineViewSubclass, profile qtwebenginecore.QWebEngineProfileLike, parent qtwidgets.QWidgetLike) *QWebEngineView {
+	rt.CheckThread("NewQWebEngineViewWithProfileWith")
+	base := v.quteQWebEngineViewBase()
+	if base.QWebEngineView != nil {
+		panic("NewQWebEngineViewWithProfileWith: value is already constructed; use a fresh value")
+	}
+	var profilePtr unsafe.Pointer
+	var profileH *rt.Handle
+	if profile != nil {
+		profilePtr, profileH = rt.Arg(unsafe.Pointer(profile.AsQWebEngineProfile()), "NewQWebEngineViewWithProfileWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQWebEngineViewWithProfileWith")
+	}
+	p := C.qute_QWebEngineView_new_shim_1(profilePtr, parentPtr)
+	runtime.KeepAlive(profile)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWebEngineView", mode)
+	rt.KeepArg(h, "profile", profileH, true)
+	base.QWebEngineView = rt.View[QWebEngineView](h, p)
+	id := h.SetSelf(v, qWebEngineViewVTable)
+	mask := rt.Mask(v, qWebEngineViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QWebEngineView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QWebEngineView
+}
+
+// NewQWebEngineViewWithPageWith is NewQWebEngineViewWithPage for a Go subclass: it constructs a QWebEngineView whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQWebEngineViewWithPageWith(v QWebEngineViewSubclass, page qtwebenginecore.QWebEnginePageLike, parent qtwidgets.QWidgetLike) *QWebEngineView {
+	rt.CheckThread("NewQWebEngineViewWithPageWith")
+	base := v.quteQWebEngineViewBase()
+	if base.QWebEngineView != nil {
+		panic("NewQWebEngineViewWithPageWith: value is already constructed; use a fresh value")
+	}
+	var pagePtr unsafe.Pointer
+	var pageH *rt.Handle
+	if page != nil {
+		pagePtr, pageH = rt.Arg(unsafe.Pointer(page.AsQWebEnginePage()), "NewQWebEngineViewWithPageWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQWebEngineViewWithPageWith")
+	}
+	p := C.qute_QWebEngineView_new_shim_2(pagePtr, parentPtr)
+	runtime.KeepAlive(page)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWebEngineView", mode)
+	rt.KeepArg(h, "page", pageH, false)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)
 	mask := rt.Mask(v, qWebEngineViewVTable)

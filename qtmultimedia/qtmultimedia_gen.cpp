@@ -1368,6 +1368,10 @@ void * qute_QAudioBufferInput_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QAudioBufferInput *>(new qute_QAudioBufferInput(static_cast<QObject *>(a0)));
 }
+void * qute_QAudioBufferInput_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioBufferInput *>(new qute_QAudioBufferInput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+}
 void qute_QAudioBufferInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -1431,6 +1435,10 @@ void * qute_QAudioBufferOutput_new_1(void * a0, void * a1) {
 void * qute_QAudioBufferOutput_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QAudioBufferOutput *>(new qute_QAudioBufferOutput(static_cast<QObject *>(a0)));
+}
+void * qute_QAudioBufferOutput_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioBufferOutput *>(new qute_QAudioBufferOutput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
 void qute_QAudioBufferOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -1832,6 +1840,10 @@ void * qute_QAudioInput_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QAudioInput *>(new qute_QAudioInput(static_cast<QObject *>(a0)));
 }
+void * qute_QAudioInput_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioInput *>(new qute_QAudioInput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+}
 void qute_QAudioInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -1928,6 +1940,10 @@ void * qute_QAudioOutput_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QAudioOutput *>(new qute_QAudioOutput(static_cast<QObject *>(a0)));
 }
+void * qute_QAudioOutput_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QAudioOutput *>(new qute_QAudioOutput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+}
 void qute_QAudioOutput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -2023,6 +2039,10 @@ void * qute_QAudioSink_new_1(void * a0, void * a1, void * a2) {
 void * qute_QAudioSink_new_shim(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioSink *>(new qute_QAudioSink((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+}
+void * qute_QAudioSink_new_shim_1(void * a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QAudioSink *>(new qute_QAudioSink((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
 }
 void qute_QAudioSink_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -2163,6 +2183,10 @@ void * qute_QAudioSource_new_1(void * a0, void * a1, void * a2) {
 void * qute_QAudioSource_new_shim(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QAudioSource *>(new qute_QAudioSource((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+}
+void * qute_QAudioSource_new_shim_1(void * a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QAudioSource *>(new qute_QAudioSource((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
 }
 void qute_QAudioSource_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -2307,6 +2331,14 @@ void * qute_QCamera_new_2(int64_t a0, void * a1) {
 void * qute_QCamera_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QCamera *>(new qute_QCamera(static_cast<QObject *>(a0)));
+}
+void * qute_QCamera_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QCamera *>(new qute_QCamera((a0 ? *static_cast<QCameraDevice *>(a0) : QCameraDevice()), static_cast<QObject *>(a1)));
+}
+void * qute_QCamera_new_shim_2(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QCamera *>(new qute_QCamera(static_cast<QCameraDevice::Position>(a0), static_cast<QObject *>(a1)));
 }
 void qute_QCamera_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -4728,6 +4760,10 @@ void * qute_QSoundEffect_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QSoundEffect *>(new qute_QSoundEffect(static_cast<QObject *>(a0)));
 }
+void * qute_QSoundEffect_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QSoundEffect *>(new qute_QSoundEffect((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+}
 void qute_QSoundEffect_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -5247,6 +5283,10 @@ void * qute_QVideoFrameInput_new_1(void * a0, void * a1) {
 void * qute_QVideoFrameInput_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QVideoFrameInput *>(new qute_QVideoFrameInput(static_cast<QObject *>(a0)));
+}
+void * qute_QVideoFrameInput_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QVideoFrameInput *>(new qute_QVideoFrameInput((a0 ? *static_cast<QVideoFrameFormat *>(a0) : QVideoFrameFormat()), static_cast<QObject *>(a1)));
 }
 void qute_QVideoFrameInput_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();

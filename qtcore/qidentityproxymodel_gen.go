@@ -98,7 +98,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ ColumnCount(*QModelIndex) int }).ColumnCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
@@ -112,11 +112,11 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				Index(int, int, *QModelIndex) *QModelIndex
 			}).Index(row, column, parent)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.Index")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.Index")
 		}},
 	{Name: "MapFromSource", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -126,11 +126,11 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			sourceIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				MapFromSource(*QModelIndex) *QModelIndex
 			}).MapFromSource(sourceIndex)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.MapFromSource")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.MapFromSource")
 		}},
 	{Name: "MapToSource", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -140,11 +140,11 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				MapToSource(*QModelIndex) *QModelIndex
 			}).MapToSource(proxyIndex)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.MapToSource")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.MapToSource")
 		}},
 	{Name: "Parent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -154,16 +154,16 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			child := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			child := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				Parent(*QModelIndex) *QModelIndex
 			}).Parent(child)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.Parent")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.Parent")
 		}},
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*QModelIndex) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
 			*(*C.int)(ret) = C.int(r)
 		}},
@@ -195,7 +195,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
 			r := v.(interface {
 				DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).DropMimeData(data, action, row, column, parent)
@@ -211,11 +211,11 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
-			idx := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			idx := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				Sibling(int, int, *QModelIndex) *QModelIndex
 			}).Sibling(row, column, idx)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.Sibling")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.Sibling")
 		}},
 	{Name: "MapSelectionFromSource", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -253,7 +253,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			start := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			hits := int(*(*C.int)(a[3]))
@@ -261,11 +261,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			r := v.(interface {
 				Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
 			}).Match(start, role, value, hits, flags)
-			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
-				for i, e := range r {
-					d[i] = rt.UseArg(unsafe.Pointer(e), "QIdentityProxyModel.Match")
-				}
-			})
+			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QIdentityProxyModel.Match", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "SetSourceModel", Has: func(v any) bool { _, ok := v.(interface{ SetSourceModel(*QAbstractItemModel) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -283,7 +279,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				InsertColumns(int, int, *QModelIndex) bool
 			}).InsertColumns(column, count, parent)
@@ -299,7 +295,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				InsertRows(int, int, *QModelIndex) bool
 			}).InsertRows(row, count, parent)
@@ -315,7 +311,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				RemoveColumns(int, int, *QModelIndex) bool
 			}).RemoveColumns(column, count, parent)
@@ -331,7 +327,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[2]))
 			r := v.(interface {
 				RemoveRows(int, int, *QModelIndex) bool
 			}).RemoveRows(row, count, parent)
@@ -345,10 +341,10 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			sourceRow := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -363,10 +359,10 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
-			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			sourceParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			sourceColumn := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
-			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
+			destinationParent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[3]))
 			destinationChild := int(*(*C.int)(a[4]))
 			r := v.(interface {
 				MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
@@ -392,7 +388,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			proxyIndex := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			role := int(*(*C.int)(a[1]))
 			r := v.(interface {
 				Data(*QModelIndex, int) *QVariant
@@ -407,7 +403,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				ItemData(*QModelIndex) map[int]*QVariant
 			}).ItemData(index)
@@ -416,7 +412,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	{Name: "Flags", Has: func(v any) bool { _, ok := v.(interface{ Flags(*QModelIndex) ItemFlags }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
@@ -428,7 +424,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			role := int(*(*C.int)(a[2]))
 			r := v.(interface {
@@ -444,7 +440,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
 				return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 			})
@@ -473,7 +469,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	{Name: "ClearItemData", Has: func(v any) bool { _, ok := v.(interface{ ClearItemData(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -485,23 +481,23 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				Buddy(*QModelIndex) *QModelIndex
 			}).Buddy(index)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIdentityProxyModel.Buddy")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QIdentityProxyModel.Buddy")
 		}},
 	{Name: "CanFetchMore", Has: func(v any) bool { _, ok := v.(interface{ CanFetchMore(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
 		}},
 	{Name: "Sort", Has: func(v any) bool { _, ok := v.(interface{ Sort(int, SortOrder) }); return ok },
@@ -514,14 +510,14 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ Span(*QModelIndex) QSize }).Span(index)
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "HasChildren", Has: func(v any) bool { _, ok := v.(interface{ HasChildren(*QModelIndex) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface{ HasChildren(*QModelIndex) bool }).HasChildren(parent)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
@@ -556,7 +552,7 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
-			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[4]))
+			parent := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[4]))
 			r := v.(interface {
 				CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
 			}).CanDropMimeData(data, action, row, column, parent)
@@ -990,11 +986,8 @@ func (s *QIdentityProxyModelSuper) HasChildren(parent *QModelIndex) bool {
 // MimeData calls QAbstractProxyModel::mimeData.
 func (s *QIdentityProxyModelSuper) MimeData(indexes []*QModelIndex) *QMimeData {
 	self := rt.Use(unsafe.Pointer(s.this), "QIdentityProxyModel.Super.MimeData")
-	indexesC := make([]unsafe.Pointer, len(indexes))
-	for i := range indexes {
-		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QIdentityProxyModel.Super.MimeData")
-	}
-	r := C.qute_QIdentityProxyModel_super_34(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)))
+	indexesC := rt.InlineBlock("QModelIndex", "QIdentityProxyModel.Super.MimeData", len(indexes), func(i int) unsafe.Pointer { return unsafe.Pointer(indexes[i]) }, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]uint64, (n+7)/8))) })
+	r := C.qute_QIdentityProxyModel_super_34(self, indexesC, C.ptrdiff_t(len(indexes)))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(indexes)
 	return rt.View[QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
@@ -1167,15 +1160,12 @@ func (b *QIdentityProxyModelBase) CreateIndexWithUint64(row int, column int, idA
 func (b *QIdentityProxyModelBase) EncodeData(indexes []*QModelIndex, stream QDataStreamLike) {
 	this := b.QIdentityProxyModel // the receiver the ownership code below acts on
 	self := rt.Use(unsafe.Pointer(this), "QIdentityProxyModel.EncodeData")
-	indexesC := make([]unsafe.Pointer, len(indexes))
-	for i := range indexes {
-		indexesC[i] = rt.UseArg(unsafe.Pointer(indexes[i]), "QIdentityProxyModel.EncodeData")
-	}
+	indexesC := rt.InlineBlock("QModelIndex", "QIdentityProxyModel.EncodeData", len(indexes), func(i int) unsafe.Pointer { return unsafe.Pointer(indexes[i]) }, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]uint64, (n+7)/8))) })
 	var streamPtr unsafe.Pointer
 	if stream != nil {
 		streamPtr = rt.UseArg(unsafe.Pointer(stream.AsQDataStream()), "QIdentityProxyModel.EncodeData")
 	}
-	C.qute_QIdentityProxyModel_prot_encodeData(self, unsafe.Pointer(unsafe.SliceData(indexesC)), C.ptrdiff_t(len(indexes)), streamPtr)
+	C.qute_QIdentityProxyModel_prot_encodeData(self, indexesC, C.ptrdiff_t(len(indexes)), streamPtr)
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(indexes)
 	runtime.KeepAlive(stream)
@@ -1332,15 +1322,9 @@ func (b *QIdentityProxyModelBase) ChangePersistentIndex(from *QModelIndex, to *Q
 func (b *QIdentityProxyModelBase) ChangePersistentIndexList(from []*QModelIndex, to []*QModelIndex) {
 	this := b.QIdentityProxyModel // the receiver the ownership code below acts on
 	self := rt.Use(unsafe.Pointer(this), "QIdentityProxyModel.ChangePersistentIndexList")
-	fromC := make([]unsafe.Pointer, len(from))
-	for i := range from {
-		fromC[i] = rt.UseArg(unsafe.Pointer(from[i]), "QIdentityProxyModel.ChangePersistentIndexList")
-	}
-	toC := make([]unsafe.Pointer, len(to))
-	for i := range to {
-		toC[i] = rt.UseArg(unsafe.Pointer(to[i]), "QIdentityProxyModel.ChangePersistentIndexList")
-	}
-	C.qute_QIdentityProxyModel_prot_changePersistentIndexList(self, unsafe.Pointer(unsafe.SliceData(fromC)), C.ptrdiff_t(len(from)), unsafe.Pointer(unsafe.SliceData(toC)), C.ptrdiff_t(len(to)))
+	fromC := rt.InlineBlock("QModelIndex", "QIdentityProxyModel.ChangePersistentIndexList", len(from), func(i int) unsafe.Pointer { return unsafe.Pointer(from[i]) }, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]uint64, (n+7)/8))) })
+	toC := rt.InlineBlock("QModelIndex", "QIdentityProxyModel.ChangePersistentIndexList", len(to), func(i int) unsafe.Pointer { return unsafe.Pointer(to[i]) }, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]uint64, (n+7)/8))) })
+	C.qute_QIdentityProxyModel_prot_changePersistentIndexList(self, fromC, C.ptrdiff_t(len(from)), toC, C.ptrdiff_t(len(to)))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)

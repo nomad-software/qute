@@ -47,6 +47,9 @@ type Class struct {
 
 	Ctors     []*Method
 	ShimCtors []*Method // constructors of an abstract class, used only by its shim
+	// SubCtors are the constructors of a Go subclass (New<Ctor>With), the
+	// primary one first (see subCtors)
+	SubCtors  []subCtor
 	Methods   []*Method
 	Statics   []*Method
 	Signals   []*Method
@@ -58,11 +61,22 @@ type Class struct {
 	DefCtor   bool // has a public constructor callable with no arguments
 	HasDtor   bool
 	Skipped   []skipNote
+	// NoFull are methods whose Full form cannot be built (a defaulted
+	// argument with no Go type, such as an unconfirmed bool *ok).
+	NoFull []skipNote
 	// NoVirtuals are the virtuals this class declares that Go cannot override.
 	NoVirtuals []skipNote
 	protected  map[string]*Method // its own protected methods, built once (ownProtected)
 	cNames     map[string]int
 	goNames    map[string]string
+}
+
+// subCtor is one constructor of a Go subclass: the C++ constructor it
+// forwards to, its Go name and the C function that builds the shim.
+type subCtor struct {
+	M      *Method
+	GoName string
+	CName  string
 }
 
 type skipNote struct {
@@ -352,6 +366,11 @@ func (g *Gen) build() error {
 			g.buildShim(c)
 		}
 	}
+	for _, m := range g.modules {
+		for _, c := range m.Classes {
+			g.checkInline(c)
+		}
+	}
 	// 5. unused overlays
 	for _, m := range g.modules {
 		for cls, entries := range m.Overlays {
@@ -627,7 +646,7 @@ func (g *Gen) buildMembers(c *Class) {
 			if im.Copy || im.Move {
 				continue
 			}
-			if c.Opts.NoConstruct || c.Event || !c.HasDtor && c.Kind != KindObject {
+			if c.Opts.NoConstruct || !c.HasDtor && c.Kind != KindObject {
 				continue
 			}
 			if c.Abstract {
@@ -745,14 +764,23 @@ func (g *Gen) buildMembers(c *Class) {
 // out, when an overlay already decides (keep-defaults, full), or when a
 // defaulted argument has no Go type; the short form stands either way.
 func (g *Gen) fullTwin(c *Class, im *irMethod, ov *overlay, ctor bool, short *Method) *Method {
+	if ov != nil && ov.NoFull != "" {
+		c.NoFull = append(c.NoFull, skipNote{short.Sig, "on purpose: " + ov.NoFull})
+		return nil
+	}
 	if ov != nil && (ov.KeepDefs || ov.Full != "" || ov.Cpp != "") || short.PairRet != nil {
 		return nil
 	}
 	skipped, warns := len(c.Skipped), len(g.report.warnings)
 	full := g.newMethod(c, im, ov, ctor, true)
+	if full == nil && len(c.Skipped) > skipped {
+		// the short form is bound, so the method is not skipped, but its
+		// Full form is a gap COVERAGE.md lists
+		c.NoFull = append(c.NoFull, skipNote{short.Sig, c.Skipped[len(c.Skipped)-1].Why})
+	}
 	c.Skipped, g.report.warnings = c.Skipped[:skipped], g.report.warnings[:warns]
-	if full == nil || len(goParams(full)) == len(goParams(short)) {
-		return nil
+	if full == nil || len(full.Params) == len(short.Params) {
+		return nil // no defaulted argument has a Go form
 	}
 	full.FullOf = short
 	return full
@@ -770,7 +798,7 @@ func (g *Gen) nameTwins(c *Class, twins, named []*Method, pkgLevel bool) []*Meth
 		live[mm] = true
 		used[mm.GoName] = true
 		if mm.IR != nil {
-			sigs[mm.IR.Name+"|"+goSig(mm)] = true
+			sigs[mm.IR.Name+"|"+goSigOut(mm)] = true
 		}
 	}
 	for k := range reservedMethods {
@@ -779,7 +807,7 @@ func (g *Gen) nameTwins(c *Class, twins, named []*Method, pkgLevel bool) []*Meth
 	var out []*Method
 	for _, tw := range twins {
 		short := tw.FullOf
-		if !live[short] || short.GoName == "" || sigs[tw.IR.Name+"|"+goSig(tw)] {
+		if !live[short] || short.GoName == "" || sigs[tw.IR.Name+"|"+goSigOut(tw)] {
 			continue
 		}
 		name := short.GoName + "Full"
@@ -791,7 +819,7 @@ func (g *Gen) nameTwins(c *Class, twins, named []*Method, pkgLevel bool) []*Meth
 			continue
 		}
 		used[name] = true
-		sigs[tw.IR.Name+"|"+goSig(tw)] = true
+		sigs[tw.IR.Name+"|"+goSigOut(tw)] = true
 		tw.GoName = name
 		short.FullName = name
 		if tw.IR.Kind == "ctor" {
@@ -1041,6 +1069,18 @@ func goSig(m *Method) string {
 	return strings.Join(ps, ",")
 }
 
+// goSigOut is goSig with the out-parameters, which are Go results: a Full
+// form that only adds one (toInt's bool *ok) differs from its short form.
+func goSigOut(m *Method) string {
+	var outs []string
+	for _, p := range m.Params {
+		if p.Out {
+			outs = append(outs, goKey(p.T))
+		}
+	}
+	return goSig(m) + "|" + strings.Join(outs, ",")
+}
+
 var reservedMethods = map[string]bool{
 	"Ptr": true, "Alive": true, "Delete": true, "Keep": true, "Unkeep": true, "Ownership": true,
 	"Super": true, "String": true,
@@ -1274,7 +1314,9 @@ func (g *Gen) buildShim(c *Class) {
 	if c.Opts.EnumsOnly {
 		return
 	}
-	c.Shim = (c.Opts.Subclass || c.Opts.NotifyDtor) && !c.Opts.NoConstruct
+	// An event Go builds is built as its shim, whose destructor reports its
+	// death: Qt deletes a posted event once it is delivered.
+	c.Shim = (c.Opts.Subclass || c.Opts.NotifyDtor || c.Event && len(c.Ctors) > 0) && !c.Opts.NoConstruct
 	if !c.Shim {
 		return
 	}
@@ -1400,9 +1442,72 @@ func (g *Gen) buildShim(c *Class) {
 	for _, v := range c.Protected {
 		v.CName = c.cName("prot_" + v.IR.Name)
 	}
+	c.SubCtors = g.subCtors(c)
 	if c.Opts.NotifyDtor {
 		g.report.warn("%s: notify-dtor is redundant: its subclass shim reports its death", c.Name)
 	}
+}
+
+// checkInline warns where an inline value class (spec option inline) is
+// used in a way its byte-copy protocol does not cover: where a pointer to Go
+// memory would have to be stored in C memory.
+func (g *Gen) checkInline(c *Class) {
+	if c.Opts.Inline && (c.Kind != KindValue || c.Opts.Memory != nil) {
+		g.report.warn("%s: inline needs kind: value and no memory option", c.Name)
+	}
+	var bad func(t *conv) bool
+	bad = func(t *conv) bool {
+		if t == nil {
+			return false
+		}
+		switch t.k {
+		case kMap:
+			return inlineVal(t.key) || inlineVal(t.elem) || bad(t.key) || bad(t.elem)
+		case kFunc:
+			return inlineVal(t.elem) || bad(t.elem)
+		case kOpt:
+			return false // a result: Go copies it
+		case kList:
+			return t.elem != nil && t.elem.k == kValue && t.elem.cls.Opts.Inline && t.elem.ptr
+		}
+		return false
+	}
+	all := append(append(append(append(append([]*Method{}, c.Ctors...), c.Methods...), c.Statics...), c.Signals...), c.Virtuals...)
+	for _, mm := range append(all, c.Protected...) {
+		for _, p := range mm.Params {
+			if bad(p.T) || (p.Out || p.InOut) && inlineVal(p.T) {
+				g.report.warn("%s: an inline value as %s, which the inline protocol does not cover", mm.Sig, p.GoName)
+			}
+		}
+		if mm.Ret != nil && bad(mm.Ret) {
+			g.report.warn("%s: an inline value in its result, which the inline protocol does not cover", mm.Sig)
+		}
+	}
+}
+
+// subCtors lists the constructors a Go subclass is built with: the primary
+// one as New<Class>With, and every other public constructor as its own name
+// plus With (NewQWebEnginePageWithProfileWith), so a subclass can be built in
+// any way the class can. Full forms take the short form's subclass
+// constructor; a constructor an overlay builds with cpp is left out.
+func (g *Gen) subCtors(c *Class) []subCtor {
+	pc := primaryCtor(c)
+	if pc == nil {
+		return nil
+	}
+	out := []subCtor{{M: pc, GoName: "New" + c.Name + "With", CName: "qute_" + c.Name + "_new_shim"}}
+	for _, mm := range c.Ctors {
+		if mm == pc || mm.FullOf != nil || mm.IR == nil || len(mm.IR.Params) == 0 || mm.Overlay != nil && mm.Overlay.Cpp != "" {
+			continue
+		}
+		name := mm.GoName + "With"
+		if !c.Module.claim(name, mm.Sig+" [subclass]") {
+			g.report.warn("%s: subclass constructor name %s is taken", c.Name, name)
+			continue
+		}
+		out = append(out, subCtor{M: mm, GoName: name, CName: fmt.Sprintf("qute_%s_new_shim_%d", c.Name, len(out))})
+	}
+	return out
 }
 
 // noVirtual records, once per declaring class, a virtual Go cannot override.

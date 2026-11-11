@@ -111,10 +111,10 @@ func InvokeFunc(id uintptr, args, ret unsafe.Pointer) {
 func NewCallback(sender *Handle, fn func(args unsafe.Pointer)) uintptr {
 	id := newSlot(sender)
 	sender.mu.Lock()
-	if sender.callbacks == nil {
-		sender.callbacks = map[uintptr]func(args unsafe.Pointer){}
+	if sender.x().callbacks == nil {
+		sender.x().callbacks = map[uintptr]func(args unsafe.Pointer){}
 	}
-	sender.callbacks[id] = fn
+	sender.x().callbacks[id] = fn
 	sender.mu.Unlock()
 	sender.anchorPin()
 	return id
@@ -133,7 +133,7 @@ func InvokeCallback(id uintptr, args unsafe.Pointer) {
 	var fn func(args unsafe.Pointer)
 	if h := slotHandle(id); h != nil {
 		h.mu.Lock()
-		fn = h.callbacks[id]
+		fn = h.x().callbacks[id]
 		h.mu.Unlock()
 	}
 	if fn == nil {
@@ -159,7 +159,7 @@ func ReleaseCallback(id uintptr) {
 	}
 	if h := v.(weak.Pointer[Handle]).Value(); h != nil {
 		h.mu.Lock()
-		delete(h.callbacks, id)
+		delete(h.x().callbacks, id)
 		h.mu.Unlock()
 		h.anchorUnpin()
 	}
@@ -218,16 +218,20 @@ type Virtual struct {
 func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) bool {
 	guiOnlyEntry("virtual method override")
 	h := slotHandle(id)
-	if h == nil || h.Self == nil {
+	if h == nil {
+		return false
+	}
+	e := h.ext.Load()
+	if e == nil || e.self == nil {
 		return false
 	}
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
-	if idx < 0 || idx >= len(h.VTable) {
+	if idx < 0 || idx >= len(e.vtable) {
 		panic(fmt.Sprintf("qute: virtual index %d out of range for %s", idx, h.class))
 	}
-	h.VTable[idx].Call(h.Self, args, ret)
+	e.vtable[idx].Call(e.self, args, ret)
 	return true
 }
 

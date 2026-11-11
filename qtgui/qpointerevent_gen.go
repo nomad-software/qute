@@ -25,7 +25,7 @@ type QPointerEventLike interface{ AsQPointerEvent() *QPointerEvent }
 func (this *QPointerEvent) AsQPointerEvent() *QPointerEvent { return this }
 
 func init() {
-	rt.RegisterClass("QPointerEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QPointerEvent_delete(p) })
+	rt.RegisterClass("QPointerEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QPointerEvent_delete(p) })
 }
 
 // QPointerEventFromPtr wraps an existing C++ QPointerEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,61 @@ func QPointerEventCast(e qtcore.QEventLike) *QPointerEvent {
 	r := rt.View[QPointerEvent](rt.WrapClassFrom(p, "QPointerEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQPointerEventWithType wraps the QPointerEvent constructor.
+//
+//	C++: QPointerEvent::QPointerEvent(Type type, const QPointingDevice * dev, Qt::KeyboardModifiers modifiers = …, const QList<QEventPoint> & points = …)
+//
+// Ownership: dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQPointerEventWithTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#QPointerEvent
+func NewQPointerEventWithType(typeArg qtcore.QEventType, dev QPointingDeviceLike) *QPointerEvent {
+	rt.CheckThread("NewQPointerEventWithType")
+	var devPtr unsafe.Pointer
+	var devH *rt.Handle
+	if dev != nil {
+		devPtr, devH = rt.Arg(unsafe.Pointer(dev.AsQPointingDevice()), "NewQPointerEventWithType")
+	}
+	p := C.qute_QPointerEvent_new(C.int64_t(typeArg), devPtr)
+	runtime.KeepAlive(dev)
+	h := rt.WrapClass(p, "QPointerEvent", rt.NewOwned)
+	rt.KeepArg(h, "QPointerEvent.dev", devH, true)
+	return rt.View[QPointerEvent](h, p)
+}
+
+// NewQPointerEventWithTypeFull wraps the QPointerEvent constructor.
+//
+//	C++: QPointerEvent::QPointerEvent(Type type, const QPointingDevice * dev, Qt::KeyboardModifiers modifiers = …, const QList<QEventPoint> & points = …)
+//
+// Ownership: dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQPointerEventWithTypeFull is NewQPointerEventWithType with every argument, including those NewQPointerEventWithType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpointerevent.html#QPointerEvent
+func NewQPointerEventWithTypeFull(typeArg qtcore.QEventType, dev QPointingDeviceLike, modifiers qtcore.KeyboardModifiers, points []*QEventPoint) *QPointerEvent {
+	rt.CheckThread("NewQPointerEventWithTypeFull")
+	var devPtr unsafe.Pointer
+	var devH *rt.Handle
+	if dev != nil {
+		devPtr, devH = rt.Arg(unsafe.Pointer(dev.AsQPointingDevice()), "NewQPointerEventWithTypeFull")
+	}
+	pointsC := make([]unsafe.Pointer, len(points))
+	for i := range points {
+		pointsC[i] = rt.UseArg(unsafe.Pointer(points[i]), "NewQPointerEventWithTypeFull")
+	}
+	p := C.qute_QPointerEvent_new_1(C.int64_t(typeArg), devPtr, C.int64_t(modifiers), unsafe.Pointer(unsafe.SliceData(pointsC)), C.ptrdiff_t(len(points)))
+	runtime.KeepAlive(dev)
+	runtime.KeepAlive(points)
+	h := rt.WrapClass(p, "QPointerEvent", rt.NewOwned)
+	rt.KeepArg(h, "QPointerEvent.dev", devH, true)
+	return rt.View[QPointerEvent](h, p)
 }
 
 // PointingDevice wraps QPointerEvent::pointingDevice.

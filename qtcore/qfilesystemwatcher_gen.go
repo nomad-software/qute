@@ -374,3 +374,36 @@ func NewQFileSystemWatcherWith(v QFileSystemWatcherSubclass, parent QObjectLike)
 	C.qute_QFileSystemWatcher_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QFileSystemWatcher
 }
+
+// NewQFileSystemWatcherWithPathsWith is NewQFileSystemWatcherWithPaths for a Go subclass: it constructs a QFileSystemWatcher whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQFileSystemWatcherWithPathsWith(v QFileSystemWatcherSubclass, paths []string, parent QObjectLike) *QFileSystemWatcher {
+	rt.CheckThread("NewQFileSystemWatcherWithPathsWith")
+	base := v.quteQFileSystemWatcherBase()
+	if base.QFileSystemWatcher != nil {
+		panic("NewQFileSystemWatcherWithPathsWith: value is already constructed; use a fresh value")
+	}
+	pathsData, pathsLens := quteStrListArg(paths)
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileSystemWatcherWithPathsWith")
+	}
+	p := C.qute_QFileSystemWatcher_new_shim_1((*C.char)(unsafe.Pointer(unsafe.SliceData(pathsData))), (*C.ptrdiff_t)(unsafe.SliceData(pathsLens)), C.ptrdiff_t(len(paths)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFileSystemWatcher", mode)
+	base.QFileSystemWatcher = rt.View[QFileSystemWatcher](h, p)
+	id := h.SetSelf(v, qFileSystemWatcherVTable)
+	mask := rt.Mask(v, qFileSystemWatcherVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QFileSystemWatcher_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QFileSystemWatcher
+}

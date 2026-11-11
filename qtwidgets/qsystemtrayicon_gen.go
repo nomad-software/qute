@@ -546,3 +546,36 @@ func NewQSystemTrayIconWith(v QSystemTrayIconSubclass, parent qtcore.QObjectLike
 	C.qute_QSystemTrayIcon_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSystemTrayIcon
 }
+
+// NewQSystemTrayIconWithIconWith is NewQSystemTrayIconWithIcon for a Go subclass: it constructs a QSystemTrayIcon whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSystemTrayIconWithIconWith(v QSystemTrayIconSubclass, icon *qtgui.QIcon, parent qtcore.QObjectLike) *QSystemTrayIcon {
+	rt.CheckThread("NewQSystemTrayIconWithIconWith")
+	base := v.quteQSystemTrayIconBase()
+	if base.QSystemTrayIcon != nil {
+		panic("NewQSystemTrayIconWithIconWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSystemTrayIconWithIconWith")
+	}
+	p := C.qute_QSystemTrayIcon_new_shim_1(rt.UseArg(unsafe.Pointer(icon), "NewQSystemTrayIconWithIconWith"), parentPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSystemTrayIcon", mode)
+	base.QSystemTrayIcon = rt.View[QSystemTrayIcon](h, p)
+	id := h.SetSelf(v, qSystemTrayIconVTable)
+	mask := rt.Mask(v, qSystemTrayIconVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSystemTrayIcon_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSystemTrayIcon
+}

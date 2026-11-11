@@ -25,7 +25,7 @@ type QGraphicsSceneEventLike interface{ AsQGraphicsSceneEvent() *QGraphicsSceneE
 func (this *QGraphicsSceneEvent) AsQGraphicsSceneEvent() *QGraphicsSceneEvent { return this }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneEvent_delete(p) })
 }
 
 // QGraphicsSceneEventFromPtr wraps an existing C++ QGraphicsSceneEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QGraphicsSceneEventCast(e qtcore.QEventLike) *QGraphicsSceneEvent {
 	r := rt.View[QGraphicsSceneEvent](rt.WrapClassFrom(p, "QGraphicsSceneEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneEventWithType wraps the QGraphicsSceneEvent constructor.
+//
+//	C++: QGraphicsSceneEvent::QGraphicsSceneEvent(Type type)
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicssceneevent.html#QGraphicsSceneEvent
+func NewQGraphicsSceneEventWithType(typeArg qtcore.QEventType) *QGraphicsSceneEvent {
+	rt.CheckThread("NewQGraphicsSceneEventWithType")
+	p := C.qute_QGraphicsSceneEvent_new(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneEvent](h, p)
 }
 
 // Widget wraps QGraphicsSceneEvent::widget.

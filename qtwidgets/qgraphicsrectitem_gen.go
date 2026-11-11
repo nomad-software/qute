@@ -1008,3 +1008,35 @@ func NewQGraphicsRectItemWith(v QGraphicsRectItemSubclass, parent QGraphicsItemL
 	C.qute_QGraphicsRectItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsRectItem
 }
+
+// NewQGraphicsRectItemWithRectFWith is NewQGraphicsRectItemWithRectF for a Go subclass: it constructs a QGraphicsRectItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsRectItemWithRectFWith(v QGraphicsRectItemSubclass, rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsRectItem {
+	rt.CheckThread("NewQGraphicsRectItemWithRectFWith")
+	base := v.quteQGraphicsRectItemBase()
+	if base.QGraphicsRectItem != nil {
+		panic("NewQGraphicsRectItemWithRectFWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsRectItemWithRectFWith")
+	}
+	p := C.qute_QGraphicsRectItem_new_shim_1(cQRectF(rect), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
+	base.QGraphicsRectItem = rt.View[QGraphicsRectItem](h, p)
+	id := h.SetSelf(v, qGraphicsRectItemVTable)
+	mask := rt.Mask(v, qGraphicsRectItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsRectItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsRectItem
+}

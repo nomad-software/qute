@@ -29,7 +29,7 @@ func (this *QGraphicsSceneMouseEvent) AsQGraphicsSceneMouseEvent() *QGraphicsSce
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneMouseEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneMouseEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneMouseEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneMouseEvent_delete(p) })
 }
 
 // QGraphicsSceneMouseEventFromPtr wraps an existing C++ QGraphicsSceneMouseEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,34 @@ func QGraphicsSceneMouseEventCast(e qtcore.QEventLike) *QGraphicsSceneMouseEvent
 	r := rt.View[QGraphicsSceneMouseEvent](rt.WrapClassFrom(p, "QGraphicsSceneMouseEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneMouseEvent wraps the QGraphicsSceneMouseEvent constructor.
+//
+//	C++: QGraphicsSceneMouseEvent::QGraphicsSceneMouseEvent(Type type = …)
+//
+// Arguments with C++ defaults are left at them; NewQGraphicsSceneMouseEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenemouseevent.html#QGraphicsSceneMouseEvent
+func NewQGraphicsSceneMouseEvent() *QGraphicsSceneMouseEvent {
+	rt.CheckThread("NewQGraphicsSceneMouseEvent")
+	p := C.qute_QGraphicsSceneMouseEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneMouseEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneMouseEvent](h, p)
+}
+
+// NewQGraphicsSceneMouseEventFull wraps the QGraphicsSceneMouseEvent constructor.
+//
+//	C++: QGraphicsSceneMouseEvent::QGraphicsSceneMouseEvent(Type type = …)
+//
+// NewQGraphicsSceneMouseEventFull is NewQGraphicsSceneMouseEvent with every argument, including those NewQGraphicsSceneMouseEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenemouseevent.html#QGraphicsSceneMouseEvent
+func NewQGraphicsSceneMouseEventFull(typeArg qtcore.QEventType) *QGraphicsSceneMouseEvent {
+	rt.CheckThread("NewQGraphicsSceneMouseEventFull")
+	p := C.qute_QGraphicsSceneMouseEvent_new_1(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneMouseEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneMouseEvent](h, p)
 }
 
 // Pos wraps QGraphicsSceneMouseEvent::pos.

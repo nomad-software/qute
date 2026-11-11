@@ -1541,3 +1541,35 @@ func NewQGraphicsTextItemWith(v QGraphicsTextItemSubclass, parent QGraphicsItemL
 	C.qute_QGraphicsTextItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsTextItem
 }
+
+// NewQGraphicsTextItemWithTextWith is NewQGraphicsTextItemWithText for a Go subclass: it constructs a QGraphicsTextItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsTextItemWithTextWith(v QGraphicsTextItemSubclass, text string, parent QGraphicsItemLike) *QGraphicsTextItem {
+	rt.CheckThread("NewQGraphicsTextItemWithTextWith")
+	base := v.quteQGraphicsTextItemBase()
+	if base.QGraphicsTextItem != nil {
+		panic("NewQGraphicsTextItemWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsTextItemWithTextWith")
+	}
+	p := C.qute_QGraphicsTextItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsTextItem", mode)
+	base.QGraphicsTextItem = rt.View[QGraphicsTextItem](h, p)
+	id := h.SetSelf(v, qGraphicsTextItemVTable)
+	mask := rt.Mask(v, qGraphicsTextItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsTextItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsTextItem
+}

@@ -27,6 +27,11 @@ func init() {
 	rt.RegisterClass("QModelIndex", rt.KindValue, func(p unsafe.Pointer) { C.qute_QModelIndex_delete(p) })
 }
 
+// A QModelIndex is an inline value: its bytes are kept in Go memory.
+func init() {
+	rt.RegisterInline("QModelIndex", int(C.qute_QModelIndex_sizeof()), func(p unsafe.Pointer) { C.qute_QModelIndex_construct(p) })
+}
+
 // Every QModelIndex holds the QAbstractItemModel it belongs to (depends-on: model).
 func init() {
 	rt.RegisterDependency("QModelIndex", func(p unsafe.Pointer) *rt.Handle {

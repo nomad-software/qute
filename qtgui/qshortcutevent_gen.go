@@ -25,7 +25,7 @@ type QShortcutEventLike interface{ AsQShortcutEvent() *QShortcutEvent }
 func (this *QShortcutEvent) AsQShortcutEvent() *QShortcutEvent { return this }
 
 func init() {
-	rt.RegisterClass("QShortcutEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QShortcutEvent_delete(p) })
+	rt.RegisterClass("QShortcutEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QShortcutEvent_delete(p) })
 }
 
 // QShortcutEventFromPtr wraps an existing C++ QShortcutEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,79 @@ func QShortcutEventCast(e qtcore.QEventLike) *QShortcutEvent {
 	r := rt.View[QShortcutEvent](rt.WrapClassFrom(p, "QShortcutEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQShortcutEventWithKeySequence wraps the QShortcutEvent constructor.
+//
+//	C++: QShortcutEvent::QShortcutEvent(const QKeySequence & key, int id, bool ambiguous = …)
+//
+// Arguments with C++ defaults are left at them; NewQShortcutEventWithKeySequenceFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcutevent.html#QShortcutEvent
+func NewQShortcutEventWithKeySequence(key *QKeySequence, idArg int) *QShortcutEvent {
+	rt.CheckThread("NewQShortcutEventWithKeySequence")
+	p := C.qute_QShortcutEvent_new(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventWithKeySequence"), C.int(idArg))
+	runtime.KeepAlive(key)
+	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	return rt.View[QShortcutEvent](h, p)
+}
+
+// NewQShortcutEventForShortcut wraps the QShortcutEvent constructor.
+//
+//	C++: QShortcutEvent::QShortcutEvent(const QKeySequence & key, const QShortcut * shortcut = …, bool ambiguous = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQShortcutEventForShortcutFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcutevent.html#QShortcutEvent
+func NewQShortcutEventForShortcut(key *QKeySequence) *QShortcutEvent {
+	rt.CheckThread("NewQShortcutEventForShortcut")
+	p := C.qute_QShortcutEvent_new_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventForShortcut"))
+	runtime.KeepAlive(key)
+	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	return rt.View[QShortcutEvent](h, p)
+}
+
+// NewQShortcutEventWithKeySequenceFull wraps the QShortcutEvent constructor.
+//
+//	C++: QShortcutEvent::QShortcutEvent(const QKeySequence & key, int id, bool ambiguous = …)
+//
+// NewQShortcutEventWithKeySequenceFull is NewQShortcutEventWithKeySequence with every argument, including those NewQShortcutEventWithKeySequence leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcutevent.html#QShortcutEvent
+func NewQShortcutEventWithKeySequenceFull(key *QKeySequence, idArg int, ambiguous bool) *QShortcutEvent {
+	rt.CheckThread("NewQShortcutEventWithKeySequenceFull")
+	p := C.qute_QShortcutEvent_new_2(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventWithKeySequenceFull"), C.int(idArg), C.bool(ambiguous))
+	runtime.KeepAlive(key)
+	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	return rt.View[QShortcutEvent](h, p)
+}
+
+// NewQShortcutEventForShortcutFull wraps the QShortcutEvent constructor.
+//
+//	C++: QShortcutEvent::QShortcutEvent(const QKeySequence & key, const QShortcut * shortcut = …, bool ambiguous = …)
+//
+// Ownership: shortcut is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQShortcutEventForShortcutFull is NewQShortcutEventForShortcut with every argument, including those NewQShortcutEventForShortcut leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qshortcutevent.html#QShortcutEvent
+func NewQShortcutEventForShortcutFull(key *QKeySequence, shortcut QShortcutLike, ambiguous bool) *QShortcutEvent {
+	rt.CheckThread("NewQShortcutEventForShortcutFull")
+	var shortcutPtr unsafe.Pointer
+	var shortcutH *rt.Handle
+	if shortcut != nil {
+		shortcutPtr, shortcutH = rt.Arg(unsafe.Pointer(shortcut.AsQShortcut()), "NewQShortcutEventForShortcutFull")
+	}
+	p := C.qute_QShortcutEvent_new_3(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventForShortcutFull"), shortcutPtr, C.bool(ambiguous))
+	runtime.KeepAlive(key)
+	runtime.KeepAlive(shortcut)
+	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	rt.KeepArg(h, "QShortcutEvent.shortcut", shortcutH, true)
+	return rt.View[QShortcutEvent](h, p)
 }
 
 // Key wraps QShortcutEvent::key.

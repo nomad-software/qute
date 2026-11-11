@@ -1111,3 +1111,35 @@ func NewQCheckBoxWith(v QCheckBoxSubclass, parent QWidgetLike) *QCheckBox {
 	C.qute_QCheckBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QCheckBox
 }
+
+// NewQCheckBoxWithTextWith is NewQCheckBoxWithText for a Go subclass: it constructs a QCheckBox whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCheckBoxWithTextWith(v QCheckBoxSubclass, text string, parent QWidgetLike) *QCheckBox {
+	rt.CheckThread("NewQCheckBoxWithTextWith")
+	base := v.quteQCheckBoxBase()
+	if base.QCheckBox != nil {
+		panic("NewQCheckBoxWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCheckBoxWithTextWith")
+	}
+	p := C.qute_QCheckBox_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCheckBox", mode)
+	base.QCheckBox = rt.View[QCheckBox](h, p)
+	id := h.SetSelf(v, qCheckBoxVTable)
+	mask := rt.Mask(v, qCheckBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCheckBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCheckBox
+}

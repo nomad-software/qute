@@ -29,7 +29,7 @@ func (this *QGraphicsSceneResizeEvent) AsQGraphicsSceneResizeEvent() *QGraphicsS
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneResizeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneResizeEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneResizeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneResizeEvent_delete(p) })
 }
 
 // QGraphicsSceneResizeEventFromPtr wraps an existing C++ QGraphicsSceneResizeEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,18 @@ func QGraphicsSceneResizeEventCast(e qtcore.QEventLike) *QGraphicsSceneResizeEve
 	r := rt.View[QGraphicsSceneResizeEvent](rt.WrapClassFrom(p, "QGraphicsSceneResizeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneResizeEvent wraps the QGraphicsSceneResizeEvent constructor.
+//
+//	C++: QGraphicsSceneResizeEvent::QGraphicsSceneResizeEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicssceneresizeevent.html#QGraphicsSceneResizeEvent
+func NewQGraphicsSceneResizeEvent() *QGraphicsSceneResizeEvent {
+	rt.CheckThread("NewQGraphicsSceneResizeEvent")
+	p := C.qute_QGraphicsSceneResizeEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneResizeEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneResizeEvent](h, p)
 }
 
 // OldSize wraps QGraphicsSceneResizeEvent::oldSize.

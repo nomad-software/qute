@@ -25,7 +25,7 @@ type QFileOpenEventLike interface{ AsQFileOpenEvent() *QFileOpenEvent }
 func (this *QFileOpenEvent) AsQFileOpenEvent() *QFileOpenEvent { return this }
 
 func init() {
-	rt.RegisterClass("QFileOpenEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QFileOpenEvent_delete(p) })
+	rt.RegisterClass("QFileOpenEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QFileOpenEvent_delete(p) })
 }
 
 // QFileOpenEventFromPtr wraps an existing C++ QFileOpenEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,31 @@ func QFileOpenEventCast(e qtcore.QEventLike) *QFileOpenEvent {
 	r := rt.View[QFileOpenEvent](rt.WrapClassFrom(p, "QFileOpenEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQFileOpenEventWithFile wraps the QFileOpenEvent constructor.
+//
+//	C++: QFileOpenEvent::QFileOpenEvent(const QString & file)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfileopenevent.html#QFileOpenEvent
+func NewQFileOpenEventWithFile(file string) *QFileOpenEvent {
+	rt.CheckThread("NewQFileOpenEventWithFile")
+	p := C.qute_QFileOpenEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
+	h := rt.WrapClass(p, "QFileOpenEvent", rt.NewOwned)
+	return rt.View[QFileOpenEvent](h, p)
+}
+
+// NewQFileOpenEventWithUrl wraps the QFileOpenEvent constructor.
+//
+//	C++: QFileOpenEvent::QFileOpenEvent(const QUrl & url)
+//
+// Qt docs: https://doc.qt.io/qt-6/qfileopenevent.html#QFileOpenEvent
+func NewQFileOpenEventWithUrl(url *qtcore.QUrl) *QFileOpenEvent {
+	rt.CheckThread("NewQFileOpenEventWithUrl")
+	p := C.qute_QFileOpenEvent_new_1(rt.UseArg(unsafe.Pointer(url), "NewQFileOpenEventWithUrl"))
+	runtime.KeepAlive(url)
+	h := rt.WrapClass(p, "QFileOpenEvent", rt.NewOwned)
+	return rt.View[QFileOpenEvent](h, p)
 }
 
 // File wraps QFileOpenEvent::file.

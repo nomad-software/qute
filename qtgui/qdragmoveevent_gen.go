@@ -25,7 +25,7 @@ type QDragMoveEventLike interface{ AsQDragMoveEvent() *QDragMoveEvent }
 func (this *QDragMoveEvent) AsQDragMoveEvent() *QDragMoveEvent { return this }
 
 func init() {
-	rt.RegisterClass("QDragMoveEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QDragMoveEvent_delete(p) })
+	rt.RegisterClass("QDragMoveEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QDragMoveEvent_delete(p) })
 }
 
 // QDragMoveEventFromPtr wraps an existing C++ QDragMoveEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,56 @@ func QDragMoveEventCast(e qtcore.QEventLike) *QDragMoveEvent {
 	r := rt.View[QDragMoveEvent](rt.WrapClassFrom(p, "QDragMoveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQDragMoveEventWithPointF wraps the QDragMoveEvent constructor.
+//
+//	C++: QDragMoveEvent::QDragMoveEvent(QPointF pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)
+//
+// Ownership: data is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQDragMoveEventWithPointFFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdragmoveevent.html#QDragMoveEvent
+func NewQDragMoveEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions, data qtcore.QMimeDataLike, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QDragMoveEvent {
+	rt.CheckThread("NewQDragMoveEventWithPointF")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "NewQDragMoveEventWithPointF")
+	}
+	p := C.qute_QDragMoveEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
+	runtime.KeepAlive(data)
+	h := rt.WrapClass(p, "QDragMoveEvent", rt.NewOwned)
+	rt.KeepArg(h, "QDragMoveEvent.data", dataH, true)
+	return rt.View[QDragMoveEvent](h, p)
+}
+
+// NewQDragMoveEventWithPointFFull wraps the QDragMoveEvent constructor.
+//
+//	C++: QDragMoveEvent::QDragMoveEvent(QPointF pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)
+//
+// Ownership: data is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQDragMoveEventWithPointFFull is NewQDragMoveEventWithPointF with every argument, including those NewQDragMoveEventWithPointF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdragmoveevent.html#QDragMoveEvent
+func NewQDragMoveEventWithPointFFull(pos qtcore.QPointF, actions qtcore.DropActions, data qtcore.QMimeDataLike, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, typeArg qtcore.QEventType) *QDragMoveEvent {
+	rt.CheckThread("NewQDragMoveEventWithPointFFull")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "NewQDragMoveEventWithPointFFull")
+	}
+	p := C.qute_QDragMoveEvent_new_1(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(typeArg))
+	runtime.KeepAlive(data)
+	h := rt.WrapClass(p, "QDragMoveEvent", rt.NewOwned)
+	rt.KeepArg(h, "QDragMoveEvent.data", dataH, true)
+	return rt.View[QDragMoveEvent](h, p)
 }
 
 // AnswerRect wraps QDragMoveEvent::answerRect.

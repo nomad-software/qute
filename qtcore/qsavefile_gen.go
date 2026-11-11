@@ -623,3 +623,35 @@ func NewQSaveFileWith(v QSaveFileSubclass, parent QObjectLike) *QSaveFile {
 	C.qute_QSaveFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSaveFile
 }
+
+// NewQSaveFileWithNameWith is NewQSaveFileWithName for a Go subclass: it constructs a QSaveFile whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSaveFileWithNameWith(v QSaveFileSubclass, name string, parent QObjectLike) *QSaveFile {
+	rt.CheckThread("NewQSaveFileWithNameWith")
+	base := v.quteQSaveFileBase()
+	if base.QSaveFile != nil {
+		panic("NewQSaveFileWithNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSaveFileWithNameWith")
+	}
+	p := C.qute_QSaveFile_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSaveFile", mode)
+	base.QSaveFile = rt.View[QSaveFile](h, p)
+	id := h.SetSelf(v, qSaveFileVTable)
+	mask := rt.Mask(v, qSaveFileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSaveFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSaveFile
+}

@@ -342,6 +342,15 @@ public:
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QActionEvent : public QActionEvent {
+public:
+	template <class... A> explicit qute_QActionEvent(A &&...a) : QActionEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QActionEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QActionEvent *>(this))); }
+};
+
 class qute_QActionGroup : public QActionGroup {
 public:
 	template <class... A> explicit qute_QActionGroup(A &&...a) : QActionGroup(std::forward<A>(a)...) {}
@@ -406,6 +415,42 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QApplicationStateChangeEvent : public QApplicationStateChangeEvent {
+public:
+	template <class... A> explicit qute_QApplicationStateChangeEvent(A &&...a) : QApplicationStateChangeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QApplicationStateChangeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QApplicationStateChangeEvent *>(this))); }
+};
+
+class qute_QChildWindowEvent : public QChildWindowEvent {
+public:
+	template <class... A> explicit qute_QChildWindowEvent(A &&...a) : QChildWindowEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QChildWindowEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QChildWindowEvent *>(this))); }
+};
+
+class qute_QCloseEvent : public QCloseEvent {
+public:
+	template <class... A> explicit qute_QCloseEvent(A &&...a) : QCloseEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QCloseEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QCloseEvent *>(this))); }
+};
+
+class qute_QContextMenuEvent : public QContextMenuEvent {
+public:
+	template <class... A> explicit qute_QContextMenuEvent(A &&...a) : QContextMenuEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QContextMenuEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QContextMenuEvent *>(this))); }
 };
 
 class qute_QDoubleValidator : public QDoubleValidator {
@@ -569,6 +614,69 @@ public:
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QDragEnterEvent : public QDragEnterEvent {
+public:
+	template <class... A> explicit qute_QDragEnterEvent(A &&...a) : QDragEnterEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QDragEnterEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QDragEnterEvent *>(this))); }
+};
+
+class qute_QDragLeaveEvent : public QDragLeaveEvent {
+public:
+	template <class... A> explicit qute_QDragLeaveEvent(A &&...a) : QDragLeaveEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QDragLeaveEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QDragLeaveEvent *>(this))); }
+};
+
+class qute_QDragMoveEvent : public QDragMoveEvent {
+public:
+	template <class... A> explicit qute_QDragMoveEvent(A &&...a) : QDragMoveEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QDragMoveEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QDragMoveEvent *>(this))); }
+};
+
+class qute_QDropEvent : public QDropEvent {
+public:
+	template <class... A> explicit qute_QDropEvent(A &&...a) : QDropEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QDropEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QDropEvent *>(this))); }
+};
+
+class qute_QEnterEvent : public QEnterEvent {
+public:
+	template <class... A> explicit qute_QEnterEvent(A &&...a) : QEnterEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QEnterEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QEnterEvent *>(this))); }
+};
+
+class qute_QExposeEvent : public QExposeEvent {
+public:
+	template <class... A> explicit qute_QExposeEvent(A &&...a) : QExposeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QExposeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QExposeEvent *>(this))); }
+};
+
+class qute_QFileOpenEvent : public QFileOpenEvent {
+public:
+	template <class... A> explicit qute_QFileOpenEvent(A &&...a) : QFileOpenEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QFileOpenEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QFileOpenEvent *>(this))); }
+};
+
 class qute_QFileSystemModel : public QFileSystemModel {
 public:
 	template <class... A> explicit qute_QFileSystemModel(A &&...a) : QFileSystemModel(std::forward<A>(a)...) {}
@@ -599,11 +707,11 @@ public:
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 0, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QFileSystemModel::index(a0, a1, a2);
@@ -611,11 +719,11 @@ public:
 	QModelIndex qute_super_0(int a0, int a1, const QModelIndex & a2) const { return QFileSystemModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(1)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QFileSystemModel::parent(a0);
@@ -625,11 +733,11 @@ public:
 		if (qute_has(2)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QFileSystemModel::sibling(a0, a1, a2);
@@ -637,7 +745,7 @@ public:
 	QModelIndex qute_super_2(int a0, int a1, const QModelIndex & a2) const { return QFileSystemModel::sibling(a0, a1, a2); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
@@ -649,7 +757,7 @@ public:
 	bool qute_super_3(const QModelIndex & a0) const { return QFileSystemModel::hasChildren(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
@@ -661,7 +769,7 @@ public:
 	bool qute_super_4(const QModelIndex & a0) const { return QFileSystemModel::canFetchMore(a0); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(5)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_qtgui_virtual(qute_id, 5, args, nullptr)) {
 				return;
@@ -672,7 +780,7 @@ public:
 	void qute_super_5(const QModelIndex & a0) { return QFileSystemModel::fetchMore(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(6)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int r{};
 			if (qute_qtgui_virtual(qute_id, 6, args, &r)) {
@@ -684,7 +792,7 @@ public:
 	int qute_super_6(const QModelIndex & a0) const { return QFileSystemModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int r{};
 			if (qute_qtgui_virtual(qute_id, 7, args, &r)) {
@@ -696,7 +804,7 @@ public:
 	int qute_super_7(const QModelIndex & a0) const { return QFileSystemModel::columnCount(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
@@ -709,7 +817,7 @@ public:
 	QVariant qute_super_8(const QModelIndex & a0, int a1) const { return QFileSystemModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(9)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
@@ -737,7 +845,7 @@ public:
 	QVariant qute_super_10(int a0, Qt::Orientation a1, int a2) const { return QFileSystemModel::headerData(a0, a1, a2); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(11)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int64_t r{};
 			if (qute_qtgui_virtual(qute_id, 11, args, &r)) {
@@ -787,7 +895,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = static_cast<void *>(new QModelIndex(a4));
+			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 15, args, &r)) {
@@ -857,7 +965,7 @@ public:
 	bool qute_super_20(int a0, Qt::Orientation a1, const QVariant & a2, int a3) { return QAbstractItemModel::setHeaderData(a0, a1, a2, a3); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(21)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			qute_map r{};
 			if (qute_qtgui_virtual(qute_id, 21, args, &r)) {
@@ -869,7 +977,7 @@ public:
 	QMap<int, QVariant> qute_super_21(const QModelIndex & a0) const { return QAbstractItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(22)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
@@ -882,7 +990,7 @@ public:
 	bool qute_super_22(const QModelIndex & a0, const QMap<int, QVariant> & a1) { return QAbstractItemModel::setItemData(a0, a1); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(23)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
@@ -898,7 +1006,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = static_cast<void *>(new QModelIndex(a4));
+			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 24, args, &r)) {
@@ -922,7 +1030,7 @@ public:
 		if (qute_has(26)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 26, args, &r)) {
@@ -936,7 +1044,7 @@ public:
 		if (qute_has(27)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 27, args, &r)) {
@@ -950,7 +1058,7 @@ public:
 		if (qute_has(28)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 28, args, &r)) {
@@ -964,7 +1072,7 @@ public:
 		if (qute_has(29)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 29, args, &r)) {
@@ -976,10 +1084,10 @@ public:
 	bool qute_super_29(int a0, int a1, const QModelIndex & a2) { return QAbstractItemModel::removeColumns(a0, a1, a2); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(30)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = static_cast<void *>(new QModelIndex(a3));
+			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
@@ -992,10 +1100,10 @@ public:
 	bool qute_super_30(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(31)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = static_cast<void *>(new QModelIndex(a3));
+			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
@@ -1008,11 +1116,11 @@ public:
 	bool qute_super_31(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 32, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QAbstractItemModel::buddy(a0);
@@ -1020,7 +1128,7 @@ public:
 	QModelIndex qute_super_32(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(33)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
@@ -1028,7 +1136,7 @@ public:
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
 			if (qute_qtgui_virtual(qute_id, 33, args, &r)) {
-				return qute_take_list<QModelIndex, void *>(r, [](void * e) { return (e ? *static_cast<QModelIndex *>(e) : QModelIndex()); });
+				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
 		return QAbstractItemModel::match(a0, a1, a2, a3, a4);
@@ -1036,7 +1144,7 @@ public:
 	QList<QModelIndex> qute_super_33(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(34)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			qute_size r{};
 			if (qute_qtgui_virtual(qute_id, 34, args, &r)) {
@@ -1109,6 +1217,51 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_40(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QFocusEvent : public QFocusEvent {
+public:
+	template <class... A> explicit qute_QFocusEvent(A &&...a) : QFocusEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QFocusEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QFocusEvent *>(this))); }
+};
+
+class qute_QHelpEvent : public QHelpEvent {
+public:
+	template <class... A> explicit qute_QHelpEvent(A &&...a) : QHelpEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QHelpEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QHelpEvent *>(this))); }
+};
+
+class qute_QHideEvent : public QHideEvent {
+public:
+	template <class... A> explicit qute_QHideEvent(A &&...a) : QHideEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QHideEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QHideEvent *>(this))); }
+};
+
+class qute_QHoverEvent : public QHoverEvent {
+public:
+	template <class... A> explicit qute_QHoverEvent(A &&...a) : QHoverEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QHoverEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QHoverEvent *>(this))); }
+};
+
+class qute_QIconDragEvent : public QIconDragEvent {
+public:
+	template <class... A> explicit qute_QIconDragEvent(A &&...a) : QIconDragEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QIconDragEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QIconDragEvent *>(this))); }
 };
 
 class qute_QIconEngine : public QIconEngine {
@@ -1357,6 +1510,33 @@ public:
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QInputEvent : public QInputEvent {
+public:
+	template <class... A> explicit qute_QInputEvent(A &&...a) : QInputEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QInputEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QInputEvent *>(this))); }
+};
+
+class qute_QInputMethodEvent : public QInputMethodEvent {
+public:
+	template <class... A> explicit qute_QInputMethodEvent(A &&...a) : QInputMethodEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QInputMethodEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QInputMethodEvent *>(this))); }
+};
+
+class qute_QInputMethodQueryEvent : public QInputMethodQueryEvent {
+public:
+	template <class... A> explicit qute_QInputMethodQueryEvent(A &&...a) : QInputMethodQueryEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QInputMethodQueryEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QInputMethodQueryEvent *>(this))); }
+};
+
 class qute_QIntValidator : public QIntValidator {
 public:
 	template <class... A> explicit qute_QIntValidator(A &&...a) : QIntValidator(std::forward<A>(a)...) {}
@@ -1452,6 +1632,33 @@ public:
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QKeyEvent : public QKeyEvent {
+public:
+	template <class... A> explicit qute_QKeyEvent(A &&...a) : QKeyEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QKeyEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QKeyEvent *>(this))); }
+};
+
+class qute_QMouseEvent : public QMouseEvent {
+public:
+	template <class... A> explicit qute_QMouseEvent(A &&...a) : QMouseEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QMouseEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QMouseEvent *>(this))); }
+};
+
+class qute_QMoveEvent : public QMoveEvent {
+public:
+	template <class... A> explicit qute_QMoveEvent(A &&...a) : QMoveEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QMoveEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QMoveEvent *>(this))); }
+};
+
 class qute_QMovie : public QMovie {
 public:
 	template <class... A> explicit qute_QMovie(A &&...a) : QMovie(std::forward<A>(a)...) {}
@@ -1516,6 +1723,15 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QNativeGestureEvent : public QNativeGestureEvent {
+public:
+	template <class... A> explicit qute_QNativeGestureEvent(A &&...a) : QNativeGestureEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QNativeGestureEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QNativeGestureEvent *>(this))); }
 };
 
 class qute_QOffscreenSurface : public QOffscreenSurface {
@@ -1682,6 +1898,15 @@ public:
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QPaintEvent : public QPaintEvent {
+public:
+	template <class... A> explicit qute_QPaintEvent(A &&...a) : QPaintEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QPaintEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QPaintEvent *>(this))); }
+};
+
 class qute_QPdfWriter : public QPdfWriter {
 public:
 	template <class... A> explicit qute_QPdfWriter(A &&...a) : QPdfWriter(std::forward<A>(a)...) {}
@@ -1757,6 +1982,24 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QPlatformSurfaceEvent : public QPlatformSurfaceEvent {
+public:
+	template <class... A> explicit qute_QPlatformSurfaceEvent(A &&...a) : QPlatformSurfaceEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QPlatformSurfaceEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QPlatformSurfaceEvent *>(this))); }
+};
+
+class qute_QPointerEvent : public QPointerEvent {
+public:
+	template <class... A> explicit qute_QPointerEvent(A &&...a) : QPointerEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QPointerEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QPointerEvent *>(this))); }
 };
 
 class qute_QPointingDevice : public QPointingDevice {
@@ -2226,6 +2469,42 @@ public:
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QResizeEvent : public QResizeEvent {
+public:
+	template <class... A> explicit qute_QResizeEvent(A &&...a) : QResizeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QResizeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QResizeEvent *>(this))); }
+};
+
+class qute_QScreenOrientationChangeEvent : public QScreenOrientationChangeEvent {
+public:
+	template <class... A> explicit qute_QScreenOrientationChangeEvent(A &&...a) : QScreenOrientationChangeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QScreenOrientationChangeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QScreenOrientationChangeEvent *>(this))); }
+};
+
+class qute_QScrollEvent : public QScrollEvent {
+public:
+	template <class... A> explicit qute_QScrollEvent(A &&...a) : QScrollEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QScrollEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QScrollEvent *>(this))); }
+};
+
+class qute_QScrollPrepareEvent : public QScrollPrepareEvent {
+public:
+	template <class... A> explicit qute_QScrollPrepareEvent(A &&...a) : QScrollPrepareEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QScrollPrepareEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QScrollPrepareEvent *>(this))); }
+};
+
 class qute_QShortcut : public QShortcut {
 public:
 	template <class... A> explicit qute_QShortcut(A &&...a) : QShortcut(std::forward<A>(a)...) {}
@@ -2290,6 +2569,24 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QShortcutEvent : public QShortcutEvent {
+public:
+	template <class... A> explicit qute_QShortcutEvent(A &&...a) : QShortcutEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QShortcutEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QShortcutEvent *>(this))); }
+};
+
+class qute_QShowEvent : public QShowEvent {
+public:
+	template <class... A> explicit qute_QShowEvent(A &&...a) : QShowEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QShowEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QShowEvent *>(this))); }
 };
 
 class qute_QStandardItem : public QStandardItem {
@@ -2408,11 +2705,11 @@ public:
 		if (qute_has(1)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 1, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QStandardItemModel::index(a0, a1, a2);
@@ -2420,11 +2717,11 @@ public:
 	QModelIndex qute_super_1(int a0, int a1, const QModelIndex & a2) const { return QStandardItemModel::index(a0, a1, a2); }
 	QModelIndex parent(const QModelIndex & a0) const override {
 		if (qute_has(2)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 2, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QStandardItemModel::parent(a0);
@@ -2432,7 +2729,7 @@ public:
 	QModelIndex qute_super_2(const QModelIndex & a0) const { return QStandardItemModel::parent(a0); }
 	int rowCount(const QModelIndex & a0) const override {
 		if (qute_has(3)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int r{};
 			if (qute_qtgui_virtual(qute_id, 3, args, &r)) {
@@ -2444,7 +2741,7 @@ public:
 	int qute_super_3(const QModelIndex & a0) const { return QStandardItemModel::rowCount(a0); }
 	int columnCount(const QModelIndex & a0) const override {
 		if (qute_has(4)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int r{};
 			if (qute_qtgui_virtual(qute_id, 4, args, &r)) {
@@ -2456,7 +2753,7 @@ public:
 	int qute_super_4(const QModelIndex & a0) const { return QStandardItemModel::columnCount(a0); }
 	bool hasChildren(const QModelIndex & a0) const override {
 		if (qute_has(5)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 5, args, &r)) {
@@ -2468,7 +2765,7 @@ public:
 	bool qute_super_5(const QModelIndex & a0) const { return QStandardItemModel::hasChildren(a0); }
 	QVariant data(const QModelIndex & a0, int a1) const override {
 		if (qute_has(6)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			void *args[] = {&c0, &c1};
 			void * r = nullptr;
@@ -2481,7 +2778,7 @@ public:
 	QVariant qute_super_6(const QModelIndex & a0, int a1) const { return QStandardItemModel::data(a0, a1); }
 	bool setData(const QModelIndex & a0, const QVariant & a1, int a2) override {
 		if (qute_has(7)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void * c1 = static_cast<void *>(new QVariant(a1));
 			int c2 = static_cast<int>(a2);
 			void *args[] = {&c0, &c1, &c2};
@@ -2495,7 +2792,7 @@ public:
 	bool qute_super_7(const QModelIndex & a0, const QVariant & a1, int a2) { return QStandardItemModel::setData(a0, a1, a2); }
 	bool clearItemData(const QModelIndex & a0) override {
 		if (qute_has(8)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 8, args, &r)) {
@@ -2538,7 +2835,7 @@ public:
 		if (qute_has(11)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 11, args, &r)) {
@@ -2552,7 +2849,7 @@ public:
 		if (qute_has(12)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 12, args, &r)) {
@@ -2566,7 +2863,7 @@ public:
 		if (qute_has(13)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 13, args, &r)) {
@@ -2580,7 +2877,7 @@ public:
 		if (qute_has(14)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 14, args, &r)) {
@@ -2592,7 +2889,7 @@ public:
 	bool qute_super_14(int a0, int a1, const QModelIndex & a2) { return QStandardItemModel::removeColumns(a0, a1, a2); }
 	QFlags<Qt::ItemFlag> flags(const QModelIndex & a0) const override {
 		if (qute_has(15)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			int64_t r{};
 			if (qute_qtgui_virtual(qute_id, 15, args, &r)) {
@@ -2614,7 +2911,7 @@ public:
 	QFlags<Qt::DropAction> qute_super_16() const { return QStandardItemModel::supportedDropActions(); }
 	QMap<int, QVariant> itemData(const QModelIndex & a0) const override {
 		if (qute_has(17)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			qute_map r{};
 			if (qute_qtgui_virtual(qute_id, 17, args, &r)) {
@@ -2626,7 +2923,7 @@ public:
 	QMap<int, QVariant> qute_super_17(const QModelIndex & a0) const { return QStandardItemModel::itemData(a0); }
 	bool setItemData(const QModelIndex & a0, const QMap<int, QVariant> & a1) override {
 		if (qute_has(18)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			qute_map c1 = qute_ret_map<int, void *>(a1, [](const auto &v) { return static_cast<int>(v); }, [](const auto &v) { return static_cast<void *>(new QVariant(v)); });
 			void *args[] = {&c0, &c1};
 			bool r{};
@@ -2677,7 +2974,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = static_cast<void *>(new QModelIndex(a4));
+			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 22, args, &r)) {
@@ -2691,11 +2988,11 @@ public:
 		if (qute_has(23)) {
 			int c0 = static_cast<int>(a0);
 			int c1 = static_cast<int>(a1);
-			void * c2 = static_cast<void *>(new QModelIndex(a2));
+			void * c2 = const_cast<void *>(static_cast<const void *>(&a2));
 			void *args[] = {&c0, &c1, &c2};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 23, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QAbstractItemModel::sibling(a0, a1, a2);
@@ -2707,7 +3004,7 @@ public:
 			int64_t c1 = static_cast<int64_t>(a1);
 			int c2 = static_cast<int>(a2);
 			int c3 = static_cast<int>(a3);
-			void * c4 = static_cast<void *>(new QModelIndex(a4));
+			void * c4 = const_cast<void *>(static_cast<const void *>(&a4));
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 24, args, &r)) {
@@ -2729,10 +3026,10 @@ public:
 	QFlags<Qt::DropAction> qute_super_25() const { return QAbstractItemModel::supportedDragActions(); }
 	bool moveRows(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(26)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = static_cast<void *>(new QModelIndex(a3));
+			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
@@ -2745,10 +3042,10 @@ public:
 	bool qute_super_26(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveRows(a0, a1, a2, a3, a4); }
 	bool moveColumns(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) override {
 		if (qute_has(27)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			int c2 = static_cast<int>(a2);
-			void * c3 = static_cast<void *>(new QModelIndex(a3));
+			void * c3 = const_cast<void *>(static_cast<const void *>(&a3));
 			int c4 = static_cast<int>(a4);
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			bool r{};
@@ -2761,7 +3058,7 @@ public:
 	bool qute_super_27(const QModelIndex & a0, int a1, int a2, const QModelIndex & a3, int a4) { return QAbstractItemModel::moveColumns(a0, a1, a2, a3, a4); }
 	void fetchMore(const QModelIndex & a0) override {
 		if (qute_has(28)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			if (qute_qtgui_virtual(qute_id, 28, args, nullptr)) {
 				return;
@@ -2772,7 +3069,7 @@ public:
 	void qute_super_28(const QModelIndex & a0) { return QAbstractItemModel::fetchMore(a0); }
 	bool canFetchMore(const QModelIndex & a0) const override {
 		if (qute_has(29)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			bool r{};
 			if (qute_qtgui_virtual(qute_id, 29, args, &r)) {
@@ -2784,11 +3081,11 @@ public:
 	bool qute_super_29(const QModelIndex & a0) const { return QAbstractItemModel::canFetchMore(a0); }
 	QModelIndex buddy(const QModelIndex & a0) const override {
 		if (qute_has(30)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
-			void * r = nullptr;
+			QModelIndex r{};
 			if (qute_qtgui_virtual(qute_id, 30, args, &r)) {
-				return (r ? *static_cast<QModelIndex *>(r) : QModelIndex());
+				return r;
 			}
 		}
 		return QAbstractItemModel::buddy(a0);
@@ -2796,7 +3093,7 @@ public:
 	QModelIndex qute_super_30(const QModelIndex & a0) const { return QAbstractItemModel::buddy(a0); }
 	QList<QModelIndex> match(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const override {
 		if (qute_has(31)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			int c1 = static_cast<int>(a1);
 			void * c2 = static_cast<void *>(new QVariant(a2));
 			int c3 = static_cast<int>(a3);
@@ -2804,7 +3101,7 @@ public:
 			void *args[] = {&c0, &c1, &c2, &c3, &c4};
 			qute_list r{};
 			if (qute_qtgui_virtual(qute_id, 31, args, &r)) {
-				return qute_take_list<QModelIndex, void *>(r, [](void * e) { return (e ? *static_cast<QModelIndex *>(e) : QModelIndex()); });
+				return qute_take_list<QModelIndex, QModelIndex>(r, [](QModelIndex e) { return e; });
 			}
 		}
 		return QAbstractItemModel::match(a0, a1, a2, a3, a4);
@@ -2812,7 +3109,7 @@ public:
 	QList<QModelIndex> qute_super_31(const QModelIndex & a0, int a1, const QVariant & a2, int a3, QFlags<Qt::MatchFlag> a4) const { return QAbstractItemModel::match(a0, a1, a2, a3, a4); }
 	QSize span(const QModelIndex & a0) const override {
 		if (qute_has(32)) {
-			void * c0 = static_cast<void *>(new QModelIndex(a0));
+			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
 			void *args[] = {&c0};
 			qute_size r{};
 			if (qute_qtgui_virtual(qute_id, 32, args, &r)) {
@@ -2910,6 +3207,15 @@ public:
 	void qute_super_40(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QStatusTipEvent : public QStatusTipEvent {
+public:
+	template <class... A> explicit qute_QStatusTipEvent(A &&...a) : QStatusTipEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QStatusTipEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QStatusTipEvent *>(this))); }
+};
+
 class qute_QSyntaxHighlighter : public QSyntaxHighlighter {
 public:
 	template <class... A> explicit qute_QSyntaxHighlighter(A &&...a) : QSyntaxHighlighter(std::forward<A>(a)...) {}
@@ -2992,6 +3298,15 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QTabletEvent : public QTabletEvent {
+public:
+	template <class... A> explicit qute_QTabletEvent(A &&...a) : QTabletEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QTabletEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QTabletEvent *>(this))); }
 };
 
 class qute_QTextBlockUserData : public QTextBlockUserData {
@@ -3168,6 +3483,24 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QToolBarChangeEvent : public QToolBarChangeEvent {
+public:
+	template <class... A> explicit qute_QToolBarChangeEvent(A &&...a) : QToolBarChangeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QToolBarChangeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QToolBarChangeEvent *>(this))); }
+};
+
+class qute_QTouchEvent : public QTouchEvent {
+public:
+	template <class... A> explicit qute_QTouchEvent(A &&...a) : QTouchEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QTouchEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QTouchEvent *>(this))); }
 };
 
 class qute_QUndoCommand : public QUndoCommand {
@@ -3443,6 +3776,24 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+};
+
+class qute_QWhatsThisClickedEvent : public QWhatsThisClickedEvent {
+public:
+	template <class... A> explicit qute_QWhatsThisClickedEvent(A &&...a) : QWhatsThisClickedEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QWhatsThisClickedEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QWhatsThisClickedEvent *>(this))); }
+};
+
+class qute_QWheelEvent : public QWheelEvent {
+public:
+	template <class... A> explicit qute_QWheelEvent(A &&...a) : QWheelEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QWheelEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QWheelEvent *>(this))); }
 };
 
 class qute_QWindow : public QWindow {
@@ -3750,6 +4101,15 @@ public:
 	void qute_super_26(QEvent * a0) { return QObject::customEvent(a0); }
 };
 
+class qute_QWindowStateChangeEvent : public QWindowStateChangeEvent {
+public:
+	template <class... A> explicit qute_QWindowStateChangeEvent(A &&...a) : QWindowStateChangeEvent(std::forward<A>(a)...) {}
+	uintptr_t qute_id = 0;
+	uint64_t qute_mask[1] = {};
+	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	~qute_QWindowStateChangeEvent() override { qute_qtgui_dead(static_cast<void *>(static_cast<QWindowStateChangeEvent *>(this))); }
+};
+
 extern "C" {
 
 const char *qute_qtgui_check_layout(void) {
@@ -3922,6 +4282,14 @@ void * qute_QAction_new_2(void * a0, const char *a1, ptrdiff_t a1_len, void * a2
 void * qute_QAction_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QAction *>(new qute_QAction(static_cast<QObject *>(a0)));
+}
+void * qute_QAction_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QAction *>(new qute_QAction(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+}
+void * qute_QAction_new_shim_2(void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	return static_cast<QAction *>(new qute_QAction((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len), static_cast<QObject *>(a2)));
 }
 void qute_QAction_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -4239,6 +4607,14 @@ void * qute_QAction_toggled(void *self, uintptr_t id) {
 }
 
 // ---- QActionEvent
+void * qute_QActionEvent_new(int a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QActionEvent *>(new qute_QActionEvent(static_cast<int>(a0), static_cast<QAction *>(a1)));
+}
+void * qute_QActionEvent_new_1(int a0, void * a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QActionEvent *>(new qute_QActionEvent(static_cast<int>(a0), static_cast<QAction *>(a1), static_cast<QAction *>(a2)));
+}
 void qute_QActionEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QActionEvent *>(self);
@@ -4375,6 +4751,10 @@ void * qute_QActionGroup_hovered(void *self, uintptr_t id) {
 }
 
 // ---- QApplicationStateChangeEvent
+void * qute_QApplicationStateChangeEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QApplicationStateChangeEvent *>(new qute_QApplicationStateChangeEvent(static_cast<Qt::ApplicationState>(a0)));
+}
 void qute_QApplicationStateChangeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QApplicationStateChangeEvent *>(self);
@@ -4529,6 +4909,10 @@ bool qute_QBrush_isOpaque(void *self) {
 }
 
 // ---- QChildWindowEvent
+void * qute_QChildWindowEvent_new(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QChildWindowEvent *>(new qute_QChildWindowEvent(static_cast<QEvent::Type>(a0), static_cast<QWindow *>(a1)));
+}
 void qute_QChildWindowEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QChildWindowEvent *>(self);
@@ -4695,6 +5079,10 @@ void * qute_QClipboard_dataChanged(void *self, uintptr_t id) {
 }
 
 // ---- QCloseEvent
+void * qute_QCloseEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QCloseEvent *>(new qute_QCloseEvent());
+}
 void qute_QCloseEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QCloseEvent *>(self);
@@ -4981,6 +5369,14 @@ void qute_QConicalGradient_setAngle(void *self, double a0) {
 }
 
 // ---- QContextMenuEvent
+void * qute_QContextMenuEvent_new(int64_t a0, qute_point a1, qute_point a2) {
+	qute_gui_only();
+	return static_cast<QContextMenuEvent *>(new qute_QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(a0), qute_to_QPoint(a1), qute_to_QPoint(a2)));
+}
+void * qute_QContextMenuEvent_new_1(int64_t a0, qute_point a1, qute_point a2, int64_t a3) {
+	qute_gui_only();
+	return static_cast<QContextMenuEvent *>(new qute_QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(a0), qute_to_QPoint(a1), qute_to_QPoint(a2), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a3))));
+}
 void qute_QContextMenuEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QContextMenuEvent *>(self);
@@ -5110,6 +5506,10 @@ void * qute_QDoubleValidator_new_1(double a0, double a1, int a2, void * a3) {
 void * qute_QDoubleValidator_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QDoubleValidator *>(new qute_QDoubleValidator(static_cast<QObject *>(a0)));
+}
+void * qute_QDoubleValidator_new_shim_1(double a0, double a1, int a2, void * a3) {
+	qute_gui_only();
+	return static_cast<QDoubleValidator *>(new qute_QDoubleValidator(static_cast<double>(a0), static_cast<double>(a1), static_cast<int>(a2), static_cast<QObject *>(a3)));
 }
 void qute_QDoubleValidator_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -5358,6 +5758,10 @@ void * qute_QDrag_targetChanged(void *self, uintptr_t id) {
 }
 
 // ---- QDragEnterEvent
+void * qute_QDragEnterEvent_new(qute_pointf a0, int64_t a1, void * a2, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<QDragEnterEvent *>(new qute_QDragEnterEvent(qute_to_QPointF(a0), QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a1)), static_cast<QMimeData *>(a2), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a3)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4))));
+}
 void qute_QDragEnterEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QDragEnterEvent *>(self);
@@ -5368,6 +5772,10 @@ void * qute_QDragEnterEvent_cast(void *obj) {
 }
 
 // ---- QDragLeaveEvent
+void * qute_QDragLeaveEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QDragLeaveEvent *>(new qute_QDragLeaveEvent());
+}
 void qute_QDragLeaveEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QDragLeaveEvent *>(self);
@@ -5378,6 +5786,14 @@ void * qute_QDragLeaveEvent_cast(void *obj) {
 }
 
 // ---- QDragMoveEvent
+void * qute_QDragMoveEvent_new(qute_pointf a0, int64_t a1, void * a2, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<QDragMoveEvent *>(new qute_QDragMoveEvent(qute_to_QPointF(a0), QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a1)), static_cast<QMimeData *>(a2), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a3)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4))));
+}
+void * qute_QDragMoveEvent_new_1(qute_pointf a0, int64_t a1, void * a2, int64_t a3, int64_t a4, int64_t a5) {
+	qute_gui_only();
+	return static_cast<QDragMoveEvent *>(new qute_QDragMoveEvent(qute_to_QPointF(a0), QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a1)), static_cast<QMimeData *>(a2), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a3)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4)), static_cast<QEvent::Type>(a5)));
+}
 void qute_QDragMoveEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QDragMoveEvent *>(self);
@@ -5400,6 +5816,14 @@ void qute_QDragMoveEvent_ignore(void *self, qute_rect a0) {
 }
 
 // ---- QDropEvent
+void * qute_QDropEvent_new(qute_pointf a0, int64_t a1, void * a2, int64_t a3, int64_t a4) {
+	qute_gui_only();
+	return static_cast<QDropEvent *>(new qute_QDropEvent(qute_to_QPointF(a0), QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a1)), static_cast<QMimeData *>(a2), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a3)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4))));
+}
+void * qute_QDropEvent_new_1(qute_pointf a0, int64_t a1, void * a2, int64_t a3, int64_t a4, int64_t a5) {
+	qute_gui_only();
+	return static_cast<QDropEvent *>(new qute_QDropEvent(qute_to_QPointF(a0), QFlags<Qt::DropAction>::fromInt(static_cast<QFlags<Qt::DropAction>::Int>(a1)), static_cast<QMimeData *>(a2), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a3)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4)), static_cast<QEvent::Type>(a5)));
+}
 void qute_QDropEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QDropEvent *>(self);
@@ -5450,6 +5874,14 @@ void * qute_QDropEvent_mimeData(void *self) {
 }
 
 // ---- QEnterEvent
+void * qute_QEnterEvent_new(qute_pointf a0, qute_pointf a1, qute_pointf a2) {
+	qute_gui_only();
+	return static_cast<QEnterEvent *>(new qute_QEnterEvent(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2)));
+}
+void * qute_QEnterEvent_new_1(qute_pointf a0, qute_pointf a1, qute_pointf a2, void * a3) {
+	qute_gui_only();
+	return static_cast<QEnterEvent *>(new qute_QEnterEvent(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), static_cast<QPointingDevice *>(a3)));
+}
 void qute_QEnterEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QEnterEvent *>(self);
@@ -5590,6 +6022,10 @@ void qute_QEventPoint_setAccepted_1(void *self, bool a0) {
 }
 
 // ---- QExposeEvent
+void * qute_QExposeEvent_new(void * a0) {
+	qute_gui_only();
+	return static_cast<QExposeEvent *>(new qute_QExposeEvent((a0 ? *static_cast<QRegion *>(a0) : QRegion())));
+}
 void qute_QExposeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QExposeEvent *>(self);
@@ -5600,6 +6036,14 @@ void * qute_QExposeEvent_cast(void *obj) {
 }
 
 // ---- QFileOpenEvent
+void * qute_QFileOpenEvent_new(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
+	return static_cast<QFileOpenEvent *>(new qute_QFileOpenEvent(QString::fromUtf8(a0, a0_len)));
+}
+void * qute_QFileOpenEvent_new_1(void * a0) {
+	qute_gui_only();
+	return static_cast<QFileOpenEvent *>(new qute_QFileOpenEvent((a0 ? *static_cast<QUrl *>(a0) : QUrl())));
+}
 void qute_QFileOpenEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QFileOpenEvent *>(self);
@@ -5688,7 +6132,7 @@ qute_list qute_QFileSystemModel_super_13(void *self) {
 }
 void * qute_QFileSystemModel_super_14(void *self, const void *a0, ptrdiff_t a0_n) {
 	qute_gui_only();
-	return (void *)(static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->qute_super_14([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }()));
+	return (void *)(static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->qute_super_14([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }()));
 }
 bool qute_QFileSystemModel_super_15(void *self, void * a0, int64_t a1, int a2, int a3, void * a4) {
 	qute_gui_only();
@@ -5804,7 +6248,7 @@ void * qute_QFileSystemModel_prot_createIndex_1(void *self, int a0, int a1, unsi
 }
 void qute_QFileSystemModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->encodeData([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }(), *static_cast<QDataStream *>(a1));
+	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->encodeData([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }(), *static_cast<QDataStream *>(a1));
 }
 bool qute_QFileSystemModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3) {
 	qute_gui_only();
@@ -5872,7 +6316,7 @@ void qute_QFileSystemModel_prot_changePersistentIndex(void *self, void * a0, voi
 }
 void qute_QFileSystemModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n) {
 	qute_gui_only();
-	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->changePersistentIndexList([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }(), [&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }());
+	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->changePersistentIndexList([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }(), [&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(d[i]); return l; }());
 }
 qute_list qute_QFileSystemModel_prot_persistentIndexList(void *self) {
 	qute_gui_only();
@@ -6062,6 +6506,14 @@ void * qute_QFileSystemModel_directoryLoaded(void *self, uintptr_t id) {
 }
 
 // ---- QFocusEvent
+void * qute_QFocusEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QFocusEvent *>(new qute_QFocusEvent(static_cast<QEvent::Type>(a0)));
+}
+void * qute_QFocusEvent_new_1(int64_t a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QFocusEvent *>(new qute_QFocusEvent(static_cast<QEvent::Type>(a0), static_cast<Qt::FocusReason>(a1)));
+}
 void qute_QFocusEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QFocusEvent *>(self);
@@ -7466,6 +7918,10 @@ void * qute_QGuiApplication_applicationDisplayNameChanged(void *self, uintptr_t 
 }
 
 // ---- QHelpEvent
+void * qute_QHelpEvent_new(int64_t a0, qute_point a1, qute_point a2) {
+	qute_gui_only();
+	return static_cast<QHelpEvent *>(new qute_QHelpEvent(static_cast<QEvent::Type>(a0), qute_to_QPoint(a1), qute_to_QPoint(a2)));
+}
 void qute_QHelpEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QHelpEvent *>(self);
@@ -7500,6 +7956,10 @@ qute_point qute_QHelpEvent_globalPos(void *self) {
 }
 
 // ---- QHideEvent
+void * qute_QHideEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QHideEvent *>(new qute_QHideEvent());
+}
 void qute_QHideEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QHideEvent *>(self);
@@ -7510,6 +7970,14 @@ void * qute_QHideEvent_cast(void *obj) {
 }
 
 // ---- QHoverEvent
+void * qute_QHoverEvent_new(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3) {
+	qute_gui_only();
+	return static_cast<QHoverEvent *>(new qute_QHoverEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3)));
+}
+void * qute_QHoverEvent_new_1(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4, void * a5) {
+	qute_gui_only();
+	return static_cast<QHoverEvent *>(new qute_QHoverEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a4)), static_cast<QPointingDevice *>(a5)));
+}
 void qute_QHoverEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QHoverEvent *>(self);
@@ -7690,6 +8158,10 @@ void qute_QIcon_setFallbackThemeName(const char *a0, ptrdiff_t a0_len) {
 }
 
 // ---- QIconDragEvent
+void * qute_QIconDragEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QIconDragEvent *>(new qute_QIconDragEvent());
+}
 void qute_QIconDragEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QIconDragEvent *>(self);
@@ -8696,6 +9168,10 @@ void * qute_QInputDevice_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QInputDevice *>(new qute_QInputDevice(static_cast<QObject *>(a0)));
 }
+void * qute_QInputDevice_new_shim_1(const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, const char *a3, ptrdiff_t a3_len, void * a4) {
+	qute_gui_only();
+	return static_cast<QInputDevice *>(new qute_QInputDevice(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QInputDevice::DeviceType>(a2), QString::fromUtf8(a3, a3_len), static_cast<QObject *>(a4)));
+}
 void qute_QInputDevice_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QInputDevice *>(static_cast<QInputDevice *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -8790,6 +9266,14 @@ void * qute_QInputDevice_capabilitiesChanged(void *self, uintptr_t id) {
 }
 
 // ---- QInputEvent
+void * qute_QInputEvent_new(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QInputEvent *>(new qute_QInputEvent(static_cast<QEvent::Type>(a0), static_cast<QInputDevice *>(a1)));
+}
+void * qute_QInputEvent_new_1(int64_t a0, void * a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QInputEvent *>(new qute_QInputEvent(static_cast<QEvent::Type>(a0), static_cast<QInputDevice *>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2))));
+}
 void qute_QInputEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QInputEvent *>(self);
@@ -8990,6 +9474,14 @@ void * qute_QInputMethod_inputDirectionChanged(void *self, uintptr_t id) {
 }
 
 // ---- QInputMethodEvent
+void * qute_QInputMethodEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QInputMethodEvent *>(new qute_QInputMethodEvent());
+}
+void * qute_QInputMethodEvent_new_1(const char *a0, ptrdiff_t a0_len, const void *a1, ptrdiff_t a1_n) {
+	qute_gui_only();
+	return static_cast<QInputMethodEvent *>(new qute_QInputMethodEvent(QString::fromUtf8(a0, a0_len), [&] { QList<QInputMethodEvent::Attribute> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(*static_cast<QInputMethodEvent::Attribute *>(d[i])); return l; }()));
+}
 void qute_QInputMethodEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QInputMethodEvent *>(self);
@@ -9074,6 +9566,10 @@ void qute_QInputMethodEventAttribute_set_value(void *self, void * a0) {
 }
 
 // ---- QInputMethodQueryEvent
+void * qute_QInputMethodQueryEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QInputMethodQueryEvent *>(new qute_QInputMethodQueryEvent(QFlags<Qt::InputMethodQuery>::fromInt(static_cast<QFlags<Qt::InputMethodQuery>::Int>(a0))));
+}
 void qute_QInputMethodQueryEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QInputMethodQueryEvent *>(self);
@@ -9107,6 +9603,10 @@ void * qute_QIntValidator_new_1(int a0, int a1, void * a2) {
 void * qute_QIntValidator_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QIntValidator *>(new qute_QIntValidator(static_cast<QObject *>(a0)));
+}
+void * qute_QIntValidator_new_shim_1(int a0, int a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QIntValidator *>(new qute_QIntValidator(static_cast<int>(a0), static_cast<int>(a1), static_cast<QObject *>(a2)));
 }
 void qute_QIntValidator_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -9193,6 +9693,22 @@ void * qute_QIntValidator_topChanged(void *self, uintptr_t id) {
 }
 
 // ---- QKeyEvent
+void * qute_QKeyEvent_new(int64_t a0, int a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QKeyEvent *>(new qute_QKeyEvent(static_cast<QEvent::Type>(a0), static_cast<int>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2))));
+}
+void * qute_QKeyEvent_new_1(int64_t a0, int a1, int64_t a2, unsigned int a3, unsigned int a4, unsigned int a5) {
+	qute_gui_only();
+	return static_cast<QKeyEvent *>(new qute_QKeyEvent(static_cast<QEvent::Type>(a0), static_cast<int>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2)), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4), static_cast<unsigned int>(a5)));
+}
+void * qute_QKeyEvent_new_2(int64_t a0, int a1, int64_t a2, const char *a3, ptrdiff_t a3_len, bool a4, unsigned short a5) {
+	qute_gui_only();
+	return static_cast<QKeyEvent *>(new qute_QKeyEvent(static_cast<QEvent::Type>(a0), static_cast<int>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2)), QString::fromUtf8(a3, a3_len), static_cast<bool>(a4), static_cast<unsigned short>(a5)));
+}
+void * qute_QKeyEvent_new_3(int64_t a0, int a1, int64_t a2, unsigned int a3, unsigned int a4, unsigned int a5, const char *a6, ptrdiff_t a6_len, bool a7, unsigned short a8, void * a9) {
+	qute_gui_only();
+	return static_cast<QKeyEvent *>(new qute_QKeyEvent(static_cast<QEvent::Type>(a0), static_cast<int>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2)), static_cast<unsigned int>(a3), static_cast<unsigned int>(a4), static_cast<unsigned int>(a5), QString::fromUtf8(a6, a6_len), static_cast<bool>(a7), static_cast<unsigned short>(a8), static_cast<QInputDevice *>(a9)));
+}
 void qute_QKeyEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QKeyEvent *>(self);
@@ -9567,12 +10083,43 @@ int64_t qute_QMatrix4x4_flags(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QMatrix4x4 *>(self)->flags()).toInt());
 }
+void * qute_QMatrix4x4_inverted_1(void *self, bool *a0_out) {
+	qute_gui_only();
+	bool t0{};
+	auto &&r = static_cast<QMatrix4x4 *>(self)->inverted(&t0);
+	*a0_out = static_cast<bool>(t0);
+	return static_cast<void *>(new QMatrix4x4(r));
+}
 void qute_QMatrix4x4_rotate_3(void *self, float a0, float a1, float a2, float a3) {
 	qute_gui_only();
 	static_cast<QMatrix4x4 *>(self)->rotate(static_cast<float>(a0), static_cast<float>(a1), static_cast<float>(a2), static_cast<float>(a3));
 }
 
 // ---- QMouseEvent
+void * qute_QMouseEvent_new(int64_t a0, qute_pointf a1, qute_pointf a2, int64_t a3, int64_t a4, int64_t a5) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), static_cast<Qt::MouseButton>(a3), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a4)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a5))));
+}
+void * qute_QMouseEvent_new_1(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4, int64_t a5, int64_t a6) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<Qt::MouseButton>(a4), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a5)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a6))));
+}
+void * qute_QMouseEvent_new_2(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4, int64_t a5, int64_t a6, int64_t a7) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<Qt::MouseButton>(a4), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a5)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a6)), static_cast<Qt::MouseEventSource>(a7)));
+}
+void * qute_QMouseEvent_new_3(int64_t a0, qute_pointf a1, qute_pointf a2, int64_t a3, int64_t a4, int64_t a5, void * a6) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), static_cast<Qt::MouseButton>(a3), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a4)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a5)), static_cast<QPointingDevice *>(a6)));
+}
+void * qute_QMouseEvent_new_4(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4, int64_t a5, int64_t a6, void * a7) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<Qt::MouseButton>(a4), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a5)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a6)), static_cast<QPointingDevice *>(a7)));
+}
+void * qute_QMouseEvent_new_5(int64_t a0, qute_pointf a1, qute_pointf a2, qute_pointf a3, int64_t a4, int64_t a5, int64_t a6, int64_t a7, void * a8) {
+	qute_gui_only();
+	return static_cast<QMouseEvent *>(new qute_QMouseEvent(static_cast<QEvent::Type>(a0), qute_to_QPointF(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<Qt::MouseButton>(a4), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a5)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a6)), static_cast<Qt::MouseEventSource>(a7), static_cast<QPointingDevice *>(a8)));
+}
 void qute_QMouseEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QMouseEvent *>(self);
@@ -9595,6 +10142,10 @@ int64_t qute_QMouseEvent_flags(void *self) {
 }
 
 // ---- QMoveEvent
+void * qute_QMoveEvent_new(qute_point a0, qute_point a1) {
+	qute_gui_only();
+	return static_cast<QMoveEvent *>(new qute_QMoveEvent(qute_to_QPoint(a0), qute_to_QPoint(a1)));
+}
 void qute_QMoveEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QMoveEvent *>(self);
@@ -9628,6 +10179,14 @@ void * qute_QMovie_new_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdi
 void * qute_QMovie_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QMovie *>(new qute_QMovie(static_cast<QObject *>(a0)));
+}
+void * qute_QMovie_new_shim_1(void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	return static_cast<QMovie *>(new qute_QMovie(static_cast<QIODevice *>(a0), QByteArray(a1, a1_len), static_cast<QObject *>(a2)));
+}
+void * qute_QMovie_new_shim_2(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2) {
+	qute_gui_only();
+	return static_cast<QMovie *>(new qute_QMovie(QString::fromUtf8(a0, a0_len), QByteArray(a1, a1_len), static_cast<QObject *>(a2)));
 }
 void qute_QMovie_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -9853,6 +10412,14 @@ void * qute_QMovie_frameChanged(void *self, uintptr_t id) {
 }
 
 // ---- QNativeGestureEvent
+void * qute_QNativeGestureEvent_new(int64_t a0, void * a1, int a2, qute_pointf a3, qute_pointf a4, qute_pointf a5, double a6, qute_pointf a7) {
+	qute_gui_only();
+	return static_cast<QNativeGestureEvent *>(new qute_QNativeGestureEvent(static_cast<Qt::NativeGestureType>(a0), static_cast<QPointingDevice *>(a1), static_cast<int>(a2), qute_to_QPointF(a3), qute_to_QPointF(a4), qute_to_QPointF(a5), static_cast<double>(a6), qute_to_QPointF(a7)));
+}
+void * qute_QNativeGestureEvent_new_1(int64_t a0, void * a1, int a2, qute_pointf a3, qute_pointf a4, qute_pointf a5, double a6, qute_pointf a7, unsigned long long a8) {
+	qute_gui_only();
+	return static_cast<QNativeGestureEvent *>(new qute_QNativeGestureEvent(static_cast<Qt::NativeGestureType>(a0), static_cast<QPointingDevice *>(a1), static_cast<int>(a2), qute_to_QPointF(a3), qute_to_QPointF(a4), qute_to_QPointF(a5), static_cast<double>(a6), qute_to_QPointF(a7), static_cast<unsigned long long>(a8)));
+}
 void qute_QNativeGestureEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QNativeGestureEvent *>(self);
@@ -11727,6 +12294,14 @@ void qute_QPaintDeviceWindow_update_2(void *self) {
 }
 
 // ---- QPaintEvent
+void * qute_QPaintEvent_new(void * a0) {
+	qute_gui_only();
+	return static_cast<QPaintEvent *>(new qute_QPaintEvent((a0 ? *static_cast<QRegion *>(a0) : QRegion())));
+}
+void * qute_QPaintEvent_new_1(qute_rect a0) {
+	qute_gui_only();
+	return static_cast<QPaintEvent *>(new qute_QPaintEvent(qute_to_QRect(a0)));
+}
 void qute_QPaintEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QPaintEvent *>(self);
@@ -12378,6 +12953,18 @@ void qute_QPainter_drawImage_6(void *self, qute_rectf a0, void * a1, qute_rectf 
 void qute_QPainter_drawImage_7(void *self, qute_rect a0, void * a1, qute_rect a2, int64_t a3) {
 	qute_gui_only();
 	static_cast<QPainter *>(self)->drawImage(qute_to_QRect(a0), (a1 ? *static_cast<QImage *>(a1) : QImage()), qute_to_QRect(a2), QFlags<Qt::ImageConversionFlag>::fromInt(static_cast<QFlags<Qt::ImageConversionFlag>::Int>(a3)));
+}
+void qute_QPainter_drawText_4(void *self, qute_rectf a0, int a1, const char *a2, ptrdiff_t a2_len, qute_rectf *a3_out) {
+	qute_gui_only();
+	QRectF t3{};
+	static_cast<QPainter *>(self)->drawText(qute_to_QRectF(a0), static_cast<int>(a1), QString::fromUtf8(a2, a2_len), &t3);
+	*a3_out = qute_from_QRectF(t3);
+}
+void qute_QPainter_drawText_5(void *self, qute_rect a0, int a1, const char *a2, ptrdiff_t a2_len, qute_rect *a3_out) {
+	qute_gui_only();
+	QRect t3{};
+	static_cast<QPainter *>(self)->drawText(qute_to_QRect(a0), static_cast<int>(a1), QString::fromUtf8(a2, a2_len), &t3);
+	*a3_out = qute_from_QRect(t3);
 }
 qute_rectf qute_QPainter_boundingRect_3(void *self, qute_rectf a0, const char *a1, ptrdiff_t a1_len, void * a2) {
 	qute_gui_only();
@@ -13069,6 +13656,10 @@ void * qute_QPdfWriter_new_shim(const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
 	return static_cast<QPdfWriter *>(new qute_QPdfWriter(QString::fromUtf8(a0, a0_len)));
 }
+void * qute_QPdfWriter_new_shim_1(void * a0) {
+	qute_gui_only();
+	return static_cast<QPdfWriter *>(new qute_QPdfWriter(static_cast<QIODevice *>(a0)));
+}
 void qute_QPdfWriter_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -13739,6 +14330,10 @@ bool qute_QPixmapCacheKey_isValid(void *self) {
 }
 
 // ---- QPlatformSurfaceEvent
+void * qute_QPlatformSurfaceEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QPlatformSurfaceEvent *>(new qute_QPlatformSurfaceEvent(static_cast<QPlatformSurfaceEvent::SurfaceEventType>(a0)));
+}
 void qute_QPlatformSurfaceEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QPlatformSurfaceEvent *>(self);
@@ -13753,6 +14348,14 @@ int64_t qute_QPlatformSurfaceEvent_surfaceEventType(void *self) {
 }
 
 // ---- QPointerEvent
+void * qute_QPointerEvent_new(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QPointerEvent *>(new qute_QPointerEvent(static_cast<QEvent::Type>(a0), static_cast<QPointingDevice *>(a1)));
+}
+void * qute_QPointerEvent_new_1(int64_t a0, void * a1, int64_t a2, const void *a3, ptrdiff_t a3_n) {
+	qute_gui_only();
+	return static_cast<QPointerEvent *>(new qute_QPointerEvent(static_cast<QEvent::Type>(a0), static_cast<QPointingDevice *>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2)), [&] { QList<QEventPoint> l; auto d = static_cast<void * const *>(a3); l.reserve(a3_n); for (ptrdiff_t i = 0; i < a3_n; i++) l.append((d[i] ? *static_cast<QEventPoint *>(d[i]) : QEventPoint())); return l; }()));
+}
 void qute_QPointerEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QPointerEvent *>(self);
@@ -13842,6 +14445,10 @@ void * qute_QPointingDevice_new_1(const char *a0, ptrdiff_t a0_len, long long a1
 void * qute_QPointingDevice_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QPointingDevice *>(new qute_QPointingDevice(static_cast<QObject *>(a0)));
+}
+void * qute_QPointingDevice_new_shim_1(const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, int64_t a3, int64_t a4, int a5, int a6, const char *a7, ptrdiff_t a7_len, void * a8, void * a9) {
+	qute_gui_only();
+	return static_cast<QPointingDevice *>(new qute_QPointingDevice(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QInputDevice::DeviceType>(a2), static_cast<QPointingDevice::PointerType>(a3), QFlags<QInputDevice::Capability>::fromInt(static_cast<QFlags<QInputDevice::Capability>::Int>(a4)), static_cast<int>(a5), static_cast<int>(a6), QString::fromUtf8(a7, a7_len), (a8 ? *static_cast<QPointingDeviceUniqueId *>(a8) : QPointingDeviceUniqueId()), static_cast<QObject *>(a9)));
 }
 void qute_QPointingDevice_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -14420,6 +15027,10 @@ void * qute_QRegularExpressionValidator_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QRegularExpressionValidator *>(new qute_QRegularExpressionValidator(static_cast<QObject *>(a0)));
 }
+void * qute_QRegularExpressionValidator_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QRegularExpressionValidator *>(new qute_QRegularExpressionValidator((a0 ? *static_cast<QRegularExpression *>(a0) : QRegularExpression()), static_cast<QObject *>(a1)));
+}
 void qute_QRegularExpressionValidator_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QRegularExpressionValidator *>(static_cast<QRegularExpressionValidator *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -14483,6 +15094,10 @@ void * qute_QRegularExpressionValidator_regularExpressionChanged(void *self, uin
 }
 
 // ---- QResizeEvent
+void * qute_QResizeEvent_new(qute_size a0, qute_size a1) {
+	qute_gui_only();
+	return static_cast<QResizeEvent *>(new qute_QResizeEvent(qute_to_QSize(a0), qute_to_QSize(a1)));
+}
 void qute_QResizeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QResizeEvent *>(self);
@@ -14831,6 +15446,10 @@ void * qute_QScreen_refreshRateChanged(void *self, uintptr_t id) {
 }
 
 // ---- QScreenOrientationChangeEvent
+void * qute_QScreenOrientationChangeEvent_new(void * a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QScreenOrientationChangeEvent *>(new qute_QScreenOrientationChangeEvent(static_cast<QScreen *>(a0), static_cast<Qt::ScreenOrientation>(a1)));
+}
 void qute_QScreenOrientationChangeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QScreenOrientationChangeEvent *>(self);
@@ -14849,6 +15468,10 @@ int64_t qute_QScreenOrientationChangeEvent_orientation(void *self) {
 }
 
 // ---- QScrollEvent
+void * qute_QScrollEvent_new(qute_pointf a0, qute_pointf a1, int64_t a2) {
+	qute_gui_only();
+	return static_cast<QScrollEvent *>(new qute_QScrollEvent(qute_to_QPointF(a0), qute_to_QPointF(a1), static_cast<QScrollEvent::ScrollState>(a2)));
+}
 void qute_QScrollEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QScrollEvent *>(self);
@@ -14871,6 +15494,10 @@ int64_t qute_QScrollEvent_scrollState(void *self) {
 }
 
 // ---- QScrollPrepareEvent
+void * qute_QScrollPrepareEvent_new(qute_pointf a0) {
+	qute_gui_only();
+	return static_cast<QScrollPrepareEvent *>(new qute_QScrollPrepareEvent(qute_to_QPointF(a0)));
+}
 void qute_QScrollPrepareEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QScrollPrepareEvent *>(self);
@@ -15003,6 +15630,14 @@ void * qute_QShortcut_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QShortcut *>(new qute_QShortcut(static_cast<QObject *>(a0)));
 }
+void * qute_QShortcut_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QShortcut *>(new qute_QShortcut((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<QObject *>(a1)));
+}
+void * qute_QShortcut_new_shim_2(int64_t a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QShortcut *>(new qute_QShortcut(static_cast<QKeySequence::StandardKey>(a0), static_cast<QObject *>(a1)));
+}
 void qute_QShortcut_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QShortcut *>(static_cast<QShortcut *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -15105,6 +15740,22 @@ void * qute_QShortcut_activatedAmbiguously(void *self, uintptr_t id) {
 }
 
 // ---- QShortcutEvent
+void * qute_QShortcutEvent_new(void * a0, int a1) {
+	qute_gui_only();
+	return static_cast<QShortcutEvent *>(new qute_QShortcutEvent((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<int>(a1)));
+}
+void * qute_QShortcutEvent_new_1(void * a0) {
+	qute_gui_only();
+	return static_cast<QShortcutEvent *>(new qute_QShortcutEvent((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence())));
+}
+void * qute_QShortcutEvent_new_2(void * a0, int a1, bool a2) {
+	qute_gui_only();
+	return static_cast<QShortcutEvent *>(new qute_QShortcutEvent((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<int>(a1), static_cast<bool>(a2)));
+}
+void * qute_QShortcutEvent_new_3(void * a0, void * a1, bool a2) {
+	qute_gui_only();
+	return static_cast<QShortcutEvent *>(new qute_QShortcutEvent((a0 ? *static_cast<QKeySequence *>(a0) : QKeySequence()), static_cast<QShortcut *>(a1), static_cast<bool>(a2)));
+}
 void qute_QShortcutEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QShortcutEvent *>(self);
@@ -15127,6 +15778,10 @@ bool qute_QShortcutEvent_isAmbiguous(void *self) {
 }
 
 // ---- QShowEvent
+void * qute_QShowEvent_new(void) {
+	qute_gui_only();
+	return static_cast<QShowEvent *>(new qute_QShowEvent());
+}
 void qute_QShowEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QShowEvent *>(self);
@@ -15198,6 +15853,18 @@ void * qute_QStandardItem_new_4(int a0, int a1) {
 void * qute_QStandardItem_new_shim(void) {
 	qute_gui_only();
 	return static_cast<QStandardItem *>(new qute_QStandardItem());
+}
+void * qute_QStandardItem_new_shim_1(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
+	return static_cast<QStandardItem *>(new qute_QStandardItem(QString::fromUtf8(a0, a0_len)));
+}
+void * qute_QStandardItem_new_shim_2(void * a0, const char *a1, ptrdiff_t a1_len) {
+	qute_gui_only();
+	return static_cast<QStandardItem *>(new qute_QStandardItem((a0 ? *static_cast<QIcon *>(a0) : QIcon()), QString::fromUtf8(a1, a1_len)));
+}
+void * qute_QStandardItem_new_shim_3(int a0) {
+	qute_gui_only();
+	return static_cast<QStandardItem *>(new qute_QStandardItem(static_cast<int>(a0)));
 }
 void qute_QStandardItem_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -15597,6 +16264,10 @@ void * qute_QStandardItemModel_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QStandardItemModel *>(new qute_QStandardItemModel(static_cast<QObject *>(a0)));
 }
+void * qute_QStandardItemModel_new_shim_1(int a0, int a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QStandardItemModel *>(new qute_QStandardItemModel(static_cast<int>(a0), static_cast<int>(a1), static_cast<QObject *>(a2)));
+}
 void qute_QStandardItemModel_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -15687,7 +16358,7 @@ qute_list qute_QStandardItemModel_super_20(void *self) {
 }
 void * qute_QStandardItemModel_super_21(void *self, const void *a0, ptrdiff_t a0_n) {
 	qute_gui_only();
-	return (void *)(static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->qute_super_21([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }()));
+	return (void *)(static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->qute_super_21([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }()));
 }
 bool qute_QStandardItemModel_super_22(void *self, void * a0, int64_t a1, int a2, int a3, void * a4) {
 	qute_gui_only();
@@ -15775,7 +16446,7 @@ void * qute_QStandardItemModel_prot_createIndex_1(void *self, int a0, int a1, un
 }
 void qute_QStandardItemModel_prot_encodeData(void *self, const void *a0, ptrdiff_t a0_n, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->encodeData([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }(), *static_cast<QDataStream *>(a1));
+	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->encodeData([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }(), *static_cast<QDataStream *>(a1));
 }
 bool qute_QStandardItemModel_prot_decodeData(void *self, int a0, int a1, void * a2, void * a3) {
 	qute_gui_only();
@@ -15843,7 +16514,7 @@ void qute_QStandardItemModel_prot_changePersistentIndex(void *self, void * a0, v
 }
 void qute_QStandardItemModel_prot_changePersistentIndexList(void *self, const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n) {
 	qute_gui_only();
-	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->changePersistentIndexList([&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }(), [&] { QList<QModelIndex> l; auto d = static_cast<void * const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append((d[i] ? *static_cast<QModelIndex *>(d[i]) : QModelIndex())); return l; }());
+	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->changePersistentIndexList([&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a0); l.reserve(a0_n); for (ptrdiff_t i = 0; i < a0_n; i++) l.append(d[i]); return l; }(), [&] { QList<QModelIndex> l; auto d = static_cast<QModelIndex const *>(a1); l.reserve(a1_n); for (ptrdiff_t i = 0; i < a1_n; i++) l.append(d[i]); return l; }());
 }
 qute_list qute_QStandardItemModel_prot_persistentIndexList(void *self) {
 	qute_gui_only();
@@ -16071,6 +16742,10 @@ void qute_QStaticText_prepare_1(void *self, void * a0, void * a1) {
 }
 
 // ---- QStatusTipEvent
+void * qute_QStatusTipEvent_new(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
+	return static_cast<QStatusTipEvent *>(new qute_QStatusTipEvent(QString::fromUtf8(a0, a0_len)));
+}
 void qute_QStatusTipEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QStatusTipEvent *>(self);
@@ -16709,6 +17384,10 @@ void qute_QSyntaxHighlighter_rehighlightBlock(void *self, void * a0) {
 }
 
 // ---- QTabletEvent
+void * qute_QTabletEvent_new(int64_t a0, void * a1, qute_pointf a2, qute_pointf a3, double a4, float a5, float a6, float a7, double a8, float a9, int64_t a10, int64_t a11, int64_t a12) {
+	qute_gui_only();
+	return static_cast<QTabletEvent *>(new qute_QTabletEvent(static_cast<QEvent::Type>(a0), static_cast<QPointingDevice *>(a1), qute_to_QPointF(a2), qute_to_QPointF(a3), static_cast<double>(a4), static_cast<float>(a5), static_cast<float>(a6), static_cast<float>(a7), static_cast<double>(a8), static_cast<float>(a9), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a10)), static_cast<Qt::MouseButton>(a11), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a12))));
+}
 void qute_QTabletEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QTabletEvent *>(self);
@@ -17611,6 +18290,10 @@ void * qute_QTextDocument_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QTextDocument *>(new qute_QTextDocument(static_cast<QObject *>(a0)));
 }
+void * qute_QTextDocument_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QTextDocument *>(new qute_QTextDocument(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+}
 void qute_QTextDocument_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QTextDocument *>(static_cast<QTextDocument *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -17853,7 +18536,7 @@ void qute_QTextDocument_addResource(void *self, int a0, void * a1, void * a2) {
 }
 void qute_QTextDocument_setResourceProvider(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QTextDocument *>(self)->setResourceProvider(std::function<QVariant (const QUrl &)>([s = std::make_shared<GoSlot>(a0)](const QUrl & p0) -> QVariant { void * c0 = static_cast<void *>(new QUrl(p0)); void *args[] = {&c0}; void * r = nullptr; qute_call(s->id, args, &r); return (r ? *static_cast<QVariant *>(r) : QVariant()); }));
+	static_cast<QTextDocument *>(self)->setResourceProvider((a0 ? std::function<QVariant (const QUrl &)>([s = std::make_shared<GoSlot>(a0)](const QUrl & p0) -> QVariant { void * c0 = static_cast<void *>(new QUrl(p0)); void *args[] = {&c0}; void * r = nullptr; qute_call(s->id, args, &r); return (r ? *static_cast<QVariant *>(r) : QVariant()); }) : std::function<QVariant (const QUrl &)>()));
 }
 qute_list qute_QTextDocument_allFormats(void *self) {
 	qute_gui_only();
@@ -18077,7 +18760,7 @@ void qute_QTextDocument_setModified_1(void *self, bool a0) {
 }
 void qute_QTextDocument_setDefaultResourceProvider(uintptr_t a0) {
 	qute_gui_only();
-	QTextDocument::setDefaultResourceProvider(std::function<QVariant (const QUrl &)>([s = std::make_shared<GoSlot>(a0)](const QUrl & p0) -> QVariant { void * c0 = static_cast<void *>(new QUrl(p0)); void *args[] = {&c0}; void * r = nullptr; qute_call(s->id, args, &r); return (r ? *static_cast<QVariant *>(r) : QVariant()); }));
+	QTextDocument::setDefaultResourceProvider((a0 ? std::function<QVariant (const QUrl &)>([s = std::make_shared<GoSlot>(a0)](const QUrl & p0) -> QVariant { void * c0 = static_cast<void *>(new QUrl(p0)); void *args[] = {&c0}; void * r = nullptr; qute_call(s->id, args, &r); return (r ? *static_cast<QVariant *>(r) : QVariant()); }) : std::function<QVariant (const QUrl &)>()));
 }
 void * qute_QTextDocument_contentsChange(void *self, uintptr_t id) {
 	qute_gui_only();
@@ -19364,6 +20047,10 @@ bool qute_QTextTableFormat_borderCollapse(void *self) {
 }
 
 // ---- QToolBarChangeEvent
+void * qute_QToolBarChangeEvent_new(bool a0) {
+	qute_gui_only();
+	return static_cast<QToolBarChangeEvent *>(new qute_QToolBarChangeEvent(static_cast<bool>(a0)));
+}
 void qute_QToolBarChangeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QToolBarChangeEvent *>(self);
@@ -19378,6 +20065,14 @@ bool qute_QToolBarChangeEvent_toggle(void *self) {
 }
 
 // ---- QTouchEvent
+void * qute_QTouchEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QTouchEvent *>(new qute_QTouchEvent(static_cast<QEvent::Type>(a0)));
+}
+void * qute_QTouchEvent_new_1(int64_t a0, void * a1, int64_t a2, const void *a3, ptrdiff_t a3_n) {
+	qute_gui_only();
+	return static_cast<QTouchEvent *>(new qute_QTouchEvent(static_cast<QEvent::Type>(a0), static_cast<QPointingDevice *>(a1), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a2)), [&] { QList<QEventPoint> l; auto d = static_cast<void * const *>(a3); l.reserve(a3_n); for (ptrdiff_t i = 0; i < a3_n; i++) l.append((d[i] ? *static_cast<QEventPoint *>(d[i]) : QEventPoint())); return l; }()));
+}
 void qute_QTouchEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QTouchEvent *>(self);
@@ -19580,6 +20275,13 @@ qute_rectf qute_QTransform_mapRect_1(void *self, qute_rectf a0) {
 	qute_gui_only();
 	return qute_from_QRectF(static_cast<QTransform *>(self)->mapRect(qute_to_QRectF(a0)));
 }
+void * qute_QTransform_inverted_1(void *self, bool *a0_out) {
+	qute_gui_only();
+	bool t0{};
+	auto &&r = static_cast<QTransform *>(self)->inverted(&t0);
+	*a0_out = static_cast<bool>(t0);
+	return static_cast<void *>(new QTransform(r));
+}
 void qute_QTransform_rotate_2(void *self, double a0, int64_t a1) {
 	qute_gui_only();
 	static_cast<QTransform *>(self)->rotate(static_cast<double>(a0), static_cast<Qt::Axis>(a1));
@@ -19630,6 +20332,10 @@ void * qute_QUndoCommand_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 void * qute_QUndoCommand_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QUndoCommand *>(new qute_QUndoCommand(static_cast<QUndoCommand *>(a0)));
+}
+void * qute_QUndoCommand_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QUndoCommand *>(new qute_QUndoCommand(QString::fromUtf8(a0, a0_len), static_cast<QUndoCommand *>(a1)));
 }
 void qute_QUndoCommand_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -20510,6 +21216,10 @@ float qute_QVector4D_dotProduct(void * a0, void * a1) {
 }
 
 // ---- QWhatsThisClickedEvent
+void * qute_QWhatsThisClickedEvent_new(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
+	return static_cast<QWhatsThisClickedEvent *>(new qute_QWhatsThisClickedEvent(QString::fromUtf8(a0, a0_len)));
+}
 void qute_QWhatsThisClickedEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QWhatsThisClickedEvent *>(self);
@@ -20524,6 +21234,14 @@ qute_str qute_QWhatsThisClickedEvent_href(void *self) {
 }
 
 // ---- QWheelEvent
+void * qute_QWheelEvent_new(qute_pointf a0, qute_pointf a1, qute_point a2, qute_point a3, int64_t a4, int64_t a5, int64_t a6, bool a7) {
+	qute_gui_only();
+	return static_cast<QWheelEvent *>(new qute_QWheelEvent(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPoint(a2), qute_to_QPoint(a3), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a4)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a5)), static_cast<Qt::ScrollPhase>(a6), static_cast<bool>(a7)));
+}
+void * qute_QWheelEvent_new_1(qute_pointf a0, qute_pointf a1, qute_point a2, qute_point a3, int64_t a4, int64_t a5, int64_t a6, bool a7, int64_t a8, void * a9) {
+	qute_gui_only();
+	return static_cast<QWheelEvent *>(new qute_QWheelEvent(qute_to_QPointF(a0), qute_to_QPointF(a1), qute_to_QPoint(a2), qute_to_QPoint(a3), QFlags<Qt::MouseButton>::fromInt(static_cast<QFlags<Qt::MouseButton>::Int>(a4)), QFlags<Qt::KeyboardModifier>::fromInt(static_cast<QFlags<Qt::KeyboardModifier>::Int>(a5)), static_cast<Qt::ScrollPhase>(a6), static_cast<bool>(a7), static_cast<Qt::MouseEventSource>(a8), static_cast<QPointingDevice *>(a9)));
+}
 void qute_QWheelEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QWheelEvent *>(self);
@@ -21342,6 +22060,14 @@ void * qute_QWindow_transientParentChanged(void *self, uintptr_t id) {
 }
 
 // ---- QWindowStateChangeEvent
+void * qute_QWindowStateChangeEvent_new(int64_t a0) {
+	qute_gui_only();
+	return static_cast<QWindowStateChangeEvent *>(new qute_QWindowStateChangeEvent(QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a0))));
+}
+void * qute_QWindowStateChangeEvent_new_1(int64_t a0, bool a1) {
+	qute_gui_only();
+	return static_cast<QWindowStateChangeEvent *>(new qute_QWindowStateChangeEvent(QFlags<Qt::WindowState>::fromInt(static_cast<QFlags<Qt::WindowState>::Int>(a0)), static_cast<bool>(a1)));
+}
 void qute_QWindowStateChangeEvent_delete(void *self) {
 	qute_gui_only();
 	delete static_cast<QWindowStateChangeEvent *>(self);

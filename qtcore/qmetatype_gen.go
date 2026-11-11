@@ -592,13 +592,16 @@ func QMetaTypeHasRegisteredMutableViewFunction(fromType *QMetaType, toType *QMet
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#registerConverterFunction
 func QMetaTypeRegisterConverterFunction(fArg func(unsafe.Pointer, unsafe.Pointer) bool, from *QMetaType, to *QMetaType) bool {
 	rt.CheckThread("QMetaTypeRegisterConverterFunction")
-	fArgID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		p0 := *(*unsafe.Pointer)(a[0])
-		p1 := *(*unsafe.Pointer)(a[1])
-		r := fArg(p0, p1)
-		*(*C.bool)(ret) = C.bool(r)
-	})
+	var fArgID uintptr
+	if fArg != nil {
+		fArgID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			p0 := *(*unsafe.Pointer)(a[0])
+			p1 := *(*unsafe.Pointer)(a[1])
+			r := fArg(p0, p1)
+			*(*C.bool)(ret) = C.bool(r)
+		})
+	}
 	r := C.qute_QMetaType_registerConverterFunction(C.uintptr_t(fArgID), rt.UseArg(unsafe.Pointer(from), "QMetaTypeRegisterConverterFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeRegisterConverterFunction"))
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)
@@ -624,13 +627,16 @@ func QMetaTypeUnregisterConverterFunction(from *QMetaType, to *QMetaType) {
 // Qt docs: https://doc.qt.io/qt-6/qmetatype.html#registerMutableViewFunction
 func QMetaTypeRegisterMutableViewFunction(fArg func(unsafe.Pointer, unsafe.Pointer) bool, from *QMetaType, to *QMetaType) bool {
 	rt.CheckThread("QMetaTypeRegisterMutableViewFunction")
-	fArgID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		p0 := *(*unsafe.Pointer)(a[0])
-		p1 := *(*unsafe.Pointer)(a[1])
-		r := fArg(p0, p1)
-		*(*C.bool)(ret) = C.bool(r)
-	})
+	var fArgID uintptr
+	if fArg != nil {
+		fArgID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			p0 := *(*unsafe.Pointer)(a[0])
+			p1 := *(*unsafe.Pointer)(a[1])
+			r := fArg(p0, p1)
+			*(*C.bool)(ret) = C.bool(r)
+		})
+	}
 	r := C.qute_QMetaType_registerMutableViewFunction(C.uintptr_t(fArgID), rt.UseArg(unsafe.Pointer(from), "QMetaTypeRegisterMutableViewFunction"), rt.UseArg(unsafe.Pointer(to), "QMetaTypeRegisterMutableViewFunction"))
 	runtime.KeepAlive(from)
 	runtime.KeepAlive(to)

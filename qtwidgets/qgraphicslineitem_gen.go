@@ -1038,3 +1038,36 @@ func NewQGraphicsLineItemWith(v QGraphicsLineItemSubclass, parent QGraphicsItemL
 	C.qute_QGraphicsLineItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsLineItem
 }
+
+// NewQGraphicsLineItemWithLineFWith is NewQGraphicsLineItemWithLineF for a Go subclass: it constructs a QGraphicsLineItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsLineItemWithLineFWith(v QGraphicsLineItemSubclass, line *qtcore.QLineF, parent QGraphicsItemLike) *QGraphicsLineItem {
+	rt.CheckThread("NewQGraphicsLineItemWithLineFWith")
+	base := v.quteQGraphicsLineItemBase()
+	if base.QGraphicsLineItem != nil {
+		panic("NewQGraphicsLineItemWithLineFWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsLineItemWithLineFWith")
+	}
+	p := C.qute_QGraphicsLineItem_new_shim_1(rt.UseArg(unsafe.Pointer(line), "NewQGraphicsLineItemWithLineFWith"), parentPtr)
+	runtime.KeepAlive(line)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsLineItem", mode)
+	base.QGraphicsLineItem = rt.View[QGraphicsLineItem](h, p)
+	id := h.SetSelf(v, qGraphicsLineItemVTable)
+	mask := rt.Mask(v, qGraphicsLineItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsLineItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsLineItem
+}

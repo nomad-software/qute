@@ -817,3 +817,68 @@ func NewQListWidgetItemWith(v QListWidgetItemSubclass, listview QListWidgetLike)
 	C.qute_QListWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QListWidgetItem
 }
+
+// NewQListWidgetItemWithTextWith is NewQListWidgetItemWithText for a Go subclass: it constructs a QListWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQListWidgetItemWithTextWith(v QListWidgetItemSubclass, text string, listview QListWidgetLike) *QListWidgetItem {
+	rt.CheckThread("NewQListWidgetItemWithTextWith")
+	base := v.quteQListWidgetItemBase()
+	if base.QListWidgetItem != nil {
+		panic("NewQListWidgetItemWithTextWith: value is already constructed; use a fresh value")
+	}
+	var listviewPtr unsafe.Pointer
+	if listview != nil {
+		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithTextWith")
+	}
+	p := C.qute_QListWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr)
+	runtime.KeepAlive(listview)
+	mode := rt.NewOwned
+	if listviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
+	id := h.SetSelf(v, qListWidgetItemVTable)
+	mask := rt.Mask(v, qListWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QListWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QListWidgetItem
+}
+
+// NewQListWidgetItemWithIconWith is NewQListWidgetItemWithIcon for a Go subclass: it constructs a QListWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQListWidgetItemWithIconWith(v QListWidgetItemSubclass, icon *qtgui.QIcon, text string, listview QListWidgetLike) *QListWidgetItem {
+	rt.CheckThread("NewQListWidgetItemWithIconWith")
+	base := v.quteQListWidgetItemBase()
+	if base.QListWidgetItem != nil {
+		panic("NewQListWidgetItemWithIconWith: value is already constructed; use a fresh value")
+	}
+	var listviewPtr unsafe.Pointer
+	if listview != nil {
+		listviewPtr = rt.UseArg(unsafe.Pointer(listview.AsQListWidget()), "NewQListWidgetItemWithIconWith")
+	}
+	p := C.qute_QListWidgetItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQListWidgetItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), listviewPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(listview)
+	mode := rt.NewOwned
+	if listviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
+	id := h.SetSelf(v, qListWidgetItemVTable)
+	mask := rt.Mask(v, qListWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QListWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QListWidgetItem
+}

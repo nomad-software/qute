@@ -25,7 +25,7 @@ type QCloseEventLike interface{ AsQCloseEvent() *QCloseEvent }
 func (this *QCloseEvent) AsQCloseEvent() *QCloseEvent { return this }
 
 func init() {
-	rt.RegisterClass("QCloseEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QCloseEvent_delete(p) })
+	rt.RegisterClass("QCloseEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QCloseEvent_delete(p) })
 }
 
 // QCloseEventFromPtr wraps an existing C++ QCloseEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,16 @@ func QCloseEventCast(e qtcore.QEventLike) *QCloseEvent {
 	r := rt.View[QCloseEvent](rt.WrapClassFrom(p, "QCloseEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQCloseEvent wraps the QCloseEvent constructor.
+//
+//	C++: QCloseEvent::QCloseEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qcloseevent.html#QCloseEvent
+func NewQCloseEvent() *QCloseEvent {
+	rt.CheckThread("NewQCloseEvent")
+	p := C.qute_QCloseEvent_new()
+	h := rt.WrapClass(p, "QCloseEvent", rt.NewOwned)
+	return rt.View[QCloseEvent](h, p)
 }

@@ -313,6 +313,8 @@ func (this *QLineF) NormalVector() *QLineF {
 //
 //	C++: IntersectionType QLineF::intersects(const QLineF & l, QPointF * intersectionPoint = …) const
 //
+// Arguments with C++ defaults are left at them; IntersectsFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qlinef.html#intersects
 func (this *QLineF) Intersects(l *QLineF) QLineFIntersectionType {
 	self := rt.Use(unsafe.Pointer(this), "QLineF.Intersects")
@@ -427,6 +429,22 @@ func (this *QLineF) ToLine() *QLine {
 	r := C.qute_QLineF_toLine(self)
 	runtime.KeepAlive(this)
 	return rt.View[QLine](rt.WrapClass(r, "QLine", rt.TakeOwned), r)
+}
+
+// IntersectsFull wraps QLineF::intersects.
+//
+//	C++: IntersectionType QLineF::intersects(const QLineF & l, QPointF * intersectionPoint = …) const
+//
+// IntersectsFull is Intersects with every argument, including those Intersects leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qlinef.html#intersects
+func (this *QLineF) IntersectsFull(l *QLineF) (QLineFIntersectionType, QPointF) {
+	self := rt.Use(unsafe.Pointer(this), "QLineF.IntersectsFull")
+	var intersectionPointOut C.qute_pointf
+	r := C.qute_QLineF_intersects_1(self, rt.UseArg(unsafe.Pointer(l), "QLineF.IntersectsFull"), &intersectionPointOut)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(l)
+	return QLineFIntersectionType(r), goQPointF(intersectionPointOut)
 }
 
 // QLineFFromPolar wraps QLineF::fromPolar.

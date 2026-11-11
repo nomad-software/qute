@@ -9,6 +9,7 @@
 #   no-construct: true hide constructors
 #   skip-virtuals: [x] virtuals Go may not override
 #   raw-pointers: true pass pointer-to-number arguments as unsafe.Pointer (GL)
+#   inline: true       a trivially copyable value kept in Go memory, not a C++ heap copy
 #   enums-only: true   emit the enums but no wrapper (QChar is a rune in Go)
 #   depends-on: x      the object(s) a value is only valid with: a getter name,
 #                      or {cpp: <expr over $self>, class: <class>}; a list for several
@@ -34,11 +35,11 @@ classes:
   QBuffer: {}
   QMimeData: {}
   QSettings: {}
-  QEvent: { kind: event, no-construct: true }
+  QEvent: { kind: event }
   QTimerEvent: { kind: event, no-construct: true }
   QChildEvent: { kind: event, no-construct: true }
   QVariant: { kind: value }
-  QModelIndex: { kind: value, depends-on: model }
+  QModelIndex: { kind: value, inline: true, depends-on: model }
   QPersistentModelIndex: { kind: value }
   QUrl: { kind: value }
   QDate: { kind: value }

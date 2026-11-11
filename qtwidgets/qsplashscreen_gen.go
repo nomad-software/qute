@@ -1121,3 +1121,31 @@ func NewQSplashScreenWith(v QSplashScreenSubclass) *QSplashScreen {
 	C.qute_QSplashScreen_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSplashScreen
 }
+
+// NewQSplashScreenWithScreenWith is NewQSplashScreenWithScreen for a Go subclass: it constructs a QSplashScreen whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSplashScreenWithScreenWith(v QSplashScreenSubclass, screen qtgui.QScreenLike) *QSplashScreen {
+	rt.CheckThread("NewQSplashScreenWithScreenWith")
+	base := v.quteQSplashScreenBase()
+	if base.QSplashScreen != nil {
+		panic("NewQSplashScreenWithScreenWith: value is already constructed; use a fresh value")
+	}
+	var screenPtr unsafe.Pointer
+	if screen != nil {
+		screenPtr = rt.UseArg(unsafe.Pointer(screen.AsQScreen()), "NewQSplashScreenWithScreenWith")
+	}
+	p := C.qute_QSplashScreen_new_shim_1(screenPtr)
+	runtime.KeepAlive(screen)
+	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	base.QSplashScreen = rt.View[QSplashScreen](h, p)
+	id := h.SetSelf(v, qSplashScreenVTable)
+	mask := rt.Mask(v, qSplashScreenVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSplashScreen_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSplashScreen
+}

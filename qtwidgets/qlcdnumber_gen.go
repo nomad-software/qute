@@ -1240,3 +1240,35 @@ func NewQLCDNumberWith(v QLCDNumberSubclass, parent QWidgetLike) *QLCDNumber {
 	C.qute_QLCDNumber_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QLCDNumber
 }
+
+// NewQLCDNumberWithNumDigitsWith is NewQLCDNumberWithNumDigits for a Go subclass: it constructs a QLCDNumber whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQLCDNumberWithNumDigitsWith(v QLCDNumberSubclass, numDigits uint, parent QWidgetLike) *QLCDNumber {
+	rt.CheckThread("NewQLCDNumberWithNumDigitsWith")
+	base := v.quteQLCDNumberBase()
+	if base.QLCDNumber != nil {
+		panic("NewQLCDNumberWithNumDigitsWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQLCDNumberWithNumDigitsWith")
+	}
+	p := C.qute_QLCDNumber_new_shim_1(C.uint(numDigits), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QLCDNumber", mode)
+	base.QLCDNumber = rt.View[QLCDNumber](h, p)
+	id := h.SetSelf(v, qLCDNumberVTable)
+	mask := rt.Mask(v, qLCDNumberVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QLCDNumber_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QLCDNumber
+}

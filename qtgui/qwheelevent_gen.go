@@ -25,7 +25,7 @@ type QWheelEventLike interface{ AsQWheelEvent() *QWheelEvent }
 func (this *QWheelEvent) AsQWheelEvent() *QWheelEvent { return this }
 
 func init() {
-	rt.RegisterClass("QWheelEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QWheelEvent_delete(p) })
+	rt.RegisterClass("QWheelEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QWheelEvent_delete(p) })
 }
 
 // QWheelEventFromPtr wraps an existing C++ QWheelEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,47 @@ func QWheelEventCast(e qtcore.QEventLike) *QWheelEvent {
 	r := rt.View[QWheelEvent](rt.WrapClassFrom(p, "QWheelEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQWheelEvent wraps the QWheelEvent constructor.
+//
+//	C++: QWheelEvent::QWheelEvent(const QPointF & pos, const QPointF & globalPos, QPoint pixelDelta, QPoint angleDelta, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, bool inverted, Qt::MouseEventSource source = …, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQWheelEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwheelevent.html#QWheelEvent
+func NewQWheelEvent(pos qtcore.QPointF, globalPos qtcore.QPointF, pixelDelta qtcore.QPoint, angleDelta qtcore.QPoint, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, phase qtcore.ScrollPhase, inverted bool) *QWheelEvent {
+	rt.CheckThread("NewQWheelEvent")
+	p := C.qute_QWheelEvent_new(cQPointF(pos), cQPointF(globalPos), cQPoint(pixelDelta), cQPoint(angleDelta), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(phase), C.bool(inverted))
+	h := rt.WrapClass(p, "QWheelEvent", rt.NewOwned)
+	return rt.View[QWheelEvent](h, p)
+}
+
+// NewQWheelEventFull wraps the QWheelEvent constructor.
+//
+//	C++: QWheelEvent::QWheelEvent(const QPointF & pos, const QPointF & globalPos, QPoint pixelDelta, QPoint angleDelta, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Qt::ScrollPhase phase, bool inverted, Qt::MouseEventSource source = …, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQWheelEventFull is NewQWheelEvent with every argument, including those NewQWheelEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qwheelevent.html#QWheelEvent
+func NewQWheelEventFull(pos qtcore.QPointF, globalPos qtcore.QPointF, pixelDelta qtcore.QPoint, angleDelta qtcore.QPoint, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, phase qtcore.ScrollPhase, inverted bool, source qtcore.MouseEventSource, device QPointingDeviceLike) *QWheelEvent {
+	rt.CheckThread("NewQWheelEventFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQWheelEventFull")
+	}
+	p := C.qute_QWheelEvent_new_1(cQPointF(pos), cQPointF(globalPos), cQPoint(pixelDelta), cQPoint(angleDelta), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(phase), C.bool(inverted), C.int64_t(source), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QWheelEvent", rt.NewOwned)
+	rt.KeepArg(h, "QWheelEvent.device", deviceH, true)
+	return rt.View[QWheelEvent](h, p)
 }
 
 // PixelDelta wraps QWheelEvent::pixelDelta.

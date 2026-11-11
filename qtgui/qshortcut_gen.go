@@ -569,3 +569,68 @@ func NewQShortcutWith(v QShortcutSubclass, parent qtcore.QObjectLike) *QShortcut
 	C.qute_QShortcut_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QShortcut
 }
+
+// NewQShortcutWithKeySequenceWith is NewQShortcutWithKeySequence for a Go subclass: it constructs a QShortcut whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQShortcutWithKeySequenceWith(v QShortcutSubclass, key *QKeySequence, parent qtcore.QObjectLike) *QShortcut {
+	rt.CheckThread("NewQShortcutWithKeySequenceWith")
+	base := v.quteQShortcutBase()
+	if base.QShortcut != nil {
+		panic("NewQShortcutWithKeySequenceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutWithKeySequenceWith")
+	}
+	p := C.qute_QShortcut_new_shim_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutWithKeySequenceWith"), parentPtr)
+	runtime.KeepAlive(key)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QShortcut", mode)
+	base.QShortcut = rt.View[QShortcut](h, p)
+	id := h.SetSelf(v, qShortcutVTable)
+	mask := rt.Mask(v, qShortcutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QShortcut_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QShortcut
+}
+
+// NewQShortcutStandardWith is NewQShortcutStandard for a Go subclass: it constructs a QShortcut whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQShortcutStandardWith(v QShortcutSubclass, key QKeySequenceStandardKey, parent qtcore.QObjectLike) *QShortcut {
+	rt.CheckThread("NewQShortcutStandardWith")
+	base := v.quteQShortcutBase()
+	if base.QShortcut != nil {
+		panic("NewQShortcutStandardWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQShortcutStandardWith")
+	}
+	p := C.qute_QShortcut_new_shim_2(C.int64_t(key), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QShortcut", mode)
+	base.QShortcut = rt.View[QShortcut](h, p)
+	id := h.SetSelf(v, qShortcutVTable)
+	mask := rt.Mask(v, qShortcutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QShortcut_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QShortcut
+}

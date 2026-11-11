@@ -25,7 +25,7 @@ type QEnterEventLike interface{ AsQEnterEvent() *QEnterEvent }
 func (this *QEnterEvent) AsQEnterEvent() *QEnterEvent { return this }
 
 func init() {
-	rt.RegisterClass("QEnterEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QEnterEvent_delete(p) })
+	rt.RegisterClass("QEnterEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QEnterEvent_delete(p) })
 }
 
 // QEnterEventFromPtr wraps an existing C++ QEnterEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,45 @@ func QEnterEventCast(e qtcore.QEventLike) *QEnterEvent {
 	r := rt.View[QEnterEvent](rt.WrapClassFrom(p, "QEnterEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQEnterEvent wraps the QEnterEvent constructor.
+//
+//	C++: QEnterEvent::QEnterEvent(const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQEnterEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qenterevent.html#QEnterEvent
+func NewQEnterEvent(localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF) *QEnterEvent {
+	rt.CheckThread("NewQEnterEvent")
+	p := C.qute_QEnterEvent_new(cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos))
+	h := rt.WrapClass(p, "QEnterEvent", rt.NewOwned)
+	return rt.View[QEnterEvent](h, p)
+}
+
+// NewQEnterEventFull wraps the QEnterEvent constructor.
+//
+//	C++: QEnterEvent::QEnterEvent(const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQEnterEventFull is NewQEnterEvent with every argument, including those NewQEnterEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qenterevent.html#QEnterEvent
+func NewQEnterEventFull(localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, device QPointingDeviceLike) *QEnterEvent {
+	rt.CheckThread("NewQEnterEventFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQEnterEventFull")
+	}
+	p := C.qute_QEnterEvent_new_1(cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QEnterEvent", rt.NewOwned)
+	rt.KeepArg(h, "QEnterEvent.device", deviceH, true)
+	return rt.View[QEnterEvent](h, p)
 }

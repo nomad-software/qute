@@ -1066,3 +1066,35 @@ func NewQSliderWith(v QSliderSubclass, parent QWidgetLike) *QSlider {
 	C.qute_QSlider_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSlider
 }
+
+// NewQSliderWithOrientationWith is NewQSliderWithOrientation for a Go subclass: it constructs a QSlider whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSliderWithOrientationWith(v QSliderSubclass, orientation qtcore.Orientations, parent QWidgetLike) *QSlider {
+	rt.CheckThread("NewQSliderWithOrientationWith")
+	base := v.quteQSliderBase()
+	if base.QSlider != nil {
+		panic("NewQSliderWithOrientationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSliderWithOrientationWith")
+	}
+	p := C.qute_QSlider_new_shim_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSlider", mode)
+	base.QSlider = rt.View[QSlider](h, p)
+	id := h.SetSelf(v, qSliderVTable)
+	mask := rt.Mask(v, qSliderVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSlider_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSlider
+}

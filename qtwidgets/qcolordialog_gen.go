@@ -1280,3 +1280,35 @@ func NewQColorDialogWith(v QColorDialogSubclass, parent QWidgetLike) *QColorDial
 	C.qute_QColorDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QColorDialog
 }
+
+// NewQColorDialogWithColorWith is NewQColorDialogWithColor for a Go subclass: it constructs a QColorDialog whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQColorDialogWithColorWith(v QColorDialogSubclass, initial qtgui.QColor, parent QWidgetLike) *QColorDialog {
+	rt.CheckThread("NewQColorDialogWithColorWith")
+	base := v.quteQColorDialogBase()
+	if base.QColorDialog != nil {
+		panic("NewQColorDialogWithColorWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQColorDialogWithColorWith")
+	}
+	p := C.qute_QColorDialog_new_shim_1(cQColor(initial), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QColorDialog", mode)
+	base.QColorDialog = rt.View[QColorDialog](h, p)
+	id := h.SetSelf(v, qColorDialogVTable)
+	mask := rt.Mask(v, qColorDialogVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QColorDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QColorDialog
+}

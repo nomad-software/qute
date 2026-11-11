@@ -572,8 +572,8 @@ func (this *QItemSelectionModel) OnCurrentChanged(f func(current *QModelIndex, p
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentChanged(self, C.uintptr_t(id)))
@@ -590,8 +590,8 @@ func (this *QItemSelectionModel) OnCurrentRowChanged(f func(current *QModelIndex
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentRowChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentRowChanged(self, C.uintptr_t(id)))
@@ -608,8 +608,8 @@ func (this *QItemSelectionModel) OnCurrentColumnChanged(f func(current *QModelIn
 	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.OnCurrentColumnChanged")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+		current := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+		previous := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 		f(current, previous)
 	})
 	return rt.NewConnection(C.qute_QItemSelectionModel_currentColumnChanged(self, C.uintptr_t(id)))
@@ -641,7 +641,7 @@ var qItemSelectionModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
 			v.(interface {
 				SetCurrentIndex(*QModelIndex, QItemSelectionModelSelectionFlags)
@@ -655,7 +655,7 @@ var qItemSelectionModelVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			command := QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
 			v.(interface {
 				Select(*QModelIndex, QItemSelectionModelSelectionFlags)
@@ -898,6 +898,45 @@ func NewQItemSelectionModelWith(v QItemSelectionModelSubclass) *QItemSelectionMo
 	}
 	p := C.qute_QItemSelectionModel_new_shim()
 	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	base.QItemSelectionModel = rt.View[QItemSelectionModel](h, p)
+	id := h.SetSelf(v, qItemSelectionModelVTable)
+	mask := rt.Mask(v, qItemSelectionModelVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QItemSelectionModel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QItemSelectionModel
+}
+
+// NewQItemSelectionModelWithAbstractItemModelWith is NewQItemSelectionModelWithAbstractItemModel for a Go subclass: it constructs a QItemSelectionModel whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQItemSelectionModelWithAbstractItemModelWith(v QItemSelectionModelSubclass, model QAbstractItemModelLike, parent QObjectLike) *QItemSelectionModel {
+	rt.CheckThread("NewQItemSelectionModelWithAbstractItemModelWith")
+	base := v.quteQItemSelectionModelBase()
+	if base.QItemSelectionModel != nil {
+		panic("NewQItemSelectionModelWithAbstractItemModelWith: value is already constructed; use a fresh value")
+	}
+	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
+	if model != nil {
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQItemSelectionModelWithAbstractItemModelWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQItemSelectionModelWithAbstractItemModelWith")
+	}
+	p := C.qute_QItemSelectionModel_new_shim_1(modelPtr, parentPtr)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QItemSelectionModel", mode)
+	rt.KeepArg(h, "model", modelH, false)
 	base.QItemSelectionModel = rt.View[QItemSelectionModel](h, p)
 	id := h.SetSelf(v, qItemSelectionModelVTable)
 	mask := rt.Mask(v, qItemSelectionModelVTable)

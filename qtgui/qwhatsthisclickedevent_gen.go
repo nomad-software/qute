@@ -27,7 +27,7 @@ type QWhatsThisClickedEventLike interface {
 func (this *QWhatsThisClickedEvent) AsQWhatsThisClickedEvent() *QWhatsThisClickedEvent { return this }
 
 func init() {
-	rt.RegisterClass("QWhatsThisClickedEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QWhatsThisClickedEvent_delete(p) })
+	rt.RegisterClass("QWhatsThisClickedEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QWhatsThisClickedEvent_delete(p) })
 }
 
 // QWhatsThisClickedEventFromPtr wraps an existing C++ QWhatsThisClickedEvent. This is an unsafe escape hatch: own says
@@ -53,6 +53,18 @@ func QWhatsThisClickedEventCast(e qtcore.QEventLike) *QWhatsThisClickedEvent {
 	r := rt.View[QWhatsThisClickedEvent](rt.WrapClassFrom(p, "QWhatsThisClickedEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQWhatsThisClickedEventWithHref wraps the QWhatsThisClickedEvent constructor.
+//
+//	C++: QWhatsThisClickedEvent::QWhatsThisClickedEvent(const QString & href)
+//
+// Qt docs: https://doc.qt.io/qt-6/qwhatsthisclickedevent.html#QWhatsThisClickedEvent
+func NewQWhatsThisClickedEventWithHref(href string) *QWhatsThisClickedEvent {
+	rt.CheckThread("NewQWhatsThisClickedEventWithHref")
+	p := C.qute_QWhatsThisClickedEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(href))), C.ptrdiff_t(len(href)))
+	h := rt.WrapClass(p, "QWhatsThisClickedEvent", rt.NewOwned)
+	return rt.View[QWhatsThisClickedEvent](h, p)
 }
 
 // Href wraps QWhatsThisClickedEvent::href.

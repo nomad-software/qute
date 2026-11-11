@@ -25,7 +25,7 @@ type QStatusTipEventLike interface{ AsQStatusTipEvent() *QStatusTipEvent }
 func (this *QStatusTipEvent) AsQStatusTipEvent() *QStatusTipEvent { return this }
 
 func init() {
-	rt.RegisterClass("QStatusTipEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QStatusTipEvent_delete(p) })
+	rt.RegisterClass("QStatusTipEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QStatusTipEvent_delete(p) })
 }
 
 // QStatusTipEventFromPtr wraps an existing C++ QStatusTipEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QStatusTipEventCast(e qtcore.QEventLike) *QStatusTipEvent {
 	r := rt.View[QStatusTipEvent](rt.WrapClassFrom(p, "QStatusTipEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQStatusTipEventWithTip wraps the QStatusTipEvent constructor.
+//
+//	C++: QStatusTipEvent::QStatusTipEvent(const QString & tip)
+//
+// Qt docs: https://doc.qt.io/qt-6/qstatustipevent.html#QStatusTipEvent
+func NewQStatusTipEventWithTip(tip string) *QStatusTipEvent {
+	rt.CheckThread("NewQStatusTipEventWithTip")
+	p := C.qute_QStatusTipEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
+	h := rt.WrapClass(p, "QStatusTipEvent", rt.NewOwned)
+	return rt.View[QStatusTipEvent](h, p)
 }
 
 // Tip wraps QStatusTipEvent::tip.

@@ -323,6 +323,9 @@ happened and the fix.
   Pass `nil` for "no parent". The method's `Full` form takes every argument:
   `lay.AddWidgetFull(w, 1, qtcore.AlignTop)`,
   `c.MovePositionFull(qtgui.QTextCursorRight, qtgui.QTextCursorKeepAnchor, 5)`.
+  A defaulted out-parameter is a result of the `Full` form:
+  `n, ok := loc.ToIntFull(s)`, `name, ok := qtwidgets.QInputDialogGetTextFull(nil,
+  "Password", "Password:", qtwidgets.QLineEditPassword, "", 0, 0)`.
 - Overloads get descriptive names: the one with the fewest parameters gets
   the plain name and the others a suffix for what differs (`Year` /
   `YearWithCalendar`, `DrawRect` / `DrawRectF`).
@@ -331,7 +334,9 @@ happened and the fix.
 - `QString`, `QByteArray` and `QStringList` are `string`, `[]byte` and
   `[]string`. `QPoint`, `QSize`, `QRect`, `QMargins` and `QColor` are plain
   Go structs. `QImage`, `QFont`, `QIcon`, `QVariant` and other value classes
-  are Owned handles that GC frees. `qtcore.NewQVariantOf(v)` and
+  are Owned handles that GC frees; a `QModelIndex` is kept in Go memory, so
+  the index Qt hands a model's overrides for every row costs no C++ copy or
+  cleanup. `qtcore.NewQVariantOf(v)` and
   `(*QVariant).Value()` convert to and from Go values; `qtgui.NewQVariantOf`
   and `qtgui.VariantValue` also take and return colours, icons, fonts, brushes,
   pixmaps, images and the other GUI values, for item model roles.
@@ -341,7 +346,11 @@ happened and the fix.
   A pointer and its count become one slice (`f.Read(buf)`), `QMap`/`QHash`
   become Go maps, `std::chrono` durations and times become `time.Duration` and
   `time.Time`, `std::filesystem::path` is a `string`, and `std::function`
-  parameters take a Go func.
+  parameters take a Go func (`nil` for none).
+- Events can be built and sent like any object:
+  `qtcore.QCoreApplicationSendEvent(w, qtgui.NewQKeyEvent(qtcore.QEventKeyPress, int(qtcore.Key_A), qtcore.NoModifier))`.
+  A sent event stays yours; a posted one (`QCoreApplicationPostEvent`) is
+  Qt's, and its handle is Dead once Qt has delivered and deleted it.
 - Methods that return the object itself chain: `t.Translate(10, 20).Rotate(45)`.
 - Public data members get getters and setters (`opt.Rect()`, `opt.SetRect(r)`),
   and nested classes get flat names (`QFont::Tag` is `qtgui.QFontTag`).
@@ -372,7 +381,9 @@ implementation. Models work the same way: embed
 
 Every class with virtuals works like this, with no opt-in: embed
 `<Class>Base`, define the virtuals you want, build it with
-`New<Class>With(v, ...)`. Abstract classes (`QGraphicsItem`, `QLayout`,
+`New<Class>With(v, ...)`; every other constructor has a subclass form too,
+its name plus `With` (`qtwebenginecore.NewQWebEnginePageWithProfileWith(v,
+profile, parent)` makes a Go page in a profile of your own). Abstract classes (`QGraphicsItem`, `QLayout`,
 `QValidator`, `QSyntaxHighlighter`) are built only that way, and a pure
 virtual you don't define returns its zero value (the one exception is
 `QIconEngine.Clone`, which Qt needs: the constructor panics without it). An override has the same

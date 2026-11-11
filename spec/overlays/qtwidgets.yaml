@@ -1224,7 +1224,7 @@ QGraphicsItem:
   mapFromScene(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
   mapRectFromScene(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
   isVisibleTo: { reviewed: true }
-  itemTransform: { reviewed: true }
+  itemTransform: { args: { ok: out }, reviewed: true }
   isObscuredBy: { reviewed: true }
   mapToItem: { reviewed: true }
   mapFromItem: { reviewed: true }
@@ -1249,7 +1249,7 @@ QGraphicsItem:
   collidesWithItem: { reviewed: true }
   isAncestorOf: { reviewed: true }
   commonAncestorItem: { return: borrowed, reviewed: true }
-  isBlockedByModalPanel: { reviewed: true }
+  isBlockedByModalPanel: { reviewed: true, no-full: "the panel comes back through a pointer to an object pointer, which out rules do not cover; use Panel and PanelModality of the items" }
   stackBefore: { reviewed: true }
   installSceneEventFilter: { reviewed: true }
   removeSceneEventFilter: { reviewed: true }
@@ -1309,6 +1309,12 @@ QAbstractItemDelegate:
   closeEditor: { reviewed: true }
 
 QFileDialog:
+  getOpenFileName: { args: { selectedFilter: in-out }, reviewed: true }
+  getOpenFileNames: { args: { selectedFilter: in-out }, reviewed: true }
+  getSaveFileName: { args: { selectedFilter: in-out }, reviewed: true }
+  getOpenFileUrl: { args: { selectedFilter: in-out }, reviewed: true }
+  getOpenFileUrls: { args: { selectedFilter: in-out }, reviewed: true }
+  getSaveFileUrl: { args: { selectedFilter: in-out }, reviewed: true }
   saveFileContent: { reviewed: true }
   getOpenFileContent: { reviewed: true }
   getExistingDirectoryUrl: { reviewed: true }
@@ -1327,11 +1333,11 @@ QGraphicsTextItem:
   document: { return: borrowed }
 
 QInputDialog:
-  getText: { reviewed: true }
-  getMultiLineText: { reviewed: true }
-  getItem: { reviewed: true }
-  getInt: { reviewed: true }
-  getDouble: { reviewed: true }
+  getText: { args: { ok: out }, reviewed: true }
+  getMultiLineText: { args: { ok: out }, reviewed: true }
+  getItem: { args: { ok: out }, reviewed: true }
+  getInt: { args: { ok: out }, reviewed: true }
+  getDouble: { args: { ok: out }, reviewed: true }
 
 QScrollBar:
   QScrollBar(Qt::Orientation, QWidget*): { name: NewQScrollBarWithOrientation }
@@ -1643,6 +1649,7 @@ QFocusFrame:
   widget: { return: borrowed }
 
 QGestureEvent:
+  QGestureEvent: { args: { gestures: borrowed }, doc: "The event does not own the gestures; keep them alive while the event lives." }
   gestures: { return: borrowed }
   gesture: { return: borrowed }
   activeGestures: { return: borrowed }

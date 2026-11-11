@@ -502,3 +502,33 @@ func NewQPdfWriterWith(v QPdfWriterSubclass, filename string) *QPdfWriter {
 	C.qute_QPdfWriter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QPdfWriter
 }
+
+// NewQPdfWriterWithIODeviceWith is NewQPdfWriterWithIODevice for a Go subclass: it constructs a QPdfWriter whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPdfWriterWithIODeviceWith(v QPdfWriterSubclass, device qtcore.QIODeviceLike) *QPdfWriter {
+	rt.CheckThread("NewQPdfWriterWithIODeviceWith")
+	base := v.quteQPdfWriterBase()
+	if base.QPdfWriter != nil {
+		panic("NewQPdfWriterWithIODeviceWith: value is already constructed; use a fresh value")
+	}
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQPdfWriterWithIODeviceWith")
+	}
+	p := C.qute_QPdfWriter_new_shim_1(devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	rt.KeepArg(h, "QPdfWriter.device", deviceH, false)
+	base.QPdfWriter = rt.View[QPdfWriter](h, p)
+	id := h.SetSelf(v, qPdfWriterVTable)
+	mask := rt.Mask(v, qPdfWriterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPdfWriter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPdfWriter
+}

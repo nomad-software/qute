@@ -63,8 +63,8 @@ func slotHandle(id uintptr) *Handle {
 func (h *Handle) anchorPin() {
 	anchorMu.Lock()
 	defer anchorMu.Unlock()
-	h.anchorN++
-	if h.anchorN == 1 {
+	h.x().anchorN++
+	if h.x().anchorN == 1 {
 		h.placeLocked(true, holderFor(h))
 	}
 }
@@ -73,11 +73,11 @@ func (h *Handle) anchorPin() {
 func (h *Handle) anchorUnpin() {
 	anchorMu.Lock()
 	defer anchorMu.Unlock()
-	if h.anchorN == 0 {
+	if h.x().anchorN == 0 {
 		return
 	}
-	h.anchorN--
-	if h.anchorN == 0 {
+	h.x().anchorN--
+	if h.x().anchorN == 0 {
 		h.placeLocked(false, nil)
 	}
 }
@@ -88,9 +88,9 @@ func (h *Handle) Anchored() string {
 	anchorMu.Lock()
 	defer anchorMu.Unlock()
 	switch {
-	case !h.placed:
+	case !h.x().placed:
 		return ""
-	case h.holder == nil:
+	case h.x().holder == nil:
 		return "global"
 	}
 	return "root"
@@ -103,24 +103,24 @@ func (h *Handle) placeLocked(placed bool, holder *Handle) {
 	if !placed {
 		holder = nil
 	}
-	wasGlobal := h.placed && h.holder == nil
+	wasGlobal := h.x().placed && h.x().holder == nil
 	nowGlobal := placed && holder == nil
 	if placed && holder != nil {
-		if holder.anchored == nil {
-			holder.anchored = map[*Handle]struct{}{}
+		if holder.x().anchored == nil {
+			holder.x().anchored = map[*Handle]struct{}{}
 		}
-		holder.anchored[h] = struct{}{}
+		holder.x().anchored[h] = struct{}{}
 	}
 	if nowGlobal && !wasGlobal {
 		h.Pin()
 	}
-	if h.placed && h.holder != nil && (h.holder != holder || !placed) {
-		delete(h.holder.anchored, h)
+	if h.x().placed && h.x().holder != nil && (h.x().holder != holder || !placed) {
+		delete(h.x().holder.x().anchored, h)
 	}
 	if wasGlobal && !nowGlobal {
 		h.Unpin()
 	}
-	h.placed, h.holder = placed, holder
+	h.x().placed, h.x().holder = placed, holder
 }
 
 // rootHolder returns the handle of the tree root at root if it can hold the
@@ -149,10 +149,10 @@ func holderFor(h *Handle) *Handle {
 // can no longer hold it (it became Parented, or died). The caller holds
 // anchorMu.
 func (r *Handle) releaseAnchoredLocked() {
-	for a := range r.anchored {
+	for a := range r.x().anchored {
 		a.placeLocked(true, nil)
 	}
-	r.anchored = nil
+	r.x().anchored = nil
 }
 
 func (r *Handle) releaseAnchored() {
@@ -198,7 +198,7 @@ func reanchorSubtree(obj unsafe.Pointer, toGlobal bool) {
 	}
 	for _, p := range objs {
 		h := Lookup(p)
-		if h == nil || h.anchorN == 0 {
+		if h == nil || h.x().anchorN == 0 {
 			continue
 		}
 		holder := rootH

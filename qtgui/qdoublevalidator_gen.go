@@ -557,3 +557,35 @@ func NewQDoubleValidatorWith(v QDoubleValidatorSubclass, parent qtcore.QObjectLi
 	C.qute_QDoubleValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QDoubleValidator
 }
+
+// NewQDoubleValidatorWithBottomWith is NewQDoubleValidatorWithBottom for a Go subclass: it constructs a QDoubleValidator whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDoubleValidatorWithBottomWith(v QDoubleValidatorSubclass, bottom float64, top float64, decimals int, parent qtcore.QObjectLike) *QDoubleValidator {
+	rt.CheckThread("NewQDoubleValidatorWithBottomWith")
+	base := v.quteQDoubleValidatorBase()
+	if base.QDoubleValidator != nil {
+		panic("NewQDoubleValidatorWithBottomWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQDoubleValidatorWithBottomWith")
+	}
+	p := C.qute_QDoubleValidator_new_shim_1(C.double(bottom), C.double(top), C.int(decimals), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDoubleValidator", mode)
+	base.QDoubleValidator = rt.View[QDoubleValidator](h, p)
+	id := h.SetSelf(v, qDoubleValidatorVTable)
+	mask := rt.Mask(v, qDoubleValidatorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDoubleValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDoubleValidator
+}

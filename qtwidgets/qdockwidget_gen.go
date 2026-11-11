@@ -1363,3 +1363,35 @@ func NewQDockWidgetWith(v QDockWidgetSubclass, parent QWidgetLike) *QDockWidget 
 	C.qute_QDockWidget_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QDockWidget
 }
+
+// NewQDockWidgetWithTitleWith is NewQDockWidgetWithTitle for a Go subclass: it constructs a QDockWidget whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDockWidgetWithTitleWith(v QDockWidgetSubclass, title string, parent QWidgetLike) *QDockWidget {
+	rt.CheckThread("NewQDockWidgetWithTitleWith")
+	base := v.quteQDockWidgetBase()
+	if base.QDockWidget != nil {
+		panic("NewQDockWidgetWithTitleWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDockWidgetWithTitleWith")
+	}
+	p := C.qute_QDockWidget_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDockWidget", mode)
+	base.QDockWidget = rt.View[QDockWidget](h, p)
+	id := h.SetSelf(v, qDockWidgetVTable)
+	mask := rt.Mask(v, qDockWidgetVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDockWidget_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDockWidget
+}

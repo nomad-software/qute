@@ -45,6 +45,10 @@ type classOpts struct {
 	// RawPointers passes every pointer to a number as unsafe.Pointer instead of
 	// an out-parameter or slice (OpenGL function tables, where GL decides the size).
 	RawPointers bool `yaml:"raw-pointers"`
+	// Inline keeps a value's bytes in Go memory instead of a C++ heap copy
+	// (rt/inline.go). Only for a class that is trivially copyable and
+	// destructible, which the shim checks with a static_assert.
+	Inline bool `yaml:"inline"`
 	// EnumsOnly emits the class's enums but no wrapper (QChar is a rune in Go).
 	EnumsOnly bool `yaml:"enums-only"`
 	// DependsOn lists the objects this value is only valid with. Each entry is
@@ -125,14 +129,17 @@ type overlay struct {
 	Name     string            `yaml:"name"`
 	Full     string            `yaml:"full"`
 	KeepDefs bool              `yaml:"keep-defaults"`
-	Skip     any               `yaml:"skip"`
-	Error    bool              `yaml:"error"`
-	ErrorMsg string            `yaml:"error-string"`
-	Cpp      string            `yaml:"cpp"`     // C++ call expression: $self, $0, $1 ... for the arguments
-	Created  bool              `yaml:"created"` // the result is built by the binding, so its death is tracked
-	Reviewed bool              `yaml:"reviewed"`
-	Test     string            `yaml:"test"`
-	Doc      string            `yaml:"doc"`
+	// NoFull says why the method has no Full form, where one cannot or should
+	// not be built (a defaulted argument that is an input array).
+	NoFull   string `yaml:"no-full"`
+	Skip     any    `yaml:"skip"`
+	Error    bool   `yaml:"error"`
+	ErrorMsg string `yaml:"error-string"`
+	Cpp      string `yaml:"cpp"`     // C++ call expression: $self, $0, $1 ... for the arguments
+	Created  bool   `yaml:"created"` // the result is built by the binding, so its death is tracked
+	Reviewed bool   `yaml:"reviewed"`
+	Test     string `yaml:"test"`
+	Doc      string `yaml:"doc"`
 	// ReleaseSlot names a keep slot the method empties: after it returns, Qt
 	// no longer uses what the slot held (QPainter::end and its device).
 	ReleaseSlot string `yaml:"release-slot"`
@@ -212,6 +219,9 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 		}
 		if o.KeepDefs {
 			out.KeepDefs = true
+		}
+		if o.NoFull != "" {
+			out.NoFull = o.NoFull
 		}
 		if o.Skip != nil {
 			out.Skip = o.Skip

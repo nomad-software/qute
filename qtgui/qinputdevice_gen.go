@@ -467,3 +467,35 @@ func NewQInputDeviceWith(v QInputDeviceSubclass, parent qtcore.QObjectLike) *QIn
 	C.qute_QInputDevice_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QInputDevice
 }
+
+// NewQInputDeviceWithNameWith is NewQInputDeviceWithName for a Go subclass: it constructs a QInputDevice whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQInputDeviceWithNameWith(v QInputDeviceSubclass, name string, systemId int64, typeArg QInputDeviceDeviceTypes, seatName string, parent qtcore.QObjectLike) *QInputDevice {
+	rt.CheckThread("NewQInputDeviceWithNameWith")
+	base := v.quteQInputDeviceBase()
+	if base.QInputDevice != nil {
+		panic("NewQInputDeviceWithNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQInputDeviceWithNameWith")
+	}
+	p := C.qute_QInputDevice_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), C.longlong(systemId), C.int64_t(typeArg), (*C.char)(unsafe.Pointer(unsafe.StringData(seatName))), C.ptrdiff_t(len(seatName)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QInputDevice", mode)
+	base.QInputDevice = rt.View[QInputDevice](h, p)
+	id := h.SetSelf(v, qInputDeviceVTable)
+	mask := rt.Mask(v, qInputDeviceVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QInputDevice_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QInputDevice
+}

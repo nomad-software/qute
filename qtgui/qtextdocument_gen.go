@@ -752,12 +752,15 @@ func (this *QTextDocument) AddResource(typeArg int, name *qtcore.QUrl, resource 
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setResourceProvider
 func (this *QTextDocument) SetResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(this), "QTextDocument.SetResourceProvider")
-	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		r := provider(p0)
-		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.SetResourceProvider")
-	})
+	var providerID uintptr
+	if provider != nil {
+		providerID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := provider(p0)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.SetResourceProvider")
+		})
+	}
 	C.qute_QTextDocument_setResourceProvider(self, C.uintptr_t(providerID))
 	runtime.KeepAlive(this)
 }
@@ -1463,12 +1466,15 @@ func (this *QTextDocument) SetModifiedFull(m bool) {
 // Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#setDefaultResourceProvider
 func QTextDocumentSetDefaultResourceProvider(provider func(*qtcore.QUrl) *qtcore.QVariant) {
 	rt.CheckThread("QTextDocumentSetDefaultResourceProvider")
-	providerID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		r := provider(p0)
-		*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocumentSetDefaultResourceProvider")
-	})
+	var providerID uintptr
+	if provider != nil {
+		providerID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			r := provider(p0)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocumentSetDefaultResourceProvider")
+		})
+	}
 	C.qute_QTextDocument_setDefaultResourceProvider(C.uintptr_t(providerID))
 }
 
@@ -1865,6 +1871,38 @@ func NewQTextDocumentWith(v QTextDocumentSubclass, parent qtcore.QObjectLike) *Q
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTextDocumentWith")
 	}
 	p := C.qute_QTextDocument_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTextDocument", mode)
+	base.QTextDocument = rt.View[QTextDocument](h, p)
+	id := h.SetSelf(v, qTextDocumentVTable)
+	mask := rt.Mask(v, qTextDocumentVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTextDocument_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTextDocument
+}
+
+// NewQTextDocumentWithTextWith is NewQTextDocumentWithText for a Go subclass: it constructs a QTextDocument whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTextDocumentWithTextWith(v QTextDocumentSubclass, text string, parent qtcore.QObjectLike) *QTextDocument {
+	rt.CheckThread("NewQTextDocumentWithTextWith")
+	base := v.quteQTextDocumentBase()
+	if base.QTextDocument != nil {
+		panic("NewQTextDocumentWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTextDocumentWithTextWith")
+	}
+	p := C.qute_QTextDocument_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

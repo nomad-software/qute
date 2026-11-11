@@ -1188,3 +1188,36 @@ func NewQDateEditWith(v QDateEditSubclass, parent QWidgetLike) *QDateEdit {
 	C.qute_QDateEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QDateEdit
 }
+
+// NewQDateEditWithDateWith is NewQDateEditWithDate for a Go subclass: it constructs a QDateEdit whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDateEditWithDateWith(v QDateEditSubclass, date *qtcore.QDate, parent QWidgetLike) *QDateEdit {
+	rt.CheckThread("NewQDateEditWithDateWith")
+	base := v.quteQDateEditBase()
+	if base.QDateEdit != nil {
+		panic("NewQDateEditWithDateWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDateEditWithDateWith")
+	}
+	p := C.qute_QDateEdit_new_shim_1(rt.UseArg(unsafe.Pointer(date), "NewQDateEditWithDateWith"), parentPtr)
+	runtime.KeepAlive(date)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDateEdit", mode)
+	base.QDateEdit = rt.View[QDateEdit](h, p)
+	id := h.SetSelf(v, qDateEditVTable)
+	mask := rt.Mask(v, qDateEditVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDateEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDateEdit
+}

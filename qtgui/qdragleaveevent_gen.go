@@ -25,7 +25,7 @@ type QDragLeaveEventLike interface{ AsQDragLeaveEvent() *QDragLeaveEvent }
 func (this *QDragLeaveEvent) AsQDragLeaveEvent() *QDragLeaveEvent { return this }
 
 func init() {
-	rt.RegisterClass("QDragLeaveEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QDragLeaveEvent_delete(p) })
+	rt.RegisterClass("QDragLeaveEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QDragLeaveEvent_delete(p) })
 }
 
 // QDragLeaveEventFromPtr wraps an existing C++ QDragLeaveEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,16 @@ func QDragLeaveEventCast(e qtcore.QEventLike) *QDragLeaveEvent {
 	r := rt.View[QDragLeaveEvent](rt.WrapClassFrom(p, "QDragLeaveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQDragLeaveEvent wraps the QDragLeaveEvent constructor.
+//
+//	C++: QDragLeaveEvent::QDragLeaveEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qdragleaveevent.html#QDragLeaveEvent
+func NewQDragLeaveEvent() *QDragLeaveEvent {
+	rt.CheckThread("NewQDragLeaveEvent")
+	p := C.qute_QDragLeaveEvent_new()
+	h := rt.WrapClass(p, "QDragLeaveEvent", rt.NewOwned)
+	return rt.View[QDragLeaveEvent](h, p)
 }

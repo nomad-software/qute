@@ -25,7 +25,7 @@ type QDropEventLike interface{ AsQDropEvent() *QDropEvent }
 func (this *QDropEvent) AsQDropEvent() *QDropEvent { return this }
 
 func init() {
-	rt.RegisterClass("QDropEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QDropEvent_delete(p) })
+	rt.RegisterClass("QDropEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QDropEvent_delete(p) })
 }
 
 // QDropEventFromPtr wraps an existing C++ QDropEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,56 @@ func QDropEventCast(e qtcore.QEventLike) *QDropEvent {
 	r := rt.View[QDropEvent](rt.WrapClassFrom(p, "QDropEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQDropEventWithPointF wraps the QDropEvent constructor.
+//
+//	C++: QDropEvent::QDropEvent(const QPointF & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)
+//
+// Ownership: data is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQDropEventWithPointFFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdropevent.html#QDropEvent
+func NewQDropEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions, data qtcore.QMimeDataLike, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QDropEvent {
+	rt.CheckThread("NewQDropEventWithPointF")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "NewQDropEventWithPointF")
+	}
+	p := C.qute_QDropEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
+	runtime.KeepAlive(data)
+	h := rt.WrapClass(p, "QDropEvent", rt.NewOwned)
+	rt.KeepArg(h, "QDropEvent.data", dataH, true)
+	return rt.View[QDropEvent](h, p)
+}
+
+// NewQDropEventWithPointFFull wraps the QDropEvent constructor.
+//
+//	C++: QDropEvent::QDropEvent(const QPointF & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …)
+//
+// Ownership: data is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQDropEventWithPointFFull is NewQDropEventWithPointF with every argument, including those NewQDropEventWithPointF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdropevent.html#QDropEvent
+func NewQDropEventWithPointFFull(pos qtcore.QPointF, actions qtcore.DropActions, data qtcore.QMimeDataLike, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, typeArg qtcore.QEventType) *QDropEvent {
+	rt.CheckThread("NewQDropEventWithPointFFull")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "NewQDropEventWithPointFFull")
+	}
+	p := C.qute_QDropEvent_new_1(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(typeArg))
+	runtime.KeepAlive(data)
+	h := rt.WrapClass(p, "QDropEvent", rt.NewOwned)
+	rt.KeepArg(h, "QDropEvent.data", dataH, true)
+	return rt.View[QDropEvent](h, p)
 }
 
 // Position wraps QDropEvent::position.

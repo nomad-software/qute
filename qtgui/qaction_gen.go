@@ -1144,3 +1144,68 @@ func NewQActionWith(v QActionSubclass, parent qtcore.QObjectLike) *QAction {
 	C.qute_QAction_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QAction
 }
+
+// NewQActionWithTextWith is NewQActionWithText for a Go subclass: it constructs a QAction whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQActionWithTextWith(v QActionSubclass, text string, parent qtcore.QObjectLike) *QAction {
+	rt.CheckThread("NewQActionWithTextWith")
+	base := v.quteQActionBase()
+	if base.QAction != nil {
+		panic("NewQActionWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQActionWithTextWith")
+	}
+	p := C.qute_QAction_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QAction", mode)
+	base.QAction = rt.View[QAction](h, p)
+	id := h.SetSelf(v, qActionVTable)
+	mask := rt.Mask(v, qActionVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAction_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAction
+}
+
+// NewQActionWithIconWith is NewQActionWithIcon for a Go subclass: it constructs a QAction whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQActionWithIconWith(v QActionSubclass, icon *QIcon, text string, parent qtcore.QObjectLike) *QAction {
+	rt.CheckThread("NewQActionWithIconWith")
+	base := v.quteQActionBase()
+	if base.QAction != nil {
+		panic("NewQActionWithIconWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQActionWithIconWith")
+	}
+	p := C.qute_QAction_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQActionWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QAction", mode)
+	base.QAction = rt.View[QAction](h, p)
+	id := h.SetSelf(v, qActionVTable)
+	mask := rt.Mask(v, qActionVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAction_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAction
+}

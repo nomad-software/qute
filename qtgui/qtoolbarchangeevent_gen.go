@@ -25,7 +25,7 @@ type QToolBarChangeEventLike interface{ AsQToolBarChangeEvent() *QToolBarChangeE
 func (this *QToolBarChangeEvent) AsQToolBarChangeEvent() *QToolBarChangeEvent { return this }
 
 func init() {
-	rt.RegisterClass("QToolBarChangeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QToolBarChangeEvent_delete(p) })
+	rt.RegisterClass("QToolBarChangeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QToolBarChangeEvent_delete(p) })
 }
 
 // QToolBarChangeEventFromPtr wraps an existing C++ QToolBarChangeEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QToolBarChangeEventCast(e qtcore.QEventLike) *QToolBarChangeEvent {
 	r := rt.View[QToolBarChangeEvent](rt.WrapClassFrom(p, "QToolBarChangeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQToolBarChangeEventWithBool wraps the QToolBarChangeEvent constructor.
+//
+//	C++: QToolBarChangeEvent::QToolBarChangeEvent(bool t)
+//
+// Qt docs: https://doc.qt.io/qt-6/qtoolbarchangeevent.html#QToolBarChangeEvent
+func NewQToolBarChangeEventWithBool(t bool) *QToolBarChangeEvent {
+	rt.CheckThread("NewQToolBarChangeEventWithBool")
+	p := C.qute_QToolBarChangeEvent_new(C.bool(t))
+	h := rt.WrapClass(p, "QToolBarChangeEvent", rt.NewOwned)
+	return rt.View[QToolBarChangeEvent](h, p)
 }
 
 // Toggle wraps QToolBarChangeEvent::toggle.

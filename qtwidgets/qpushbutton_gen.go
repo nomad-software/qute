@@ -1162,3 +1162,68 @@ func NewQPushButtonWith(v QPushButtonSubclass, parent QWidgetLike) *QPushButton 
 	C.qute_QPushButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QPushButton
 }
+
+// NewQPushButtonWithTextWith is NewQPushButtonWithText for a Go subclass: it constructs a QPushButton whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPushButtonWithTextWith(v QPushButtonSubclass, text string, parent QWidgetLike) *QPushButton {
+	rt.CheckThread("NewQPushButtonWithTextWith")
+	base := v.quteQPushButtonBase()
+	if base.QPushButton != nil {
+		panic("NewQPushButtonWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQPushButtonWithTextWith")
+	}
+	p := C.qute_QPushButton_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QPushButton", mode)
+	base.QPushButton = rt.View[QPushButton](h, p)
+	id := h.SetSelf(v, qPushButtonVTable)
+	mask := rt.Mask(v, qPushButtonVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPushButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPushButton
+}
+
+// NewQPushButtonWithIconWith is NewQPushButtonWithIcon for a Go subclass: it constructs a QPushButton whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPushButtonWithIconWith(v QPushButtonSubclass, icon *qtgui.QIcon, text string, parent QWidgetLike) *QPushButton {
+	rt.CheckThread("NewQPushButtonWithIconWith")
+	base := v.quteQPushButtonBase()
+	if base.QPushButton != nil {
+		panic("NewQPushButtonWithIconWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQPushButtonWithIconWith")
+	}
+	p := C.qute_QPushButton_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQPushButtonWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(icon)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QPushButton", mode)
+	base.QPushButton = rt.View[QPushButton](h, p)
+	id := h.SetSelf(v, qPushButtonVTable)
+	mask := rt.Mask(v, qPushButtonVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPushButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPushButton
+}

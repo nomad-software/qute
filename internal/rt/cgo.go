@@ -20,6 +20,7 @@ func init() {
 	rootOfC = func(p unsafe.Pointer) unsafe.Pointer { return C.qute_rt_root(p) }
 	subtreeC = subtree
 	classNameC = func(p unsafe.Pointer) string { return C.GoString(C.qute_rt_class_name(p)) }
+	dyingC = func(p unsafe.Pointer) bool { return bool(C.qute_rt_dying(p)) }
 }
 
 //export qute_rt_run

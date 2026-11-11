@@ -25,7 +25,7 @@ type QInputMethodEventLike interface{ AsQInputMethodEvent() *QInputMethodEvent }
 func (this *QInputMethodEvent) AsQInputMethodEvent() *QInputMethodEvent { return this }
 
 func init() {
-	rt.RegisterClass("QInputMethodEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QInputMethodEvent_delete(p) })
+	rt.RegisterClass("QInputMethodEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QInputMethodEvent_delete(p) })
 }
 
 // QInputMethodEventFromPtr wraps an existing C++ QInputMethodEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,35 @@ func QInputMethodEventCast(e qtcore.QEventLike) *QInputMethodEvent {
 	r := rt.View[QInputMethodEvent](rt.WrapClassFrom(p, "QInputMethodEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQInputMethodEvent wraps the QInputMethodEvent constructor.
+//
+//	C++: QInputMethodEvent::QInputMethodEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputmethodevent.html#QInputMethodEvent
+func NewQInputMethodEvent() *QInputMethodEvent {
+	rt.CheckThread("NewQInputMethodEvent")
+	p := C.qute_QInputMethodEvent_new()
+	h := rt.WrapClass(p, "QInputMethodEvent", rt.NewOwned)
+	return rt.View[QInputMethodEvent](h, p)
+}
+
+// NewQInputMethodEventWithPreeditText wraps the QInputMethodEvent constructor.
+//
+//	C++: QInputMethodEvent::QInputMethodEvent(const QString & preeditText, const QList<Attribute> & attributes)
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputmethodevent.html#QInputMethodEvent
+func NewQInputMethodEventWithPreeditText(preeditText string, attributes []*QInputMethodEventAttribute) *QInputMethodEvent {
+	rt.CheckThread("NewQInputMethodEventWithPreeditText")
+	attributesC := make([]unsafe.Pointer, len(attributes))
+	for i := range attributes {
+		attributesC[i] = rt.UseArg(unsafe.Pointer(attributes[i]), "NewQInputMethodEventWithPreeditText")
+	}
+	p := C.qute_QInputMethodEvent_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(preeditText))), C.ptrdiff_t(len(preeditText)), unsafe.Pointer(unsafe.SliceData(attributesC)), C.ptrdiff_t(len(attributes)))
+	runtime.KeepAlive(attributes)
+	h := rt.WrapClass(p, "QInputMethodEvent", rt.NewOwned)
+	return rt.View[QInputMethodEvent](h, p)
 }
 
 // SetCommitString wraps QInputMethodEvent::setCommitString.

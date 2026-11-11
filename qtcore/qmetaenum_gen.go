@@ -215,6 +215,8 @@ func (this *QMetaEnum) Scope() string {
 //
 //	C++: int QMetaEnum::keyToValue(const char * key, bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; KeyToValueFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmetaenum.html#keyToValue
 func (this *QMetaEnum) KeyToValue(key string) int {
 	self := rt.Use(unsafe.Pointer(this), "QMetaEnum.KeyToValue")
@@ -228,6 +230,8 @@ func (this *QMetaEnum) KeyToValue(key string) int {
 // KeysToValue wraps QMetaEnum::keysToValue.
 //
 //	C++: int QMetaEnum::keysToValue(const char * keys, bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; KeysToValueFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmetaenum.html#keysToValue
 func (this *QMetaEnum) KeysToValue(keys string) int {
@@ -287,4 +291,38 @@ func (this *QMetaEnum) IsValid() bool {
 	r := C.qute_QMetaEnum_isValid(self)
 	runtime.KeepAlive(this)
 	return bool(r)
+}
+
+// KeyToValueFull wraps QMetaEnum::keyToValue.
+//
+//	C++: int QMetaEnum::keyToValue(const char * key, bool * ok = …) const
+//
+// KeyToValueFull is KeyToValue with every argument, including those KeyToValue leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmetaenum.html#keyToValue
+func (this *QMetaEnum) KeyToValueFull(key string) (int, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMetaEnum.KeyToValueFull")
+	keyCStr := C.CString(key)
+	defer C.free(unsafe.Pointer(keyCStr))
+	var okOut C.bool
+	r := C.qute_QMetaEnum_keyToValue_1(self, keyCStr, &okOut)
+	runtime.KeepAlive(this)
+	return int(r), bool(okOut)
+}
+
+// KeysToValueFull wraps QMetaEnum::keysToValue.
+//
+//	C++: int QMetaEnum::keysToValue(const char * keys, bool * ok = …) const
+//
+// KeysToValueFull is KeysToValue with every argument, including those KeysToValue leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmetaenum.html#keysToValue
+func (this *QMetaEnum) KeysToValueFull(keys string) (int, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMetaEnum.KeysToValueFull")
+	keysCStr := C.CString(keys)
+	defer C.free(unsafe.Pointer(keysCStr))
+	var okOut C.bool
+	r := C.qute_QMetaEnum_keysToValue_1(self, keysCStr, &okOut)
+	runtime.KeepAlive(this)
+	return int(r), bool(okOut)
 }

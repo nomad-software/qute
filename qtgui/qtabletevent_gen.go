@@ -25,7 +25,7 @@ type QTabletEventLike interface{ AsQTabletEvent() *QTabletEvent }
 func (this *QTabletEvent) AsQTabletEvent() *QTabletEvent { return this }
 
 func init() {
-	rt.RegisterClass("QTabletEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QTabletEvent_delete(p) })
+	rt.RegisterClass("QTabletEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QTabletEvent_delete(p) })
 }
 
 // QTabletEventFromPtr wraps an existing C++ QTabletEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,29 @@ func QTabletEventCast(e qtcore.QEventLike) *QTabletEvent {
 	r := rt.View[QTabletEvent](rt.WrapClassFrom(p, "QTabletEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQTabletEventWithType wraps the QTabletEvent constructor.
+//
+//	C++: QTabletEvent::QTabletEvent(Type t, const QPointingDevice * device, const QPointF & pos, const QPointF & globalPos, qreal pressure, float xTilt, float yTilt, float tangentialPressure, qreal rotation, float z, Qt::KeyboardModifiers keyState, Qt::MouseButton button, Qt::MouseButtons buttons)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtabletevent.html#QTabletEvent
+func NewQTabletEventWithType(t qtcore.QEventType, device QPointingDeviceLike, pos qtcore.QPointF, globalPos qtcore.QPointF, pressure float64, xTilt float32, yTilt float32, tangentialPressure float32, rotation float64, z float32, keyState qtcore.KeyboardModifiers, button qtcore.MouseButtons, buttons qtcore.MouseButtons) *QTabletEvent {
+	rt.CheckThread("NewQTabletEventWithType")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQTabletEventWithType")
+	}
+	p := C.qute_QTabletEvent_new(C.int64_t(t), devicePtr, cQPointF(pos), cQPointF(globalPos), C.double(pressure), C.float(xTilt), C.float(yTilt), C.float(tangentialPressure), C.double(rotation), C.float(z), C.int64_t(keyState), C.int64_t(button), C.int64_t(buttons))
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QTabletEvent", rt.NewOwned)
+	rt.KeepArg(h, "QTabletEvent.device", deviceH, true)
+	return rt.View[QTabletEvent](h, p)
 }
 
 // Pressure wraps QTabletEvent::pressure.

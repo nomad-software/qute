@@ -25,7 +25,7 @@ type QIconDragEventLike interface{ AsQIconDragEvent() *QIconDragEvent }
 func (this *QIconDragEvent) AsQIconDragEvent() *QIconDragEvent { return this }
 
 func init() {
-	rt.RegisterClass("QIconDragEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QIconDragEvent_delete(p) })
+	rt.RegisterClass("QIconDragEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QIconDragEvent_delete(p) })
 }
 
 // QIconDragEventFromPtr wraps an existing C++ QIconDragEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,16 @@ func QIconDragEventCast(e qtcore.QEventLike) *QIconDragEvent {
 	r := rt.View[QIconDragEvent](rt.WrapClassFrom(p, "QIconDragEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQIconDragEvent wraps the QIconDragEvent constructor.
+//
+//	C++: QIconDragEvent::QIconDragEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qicondragevent.html#QIconDragEvent
+func NewQIconDragEvent() *QIconDragEvent {
+	rt.CheckThread("NewQIconDragEvent")
+	p := C.qute_QIconDragEvent_new()
+	h := rt.WrapClass(p, "QIconDragEvent", rt.NewOwned)
+	return rt.View[QIconDragEvent](h, p)
 }

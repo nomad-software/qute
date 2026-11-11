@@ -25,7 +25,7 @@ type QChildWindowEventLike interface{ AsQChildWindowEvent() *QChildWindowEvent }
 func (this *QChildWindowEvent) AsQChildWindowEvent() *QChildWindowEvent { return this }
 
 func init() {
-	rt.RegisterClass("QChildWindowEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QChildWindowEvent_delete(p) })
+	rt.RegisterClass("QChildWindowEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QChildWindowEvent_delete(p) })
 }
 
 // QChildWindowEventFromPtr wraps an existing C++ QChildWindowEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,29 @@ func QChildWindowEventCast(e qtcore.QEventLike) *QChildWindowEvent {
 	r := rt.View[QChildWindowEvent](rt.WrapClassFrom(p, "QChildWindowEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQChildWindowEventWithType wraps the QChildWindowEvent constructor.
+//
+//	C++: QChildWindowEvent::QChildWindowEvent(Type type, QWindow * childWindow)
+//
+// Ownership: childWindow is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Qt docs: https://doc.qt.io/qt-6/qchildwindowevent.html#QChildWindowEvent
+func NewQChildWindowEventWithType(typeArg qtcore.QEventType, childWindow QWindowLike) *QChildWindowEvent {
+	rt.CheckThread("NewQChildWindowEventWithType")
+	var childWindowPtr unsafe.Pointer
+	var childWindowH *rt.Handle
+	if childWindow != nil {
+		childWindowPtr, childWindowH = rt.Arg(unsafe.Pointer(childWindow.AsQWindow()), "NewQChildWindowEventWithType")
+	}
+	p := C.qute_QChildWindowEvent_new(C.int64_t(typeArg), childWindowPtr)
+	runtime.KeepAlive(childWindow)
+	h := rt.WrapClass(p, "QChildWindowEvent", rt.NewOwned)
+	rt.KeepArg(h, "QChildWindowEvent.childWindow", childWindowH, true)
+	return rt.View[QChildWindowEvent](h, p)
 }
 
 // Child wraps QChildWindowEvent::child.

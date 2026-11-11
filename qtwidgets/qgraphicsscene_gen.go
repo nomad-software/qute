@@ -2099,3 +2099,35 @@ func NewQGraphicsSceneWith(v QGraphicsSceneSubclass, parent qtcore.QObjectLike) 
 	C.qute_QGraphicsScene_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsScene
 }
+
+// NewQGraphicsSceneWithRectFWith is NewQGraphicsSceneWithRectF for a Go subclass: it constructs a QGraphicsScene whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsSceneWithRectFWith(v QGraphicsSceneSubclass, sceneRect qtcore.QRectF, parent qtcore.QObjectLike) *QGraphicsScene {
+	rt.CheckThread("NewQGraphicsSceneWithRectFWith")
+	base := v.quteQGraphicsSceneBase()
+	if base.QGraphicsScene != nil {
+		panic("NewQGraphicsSceneWithRectFWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQGraphicsSceneWithRectFWith")
+	}
+	p := C.qute_QGraphicsScene_new_shim_1(cQRectF(sceneRect), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsScene", mode)
+	base.QGraphicsScene = rt.View[QGraphicsScene](h, p)
+	id := h.SetSelf(v, qGraphicsSceneVTable)
+	mask := rt.Mask(v, qGraphicsSceneVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsScene_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsScene
+}

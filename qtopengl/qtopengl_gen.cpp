@@ -1037,6 +1037,14 @@ void * qute_QOpenGLFramebufferObject_new_shim(qute_size a0) {
 	qute_gui_only();
 	return static_cast<QOpenGLFramebufferObject *>(new qute_QOpenGLFramebufferObject(qute_to_QSize(a0)));
 }
+void * qute_QOpenGLFramebufferObject_new_shim_1(qute_size a0, int64_t a1) {
+	qute_gui_only();
+	return static_cast<QOpenGLFramebufferObject *>(new qute_QOpenGLFramebufferObject(qute_to_QSize(a0), static_cast<QOpenGLFramebufferObject::Attachment>(a1)));
+}
+void * qute_QOpenGLFramebufferObject_new_shim_2(qute_size a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QOpenGLFramebufferObject *>(new qute_QOpenGLFramebufferObject(qute_to_QSize(a0), (a1 ? *static_cast<QOpenGLFramebufferObjectFormat *>(a1) : QOpenGLFramebufferObjectFormat())));
+}
 void qute_QOpenGLFramebufferObject_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QOpenGLFramebufferObject *>(static_cast<QOpenGLFramebufferObject *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -1224,6 +1232,10 @@ void * qute_QOpenGLPaintDevice_new_1(qute_size a0) {
 void * qute_QOpenGLPaintDevice_new_shim(void) {
 	qute_gui_only();
 	return static_cast<QOpenGLPaintDevice *>(new qute_QOpenGLPaintDevice());
+}
+void * qute_QOpenGLPaintDevice_new_shim_1(qute_size a0) {
+	qute_gui_only();
+	return static_cast<QOpenGLPaintDevice *>(new qute_QOpenGLPaintDevice(qute_to_QSize(a0)));
 }
 void qute_QOpenGLPaintDevice_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
@@ -2179,10 +2191,6 @@ void qute_QOpenGLTexture_release_2(void *self, unsigned int a0, int64_t a1) {
 	qute_gui_only();
 	static_cast<QOpenGLTexture *>(self)->release(static_cast<unsigned int>(a0), static_cast<QOpenGLTexture::TextureUnitReset>(a1));
 }
-void qute_QOpenGLTexture_setData_11(void *self, void * a0, int64_t a1) {
-	qute_gui_only();
-	static_cast<QOpenGLTexture *>(self)->setData((a0 ? *static_cast<QImage *>(a0) : QImage()), static_cast<QOpenGLTexture::MipMapGeneration>(a1));
-}
 void qute_QOpenGLTexture_generateMipMaps_2(void *self, int a0, bool a1) {
 	qute_gui_only();
 	static_cast<QOpenGLTexture *>(self)->generateMipMaps(static_cast<int>(a0), static_cast<bool>(a1));
@@ -2332,6 +2340,10 @@ void * qute_QOpenGLWindow_new_1(void * a0, int64_t a1, void * a2) {
 void * qute_QOpenGLWindow_new_shim(int64_t a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QOpenGLWindow *>(new qute_QOpenGLWindow(static_cast<QOpenGLWindow::UpdateBehavior>(a0), static_cast<QWindow *>(a1)));
+}
+void * qute_QOpenGLWindow_new_shim_1(void * a0, int64_t a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QOpenGLWindow *>(new qute_QOpenGLWindow(static_cast<QOpenGLContext *>(a0), static_cast<QOpenGLWindow::UpdateBehavior>(a1), static_cast<QWindow *>(a2)));
 }
 void qute_QOpenGLWindow_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();

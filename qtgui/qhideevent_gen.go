@@ -25,7 +25,7 @@ type QHideEventLike interface{ AsQHideEvent() *QHideEvent }
 func (this *QHideEvent) AsQHideEvent() *QHideEvent { return this }
 
 func init() {
-	rt.RegisterClass("QHideEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QHideEvent_delete(p) })
+	rt.RegisterClass("QHideEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QHideEvent_delete(p) })
 }
 
 // QHideEventFromPtr wraps an existing C++ QHideEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,16 @@ func QHideEventCast(e qtcore.QEventLike) *QHideEvent {
 	r := rt.View[QHideEvent](rt.WrapClassFrom(p, "QHideEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQHideEvent wraps the QHideEvent constructor.
+//
+//	C++: QHideEvent::QHideEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qhideevent.html#QHideEvent
+func NewQHideEvent() *QHideEvent {
+	rt.CheckThread("NewQHideEvent")
+	p := C.qute_QHideEvent_new()
+	h := rt.WrapClass(p, "QHideEvent", rt.NewOwned)
+	return rt.View[QHideEvent](h, p)
 }

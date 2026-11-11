@@ -25,7 +25,7 @@ type QKeyEventLike interface{ AsQKeyEvent() *QKeyEvent }
 func (this *QKeyEvent) AsQKeyEvent() *QKeyEvent { return this }
 
 func init() {
-	rt.RegisterClass("QKeyEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QKeyEvent_delete(p) })
+	rt.RegisterClass("QKeyEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QKeyEvent_delete(p) })
 }
 
 // QKeyEventFromPtr wraps an existing C++ QKeyEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,75 @@ func QKeyEventCast(e qtcore.QEventLike) *QKeyEvent {
 	r := rt.View[QKeyEvent](rt.WrapClassFrom(p, "QKeyEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQKeyEvent wraps the QKeyEvent constructor.
+//
+//	C++: QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString & text = …, bool autorep = …, quint16 count = …)
+//
+// Arguments with C++ defaults are left at them; NewQKeyEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#QKeyEvent
+func NewQKeyEvent(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers) *QKeyEvent {
+	rt.CheckThread("NewQKeyEvent")
+	p := C.qute_QKeyEvent_new(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers))
+	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	return rt.View[QKeyEvent](h, p)
+}
+
+// NewQKeyEventNative wraps the QKeyEvent constructor.
+//
+//	C++: QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers, const QString & text = …, bool autorep = …, quint16 count = …, const QInputDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQKeyEventNativeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#QKeyEvent
+func NewQKeyEventNative(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers, nativeScanCode uint, nativeVirtualKey uint, nativeModifiers uint) *QKeyEvent {
+	rt.CheckThread("NewQKeyEventNative")
+	p := C.qute_QKeyEvent_new_1(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), C.uint(nativeScanCode), C.uint(nativeVirtualKey), C.uint(nativeModifiers))
+	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	return rt.View[QKeyEvent](h, p)
+}
+
+// NewQKeyEventFull wraps the QKeyEvent constructor.
+//
+//	C++: QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString & text = …, bool autorep = …, quint16 count = …)
+//
+// NewQKeyEventFull is NewQKeyEvent with every argument, including those NewQKeyEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#QKeyEvent
+func NewQKeyEventFull(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers, text string, autorep bool, count uint16) *QKeyEvent {
+	rt.CheckThread("NewQKeyEventFull")
+	p := C.qute_QKeyEvent_new_2(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.bool(autorep), C.ushort(count))
+	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	return rt.View[QKeyEvent](h, p)
+}
+
+// NewQKeyEventNativeFull wraps the QKeyEvent constructor.
+//
+//	C++: QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, quint32 nativeScanCode, quint32 nativeVirtualKey, quint32 nativeModifiers, const QString & text = …, bool autorep = …, quint16 count = …, const QInputDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQKeyEventNativeFull is NewQKeyEventNative with every argument, including those NewQKeyEventNative leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#QKeyEvent
+func NewQKeyEventNativeFull(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers, nativeScanCode uint, nativeVirtualKey uint, nativeModifiers uint, text string, autorep bool, count uint16, device QInputDeviceLike) *QKeyEvent {
+	rt.CheckThread("NewQKeyEventNativeFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQInputDevice()), "NewQKeyEventNativeFull")
+	}
+	p := C.qute_QKeyEvent_new_3(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), C.uint(nativeScanCode), C.uint(nativeVirtualKey), C.uint(nativeModifiers), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.bool(autorep), C.ushort(count), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	rt.KeepArg(h, "QKeyEvent.device", deviceH, true)
+	return rt.View[QKeyEvent](h, p)
 }
 
 // Key wraps QKeyEvent::key.

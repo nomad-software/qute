@@ -1372,3 +1372,231 @@ func NewQTreeWidgetItemWith(v QTreeWidgetItemSubclass) *QTreeWidgetItem {
 	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QTreeWidgetItem
 }
+
+// NewQTreeWidgetItemWithStringsWith is NewQTreeWidgetItemWithStrings for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemWithStringsWith(v QTreeWidgetItemSubclass, strings []string) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemWithStringsWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemWithStringsWith: value is already constructed; use a fresh value")
+	}
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemInWith is NewQTreeWidgetItemIn for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemInWith(v QTreeWidgetItemSubclass, treeview QTreeWidgetLike) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemInWith: value is already constructed; use a fresh value")
+	}
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInWith")
+	}
+	p := C.qute_QTreeWidgetItem_new_shim_2(treeviewPtr)
+	runtime.KeepAlive(treeview)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemInWithStringsWith is NewQTreeWidgetItemInWithStrings for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemInWithStringsWith(v QTreeWidgetItemSubclass, treeview QTreeWidgetLike, strings []string) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInWithStringsWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemInWithStringsWith: value is already constructed; use a fresh value")
+	}
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInWithStringsWith")
+	}
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_shim_3(treeviewPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	runtime.KeepAlive(treeview)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemInAfterWith is NewQTreeWidgetItemInAfter for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemInAfterWith(v QTreeWidgetItemSubclass, treeview QTreeWidgetLike, after QTreeWidgetItemLike) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemInAfterWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemInAfterWith: value is already constructed; use a fresh value")
+	}
+	var treeviewPtr unsafe.Pointer
+	if treeview != nil {
+		treeviewPtr = rt.UseArg(unsafe.Pointer(treeview.AsQTreeWidget()), "NewQTreeWidgetItemInAfterWith")
+	}
+	var afterPtr unsafe.Pointer
+	if after != nil {
+		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemInAfterWith")
+	}
+	p := C.qute_QTreeWidgetItem_new_shim_4(treeviewPtr, afterPtr)
+	runtime.KeepAlive(treeview)
+	runtime.KeepAlive(after)
+	mode := rt.NewOwned
+	if treeviewPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemUnderWith is NewQTreeWidgetItemUnder for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemUnderWith(v QTreeWidgetItemSubclass, parent QTreeWidgetItemLike) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemUnderWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderWith")
+	}
+	p := C.qute_QTreeWidgetItem_new_shim_5(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemUnderWithStringsWith is NewQTreeWidgetItemUnderWithStrings for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemUnderWithStringsWith(v QTreeWidgetItemSubclass, parent QTreeWidgetItemLike, strings []string) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderWithStringsWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemUnderWithStringsWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderWithStringsWith")
+	}
+	stringsData, stringsLens := quteStrListArg(strings)
+	p := C.qute_QTreeWidgetItem_new_shim_6(parentPtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}
+
+// NewQTreeWidgetItemUnderAfterWith is NewQTreeWidgetItemUnderAfter for a Go subclass: it constructs a QTreeWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTreeWidgetItemUnderAfterWith(v QTreeWidgetItemSubclass, parent QTreeWidgetItemLike, after QTreeWidgetItemLike) *QTreeWidgetItem {
+	rt.CheckThread("NewQTreeWidgetItemUnderAfterWith")
+	base := v.quteQTreeWidgetItemBase()
+	if base.QTreeWidgetItem != nil {
+		panic("NewQTreeWidgetItemUnderAfterWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfterWith")
+	}
+	var afterPtr unsafe.Pointer
+	if after != nil {
+		afterPtr = rt.UseArg(unsafe.Pointer(after.AsQTreeWidgetItem()), "NewQTreeWidgetItemUnderAfterWith")
+	}
+	p := C.qute_QTreeWidgetItem_new_shim_7(parentPtr, afterPtr)
+	runtime.KeepAlive(parent)
+	runtime.KeepAlive(after)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
+	id := h.SetSelf(v, qTreeWidgetItemVTable)
+	mask := rt.Mask(v, qTreeWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTreeWidgetItem
+}

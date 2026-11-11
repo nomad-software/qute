@@ -29,7 +29,7 @@ func (this *QScreenOrientationChangeEvent) AsQScreenOrientationChangeEvent() *QS
 }
 
 func init() {
-	rt.RegisterClass("QScreenOrientationChangeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QScreenOrientationChangeEvent_delete(p) })
+	rt.RegisterClass("QScreenOrientationChangeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QScreenOrientationChangeEvent_delete(p) })
 }
 
 // QScreenOrientationChangeEventFromPtr wraps an existing C++ QScreenOrientationChangeEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,29 @@ func QScreenOrientationChangeEventCast(e qtcore.QEventLike) *QScreenOrientationC
 	r := rt.View[QScreenOrientationChangeEvent](rt.WrapClassFrom(p, "QScreenOrientationChangeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQScreenOrientationChangeEventWithScreen wraps the QScreenOrientationChangeEvent constructor.
+//
+//	C++: QScreenOrientationChangeEvent::QScreenOrientationChangeEvent(QScreen * screen, Qt::ScreenOrientation orientation)
+//
+// Ownership: screen is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Qt docs: https://doc.qt.io/qt-6/qscreenorientationchangeevent.html#QScreenOrientationChangeEvent
+func NewQScreenOrientationChangeEventWithScreen(screen QScreenLike, orientation qtcore.ScreenOrientations) *QScreenOrientationChangeEvent {
+	rt.CheckThread("NewQScreenOrientationChangeEventWithScreen")
+	var screenPtr unsafe.Pointer
+	var screenH *rt.Handle
+	if screen != nil {
+		screenPtr, screenH = rt.Arg(unsafe.Pointer(screen.AsQScreen()), "NewQScreenOrientationChangeEventWithScreen")
+	}
+	p := C.qute_QScreenOrientationChangeEvent_new(screenPtr, C.int64_t(orientation))
+	runtime.KeepAlive(screen)
+	h := rt.WrapClass(p, "QScreenOrientationChangeEvent", rt.NewOwned)
+	rt.KeepArg(h, "QScreenOrientationChangeEvent.screen", screenH, true)
+	return rt.View[QScreenOrientationChangeEvent](h, p)
 }
 
 // Screen wraps QScreenOrientationChangeEvent::screen.

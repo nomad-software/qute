@@ -294,12 +294,15 @@ func (this *QWebEnginePage) SetContent(data []byte) {
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#toHtml
 func (this *QWebEnginePage) ToHtml(resultCallback func(string)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.ToHtml")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := quteStr(*(*C.qute_str)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := quteStr(*(*C.qute_str)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_toHtml(self, C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -311,12 +314,15 @@ func (this *QWebEnginePage) ToHtml(resultCallback func(string)) {
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#toPlainText
 func (this *QWebEnginePage) ToPlainText(resultCallback func(string)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.ToPlainText")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := quteStr(*(*C.qute_str)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := quteStr(*(*C.qute_str)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_toPlainText(self, C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -455,12 +461,15 @@ func (this *QWebEnginePage) ContentsSize() qtcore.QSizeF {
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#runJavaScript
 func (this *QWebEnginePage) RunJavaScriptWithFunc(scriptSource string, resultCallback func(*qtcore.QVariant)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.RunJavaScriptWithFunc")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_runJavaScript(self, (*C.char)(unsafe.Pointer(unsafe.StringData(scriptSource))), C.ptrdiff_t(len(scriptSource)), C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -611,12 +620,15 @@ func (this *QWebEnginePage) PrintToPdf(filePath string) {
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#printToPdf
 func (this *QWebEnginePage) PrintToPdfFunc(resultCallback func([]byte)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.PrintToPdfFunc")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := quteBytes(*(*C.qute_str)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := quteBytes(*(*C.qute_str)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_printToPdf_1(self, C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -1284,12 +1296,15 @@ func (this *QWebEnginePage) TriggerActionFull(action QWebEnginePageWebAction, ch
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#findText
 func (this *QWebEnginePage) FindTextFull(subString string, options QWebEnginePageFindFlags, resultCallback func(*QWebEngineFindTextResult)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.FindTextFull")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[QWebEngineFindTextResult](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWebEngineFindTextResult", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[QWebEngineFindTextResult](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWebEngineFindTextResult", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_findText_1(self, (*C.char)(unsafe.Pointer(unsafe.StringData(subString))), C.ptrdiff_t(len(subString)), C.int64_t(options), C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -1345,12 +1360,15 @@ func (this *QWebEnginePage) SetContentFull(data []byte, mimeType string, baseUrl
 // Qt docs: https://doc.qt.io/qt-6/qwebenginepage.html#runJavaScript
 func (this *QWebEnginePage) RunJavaScriptFull(scriptSource string, worldId uint, resultCallback func(*qtcore.QVariant)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEnginePage.RunJavaScriptFull")
-	resultCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		_ = ret
-		resultCallback(p0)
-	})
+	var resultCallbackID uintptr
+	if resultCallback != nil {
+		resultCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			p0 := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			_ = ret
+			resultCallback(p0)
+		})
+	}
 	C.qute_QWebEnginePage_runJavaScript_2(self, (*C.char)(unsafe.Pointer(unsafe.StringData(scriptSource))), C.ptrdiff_t(len(scriptSource)), C.uint(worldId), C.uintptr_t(resultCallbackID))
 	runtime.KeepAlive(this)
 }
@@ -2347,6 +2365,45 @@ func NewQWebEnginePageWith(v QWebEnginePageSubclass, parent qtcore.QObjectLike) 
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QWebEnginePage", mode)
+	base.QWebEnginePage = rt.View[QWebEnginePage](h, p)
+	id := h.SetSelf(v, qWebEnginePageVTable)
+	mask := rt.Mask(v, qWebEnginePageVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QWebEnginePage_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QWebEnginePage
+}
+
+// NewQWebEnginePageWithProfileWith is NewQWebEnginePageWithProfile for a Go subclass: it constructs a QWebEnginePage whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQWebEnginePageWithProfileWith(v QWebEnginePageSubclass, profile QWebEngineProfileLike, parent qtcore.QObjectLike) *QWebEnginePage {
+	rt.CheckThread("NewQWebEnginePageWithProfileWith")
+	base := v.quteQWebEnginePageBase()
+	if base.QWebEnginePage != nil {
+		panic("NewQWebEnginePageWithProfileWith: value is already constructed; use a fresh value")
+	}
+	var profilePtr unsafe.Pointer
+	var profileH *rt.Handle
+	if profile != nil {
+		profilePtr, profileH = rt.Arg(unsafe.Pointer(profile.AsQWebEngineProfile()), "NewQWebEnginePageWithProfileWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQWebEnginePageWithProfileWith")
+	}
+	p := C.qute_QWebEnginePage_new_shim_1(profilePtr, parentPtr)
+	runtime.KeepAlive(profile)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWebEnginePage", mode)
+	rt.KeepArg(h, "profile", profileH, true)
 	base.QWebEnginePage = rt.View[QWebEnginePage](h, p)
 	id := h.SetSelf(v, qWebEnginePageVTable)
 	mask := rt.Mask(v, qWebEnginePageVTable)

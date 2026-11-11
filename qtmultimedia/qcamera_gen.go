@@ -1710,3 +1710,68 @@ func NewQCameraWith(v QCameraSubclass, parent qtcore.QObjectLike) *QCamera {
 	C.qute_QCamera_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QCamera
 }
+
+// NewQCameraWithCameraDeviceWith is NewQCameraWithCameraDevice for a Go subclass: it constructs a QCamera whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCameraWithCameraDeviceWith(v QCameraSubclass, cameraDevice *QCameraDevice, parent qtcore.QObjectLike) *QCamera {
+	rt.CheckThread("NewQCameraWithCameraDeviceWith")
+	base := v.quteQCameraBase()
+	if base.QCamera != nil {
+		panic("NewQCameraWithCameraDeviceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCameraWithCameraDeviceWith")
+	}
+	p := C.qute_QCamera_new_shim_1(rt.UseArg(unsafe.Pointer(cameraDevice), "NewQCameraWithCameraDeviceWith"), parentPtr)
+	runtime.KeepAlive(cameraDevice)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCamera", mode)
+	base.QCamera = rt.View[QCamera](h, p)
+	id := h.SetSelf(v, qCameraVTable)
+	mask := rt.Mask(v, qCameraVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCamera_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCamera
+}
+
+// NewQCameraWithPositionWith is NewQCameraWithPosition for a Go subclass: it constructs a QCamera whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCameraWithPositionWith(v QCameraSubclass, position QCameraDevicePosition, parent qtcore.QObjectLike) *QCamera {
+	rt.CheckThread("NewQCameraWithPositionWith")
+	base := v.quteQCameraBase()
+	if base.QCamera != nil {
+		panic("NewQCameraWithPositionWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCameraWithPositionWith")
+	}
+	p := C.qute_QCamera_new_shim_2(C.int64_t(position), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCamera", mode)
+	base.QCamera = rt.View[QCamera](h, p)
+	id := h.SetSelf(v, qCameraVTable)
+	mask := rt.Mask(v, qCameraVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCamera_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCamera
+}

@@ -1138,3 +1138,36 @@ func NewQKeySequenceEditWith(v QKeySequenceEditSubclass, parent QWidgetLike) *QK
 	C.qute_QKeySequenceEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QKeySequenceEdit
 }
+
+// NewQKeySequenceEditWithKeySequenceWith is NewQKeySequenceEditWithKeySequence for a Go subclass: it constructs a QKeySequenceEdit whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQKeySequenceEditWithKeySequenceWith(v QKeySequenceEditSubclass, keySequence *qtgui.QKeySequence, parent QWidgetLike) *QKeySequenceEdit {
+	rt.CheckThread("NewQKeySequenceEditWithKeySequenceWith")
+	base := v.quteQKeySequenceEditBase()
+	if base.QKeySequenceEdit != nil {
+		panic("NewQKeySequenceEditWithKeySequenceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQKeySequenceEditWithKeySequenceWith")
+	}
+	p := C.qute_QKeySequenceEdit_new_shim_1(rt.UseArg(unsafe.Pointer(keySequence), "NewQKeySequenceEditWithKeySequenceWith"), parentPtr)
+	runtime.KeepAlive(keySequence)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QKeySequenceEdit", mode)
+	base.QKeySequenceEdit = rt.View[QKeySequenceEdit](h, p)
+	id := h.SetSelf(v, qKeySequenceEditVTable)
+	mask := rt.Mask(v, qKeySequenceEditVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QKeySequenceEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QKeySequenceEdit
+}

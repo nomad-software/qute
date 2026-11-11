@@ -1084,3 +1084,67 @@ func NewQCommandLinkButtonWith(v QCommandLinkButtonSubclass, parent QWidgetLike)
 	C.qute_QCommandLinkButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QCommandLinkButton
 }
+
+// NewQCommandLinkButtonWithTextWith is NewQCommandLinkButtonWithText for a Go subclass: it constructs a QCommandLinkButton whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCommandLinkButtonWithTextWith(v QCommandLinkButtonSubclass, text string, parent QWidgetLike) *QCommandLinkButton {
+	rt.CheckThread("NewQCommandLinkButtonWithTextWith")
+	base := v.quteQCommandLinkButtonBase()
+	if base.QCommandLinkButton != nil {
+		panic("NewQCommandLinkButtonWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithTextWith")
+	}
+	p := C.qute_QCommandLinkButton_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	base.QCommandLinkButton = rt.View[QCommandLinkButton](h, p)
+	id := h.SetSelf(v, qCommandLinkButtonVTable)
+	mask := rt.Mask(v, qCommandLinkButtonVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCommandLinkButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCommandLinkButton
+}
+
+// NewQCommandLinkButtonWithDescriptionWith is NewQCommandLinkButtonWithDescription for a Go subclass: it constructs a QCommandLinkButton whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCommandLinkButtonWithDescriptionWith(v QCommandLinkButtonSubclass, text string, description string, parent QWidgetLike) *QCommandLinkButton {
+	rt.CheckThread("NewQCommandLinkButtonWithDescriptionWith")
+	base := v.quteQCommandLinkButtonBase()
+	if base.QCommandLinkButton != nil {
+		panic("NewQCommandLinkButtonWithDescriptionWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQCommandLinkButtonWithDescriptionWith")
+	}
+	p := C.qute_QCommandLinkButton_new_shim_2((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	base.QCommandLinkButton = rt.View[QCommandLinkButton](h, p)
+	id := h.SetSelf(v, qCommandLinkButtonVTable)
+	mask := rt.Mask(v, qCommandLinkButtonVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCommandLinkButton_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCommandLinkButton
+}

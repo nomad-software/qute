@@ -23,6 +23,8 @@ bool qute_rt_post_drain(void);
 // Connect QObject::destroyed of obj to qute_rt_destroyed(obj).
 void qute_rt_watch(void *obj);
 bool qute_rt_has_parent(void *obj);
+// True while obj's destructor runs (QObjectData::wasDeleted).
+bool qute_rt_dying(void *obj);
 // The topmost QObject ancestor of obj (obj itself when it has no parent).
 void *qute_rt_root(void *obj);
 // The watched objects in obj's subtree, obj included, as a malloc'd array.

@@ -1169,11 +1169,11 @@ bool qute_QWebEngineFrame_isMainFrame(void *self) {
 }
 void qute_QWebEngineFrame_runJavaScript(void *self, const char *a0, ptrdiff_t a0_len, uintptr_t a1) {
 	qute_gui_only();
-	static_cast<QWebEngineFrame *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a1)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineFrame *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), (a1 ? std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a1)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QVariant &)>()));
 }
 void qute_QWebEngineFrame_runJavaScript_1(void *self, const char *a0, ptrdiff_t a0_len, unsigned int a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEngineFrame *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), static_cast<unsigned int>(a1), std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a2)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineFrame *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), static_cast<unsigned int>(a1), (a2 ? std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a2)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QVariant &)>()));
 }
 void qute_QWebEngineFrame_runJavaScript_2(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
@@ -1185,7 +1185,7 @@ void qute_QWebEngineFrame_printToPdf(void *self, const char *a0, ptrdiff_t a0_le
 }
 void qute_QWebEngineFrame_printToPdf_1(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QWebEngineFrame *>(self)->printToPdf(std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineFrame *>(self)->printToPdf((a0 ? std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QByteArray &)>()));
 }
 void qute_QWebEngineFrame_runJavaScript_3(void *self, const char *a0, ptrdiff_t a0_len, unsigned int a1) {
 	qute_gui_only();
@@ -1505,6 +1505,10 @@ void * qute_QWebEnginePage_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QWebEnginePage *>(new qute_QWebEnginePage(static_cast<QObject *>(a0)));
 }
+void * qute_QWebEnginePage_new_shim_1(void * a0, void * a1) {
+	qute_gui_only();
+	return static_cast<QWebEnginePage *>(new qute_QWebEnginePage(static_cast<QWebEngineProfile *>(a0), static_cast<QObject *>(a1)));
+}
 void qute_QWebEnginePage_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -1626,11 +1630,11 @@ void qute_QWebEnginePage_setContent(void *self, const char *a0, ptrdiff_t a0_len
 }
 void qute_QWebEnginePage_toHtml(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->toHtml(std::function<void (const QString &)>([s = std::make_shared<GoSlot>(a0)](const QString & p0) -> void { qute_str c0 = qute_ret_str(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->toHtml((a0 ? std::function<void (const QString &)>([s = std::make_shared<GoSlot>(a0)](const QString & p0) -> void { qute_str c0 = qute_ret_str(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QString &)>()));
 }
 void qute_QWebEnginePage_toPlainText(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->toPlainText(std::function<void (const QString &)>([s = std::make_shared<GoSlot>(a0)](const QString & p0) -> void { qute_str c0 = qute_ret_str(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->toPlainText((a0 ? std::function<void (const QString &)>([s = std::make_shared<GoSlot>(a0)](const QString & p0) -> void { qute_str c0 = qute_ret_str(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QString &)>()));
 }
 qute_str qute_QWebEnginePage_title(void *self) {
 	qute_gui_only();
@@ -1674,7 +1678,7 @@ qute_sizef qute_QWebEnginePage_contentsSize(void *self) {
 }
 void qute_QWebEnginePage_runJavaScript(void *self, const char *a0, ptrdiff_t a0_len, uintptr_t a1) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a1)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), (a1 ? std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a1)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QVariant &)>()));
 }
 void qute_QWebEnginePage_runJavaScript_1(void *self, const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
@@ -1722,7 +1726,7 @@ void qute_QWebEnginePage_printToPdf(void *self, const char *a0, ptrdiff_t a0_len
 }
 void qute_QWebEnginePage_printToPdf_1(void *self, uintptr_t a0) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->printToPdf(std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->printToPdf((a0 ? std::function<void (const QByteArray &)>([s = std::make_shared<GoSlot>(a0)](const QByteArray & p0) -> void { qute_str c0 = qute_ret_bytes(p0); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QByteArray &)>()));
 }
 void qute_QWebEnginePage_setInspectedPage(void *self, void * a0) {
 	qute_gui_only();
@@ -1934,7 +1938,7 @@ void qute_QWebEnginePage_triggerAction_1(void *self, int64_t a0, bool a1) {
 }
 void qute_QWebEnginePage_findText_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->findText(QString::fromUtf8(a0, a0_len), QFlags<QWebEnginePage::FindFlag>::fromInt(static_cast<QFlags<QWebEnginePage::FindFlag>::Int>(a1)), std::function<void (const QWebEngineFindTextResult &)>([s = std::make_shared<GoSlot>(a2)](const QWebEngineFindTextResult & p0) -> void { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->findText(QString::fromUtf8(a0, a0_len), QFlags<QWebEnginePage::FindFlag>::fromInt(static_cast<QFlags<QWebEnginePage::FindFlag>::Int>(a1)), (a2 ? std::function<void (const QWebEngineFindTextResult &)>([s = std::make_shared<GoSlot>(a2)](const QWebEngineFindTextResult & p0) -> void { void * c0 = static_cast<void *>(new QWebEngineFindTextResult(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QWebEngineFindTextResult &)>()));
 }
 void qute_QWebEnginePage_download_1(void *self, void * a0, const char *a1, ptrdiff_t a1_len) {
 	qute_gui_only();
@@ -1950,7 +1954,7 @@ void qute_QWebEnginePage_setContent_1(void *self, const char *a0, ptrdiff_t a0_l
 }
 void qute_QWebEnginePage_runJavaScript_2(void *self, const char *a0, ptrdiff_t a0_len, unsigned int a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEnginePage *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), static_cast<unsigned int>(a1), std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a2)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEnginePage *>(self)->runJavaScript(QString::fromUtf8(a0, a0_len), static_cast<unsigned int>(a1), (a2 ? std::function<void (const QVariant &)>([s = std::make_shared<GoSlot>(a2)](const QVariant & p0) -> void { void * c0 = static_cast<void *>(new QVariant(p0)); void *args[] = {&c0}; qute_call(s->id, args, nullptr); }) : std::function<void (const QVariant &)>()));
 }
 void qute_QWebEnginePage_save_1(void *self, const char *a0, ptrdiff_t a0_len, int64_t a1) {
 	qute_gui_only();
@@ -2234,6 +2238,10 @@ void * qute_QWebEngineProfile_new_shim(void * a0) {
 	qute_gui_only();
 	return static_cast<QWebEngineProfile *>(new qute_QWebEngineProfile(static_cast<QObject *>(a0)));
 }
+void * qute_QWebEngineProfile_new_shim_1(const char *a0, ptrdiff_t a0_len, void * a1) {
+	qute_gui_only();
+	return static_cast<QWebEngineProfile *>(new qute_QWebEngineProfile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+}
 void qute_QWebEngineProfile_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
@@ -2428,11 +2436,11 @@ void * qute_QWebEngineProfile_clientCertificateStore(void *self) {
 }
 void qute_QWebEngineProfile_requestIconForPageURL(void *self, void * a0, int a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEngineProfile *>(self)->requestIconForPageURL((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<int>(a1), std::function<void (const QIcon &, const QUrl &, const QUrl &)>([s = std::make_shared<GoSlot>(a2)](const QIcon & p0, const QUrl & p1, const QUrl & p2) -> void { void * c0 = static_cast<void *>(new QIcon(p0)); void * c1 = static_cast<void *>(new QUrl(p1)); void * c2 = static_cast<void *>(new QUrl(p2)); void *args[] = {&c0, &c1, &c2}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineProfile *>(self)->requestIconForPageURL((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<int>(a1), (a2 ? std::function<void (const QIcon &, const QUrl &, const QUrl &)>([s = std::make_shared<GoSlot>(a2)](const QIcon & p0, const QUrl & p1, const QUrl & p2) -> void { void * c0 = static_cast<void *>(new QIcon(p0)); void * c1 = static_cast<void *>(new QUrl(p1)); void * c2 = static_cast<void *>(new QUrl(p2)); void *args[] = {&c0, &c1, &c2}; qute_call(s->id, args, nullptr); }) : std::function<void (const QIcon &, const QUrl &, const QUrl &)>()));
 }
 void qute_QWebEngineProfile_requestIconForIconURL(void *self, void * a0, int a1, uintptr_t a2) {
 	qute_gui_only();
-	static_cast<QWebEngineProfile *>(self)->requestIconForIconURL((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<int>(a1), std::function<void (const QIcon &, const QUrl &)>([s = std::make_shared<GoSlot>(a2)](const QIcon & p0, const QUrl & p1) -> void { void * c0 = static_cast<void *>(new QIcon(p0)); void * c1 = static_cast<void *>(new QUrl(p1)); void *args[] = {&c0, &c1}; qute_call(s->id, args, nullptr); }));
+	static_cast<QWebEngineProfile *>(self)->requestIconForIconURL((a0 ? *static_cast<QUrl *>(a0) : QUrl()), static_cast<int>(a1), (a2 ? std::function<void (const QIcon &, const QUrl &)>([s = std::make_shared<GoSlot>(a2)](const QIcon & p0, const QUrl & p1) -> void { void * c0 = static_cast<void *>(new QIcon(p0)); void * c1 = static_cast<void *>(new QUrl(p1)); void *args[] = {&c0, &c1}; qute_call(s->id, args, nullptr); }) : std::function<void (const QIcon &, const QUrl &)>()));
 }
 void * qute_QWebEngineProfile_queryPermission(void *self, void * a0, int64_t a1) {
 	qute_gui_only();

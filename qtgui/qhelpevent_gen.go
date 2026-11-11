@@ -25,7 +25,7 @@ type QHelpEventLike interface{ AsQHelpEvent() *QHelpEvent }
 func (this *QHelpEvent) AsQHelpEvent() *QHelpEvent { return this }
 
 func init() {
-	rt.RegisterClass("QHelpEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QHelpEvent_delete(p) })
+	rt.RegisterClass("QHelpEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QHelpEvent_delete(p) })
 }
 
 // QHelpEventFromPtr wraps an existing C++ QHelpEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QHelpEventCast(e qtcore.QEventLike) *QHelpEvent {
 	r := rt.View[QHelpEvent](rt.WrapClassFrom(p, "QHelpEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQHelpEventWithType wraps the QHelpEvent constructor.
+//
+//	C++: QHelpEvent::QHelpEvent(Type type, const QPoint & pos, const QPoint & globalPos)
+//
+// Qt docs: https://doc.qt.io/qt-6/qhelpevent.html#QHelpEvent
+func NewQHelpEventWithType(typeArg qtcore.QEventType, pos qtcore.QPoint, globalPos qtcore.QPoint) *QHelpEvent {
+	rt.CheckThread("NewQHelpEventWithType")
+	p := C.qute_QHelpEvent_new(C.int64_t(typeArg), cQPoint(pos), cQPoint(globalPos))
+	h := rt.WrapClass(p, "QHelpEvent", rt.NewOwned)
+	return rt.View[QHelpEvent](h, p)
 }
 
 // X wraps QHelpEvent::x.

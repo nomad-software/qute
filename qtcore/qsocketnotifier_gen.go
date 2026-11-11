@@ -351,3 +351,35 @@ func NewQSocketNotifierWith(v QSocketNotifierSubclass, typeArg QSocketNotifierTy
 	C.qute_QSocketNotifier_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSocketNotifier
 }
+
+// NewQSocketNotifierWithSocketWith is NewQSocketNotifierWithSocket for a Go subclass: it constructs a QSocketNotifier whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSocketNotifierWithSocketWith(v QSocketNotifierSubclass, socket int64, typeArg QSocketNotifierType, parent QObjectLike) *QSocketNotifier {
+	rt.CheckThread("NewQSocketNotifierWithSocketWith")
+	base := v.quteQSocketNotifierBase()
+	if base.QSocketNotifier != nil {
+		panic("NewQSocketNotifierWithSocketWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSocketNotifierWithSocketWith")
+	}
+	p := C.qute_QSocketNotifier_new_shim_1(C.longlong(socket), C.int64_t(typeArg), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSocketNotifier", mode)
+	base.QSocketNotifier = rt.View[QSocketNotifier](h, p)
+	id := h.SetSelf(v, qSocketNotifierVTable)
+	mask := rt.Mask(v, qSocketNotifierVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSocketNotifier_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSocketNotifier
+}

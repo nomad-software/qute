@@ -634,14 +634,17 @@ func (this *QWebEngineProfile) ClientCertificateStore() *QWebEngineClientCertifi
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofile.html#requestIconForPageURL
 func (this *QWebEngineProfile) RequestIconForPageURL(url *qtcore.QUrl, desiredSizeInPixel int, iconAvailableCallback func(*qtgui.QIcon, *qtcore.QUrl, *qtcore.QUrl)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfile.RequestIconForPageURL")
-	iconAvailableCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-		p0 := rt.View[qtgui.QIcon](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QIcon", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		p1 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-		p2 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
-		_ = ret
-		iconAvailableCallback(p0, p1, p2)
-	})
+	var iconAvailableCallbackID uintptr
+	if iconAvailableCallback != nil {
+		iconAvailableCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			p0 := rt.View[qtgui.QIcon](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QIcon", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			p1 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			p2 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
+			_ = ret
+			iconAvailableCallback(p0, p1, p2)
+		})
+	}
 	C.qute_QWebEngineProfile_requestIconForPageURL(self, rt.UseArg(unsafe.Pointer(url), "QWebEngineProfile.RequestIconForPageURL"), C.int(desiredSizeInPixel), C.uintptr_t(iconAvailableCallbackID))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(url)
@@ -654,13 +657,16 @@ func (this *QWebEngineProfile) RequestIconForPageURL(url *qtcore.QUrl, desiredSi
 // Qt docs: https://doc.qt.io/qt-6/qwebengineprofile.html#requestIconForIconURL
 func (this *QWebEngineProfile) RequestIconForIconURL(url *qtcore.QUrl, desiredSizeInPixel int, iconAvailableCallback func(*qtgui.QIcon, *qtcore.QUrl)) {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfile.RequestIconForIconURL")
-	iconAvailableCallbackID := rt.NewFunc(func(args, ret unsafe.Pointer) {
-		a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-		p0 := rt.View[qtgui.QIcon](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QIcon", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-		p1 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-		_ = ret
-		iconAvailableCallback(p0, p1)
-	})
+	var iconAvailableCallbackID uintptr
+	if iconAvailableCallback != nil {
+		iconAvailableCallbackID = rt.NewFunc(func(args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
+			p0 := rt.View[qtgui.QIcon](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QIcon", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			p1 := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			_ = ret
+			iconAvailableCallback(p0, p1)
+		})
+	}
 	C.qute_QWebEngineProfile_requestIconForIconURL(self, rt.UseArg(unsafe.Pointer(url), "QWebEngineProfile.RequestIconForIconURL"), C.int(desiredSizeInPixel), C.uintptr_t(iconAvailableCallbackID))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(url)
@@ -977,6 +983,38 @@ func NewQWebEngineProfileWith(v QWebEngineProfileSubclass, parent qtcore.QObject
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQWebEngineProfileWith")
 	}
 	p := C.qute_QWebEngineProfile_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QWebEngineProfile", mode)
+	base.QWebEngineProfile = rt.View[QWebEngineProfile](h, p)
+	id := h.SetSelf(v, qWebEngineProfileVTable)
+	mask := rt.Mask(v, qWebEngineProfileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QWebEngineProfile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QWebEngineProfile
+}
+
+// NewQWebEngineProfileWithNameWith is NewQWebEngineProfileWithName for a Go subclass: it constructs a QWebEngineProfile whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQWebEngineProfileWithNameWith(v QWebEngineProfileSubclass, name string, parent qtcore.QObjectLike) *QWebEngineProfile {
+	rt.CheckThread("NewQWebEngineProfileWithNameWith")
+	base := v.quteQWebEngineProfileBase()
+	if base.QWebEngineProfile != nil {
+		panic("NewQWebEngineProfileWithNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQWebEngineProfileWithNameWith")
+	}
+	p := C.qute_QWebEngineProfile_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

@@ -25,7 +25,7 @@ type QActionEventLike interface{ AsQActionEvent() *QActionEvent }
 func (this *QActionEvent) AsQActionEvent() *QActionEvent { return this }
 
 func init() {
-	rt.RegisterClass("QActionEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QActionEvent_delete(p) })
+	rt.RegisterClass("QActionEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QActionEvent_delete(p) })
 }
 
 // QActionEventFromPtr wraps an existing C++ QActionEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,63 @@ func QActionEventCast(e qtcore.QEventLike) *QActionEvent {
 	r := rt.View[QActionEvent](rt.WrapClassFrom(p, "QActionEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQActionEventWithType wraps the QActionEvent constructor.
+//
+//	C++: QActionEvent::QActionEvent(int type, QAction * action, QAction * before = …)
+//
+// Ownership: action is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQActionEventWithTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qactionevent.html#QActionEvent
+func NewQActionEventWithType(typeArg int, action QActionLike) *QActionEvent {
+	rt.CheckThread("NewQActionEventWithType")
+	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
+	if action != nil {
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "NewQActionEventWithType")
+	}
+	p := C.qute_QActionEvent_new(C.int(typeArg), actionPtr)
+	runtime.KeepAlive(action)
+	h := rt.WrapClass(p, "QActionEvent", rt.NewOwned)
+	rt.KeepArg(h, "action", actionH, true)
+	return rt.View[QActionEvent](h, p)
+}
+
+// NewQActionEventWithTypeFull wraps the QActionEvent constructor.
+//
+//	C++: QActionEvent::QActionEvent(int type, QAction * action, QAction * before = …)
+//
+// Ownership: action is borrowed, and the new object keeps it from being garbage collected while it lives; before is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQActionEventWithTypeFull is NewQActionEventWithType with every argument, including those NewQActionEventWithType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qactionevent.html#QActionEvent
+func NewQActionEventWithTypeFull(typeArg int, action QActionLike, before QActionLike) *QActionEvent {
+	rt.CheckThread("NewQActionEventWithTypeFull")
+	var actionPtr unsafe.Pointer
+	var actionH *rt.Handle
+	if action != nil {
+		actionPtr, actionH = rt.Arg(unsafe.Pointer(action.AsQAction()), "NewQActionEventWithTypeFull")
+	}
+	var beforePtr unsafe.Pointer
+	var beforeH *rt.Handle
+	if before != nil {
+		beforePtr, beforeH = rt.Arg(unsafe.Pointer(before.AsQAction()), "NewQActionEventWithTypeFull")
+	}
+	p := C.qute_QActionEvent_new_1(C.int(typeArg), actionPtr, beforePtr)
+	runtime.KeepAlive(action)
+	runtime.KeepAlive(before)
+	h := rt.WrapClass(p, "QActionEvent", rt.NewOwned)
+	rt.KeepArg(h, "action", actionH, true)
+	rt.KeepArg(h, "before", beforeH, true)
+	return rt.View[QActionEvent](h, p)
 }
 
 // Action wraps QActionEvent::action.

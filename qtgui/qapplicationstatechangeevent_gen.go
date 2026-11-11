@@ -29,7 +29,7 @@ func (this *QApplicationStateChangeEvent) AsQApplicationStateChangeEvent() *QApp
 }
 
 func init() {
-	rt.RegisterClass("QApplicationStateChangeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QApplicationStateChangeEvent_delete(p) })
+	rt.RegisterClass("QApplicationStateChangeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QApplicationStateChangeEvent_delete(p) })
 }
 
 // QApplicationStateChangeEventFromPtr wraps an existing C++ QApplicationStateChangeEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,18 @@ func QApplicationStateChangeEventCast(e qtcore.QEventLike) *QApplicationStateCha
 	r := rt.View[QApplicationStateChangeEvent](rt.WrapClassFrom(p, "QApplicationStateChangeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQApplicationStateChangeEventWithApplicationState wraps the QApplicationStateChangeEvent constructor.
+//
+//	C++: QApplicationStateChangeEvent::QApplicationStateChangeEvent(Qt::ApplicationState state)
+//
+// Qt docs: https://doc.qt.io/qt-6/qapplicationstatechangeevent.html#QApplicationStateChangeEvent
+func NewQApplicationStateChangeEventWithApplicationState(state qtcore.ApplicationStates) *QApplicationStateChangeEvent {
+	rt.CheckThread("NewQApplicationStateChangeEventWithApplicationState")
+	p := C.qute_QApplicationStateChangeEvent_new(C.int64_t(state))
+	h := rt.WrapClass(p, "QApplicationStateChangeEvent", rt.NewOwned)
+	return rt.View[QApplicationStateChangeEvent](h, p)
 }
 
 // ApplicationState wraps QApplicationStateChangeEvent::applicationState.

@@ -1127,6 +1127,8 @@ func (this *QGraphicsItem) DeviceTransform(viewportTransform *qtgui.QTransform) 
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; ItemTransformFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#itemTransform
 func (this *QGraphicsItem) ItemTransform(other QGraphicsItemLike) *qtgui.QTransform {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ItemTransform")
@@ -2238,6 +2240,28 @@ func (this *QGraphicsItem) EnsureVisibleFull(rect qtcore.QRectF, xmargin int, ym
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.EnsureVisibleFull")
 	C.qute_QGraphicsItem_ensureVisible_1(self, cQRectF(rect), C.int(xmargin), C.int(ymargin))
 	runtime.KeepAlive(this)
+}
+
+// ItemTransformFull wraps QGraphicsItem::itemTransform.
+//
+//	C++: QTransform QGraphicsItem::itemTransform(const QGraphicsItem * other, bool * ok = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// ItemTransformFull is ItemTransform with every argument, including those ItemTransform leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsitem.html#itemTransform
+func (this *QGraphicsItem) ItemTransformFull(other QGraphicsItemLike) (*qtgui.QTransform, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItem.ItemTransformFull")
+	var otherPtr unsafe.Pointer
+	if other != nil {
+		otherPtr = rt.UseArg(unsafe.Pointer(other.AsQGraphicsItem()), "QGraphicsItem.ItemTransformFull")
+	}
+	var okOut C.bool
+	r := C.qute_QGraphicsItem_itemTransform_1(self, otherPtr, &okOut)
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(other)
+	return rt.View[qtgui.QTransform](rt.WrapClass(r, "QTransform", rt.TakeOwned), r), bool(okOut)
 }
 
 // SetTransformFull wraps QGraphicsItem::setTransform.

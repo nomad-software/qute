@@ -929,3 +929,42 @@ func NewQOpenGLWindowWith(v QOpenGLWindowSubclass, updateBehavior QOpenGLWindowU
 	C.qute_QOpenGLWindow_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QOpenGLWindow
 }
+
+// NewQOpenGLWindowSharedWith is NewQOpenGLWindowShared for a Go subclass: it constructs a QOpenGLWindow whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLWindowSharedWith(v QOpenGLWindowSubclass, shareContext qtgui.QOpenGLContextLike, updateBehavior QOpenGLWindowUpdateBehavior, parent qtgui.QWindowLike) *QOpenGLWindow {
+	rt.CheckThread("NewQOpenGLWindowSharedWith")
+	base := v.quteQOpenGLWindowBase()
+	if base.QOpenGLWindow != nil {
+		panic("NewQOpenGLWindowSharedWith: value is already constructed; use a fresh value")
+	}
+	var shareContextPtr unsafe.Pointer
+	var shareContextH *rt.Handle
+	if shareContext != nil {
+		shareContextPtr, shareContextH = rt.Arg(unsafe.Pointer(shareContext.AsQOpenGLContext()), "NewQOpenGLWindowSharedWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWindow()), "NewQOpenGLWindowSharedWith")
+	}
+	p := C.qute_QOpenGLWindow_new_shim_1(shareContextPtr, C.int64_t(updateBehavior), parentPtr)
+	runtime.KeepAlive(shareContext)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
+	base.QOpenGLWindow = rt.View[QOpenGLWindow](h, p)
+	id := h.SetSelf(v, qOpenGLWindowVTable)
+	mask := rt.Mask(v, qOpenGLWindowVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLWindow_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLWindow
+}

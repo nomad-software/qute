@@ -631,7 +631,7 @@ func (this *QCompleter) OnActivatedIndex(f func(index *qtcore.QModelIndex)) qtco
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnActivatedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QCompleter_activated_1(self, C.uintptr_t(id)))
@@ -665,7 +665,7 @@ func (this *QCompleter) OnHighlightedIndex(f func(index *qtcore.QModelIndex)) qt
 	self := rt.Use(unsafe.Pointer(this), "QCompleter.OnHighlightedIndex")
 	id := rt.NewCallback(rt.RefOf(unsafe.Pointer(this)).H, func(args unsafe.Pointer) {
 		a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+		index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 		f(index)
 	})
 	return rt.NewConnection(C.qute_QCompleter_highlighted_1(self, C.uintptr_t(id)))
@@ -680,7 +680,7 @@ var qCompleterVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				PathFromIndex(*qtcore.QModelIndex) string
 			}).PathFromIndex(index)
@@ -869,6 +869,78 @@ func NewQCompleterWith(v QCompleterSubclass, parent qtcore.QObjectLike) *QComple
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWith")
 	}
 	p := C.qute_QCompleter_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCompleter", mode)
+	base.QCompleter = rt.View[QCompleter](h, p)
+	id := h.SetSelf(v, qCompleterVTable)
+	mask := rt.Mask(v, qCompleterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCompleter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCompleter
+}
+
+// NewQCompleterWithModelWith is NewQCompleterWithModel for a Go subclass: it constructs a QCompleter whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCompleterWithModelWith(v QCompleterSubclass, model qtcore.QAbstractItemModelLike, parent qtcore.QObjectLike) *QCompleter {
+	rt.CheckThread("NewQCompleterWithModelWith")
+	base := v.quteQCompleterBase()
+	if base.QCompleter != nil {
+		panic("NewQCompleterWithModelWith: value is already constructed; use a fresh value")
+	}
+	var modelPtr unsafe.Pointer
+	var modelH *rt.Handle
+	if model != nil {
+		modelPtr, modelH = rt.Arg(unsafe.Pointer(model.AsQAbstractItemModel()), "NewQCompleterWithModelWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWithModelWith")
+	}
+	p := C.qute_QCompleter_new_shim_1(modelPtr, parentPtr)
+	runtime.KeepAlive(model)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QCompleter", mode)
+	rt.KeepArg(h, "model", modelH, false)
+	base.QCompleter = rt.View[QCompleter](h, p)
+	id := h.SetSelf(v, qCompleterVTable)
+	mask := rt.Mask(v, qCompleterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QCompleter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QCompleter
+}
+
+// NewQCompleterWithCompletionsWith is NewQCompleterWithCompletions for a Go subclass: it constructs a QCompleter whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQCompleterWithCompletionsWith(v QCompleterSubclass, completions []string, parent qtcore.QObjectLike) *QCompleter {
+	rt.CheckThread("NewQCompleterWithCompletionsWith")
+	base := v.quteQCompleterBase()
+	if base.QCompleter != nil {
+		panic("NewQCompleterWithCompletionsWith: value is already constructed; use a fresh value")
+	}
+	completionsData, completionsLens := quteStrListArg(completions)
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQCompleterWithCompletionsWith")
+	}
+	p := C.qute_QCompleter_new_shim_2((*C.char)(unsafe.Pointer(unsafe.SliceData(completionsData))), (*C.ptrdiff_t)(unsafe.SliceData(completionsLens)), C.ptrdiff_t(len(completions)), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

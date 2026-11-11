@@ -579,7 +579,7 @@ var qTableViewVTable = []rt.Virtual{
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
 		}},
 	{Name: "SetSelectionModel", Has: func(v any) bool {
@@ -608,7 +608,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				VisualRect(*qtcore.QModelIndex) qtcore.QRect
 			}).VisualRect(index)
@@ -622,7 +622,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			hint := QAbstractItemViewScrollHint(*(*C.int64_t)(a[1]))
 			v.(interface {
 				ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
@@ -640,7 +640,7 @@ var qTableViewVTable = []rt.Virtual{
 			r := v.(interface {
 				IndexAt(qtcore.QPoint) *qtcore.QModelIndex
 			}).IndexAt(pArg)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTableView.IndexAt")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QTableView.IndexAt")
 		}},
 	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -710,7 +710,7 @@ var qTableViewVTable = []rt.Virtual{
 			r := v.(interface {
 				MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
 			}).MoveCursor(cursorAction, modifiers)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTableView.MoveCursor")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QTableView.MoveCursor")
 		}},
 	{Name: "SetSelection", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -744,11 +744,7 @@ var qTableViewVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
 			r := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }).SelectedIndexes()
-			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
-				for i, e := range r {
-					d[i] = rt.UseArg(unsafe.Pointer(e), "QTableView.SelectedIndexes")
-				}
-			})
+			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QTableView.SelectedIndexes", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "UpdateGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometries() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -795,7 +791,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				IsIndexHidden(*qtcore.QModelIndex) bool
 			}).IsIndexHidden(index)
@@ -823,8 +819,8 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 			v.(interface {
 				CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
 			}).CurrentChanged(current, previous)
@@ -843,7 +839,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
 			}).ItemDelegateForIndex(index)
@@ -867,8 +863,8 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 			roles := quteList(*(*C.qute_list)(a[2]), func(e C.int) int { return int(e) })
 			v.(interface {
 				DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
@@ -882,7 +878,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -897,7 +893,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -960,7 +956,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			trigger := QAbstractItemViewEditTriggers(*(*C.int64_t)(a[1]))
 			eventP := *(*unsafe.Pointer)(a[2])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
@@ -979,7 +975,7 @@ var qTableViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()

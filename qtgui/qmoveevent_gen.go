@@ -25,7 +25,7 @@ type QMoveEventLike interface{ AsQMoveEvent() *QMoveEvent }
 func (this *QMoveEvent) AsQMoveEvent() *QMoveEvent { return this }
 
 func init() {
-	rt.RegisterClass("QMoveEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QMoveEvent_delete(p) })
+	rt.RegisterClass("QMoveEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QMoveEvent_delete(p) })
 }
 
 // QMoveEventFromPtr wraps an existing C++ QMoveEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QMoveEventCast(e qtcore.QEventLike) *QMoveEvent {
 	r := rt.View[QMoveEvent](rt.WrapClassFrom(p, "QMoveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQMoveEventWithPoint wraps the QMoveEvent constructor.
+//
+//	C++: QMoveEvent::QMoveEvent(const QPoint & pos, const QPoint & oldPos)
+//
+// Qt docs: https://doc.qt.io/qt-6/qmoveevent.html#QMoveEvent
+func NewQMoveEventWithPoint(pos qtcore.QPoint, oldPos qtcore.QPoint) *QMoveEvent {
+	rt.CheckThread("NewQMoveEventWithPoint")
+	p := C.qute_QMoveEvent_new(cQPoint(pos), cQPoint(oldPos))
+	h := rt.WrapClass(p, "QMoveEvent", rt.NewOwned)
+	return rt.View[QMoveEvent](h, p)
 }
 
 // Pos wraps QMoveEvent::pos.

@@ -957,3 +957,35 @@ func NewQStackedLayoutWith(v QStackedLayoutSubclass, parent QWidgetLike) *QStack
 	C.qute_QStackedLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QStackedLayout
 }
+
+// NewQStackedLayoutInWith is NewQStackedLayoutIn for a Go subclass: it constructs a QStackedLayout whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQStackedLayoutInWith(v QStackedLayoutSubclass, parentLayout QLayoutLike) *QStackedLayout {
+	rt.CheckThread("NewQStackedLayoutInWith")
+	base := v.quteQStackedLayoutBase()
+	if base.QStackedLayout != nil {
+		panic("NewQStackedLayoutInWith: value is already constructed; use a fresh value")
+	}
+	var parentLayoutPtr unsafe.Pointer
+	if parentLayout != nil {
+		parentLayoutPtr = rt.UseArg(unsafe.Pointer(parentLayout.AsQLayout()), "NewQStackedLayoutInWith")
+	}
+	p := C.qute_QStackedLayout_new_shim_1(parentLayoutPtr)
+	runtime.KeepAlive(parentLayout)
+	mode := rt.NewOwned
+	if parentLayoutPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QStackedLayout", mode)
+	base.QStackedLayout = rt.View[QStackedLayout](h, p)
+	id := h.SetSelf(v, qStackedLayoutVTable)
+	mask := rt.Mask(v, qStackedLayoutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QStackedLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QStackedLayout
+}

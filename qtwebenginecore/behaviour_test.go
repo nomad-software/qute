@@ -1,6 +1,7 @@
 package qtwebenginecore_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -145,4 +146,72 @@ func TestCookieFilterPanicBlocks(t *testing.T) {
 	if cookie != "" {
 		t.Errorf("document.cookie = %q after the filter panicked, want the cookie blocked", cookie)
 	}
+}
+
+// consolePage is a page subclassed in Go that records its console messages.
+type consolePage struct {
+	qtwebenginecore.QWebEnginePageBase
+	messages []string
+}
+
+func (p *consolePage) JavaScriptConsoleMessage(level qtwebenginecore.QWebEnginePageJavaScriptConsoleMessageLevel, message string, line int, source string) {
+	p.messages = append(p.messages, message)
+}
+
+// Every constructor of a subclassable class has a subclass form: a Go page
+// can be made in a profile of its own (NewQWebEnginePageWithProfileWith),
+// which it keeps as NewQWebEnginePageWithProfile does, and its overrides run.
+func TestSubclassedPageInProfile(t *testing.T) {
+	qutetest.Run(t, func() {
+		prof := qtwebenginecore.NewQWebEngineProfile(nil) // off the record
+		p := &consolePage{}
+		page := qtwebenginecore.NewQWebEnginePageWithProfileWith(p, prof, nil)
+		if page.Profile() != prof {
+			t.Error("the page is not in the profile it was made with")
+		}
+		if page.Ownership() != qtcore.Owned {
+			t.Errorf("parentless page: %v, want Owned", page.Ownership())
+		}
+		loaded := false
+		page.OnLoadFinished(func(bool) { loaded = true })
+		page.SetHtml("<html><body><script>console.log('from the page')</script></body></html>")
+		for i := 0; i < 250 && (!loaded || len(p.messages) == 0); i++ {
+			qutetest.Wait(20)
+		}
+		if len(p.messages) == 0 || p.messages[0] != "from the page" {
+			t.Errorf("console messages %q, want the page's", p.messages)
+		}
+		var msg string
+		func() {
+			defer func() { msg, _ = recover().(string) }()
+			prof.Delete()
+		}()
+		if !strings.Contains(msg, "still uses this QWebEngineProfile") {
+			t.Errorf("Delete of the subclassed page's profile: panic %q, want the keep guard", msg)
+		}
+		page.Delete()
+		prof.Delete()
+	})
+}
+
+// A nil func passed as a std::function is an empty one, which Qt checks for,
+// rather than a call into Go with nothing to call.
+func TestRunJavaScriptNilCallback(t *testing.T) {
+	qutetest.Run(t, func() {
+		page := qtwebenginecore.NewQWebEnginePage(nil)
+		defer page.Delete()
+		page.SetHtml("<html><body>x</body></html>")
+		page.RunJavaScriptFull("window.ranFromGo = 1", 0, nil)
+		got, done := "", false
+		page.RunJavaScriptWithFunc("window.ranFromGo", func(v *qtcore.QVariant) {
+			got = fmt.Sprint(v.Value())
+			done = true
+		})
+		for i := 0; i < 250 && !done; i++ {
+			qutetest.Wait(20)
+		}
+		if !done || got != "1" {
+			t.Errorf("script with a nil callback: ran=%v, value %v, want 1", done, got)
+		}
+	})
 }

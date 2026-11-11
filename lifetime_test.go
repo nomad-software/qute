@@ -437,9 +437,10 @@ func TestOverrideResultTransferredToCpp(t *testing.T) {
 		defer w.Delete()
 		h := rt.RefOf(unsafe.Pointer(w)).H
 		var ret unsafe.Pointer
-		for _, vt := range h.VTable {
+		self, vtable := h.Subclass()
+		for _, vt := range vtable {
 			if vt.Name == "CreatePopupMenu" {
-				vt.Call(h.Self, nil, unsafe.Pointer(&ret)) // as the shim does for Qt
+				vt.Call(self, nil, unsafe.Pointer(&ret)) // as the shim does for Qt
 			}
 		}
 		if ret == nil {

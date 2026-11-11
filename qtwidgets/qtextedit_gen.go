@@ -2529,3 +2529,35 @@ func NewQTextEditWith(v QTextEditSubclass, parent QWidgetLike) *QTextEdit {
 	C.qute_QTextEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QTextEdit
 }
+
+// NewQTextEditWithTextWith is NewQTextEditWithText for a Go subclass: it constructs a QTextEdit whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTextEditWithTextWith(v QTextEditSubclass, text string, parent QWidgetLike) *QTextEdit {
+	rt.CheckThread("NewQTextEditWithTextWith")
+	base := v.quteQTextEditBase()
+	if base.QTextEdit != nil {
+		panic("NewQTextEditWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQTextEditWithTextWith")
+	}
+	p := C.qute_QTextEdit_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTextEdit", mode)
+	base.QTextEdit = rt.View[QTextEdit](h, p)
+	id := h.SetSelf(v, qTextEditVTable)
+	mask := rt.Mask(v, qTextEditVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTextEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTextEdit
+}

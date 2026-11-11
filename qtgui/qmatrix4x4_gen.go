@@ -267,6 +267,8 @@ func (this *QMatrix4x4) Determinant() float64 {
 //
 // Ownership: the result is an Owned copy.
 //
+// Arguments with C++ defaults are left at them; InvertedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#inverted
 func (this *QMatrix4x4) Inverted() *QMatrix4x4 {
 	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.Inverted")
@@ -684,6 +686,23 @@ func (this *QMatrix4x4) Flags() QMatrix4x4Flags {
 	r := C.qute_QMatrix4x4_flags(self)
 	runtime.KeepAlive(this)
 	return QMatrix4x4Flags(r)
+}
+
+// InvertedFull wraps QMatrix4x4::inverted.
+//
+//	C++: QMatrix4x4 QMatrix4x4::inverted(bool * invertible = …) const
+//
+// Ownership: the result is an Owned copy.
+//
+// InvertedFull is Inverted with every argument, including those Inverted leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#inverted
+func (this *QMatrix4x4) InvertedFull() (*QMatrix4x4, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.InvertedFull")
+	var invertibleOut C.bool
+	r := C.qute_QMatrix4x4_inverted_1(self, &invertibleOut)
+	runtime.KeepAlive(this)
+	return rt.View[QMatrix4x4](rt.WrapClass(r, "QMatrix4x4", rt.TakeOwned), r), bool(invertibleOut)
 }
 
 // RotateAngleFloat32Full wraps QMatrix4x4::rotate.

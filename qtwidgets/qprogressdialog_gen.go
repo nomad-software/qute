@@ -1410,3 +1410,35 @@ func NewQProgressDialogWith(v QProgressDialogSubclass, parent QWidgetLike) *QPro
 	C.qute_QProgressDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QProgressDialog
 }
+
+// NewQProgressDialogWithLabelTextWith is NewQProgressDialogWithLabelText for a Go subclass: it constructs a QProgressDialog whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQProgressDialogWithLabelTextWith(v QProgressDialogSubclass, labelText string, cancelButtonText string, minimum int, maximum int, parent QWidgetLike) *QProgressDialog {
+	rt.CheckThread("NewQProgressDialogWithLabelTextWith")
+	base := v.quteQProgressDialogBase()
+	if base.QProgressDialog != nil {
+		panic("NewQProgressDialogWithLabelTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQProgressDialogWithLabelTextWith")
+	}
+	p := C.qute_QProgressDialog_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(labelText))), C.ptrdiff_t(len(labelText)), (*C.char)(unsafe.Pointer(unsafe.StringData(cancelButtonText))), C.ptrdiff_t(len(cancelButtonText)), C.int(minimum), C.int(maximum), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QProgressDialog", mode)
+	base.QProgressDialog = rt.View[QProgressDialog](h, p)
+	id := h.SetSelf(v, qProgressDialogVTable)
+	mask := rt.Mask(v, qProgressDialogVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QProgressDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QProgressDialog
+}

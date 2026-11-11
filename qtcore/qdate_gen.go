@@ -226,6 +226,8 @@ func (this *QDate) DaysInYear() int {
 //
 //	C++: int QDate::weekNumber(int * yearNum = …) const
 //
+// Arguments with C++ defaults are left at them; WeekNumberFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qdate.html#weekNumber
 func (this *QDate) WeekNumber() int {
 	self := rt.Use(unsafe.Pointer(this), "QDate.WeekNumber")
@@ -557,6 +559,21 @@ func (this *QDate) ToJulianDay() int64 {
 	r := C.qute_QDate_toJulianDay(self)
 	runtime.KeepAlive(this)
 	return int64(r)
+}
+
+// WeekNumberFull wraps QDate::weekNumber.
+//
+//	C++: int QDate::weekNumber(int * yearNum = …) const
+//
+// WeekNumberFull is WeekNumber with every argument, including those WeekNumber leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdate.html#weekNumber
+func (this *QDate) WeekNumberFull() (int, int) {
+	self := rt.Use(unsafe.Pointer(this), "QDate.WeekNumberFull")
+	var yearNumOut C.int
+	r := C.qute_QDate_weekNumber_1(self, &yearNumOut)
+	runtime.KeepAlive(this)
+	return int(r), int(yearNumOut)
 }
 
 // ToStringFull wraps QDate::toString.

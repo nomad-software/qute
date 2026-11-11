@@ -1038,3 +1038,145 @@ func TestRequiredVirtual(t *testing.T) {
 		t.Error("QLayout requires an override, but its pure virtuals default to zero values")
 	}
 }
+
+// Every public constructor of a subclassable class has a subclass form, so a
+// Go subclass can be made in any way the class can: a page in a profile of
+// its own (it used to have only the parent-only form).
+func TestSubclassConstructors(t *testing.T) {
+	c := class(t, "QWebEnginePage")
+	byName := map[string]subCtor{}
+	for _, sc := range c.SubCtors {
+		byName[sc.GoName] = sc
+	}
+	if sc, ok := byName["NewQWebEnginePageWith"]; !ok || sc.CName != "qute_QWebEnginePage_new_shim" {
+		t.Errorf("primary subclass constructor: %+v", sc)
+	}
+	sc, ok := byName["NewQWebEnginePageWithProfileWith"]
+	if !ok {
+		t.Fatalf("no subclass constructor with a profile; have %v", byName)
+	}
+	src := string(gen(t).emitClass(c))
+	i := strings.Index(src, "func NewQWebEnginePageWithProfileWith(v QWebEnginePageSubclass, profile QWebEngineProfileLike, parent qtcore.QObjectLike)")
+	if i < 0 {
+		t.Fatal("NewQWebEnginePageWithProfileWith is not emitted with the profile")
+	}
+	body := src[i : i+strings.Index(src[i:], "\n}\n")]
+	for _, want := range []string{"C." + sc.CName + "(", `rt.KeepArg(h, "profile", profileH, true)`, "h.SetSelf(v, "} {
+		if !strings.Contains(body, want) {
+			t.Errorf("NewQWebEnginePageWithProfileWith lacks %s:\n%s", want, body)
+		}
+	}
+	var cpp buf
+	gen(t).emitCpp(c.Module, &cpp)
+	if !strings.Contains(cpp.String(), "void * "+sc.CName+"(void * a0, void * a1) {") {
+		t.Errorf("no C function %s", sc.CName)
+	}
+}
+
+// A nil Go func passed for a std::function is an empty std::function, which
+// Qt checks before calling (RunJavaScript's result callback).
+func TestNilFuncArgument(t *testing.T) {
+	g := gen(t)
+	var mm *Method
+	for _, x := range class(t, "QWebEnginePage").Methods {
+		if x.GoName == "RunJavaScriptFull" {
+			mm = x
+		}
+	}
+	if mm == nil {
+		t.Fatal("no RunJavaScriptFull")
+	}
+	var cb *Param
+	for _, p := range mm.Params {
+		if p.T.k == kFunc {
+			cb = p
+		}
+	}
+	if cb == nil {
+		t.Fatal("no callback parameter")
+	}
+	pre, _ := g.goArg(cb.T, "f", "test", mm.Class.Module)
+	if !strings.Contains(strings.Join(pre, "\n"), "if f != nil {") {
+		t.Errorf("a nil func still gets a callback id:\n%s", strings.Join(pre, "\n"))
+	}
+	if cpp := g.cppArg(cb.T, "a2"); !strings.HasPrefix(cpp, "(a2 ? ") || !strings.HasSuffix(cpp, ": std::function<void (const QVariant &)>())") {
+		t.Errorf("id 0 is not an empty std::function: %s", cpp)
+	}
+}
+
+// A defaulted out-parameter needs its rule for the method to have a Full
+// form; one without is listed in COVERAGE.md, not silently dropped, and
+// no-full gives the reason one is left out on purpose.
+func TestFullFormsNotBuilt(t *testing.T) {
+	text := method(t, "QInputDialog", "QString QInputDialog::getText(").FullName
+	if text != "QInputDialogGetTextFull" {
+		t.Errorf("getText Full form: %q", text)
+	}
+	// a Full form that only adds an out-parameter is still a Full form
+	if mm := method(t, "QLocale", "int QLocale::toInt(const QString & s"); mm.FullName != "ToIntFull" {
+		t.Errorf("toInt Full form: %q", mm.FullName)
+	}
+	if mm := method(t, "QFileDialog", "QString QFileDialog::getOpenFileName("); mm.FullName == "" {
+		t.Error("getOpenFileName has no Full form")
+	}
+	for _, m := range gen(t).modules {
+		for _, c := range m.Classes {
+			for _, n := range c.NoFull {
+				if !strings.HasPrefix(n.Why, "on purpose") {
+					t.Errorf("open: no Full form of %s: %s", n.Sig, n.Why)
+				}
+			}
+		}
+	}
+	found := false
+	for _, n := range class(t, "QFontMetrics").NoFull {
+		found = found || strings.Contains(n.Why, "tabArray")
+	}
+	if !found {
+		t.Error("the no-full reason of QFontMetrics::size is not recorded")
+	}
+}
+
+// Events can be constructed; each is built as a shim whose destructor tells
+// Go that Qt deleted it (a posted event).
+func TestEventConstructors(t *testing.T) {
+	for _, n := range []string{"QEvent", "QKeyEvent", "QMouseEvent"} {
+		c := class(t, n)
+		if len(c.Ctors) == 0 || !c.Shim || kindConst(c) != "rt.KindNotify" {
+			t.Errorf("%s: %d constructors, shim %v, kind %s", n, len(c.Ctors), c.Shim, kindConst(c))
+		}
+	}
+	if mm := method(t, "QKeyEvent", "QKeyEvent::QKeyEvent(Type type, int key, Qt::KeyboardModifiers modifiers, const QString"); mm.GoName != "NewQKeyEvent" {
+		t.Errorf("QKeyEvent constructor named %s", mm.GoName)
+	}
+}
+
+// An inline value class crosses cgo as bytes: an override's or signal's
+// argument by its address (Go copies it), an override's result into storage
+// the shim provides, and a list as one block of the values.
+func TestInlineValueCode(t *testing.T) {
+	g := gen(t)
+	c := class(t, "QAbstractItemModel")
+	var shim buf
+	g.emitShimClass(c, &shim)
+	s := shim.String()
+	i := strings.Index(s, "QModelIndex index(int a0, int a1, const QModelIndex & a2) const override {")
+	if i < 0 {
+		t.Fatal("no index override in the shim")
+	}
+	body := s[i : i+strings.Index(s[i:], "\n\t}")]
+	for _, want := range []string{"void * c2 = const_cast<void *>(static_cast<const void *>(&a2));", "QModelIndex r{};", "return r;"} {
+		if !strings.Contains(body, want) {
+			t.Errorf("index override lacks %s:\n%s", want, body)
+		}
+	}
+	src := string(g.emitClass(c))
+	for _, want := range []string{`rt.CopyInline)`, `rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex"`, `rt.InlineBlock("QModelIndex"`} {
+		if !strings.Contains(src, want) {
+			t.Errorf("QAbstractItemModel's Go code lacks %s", want)
+		}
+	}
+	if !strings.Contains(string(g.emitClass(class(t, "QModelIndex"))), `rt.RegisterInline("QModelIndex"`) {
+		t.Error("QModelIndex does not register as inline")
+	}
+}

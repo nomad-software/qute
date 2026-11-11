@@ -25,7 +25,7 @@ type QTouchEventLike interface{ AsQTouchEvent() *QTouchEvent }
 func (this *QTouchEvent) AsQTouchEvent() *QTouchEvent { return this }
 
 func init() {
-	rt.RegisterClass("QTouchEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QTouchEvent_delete(p) })
+	rt.RegisterClass("QTouchEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QTouchEvent_delete(p) })
 }
 
 // QTouchEventFromPtr wraps an existing C++ QTouchEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,52 @@ func QTouchEventCast(e qtcore.QEventLike) *QTouchEvent {
 	r := rt.View[QTouchEvent](rt.WrapClassFrom(p, "QTouchEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQTouchEventWithType wraps the QTouchEvent constructor.
+//
+//	C++: QTouchEvent::QTouchEvent(QEvent::Type eventType, const QPointingDevice * device = …, Qt::KeyboardModifiers modifiers = …, const QList<QEventPoint> & touchPoints = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQTouchEventWithTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtouchevent.html#QTouchEvent
+func NewQTouchEventWithType(eventType qtcore.QEventType) *QTouchEvent {
+	rt.CheckThread("NewQTouchEventWithType")
+	p := C.qute_QTouchEvent_new(C.int64_t(eventType))
+	h := rt.WrapClass(p, "QTouchEvent", rt.NewOwned)
+	return rt.View[QTouchEvent](h, p)
+}
+
+// NewQTouchEventWithTypeFull wraps the QTouchEvent constructor.
+//
+//	C++: QTouchEvent::QTouchEvent(QEvent::Type eventType, const QPointingDevice * device = …, Qt::KeyboardModifiers modifiers = …, const QList<QEventPoint> & touchPoints = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQTouchEventWithTypeFull is NewQTouchEventWithType with every argument, including those NewQTouchEventWithType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtouchevent.html#QTouchEvent
+func NewQTouchEventWithTypeFull(eventType qtcore.QEventType, device QPointingDeviceLike, modifiers qtcore.KeyboardModifiers, touchPoints []*QEventPoint) *QTouchEvent {
+	rt.CheckThread("NewQTouchEventWithTypeFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQTouchEventWithTypeFull")
+	}
+	touchPointsC := make([]unsafe.Pointer, len(touchPoints))
+	for i := range touchPoints {
+		touchPointsC[i] = rt.UseArg(unsafe.Pointer(touchPoints[i]), "NewQTouchEventWithTypeFull")
+	}
+	p := C.qute_QTouchEvent_new_1(C.int64_t(eventType), devicePtr, C.int64_t(modifiers), unsafe.Pointer(unsafe.SliceData(touchPointsC)), C.ptrdiff_t(len(touchPoints)))
+	runtime.KeepAlive(device)
+	runtime.KeepAlive(touchPoints)
+	h := rt.WrapClass(p, "QTouchEvent", rt.NewOwned)
+	rt.KeepArg(h, "QTouchEvent.device", deviceH, true)
+	return rt.View[QTouchEvent](h, p)
 }
 
 // Target wraps QTouchEvent::target.

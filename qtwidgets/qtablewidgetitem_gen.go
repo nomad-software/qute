@@ -743,3 +743,50 @@ func NewQTableWidgetItemWith(v QTableWidgetItemSubclass) *QTableWidgetItem {
 	C.qute_QTableWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QTableWidgetItem
 }
+
+// NewQTableWidgetItemWithTextWith is NewQTableWidgetItemWithText for a Go subclass: it constructs a QTableWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTableWidgetItemWithTextWith(v QTableWidgetItemSubclass, text string) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemWithTextWith")
+	base := v.quteQTableWidgetItemBase()
+	if base.QTableWidgetItem != nil {
+		panic("NewQTableWidgetItemWithTextWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QTableWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
+	id := h.SetSelf(v, qTableWidgetItemVTable)
+	mask := rt.Mask(v, qTableWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTableWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTableWidgetItem
+}
+
+// NewQTableWidgetItemWithIconWith is NewQTableWidgetItemWithIcon for a Go subclass: it constructs a QTableWidgetItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTableWidgetItemWithIconWith(v QTableWidgetItemSubclass, icon *qtgui.QIcon, text string) *QTableWidgetItem {
+	rt.CheckThread("NewQTableWidgetItemWithIconWith")
+	base := v.quteQTableWidgetItemBase()
+	if base.QTableWidgetItem != nil {
+		panic("NewQTableWidgetItemWithIconWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QTableWidgetItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
+	runtime.KeepAlive(icon)
+	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
+	id := h.SetSelf(v, qTableWidgetItemVTable)
+	mask := rt.Mask(v, qTableWidgetItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTableWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTableWidgetItem
+}

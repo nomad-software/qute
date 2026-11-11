@@ -444,3 +444,35 @@ func NewQIntValidatorWith(v QIntValidatorSubclass, parent qtcore.QObjectLike) *Q
 	C.qute_QIntValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QIntValidator
 }
+
+// NewQIntValidatorWithBottomWith is NewQIntValidatorWithBottom for a Go subclass: it constructs a QIntValidator whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQIntValidatorWithBottomWith(v QIntValidatorSubclass, bottom int, top int, parent qtcore.QObjectLike) *QIntValidator {
+	rt.CheckThread("NewQIntValidatorWithBottomWith")
+	base := v.quteQIntValidatorBase()
+	if base.QIntValidator != nil {
+		panic("NewQIntValidatorWithBottomWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQIntValidatorWithBottomWith")
+	}
+	p := C.qute_QIntValidator_new_shim_1(C.int(bottom), C.int(top), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QIntValidator", mode)
+	base.QIntValidator = rt.View[QIntValidator](h, p)
+	id := h.SetSelf(v, qIntValidatorVTable)
+	mask := rt.Mask(v, qIntValidatorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QIntValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QIntValidator
+}

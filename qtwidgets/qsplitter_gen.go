@@ -1390,3 +1390,35 @@ func NewQSplitterWith(v QSplitterSubclass, parent QWidgetLike) *QSplitter {
 	C.qute_QSplitter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSplitter
 }
+
+// NewQSplitterWithOrientationWith is NewQSplitterWithOrientation for a Go subclass: it constructs a QSplitter whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSplitterWithOrientationWith(v QSplitterSubclass, orientation qtcore.Orientations, parent QWidgetLike) *QSplitter {
+	rt.CheckThread("NewQSplitterWithOrientationWith")
+	base := v.quteQSplitterBase()
+	if base.QSplitter != nil {
+		panic("NewQSplitterWithOrientationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQSplitterWithOrientationWith")
+	}
+	p := C.qute_QSplitter_new_shim_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSplitter", mode)
+	base.QSplitter = rt.View[QSplitter](h, p)
+	id := h.SetSelf(v, qSplitterVTable)
+	mask := rt.Mask(v, qSplitterVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSplitter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSplitter
+}

@@ -575,3 +575,37 @@ func NewQAudioSourceWith(v QAudioSourceSubclass, format *QAudioFormat, parent qt
 	C.qute_QAudioSource_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QAudioSource
 }
+
+// NewQAudioSourceWithAudioDeviceWith is NewQAudioSourceWithAudioDevice for a Go subclass: it constructs a QAudioSource whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQAudioSourceWithAudioDeviceWith(v QAudioSourceSubclass, audioDeviceInfo *QAudioDevice, format *QAudioFormat, parent qtcore.QObjectLike) *QAudioSource {
+	rt.CheckThread("NewQAudioSourceWithAudioDeviceWith")
+	base := v.quteQAudioSourceBase()
+	if base.QAudioSource != nil {
+		panic("NewQAudioSourceWithAudioDeviceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQAudioSourceWithAudioDeviceWith")
+	}
+	p := C.qute_QAudioSource_new_shim_1(rt.UseArg(unsafe.Pointer(audioDeviceInfo), "NewQAudioSourceWithAudioDeviceWith"), rt.UseArg(unsafe.Pointer(format), "NewQAudioSourceWithAudioDeviceWith"), parentPtr)
+	runtime.KeepAlive(audioDeviceInfo)
+	runtime.KeepAlive(format)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QAudioSource", mode)
+	base.QAudioSource = rt.View[QAudioSource](h, p)
+	id := h.SetSelf(v, qAudioSourceVTable)
+	mask := rt.Mask(v, qAudioSourceVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAudioSource_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAudioSource
+}

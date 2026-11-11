@@ -16,8 +16,8 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12093 |
-| of which Full forms (every argument, defaults included) | 709 |
+| Bound constructors, methods and functions | 12219 |
+| of which Full forms (every argument, defaults included) | 776 |
 | Plain-object results that depend on their receiver | 100 |
 | Skipped on purpose (with reasons below) | 836 |
 | Classes Go can subclass | 237 |
@@ -27,10 +27,12 @@ wants an array or also reads the value.
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
-| Ownership rules without a generated test | 5 |
+| Full forms not built (open) | 0 |
+| Full forms not built on purpose | 38 |
+| Ownership rules without a generated test | 4 |
 | Results whose death qute cannot see | 0 |
 
-5 item(s) open; see their sections below.
+4 item(s) open; see their sections below.
 
 ## Default ownership rules (0)
 
@@ -1445,6 +1447,93 @@ These bind once the generator learns the type. Counts by type:
 
 - `QAccessibleInterface * QWindow::accessibleRoot() const`: result: on purpose: the accessibility API is not bound
 
+## Full forms not built
+
+These methods are bound without their defaulted arguments, but their Full
+form, which takes every argument, cannot be built. Open ones need an `out` or
+`in-out` rule on a defaulted pointer (`bool *ok`), or type support; the others
+are left out on purpose (`no-full` in the overlay, or a type-wide reason).
+
+## Full forms not built: open (0)
+
+
+## Full forms not built on purpose (38)
+
+
+### QDir
+
+- `qsizetype QDir::count(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+- `bool QDir::mkdir(const QString & dirName, std::optional<QFile::Permissions> p = …) const`: on purpose: a std::optional permissions argument; set them with QFile.SetPermissions after making the folder
+- `bool QDir::mkpath(const QString & dirPath, std::optional<QFile::Permissions> p = …) const`: on purpose: a std::optional permissions argument; set them with QFile.SetPermissions after making the folders
+
+### QFile
+
+- `bool QFile::copy(const QString & newName, std::optional<QFileDevice::Permissions> perm = …)`: on purpose: a std::optional permissions argument; set them with SetPermissions after copying
+- `bool QFile::copy(const QString & fileName, const QString & newName, std::optional<QFileDevice::Permissions> perm = …)`: on purpose: a std::optional permissions argument; set them with SetPermissions after copying
+
+### QFontMetrics
+
+- `QRect QFontMetrics::boundingRect(const QRect & r, int flags, const QString & text, int tabstops = …, int * tabarray = …) const`: on purpose: tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead
+- `QSize QFontMetrics::size(int flags, const QString & str, int tabstops = …, int * tabarray = …) const`: on purpose: tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead
+
+### QFontMetricsF
+
+- `QRectF QFontMetricsF::boundingRect(const QRectF & r, int flags, const QString & string, int tabstops = …, int * tabarray = …) const`: on purpose: tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead
+- `QSizeF QFontMetricsF::size(int flags, const QString & str, int tabstops = …, int * tabarray = …) const`: on purpose: tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead
+
+### QGraphicsItem
+
+- `bool QGraphicsItem::isBlockedByModalPanel(QGraphicsItem ** blockingPanel = …) const`: on purpose: the panel comes back through a pointer to an object pointer, which out rules do not cover; use Panel and PanelModality of the items
+
+### QImage
+
+- `QImage::QImage(const uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: on purpose: C function pointer; a Go closure cannot become one
+- `QImage::QImage(const uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: on purpose: C function pointer; a Go closure cannot become one
+
+### QMetaType
+
+- `bool QMetaType::isValid(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+- `bool QMetaType::isRegistered(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+
+### QOpenGLTexture
+
+- `void QOpenGLTexture::setData(int mipLevel, int layer, CubeMapFace cubeFace, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int mipLevel, int layer, int layerCount, CubeMapFace cubeFace, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int mipLevel, int layer, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int mipLevel, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int xOffset, int yOffset, int zOffset, int width, int height, int depth, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int xOffset, int yOffset, int zOffset, int width, int height, int depth, int mipLevel, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int xOffset, int yOffset, int zOffset, int width, int height, int depth, int mipLevel, int layer, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int xOffset, int yOffset, int zOffset, int width, int height, int depth, int mipLevel, int layer, CubeMapFace cubeFace, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(int xOffset, int yOffset, int zOffset, int width, int height, int depth, int mipLevel, int layer, CubeMapFace cubeFace, int layerCount, PixelFormat sourceFormat, PixelType sourceType, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setCompressedData(int mipLevel, int layer, CubeMapFace cubeFace, int dataSize, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setCompressedData(int mipLevel, int layer, int layerCount, CubeMapFace cubeFace, int dataSize, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setCompressedData(int mipLevel, int layer, int dataSize, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setCompressedData(int mipLevel, int dataSize, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setCompressedData(int dataSize, const void * data, const QOpenGLPixelTransferOptions *const options = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+- `void QOpenGLTexture::setData(const QImage & image, MipMapGeneration genMipMaps = …)`: on purpose: the pixel transfer options (QOpenGLPixelTransferOptions) are not bound; Qt's defaults apply
+
+### QPagedPaintDevice
+
+- `bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)`: on purpose: printing page setup is not bound yet
+
+### QUuid
+
+- `bool QUuid::isNull(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+- `Variant QUuid::variant(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+- `Version QUuid::version(Qt::Disambiguated_t = …) const`: on purpose: a tag type that only picks an overload
+
+### QWebEnginePage
+
+- `void QWebEnginePage::printToPdf(const QString & filePath, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
+- `void QWebEnginePage::printToPdf(const std::function<void (const QByteArray &)> & resultCallback, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
+
+### QWebEngineView
+
+- `void QWebEngineView::printToPdf(const QString & filePath, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
+- `void QWebEngineView::printToPdf(const std::function<void (const QByteArray &)> & resultCallback, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
+
 ## Classes Go cannot subclass (31)
 
 Every other bound class with virtuals can be subclassed from Go: embed its
@@ -2202,11 +2291,10 @@ through named methods. Conversions to QVariant are covered by
 
 - templates: `QXmlStreamReader(const QByteArray &)`, `addData(const QByteArray &)`
 
-## Ownership rules without a generated test (5)
+## Ownership rules without a generated test (4)
 
 Add a `test:` snippet to the overlay entry to cover these.
 
-- `QEvent * QEvent::clone() const`: skipped in overlay: event objects cannot be constructed from Go
 - `QIconEngine * QIconEngine::clone() const`: skipped in overlay: QIconEngine is abstract, and a snippet cannot declare the override; covered by subclass_test.go
 - `void QSyntaxHighlighter::setCurrentBlockUserData(QTextBlockUserData * data)`: skipped in overlay: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go
 - `QGesture * QGestureRecognizer::create(QObject * target)`: skipped in overlay: QGestureRecognizer is abstract, and a snippet cannot declare the override; covered by subclass_test.go

@@ -511,7 +511,7 @@ func TestAnchoring(t *testing.T) {
 	if child.Pins() != 0 {
 		t.Fatalf("child anchored by its root is also pinned globally (%d)", child.Pins())
 	}
-	if _, ok := root.anchored[child]; !ok {
+	if _, ok := root.x().anchored[child]; !ok {
 		t.Fatal("root does not hold the child")
 	}
 
@@ -600,8 +600,8 @@ func TestCallbackSlots(t *testing.T) {
 	}
 	ReleaseCallback(id)
 	InvokeCallback(id, nil) // released: nothing runs
-	if ran != 1 || sender.Pins() != 0 || len(sender.callbacks) != 0 {
-		t.Fatalf("after release: ran %d, pins %d, %d closures", ran, sender.Pins(), len(sender.callbacks))
+	if ran != 1 || sender.Pins() != 0 || len(sender.x().callbacks) != 0 {
+		t.Fatalf("after release: ran %d, pins %d, %d closures", ran, sender.Pins(), len(sender.x().callbacks))
 	}
 	// std::function ids never collide with slot ids
 	fid := NewFunc(func(_, _ unsafe.Pointer) {})
@@ -618,15 +618,15 @@ func TestPlainKeeperReleaseFollowsOwnership(t *testing.T) {
 	owner := Wrap(fakePtr(1), "Keeper", KindPlain, TakeOwned, func(unsafe.Pointer) {})
 	kept := newPlain("Kept")
 	KeepArg(owner, "s", kept, false)
-	if owner.hasRelease {
+	if owner.x().hasRelease {
 		t.Fatal("an Owned keeper releases on collection; its free should")
 	}
 	owner.TransferToCpp()
-	if !owner.hasRelease {
+	if !owner.x().hasRelease {
 		t.Fatal("a Parented keeper has no release cleanup")
 	}
 	owner.TransferToGo()
-	if owner.hasRelease {
+	if owner.x().hasRelease {
 		t.Fatal("back to Owned, the release cleanup stayed")
 	}
 	owner.TransferToCpp()
@@ -756,7 +756,7 @@ func TestScopedArgumentEndsItsKeepers(t *testing.T) {
 	if !ended.Alive() || !borrowed.Alive() || !other.Alive() {
 		t.Errorf("ended %v, borrowed %v, other %v; want all alive", ended.Alive(), borrowed.Alive(), other.Alive())
 	}
-	if device.bound != nil || painter.scope != nil {
+	if device.x().bound != nil || painter.x().scope != nil {
 		t.Error("scope binding left behind")
 	}
 	if msg := deadMessage(guard, "Guard.Restore"); !strings.Contains(msg, "the Device argument it used expired") {
@@ -775,4 +775,105 @@ func TestTransferToSelf(t *testing.T) {
 		t.Errorf("layout passed to itself: %v, want Owned", lay.State())
 	}
 	lay.Delete("Layout.Delete")
+}
+
+// registerFakeQObject registers a QObject handle at key without the death
+// notice connection a real one gets (there is no Qt here).
+func registerFakeQObject(key unsafe.Pointer) *Handle {
+	h := newHandle(key, "QObject", KindQObject, Borrowed, nil)
+	regMu.Lock()
+	registry[key] = &regEntry{w: weak.Make(h), serial: h.serial, watched: true}
+	regMu.Unlock()
+	return h
+}
+
+// A QObject wrapped while Qt destroys it (the argument of its destroyed
+// signal) gets the handle it had, Dead, or a fresh Dead one, and nothing is
+// registered: a registered handle would never learn of its death, and would
+// be handed out for the next object at the same address.
+func TestWrapDyingQObject(t *testing.T) {
+	oldDying := dyingC
+	t.Cleanup(func() { dyingC = oldDying })
+	key := fakePtr(2)
+	h := registerFakeQObject(key)
+	Destroyed(key, "destroyed by Qt")
+	dyingC = func(p unsafe.Pointer) bool { return p == key }
+
+	if got := Wrap(key, "QObject", KindQObject, KeepOrBorrow, nil); got != h {
+		t.Fatal("the dying object got a new handle, not the one it had")
+	}
+	if h.State() != Dead {
+		t.Fatalf("handle of the dying object = %v, want Dead", h.State())
+	}
+	if Lookup(key) != nil {
+		t.Fatal("the dying object was registered")
+	}
+
+	// once the event loop runs again, no destructor is running: what is at
+	// the address now is another object, and a dying one there is new to Go
+	sweepDying()
+	fresh := Wrap(key, "QObject", KindQObject, KeepOrBorrow, nil)
+	if fresh == h || fresh.State() != Dead {
+		t.Fatalf("a dying object Go never had: %p (old %p), %v, want a fresh Dead handle", fresh, h, fresh.State())
+	}
+	if Lookup(key) != nil {
+		t.Fatal("the dying object was registered")
+	}
+
+	// a live object registered at the address forgets the dead one
+	dyingC = func(unsafe.Pointer) bool { return false }
+	regMu.Lock()
+	buryLocked(key, h)
+	regMu.Unlock()
+	dyingSweepPost.Store(false)
+	live := registerFakeQObject(key)
+	regMu.Lock()
+	delete(dying, key) // as Wrap does when it registers a new object
+	regMu.Unlock()
+	if Lookup(key) != live {
+		t.Fatal("the live object's handle is not the registered one")
+	}
+	regMu.Lock()
+	delete(registry, key)
+	regMu.Unlock()
+}
+
+// An inline value is a copy in Go memory: wrapping it copies the bytes, no
+// cleanup is attached, Delete only marks it Dead, and lists cross as a block
+// of the values, a nil element being a default one.
+func TestInlineValues(t *testing.T) {
+	RegisterClass("Inline8", KindValue, func(unsafe.Pointer) { t.Error("an inline value was deleted through C++") })
+	RegisterInline("Inline8", 8, func(p unsafe.Pointer) { *(*int64)(p) = -1 })
+	src := int64(42)
+	h := WrapClass(unsafe.Pointer(&src), "Inline8", CopyInline)
+	if !h.inline || h.State() != Owned || h.hasCleanupNow() {
+		t.Fatalf("inline handle: inline=%v state=%v cleanup=%v", h.inline, h.State(), h.hasCleanupNow())
+	}
+	src = 7
+	if *(*int64)(h.ptr) != 42 {
+		t.Fatal("the inline value is not a copy")
+	}
+	type wrapper struct{ Ref }
+	w := View[wrapper](h, unsafe.Pointer(&src))
+	if w.P != h.ptr {
+		t.Fatal("the wrapper points at the C++ object, not the Go copy")
+	}
+	block := InlineBlock("Inline8", "test", 2, func(i int) unsafe.Pointer {
+		if i == 0 {
+			return unsafe.Pointer(w)
+		}
+		return nil
+	}, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]int64, n/8))) })
+	if got := unsafe.Slice((*int64)(block), 2); got[0] != 42 || got[1] != -1 {
+		t.Fatalf("block = %v, want [42 -1]", got)
+	}
+	var out int64
+	CopyValueOut(unsafe.Pointer(&out), unsafe.Pointer(w), "Inline8", "test")
+	if out != 42 {
+		t.Fatalf("CopyValueOut wrote %d", out)
+	}
+	h.Delete("test")
+	if h.State() != Dead {
+		t.Fatalf("after Delete: %v", h.State())
+	}
 }

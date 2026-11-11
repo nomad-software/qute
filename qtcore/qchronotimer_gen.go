@@ -407,3 +407,35 @@ func NewQChronoTimerWith(v QChronoTimerSubclass, parent QObjectLike) *QChronoTim
 	C.qute_QChronoTimer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QChronoTimer
 }
+
+// NewQChronoTimerWithDurationWith is NewQChronoTimerWithDuration for a Go subclass: it constructs a QChronoTimer whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQChronoTimerWithDurationWith(v QChronoTimerSubclass, nsec time.Duration, parent QObjectLike) *QChronoTimer {
+	rt.CheckThread("NewQChronoTimerWithDurationWith")
+	base := v.quteQChronoTimerBase()
+	if base.QChronoTimer != nil {
+		panic("NewQChronoTimerWithDurationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQChronoTimerWithDurationWith")
+	}
+	p := C.qute_QChronoTimer_new_shim_1(C.int64_t(nsec), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QChronoTimer", mode)
+	base.QChronoTimer = rt.View[QChronoTimer](h, p)
+	id := h.SetSelf(v, qChronoTimerVTable)
+	mask := rt.Mask(v, qChronoTimerVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QChronoTimer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QChronoTimer
+}

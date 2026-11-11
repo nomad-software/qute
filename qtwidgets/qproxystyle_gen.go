@@ -920,3 +920,26 @@ func NewQProxyStyleWith(v QProxyStyleSubclass) *QProxyStyle {
 	C.qute_QProxyStyle_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QProxyStyle
 }
+
+// NewQProxyStyleWithKeyWith is NewQProxyStyleWithKey for a Go subclass: it constructs a QProxyStyle whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQProxyStyleWithKeyWith(v QProxyStyleSubclass, key string) *QProxyStyle {
+	rt.CheckThread("NewQProxyStyleWithKeyWith")
+	base := v.quteQProxyStyleBase()
+	if base.QProxyStyle != nil {
+		panic("NewQProxyStyleWithKeyWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QProxyStyle_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
+	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	base.QProxyStyle = rt.View[QProxyStyle](h, p)
+	id := h.SetSelf(v, qProxyStyleVTable)
+	mask := rt.Mask(v, qProxyStyleVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QProxyStyle_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QProxyStyle
+}

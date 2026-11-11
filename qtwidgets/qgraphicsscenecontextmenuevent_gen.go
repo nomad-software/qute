@@ -29,7 +29,7 @@ func (this *QGraphicsSceneContextMenuEvent) AsQGraphicsSceneContextMenuEvent() *
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneContextMenuEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneContextMenuEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneContextMenuEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneContextMenuEvent_delete(p) })
 }
 
 // QGraphicsSceneContextMenuEventFromPtr wraps an existing C++ QGraphicsSceneContextMenuEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,34 @@ func QGraphicsSceneContextMenuEventCast(e qtcore.QEventLike) *QGraphicsSceneCont
 	r := rt.View[QGraphicsSceneContextMenuEvent](rt.WrapClassFrom(p, "QGraphicsSceneContextMenuEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneContextMenuEvent wraps the QGraphicsSceneContextMenuEvent constructor.
+//
+//	C++: QGraphicsSceneContextMenuEvent::QGraphicsSceneContextMenuEvent(Type type = …)
+//
+// Arguments with C++ defaults are left at them; NewQGraphicsSceneContextMenuEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenecontextmenuevent.html#QGraphicsSceneContextMenuEvent
+func NewQGraphicsSceneContextMenuEvent() *QGraphicsSceneContextMenuEvent {
+	rt.CheckThread("NewQGraphicsSceneContextMenuEvent")
+	p := C.qute_QGraphicsSceneContextMenuEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneContextMenuEvent](h, p)
+}
+
+// NewQGraphicsSceneContextMenuEventFull wraps the QGraphicsSceneContextMenuEvent constructor.
+//
+//	C++: QGraphicsSceneContextMenuEvent::QGraphicsSceneContextMenuEvent(Type type = …)
+//
+// NewQGraphicsSceneContextMenuEventFull is NewQGraphicsSceneContextMenuEvent with every argument, including those NewQGraphicsSceneContextMenuEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenecontextmenuevent.html#QGraphicsSceneContextMenuEvent
+func NewQGraphicsSceneContextMenuEventFull(typeArg qtcore.QEventType) *QGraphicsSceneContextMenuEvent {
+	rt.CheckThread("NewQGraphicsSceneContextMenuEventFull")
+	p := C.qute_QGraphicsSceneContextMenuEvent_new_1(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneContextMenuEvent](h, p)
 }
 
 // Pos wraps QGraphicsSceneContextMenuEvent::pos.

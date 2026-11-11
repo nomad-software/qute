@@ -1056,3 +1056,35 @@ func NewQGraphicsEllipseItemWith(v QGraphicsEllipseItemSubclass, parent QGraphic
 	C.qute_QGraphicsEllipseItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsEllipseItem
 }
+
+// NewQGraphicsEllipseItemWithRectFWith is NewQGraphicsEllipseItemWithRectF for a Go subclass: it constructs a QGraphicsEllipseItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsEllipseItemWithRectFWith(v QGraphicsEllipseItemSubclass, rect qtcore.QRectF, parent QGraphicsItemLike) *QGraphicsEllipseItem {
+	rt.CheckThread("NewQGraphicsEllipseItemWithRectFWith")
+	base := v.quteQGraphicsEllipseItemBase()
+	if base.QGraphicsEllipseItem != nil {
+		panic("NewQGraphicsEllipseItemWithRectFWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsEllipseItemWithRectFWith")
+	}
+	p := C.qute_QGraphicsEllipseItem_new_shim_1(cQRectF(rect), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
+	base.QGraphicsEllipseItem = rt.View[QGraphicsEllipseItem](h, p)
+	id := h.SetSelf(v, qGraphicsEllipseItemVTable)
+	mask := rt.Mask(v, qGraphicsEllipseItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsEllipseItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsEllipseItem
+}

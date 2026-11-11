@@ -25,7 +25,7 @@ type QExposeEventLike interface{ AsQExposeEvent() *QExposeEvent }
 func (this *QExposeEvent) AsQExposeEvent() *QExposeEvent { return this }
 
 func init() {
-	rt.RegisterClass("QExposeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QExposeEvent_delete(p) })
+	rt.RegisterClass("QExposeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QExposeEvent_delete(p) })
 }
 
 // QExposeEventFromPtr wraps an existing C++ QExposeEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,17 @@ func QExposeEventCast(e qtcore.QEventLike) *QExposeEvent {
 	r := rt.View[QExposeEvent](rt.WrapClassFrom(p, "QExposeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQExposeEventWithRegion wraps the QExposeEvent constructor.
+//
+//	C++: QExposeEvent::QExposeEvent(const QRegion & m_region)
+//
+// Qt docs: https://doc.qt.io/qt-6/qexposeevent.html#QExposeEvent
+func NewQExposeEventWithRegion(m_region *QRegion) *QExposeEvent {
+	rt.CheckThread("NewQExposeEventWithRegion")
+	p := C.qute_QExposeEvent_new(rt.UseArg(unsafe.Pointer(m_region), "NewQExposeEventWithRegion"))
+	runtime.KeepAlive(m_region)
+	h := rt.WrapClass(p, "QExposeEvent", rt.NewOwned)
+	return rt.View[QExposeEvent](h, p)
 }

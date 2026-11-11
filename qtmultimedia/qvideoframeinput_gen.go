@@ -340,3 +340,36 @@ func NewQVideoFrameInputWith(v QVideoFrameInputSubclass, parent qtcore.QObjectLi
 	C.qute_QVideoFrameInput_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QVideoFrameInput
 }
+
+// NewQVideoFrameInputWithVideoFrameFormatWith is NewQVideoFrameInputWithVideoFrameFormat for a Go subclass: it constructs a QVideoFrameInput whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQVideoFrameInputWithVideoFrameFormatWith(v QVideoFrameInputSubclass, format *QVideoFrameFormat, parent qtcore.QObjectLike) *QVideoFrameInput {
+	rt.CheckThread("NewQVideoFrameInputWithVideoFrameFormatWith")
+	base := v.quteQVideoFrameInputBase()
+	if base.QVideoFrameInput != nil {
+		panic("NewQVideoFrameInputWithVideoFrameFormatWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQVideoFrameInputWithVideoFrameFormatWith")
+	}
+	p := C.qute_QVideoFrameInput_new_shim_1(rt.UseArg(unsafe.Pointer(format), "NewQVideoFrameInputWithVideoFrameFormatWith"), parentPtr)
+	runtime.KeepAlive(format)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	base.QVideoFrameInput = rt.View[QVideoFrameInput](h, p)
+	id := h.SetSelf(v, qVideoFrameInputVTable)
+	mask := rt.Mask(v, qVideoFrameInputVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QVideoFrameInput_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QVideoFrameInput
+}

@@ -573,3 +573,37 @@ func NewQAudioSinkWith(v QAudioSinkSubclass, format *QAudioFormat, parent qtcore
 	C.qute_QAudioSink_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QAudioSink
 }
+
+// NewQAudioSinkWithAudioDeviceWith is NewQAudioSinkWithAudioDevice for a Go subclass: it constructs a QAudioSink whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQAudioSinkWithAudioDeviceWith(v QAudioSinkSubclass, audioDeviceInfo *QAudioDevice, format *QAudioFormat, parent qtcore.QObjectLike) *QAudioSink {
+	rt.CheckThread("NewQAudioSinkWithAudioDeviceWith")
+	base := v.quteQAudioSinkBase()
+	if base.QAudioSink != nil {
+		panic("NewQAudioSinkWithAudioDeviceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQAudioSinkWithAudioDeviceWith")
+	}
+	p := C.qute_QAudioSink_new_shim_1(rt.UseArg(unsafe.Pointer(audioDeviceInfo), "NewQAudioSinkWithAudioDeviceWith"), rt.UseArg(unsafe.Pointer(format), "NewQAudioSinkWithAudioDeviceWith"), parentPtr)
+	runtime.KeepAlive(audioDeviceInfo)
+	runtime.KeepAlive(format)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QAudioSink", mode)
+	base.QAudioSink = rt.View[QAudioSink](h, p)
+	id := h.SetSelf(v, qAudioSinkVTable)
+	mask := rt.Mask(v, qAudioSinkVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QAudioSink_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QAudioSink
+}

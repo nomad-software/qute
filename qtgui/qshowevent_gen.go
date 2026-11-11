@@ -25,7 +25,7 @@ type QShowEventLike interface{ AsQShowEvent() *QShowEvent }
 func (this *QShowEvent) AsQShowEvent() *QShowEvent { return this }
 
 func init() {
-	rt.RegisterClass("QShowEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QShowEvent_delete(p) })
+	rt.RegisterClass("QShowEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QShowEvent_delete(p) })
 }
 
 // QShowEventFromPtr wraps an existing C++ QShowEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,16 @@ func QShowEventCast(e qtcore.QEventLike) *QShowEvent {
 	r := rt.View[QShowEvent](rt.WrapClassFrom(p, "QShowEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQShowEvent wraps the QShowEvent constructor.
+//
+//	C++: QShowEvent::QShowEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qshowevent.html#QShowEvent
+func NewQShowEvent() *QShowEvent {
+	rt.CheckThread("NewQShowEvent")
+	p := C.qute_QShowEvent_new()
+	h := rt.WrapClass(p, "QShowEvent", rt.NewOwned)
+	return rt.View[QShowEvent](h, p)
 }

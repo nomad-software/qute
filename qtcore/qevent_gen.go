@@ -24,7 +24,7 @@ type QEventLike interface{ AsQEvent() *QEvent }
 func (this *QEvent) AsQEvent() *QEvent { return this }
 
 func init() {
-	rt.RegisterClass("QEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QEvent_delete(p) })
+	rt.RegisterClass("QEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QEvent_delete(p) })
 }
 
 // QEventFromPtr wraps an existing C++ QEvent. This is an unsafe escape hatch: own says
@@ -86,6 +86,20 @@ func (this *QEvent) Unkeep() {
 	if this != nil {
 		this.quteRef.H.Unkeep()
 	}
+}
+
+// NewQEvent wraps the QEvent constructor.
+//
+//	C++: QEvent::QEvent(Type type)
+//
+// A custom event (a type from QEventRegisterEventType, or QEventUser and above) to send or post.
+//
+// Qt docs: https://doc.qt.io/qt-6/qevent.html#QEvent
+func NewQEvent(typeArg QEventType) *QEvent {
+	rt.CheckThread("NewQEvent")
+	p := C.qute_QEvent_new(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QEvent", rt.NewOwned)
+	return rt.View[QEvent](h, p)
 }
 
 // Type wraps QEvent::type.

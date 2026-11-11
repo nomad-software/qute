@@ -2352,3 +2352,35 @@ func NewQPlainTextEditWith(v QPlainTextEditSubclass, parent QWidgetLike) *QPlain
 	C.qute_QPlainTextEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QPlainTextEdit
 }
+
+// NewQPlainTextEditWithTextWith is NewQPlainTextEditWithText for a Go subclass: it constructs a QPlainTextEdit whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPlainTextEditWithTextWith(v QPlainTextEditSubclass, text string, parent QWidgetLike) *QPlainTextEdit {
+	rt.CheckThread("NewQPlainTextEditWithTextWith")
+	base := v.quteQPlainTextEditBase()
+	if base.QPlainTextEdit != nil {
+		panic("NewQPlainTextEditWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQPlainTextEditWithTextWith")
+	}
+	p := C.qute_QPlainTextEdit_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QPlainTextEdit", mode)
+	base.QPlainTextEdit = rt.View[QPlainTextEdit](h, p)
+	id := h.SetSelf(v, qPlainTextEditVTable)
+	mask := rt.Mask(v, qPlainTextEditVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPlainTextEdit_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPlainTextEdit
+}

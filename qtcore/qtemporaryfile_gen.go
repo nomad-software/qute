@@ -685,3 +685,58 @@ func NewQTemporaryFileWith(v QTemporaryFileSubclass, parent QObjectLike) *QTempo
 	C.qute_QTemporaryFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QTemporaryFile
 }
+
+// NewQTemporaryFileWithTemplateNameWith is NewQTemporaryFileWithTemplateName for a Go subclass: it constructs a QTemporaryFile whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTemporaryFileWithTemplateNameWith(v QTemporaryFileSubclass, templateName string) *QTemporaryFile {
+	rt.CheckThread("NewQTemporaryFileWithTemplateNameWith")
+	base := v.quteQTemporaryFileBase()
+	if base.QTemporaryFile != nil {
+		panic("NewQTemporaryFileWithTemplateNameWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QTemporaryFile_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(templateName))), C.ptrdiff_t(len(templateName)))
+	h := rt.WrapClass(p, "QTemporaryFile", rt.NewOwned)
+	base.QTemporaryFile = rt.View[QTemporaryFile](h, p)
+	id := h.SetSelf(v, qTemporaryFileVTable)
+	mask := rt.Mask(v, qTemporaryFileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTemporaryFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTemporaryFile
+}
+
+// NewQTemporaryFileWithTemplateNameObjectWith is NewQTemporaryFileWithTemplateNameObject for a Go subclass: it constructs a QTemporaryFile whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQTemporaryFileWithTemplateNameObjectWith(v QTemporaryFileSubclass, templateName string, parent QObjectLike) *QTemporaryFile {
+	rt.CheckThread("NewQTemporaryFileWithTemplateNameObjectWith")
+	base := v.quteQTemporaryFileBase()
+	if base.QTemporaryFile != nil {
+		panic("NewQTemporaryFileWithTemplateNameObjectWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQTemporaryFileWithTemplateNameObjectWith")
+	}
+	p := C.qute_QTemporaryFile_new_shim_2((*C.char)(unsafe.Pointer(unsafe.StringData(templateName))), C.ptrdiff_t(len(templateName)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QTemporaryFile", mode)
+	base.QTemporaryFile = rt.View[QTemporaryFile](h, p)
+	id := h.SetSelf(v, qTemporaryFileVTable)
+	mask := rt.Mask(v, qTemporaryFileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QTemporaryFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QTemporaryFile
+}

@@ -1366,3 +1366,99 @@ func NewQDialogButtonBoxWith(v QDialogButtonBoxSubclass, parent QWidgetLike) *QD
 	C.qute_QDialogButtonBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QDialogButtonBox
 }
+
+// NewQDialogButtonBoxWithOrientationWith is NewQDialogButtonBoxWithOrientation for a Go subclass: it constructs a QDialogButtonBox whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDialogButtonBoxWithOrientationWith(v QDialogButtonBoxSubclass, orientation qtcore.Orientations, parent QWidgetLike) *QDialogButtonBox {
+	rt.CheckThread("NewQDialogButtonBoxWithOrientationWith")
+	base := v.quteQDialogButtonBoxBase()
+	if base.QDialogButtonBox != nil {
+		panic("NewQDialogButtonBoxWithOrientationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithOrientationWith")
+	}
+	p := C.qute_QDialogButtonBox_new_shim_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
+	id := h.SetSelf(v, qDialogButtonBoxVTable)
+	mask := rt.Mask(v, qDialogButtonBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDialogButtonBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDialogButtonBox
+}
+
+// NewQDialogButtonBoxWithStandardButtonWith is NewQDialogButtonBoxWithStandardButton for a Go subclass: it constructs a QDialogButtonBox whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDialogButtonBoxWithStandardButtonWith(v QDialogButtonBoxSubclass, buttons QDialogButtonBoxStandardButtons, parent QWidgetLike) *QDialogButtonBox {
+	rt.CheckThread("NewQDialogButtonBoxWithStandardButtonWith")
+	base := v.quteQDialogButtonBoxBase()
+	if base.QDialogButtonBox != nil {
+		panic("NewQDialogButtonBoxWithStandardButtonWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithStandardButtonWith")
+	}
+	p := C.qute_QDialogButtonBox_new_shim_2(C.int64_t(buttons), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
+	id := h.SetSelf(v, qDialogButtonBoxVTable)
+	mask := rt.Mask(v, qDialogButtonBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDialogButtonBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDialogButtonBox
+}
+
+// NewQDialogButtonBoxWithButtonsOrientedWith is NewQDialogButtonBoxWithButtonsOriented for a Go subclass: it constructs a QDialogButtonBox whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQDialogButtonBoxWithButtonsOrientedWith(v QDialogButtonBoxSubclass, buttons QDialogButtonBoxStandardButtons, orientation qtcore.Orientations, parent QWidgetLike) *QDialogButtonBox {
+	rt.CheckThread("NewQDialogButtonBoxWithButtonsOrientedWith")
+	base := v.quteQDialogButtonBoxBase()
+	if base.QDialogButtonBox != nil {
+		panic("NewQDialogButtonBoxWithButtonsOrientedWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQDialogButtonBoxWithButtonsOrientedWith")
+	}
+	p := C.qute_QDialogButtonBox_new_shim_3(C.int64_t(buttons), C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
+	id := h.SetSelf(v, qDialogButtonBoxVTable)
+	mask := rt.Mask(v, qDialogButtonBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QDialogButtonBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QDialogButtonBox
+}

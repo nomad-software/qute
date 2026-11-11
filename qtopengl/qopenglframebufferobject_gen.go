@@ -625,3 +625,50 @@ func NewQOpenGLFramebufferObjectWith(v QOpenGLFramebufferObjectSubclass, size qt
 	C.qute_QOpenGLFramebufferObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QOpenGLFramebufferObject
 }
+
+// NewQOpenGLFramebufferObjectWithSizeAttachmentWith is NewQOpenGLFramebufferObjectWithSizeAttachment for a Go subclass: it constructs a QOpenGLFramebufferObject whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLFramebufferObjectWithSizeAttachmentWith(v QOpenGLFramebufferObjectSubclass, size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment) *QOpenGLFramebufferObject {
+	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachmentWith")
+	base := v.quteQOpenGLFramebufferObjectBase()
+	if base.QOpenGLFramebufferObject != nil {
+		panic("NewQOpenGLFramebufferObjectWithSizeAttachmentWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QOpenGLFramebufferObject_new_shim_1(cQSize(size), C.int64_t(attachment))
+	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
+	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
+	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLFramebufferObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLFramebufferObject
+}
+
+// NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith is NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat for a Go subclass: it constructs a QOpenGLFramebufferObject whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith(v QOpenGLFramebufferObjectSubclass, size qtcore.QSize, format *QOpenGLFramebufferObjectFormat) *QOpenGLFramebufferObject {
+	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith")
+	base := v.quteQOpenGLFramebufferObjectBase()
+	if base.QOpenGLFramebufferObject != nil {
+		panic("NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QOpenGLFramebufferObject_new_shim_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith"))
+	runtime.KeepAlive(format)
+	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
+	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
+	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QOpenGLFramebufferObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QOpenGLFramebufferObject
+}

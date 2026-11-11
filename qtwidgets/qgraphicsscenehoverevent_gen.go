@@ -29,7 +29,7 @@ func (this *QGraphicsSceneHoverEvent) AsQGraphicsSceneHoverEvent() *QGraphicsSce
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneHoverEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneHoverEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneHoverEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneHoverEvent_delete(p) })
 }
 
 // QGraphicsSceneHoverEventFromPtr wraps an existing C++ QGraphicsSceneHoverEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,34 @@ func QGraphicsSceneHoverEventCast(e qtcore.QEventLike) *QGraphicsSceneHoverEvent
 	r := rt.View[QGraphicsSceneHoverEvent](rt.WrapClassFrom(p, "QGraphicsSceneHoverEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneHoverEvent wraps the QGraphicsSceneHoverEvent constructor.
+//
+//	C++: QGraphicsSceneHoverEvent::QGraphicsSceneHoverEvent(Type type = …)
+//
+// Arguments with C++ defaults are left at them; NewQGraphicsSceneHoverEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenehoverevent.html#QGraphicsSceneHoverEvent
+func NewQGraphicsSceneHoverEvent() *QGraphicsSceneHoverEvent {
+	rt.CheckThread("NewQGraphicsSceneHoverEvent")
+	p := C.qute_QGraphicsSceneHoverEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneHoverEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneHoverEvent](h, p)
+}
+
+// NewQGraphicsSceneHoverEventFull wraps the QGraphicsSceneHoverEvent constructor.
+//
+//	C++: QGraphicsSceneHoverEvent::QGraphicsSceneHoverEvent(Type type = …)
+//
+// NewQGraphicsSceneHoverEventFull is NewQGraphicsSceneHoverEvent with every argument, including those NewQGraphicsSceneHoverEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenehoverevent.html#QGraphicsSceneHoverEvent
+func NewQGraphicsSceneHoverEventFull(typeArg qtcore.QEventType) *QGraphicsSceneHoverEvent {
+	rt.CheckThread("NewQGraphicsSceneHoverEventFull")
+	p := C.qute_QGraphicsSceneHoverEvent_new_1(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneHoverEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneHoverEvent](h, p)
 }
 
 // Pos wraps QGraphicsSceneHoverEvent::pos.

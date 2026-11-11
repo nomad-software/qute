@@ -710,6 +710,8 @@ func (this *QVariant) Clear() {
 //
 //	C++: int QVariant::toInt(bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToIntFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toInt
 func (this *QVariant) ToInt() int {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToInt")
@@ -721,6 +723,8 @@ func (this *QVariant) ToInt() int {
 // ToUInt wraps QVariant::toUInt.
 //
 //	C++: uint QVariant::toUInt(bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToUIntFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toUInt
 func (this *QVariant) ToUInt() uint {
@@ -734,6 +738,8 @@ func (this *QVariant) ToUInt() uint {
 //
 //	C++: qlonglong QVariant::toLongLong(bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToLongLongFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toLongLong
 func (this *QVariant) ToLongLong() int64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLongLong")
@@ -745,6 +751,8 @@ func (this *QVariant) ToLongLong() int64 {
 // ToULongLong wraps QVariant::toULongLong.
 //
 //	C++: qulonglong QVariant::toULongLong(bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToULongLongFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toULongLong
 func (this *QVariant) ToULongLong() uint64 {
@@ -770,6 +778,8 @@ func (this *QVariant) ToBool() bool {
 //
 //	C++: double QVariant::toDouble(bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToDoubleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toDouble
 func (this *QVariant) ToDouble() float64 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToDouble")
@@ -782,6 +792,8 @@ func (this *QVariant) ToDouble() float64 {
 //
 //	C++: float QVariant::toFloat(bool * ok = …) const
 //
+// Arguments with C++ defaults are left at them; ToFloatFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toFloat
 func (this *QVariant) ToFloat() float32 {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.ToFloat")
@@ -793,6 +805,8 @@ func (this *QVariant) ToFloat() float32 {
 // ToReal wraps QVariant::toReal.
 //
 //	C++: qreal QVariant::toReal(bool * ok = …) const
+//
+// Arguments with C++ defaults are left at them; ToRealFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qvariant.html#toReal
 func (this *QVariant) ToReal() float64 {
@@ -1268,6 +1282,111 @@ func (this *QVariant) SetValue(avalue *QVariant) {
 	C.qute_QVariant_setValue(self, rt.UseArg(unsafe.Pointer(avalue), "QVariant.SetValue"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(avalue)
+}
+
+// ToIntFull wraps QVariant::toInt.
+//
+//	C++: int QVariant::toInt(bool * ok = …) const
+//
+// ToIntFull is ToInt with every argument, including those ToInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toInt
+func (this *QVariant) ToIntFull() (int, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToIntFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toInt_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return int(r), bool(okOut)
+}
+
+// ToUIntFull wraps QVariant::toUInt.
+//
+//	C++: uint QVariant::toUInt(bool * ok = …) const
+//
+// ToUIntFull is ToUInt with every argument, including those ToUInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toUInt
+func (this *QVariant) ToUIntFull() (uint, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToUIntFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toUInt_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return uint(r), bool(okOut)
+}
+
+// ToLongLongFull wraps QVariant::toLongLong.
+//
+//	C++: qlonglong QVariant::toLongLong(bool * ok = …) const
+//
+// ToLongLongFull is ToLongLong with every argument, including those ToLongLong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toLongLong
+func (this *QVariant) ToLongLongFull() (int64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToLongLongFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toLongLong_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return int64(r), bool(okOut)
+}
+
+// ToULongLongFull wraps QVariant::toULongLong.
+//
+//	C++: qulonglong QVariant::toULongLong(bool * ok = …) const
+//
+// ToULongLongFull is ToULongLong with every argument, including those ToULongLong leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toULongLong
+func (this *QVariant) ToULongLongFull() (uint64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToULongLongFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toULongLong_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return uint64(r), bool(okOut)
+}
+
+// ToDoubleFull wraps QVariant::toDouble.
+//
+//	C++: double QVariant::toDouble(bool * ok = …) const
+//
+// ToDoubleFull is ToDouble with every argument, including those ToDouble leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toDouble
+func (this *QVariant) ToDoubleFull() (float64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToDoubleFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toDouble_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return float64(r), bool(okOut)
+}
+
+// ToFloatFull wraps QVariant::toFloat.
+//
+//	C++: float QVariant::toFloat(bool * ok = …) const
+//
+// ToFloatFull is ToFloat with every argument, including those ToFloat leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toFloat
+func (this *QVariant) ToFloatFull() (float32, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToFloatFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toFloat_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return float32(r), bool(okOut)
+}
+
+// ToRealFull wraps QVariant::toReal.
+//
+//	C++: qreal QVariant::toReal(bool * ok = …) const
+//
+// ToRealFull is ToReal with every argument, including those ToReal leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvariant.html#toReal
+func (this *QVariant) ToRealFull() (float64, bool) {
+	self := rt.Use(unsafe.Pointer(this), "QVariant.ToRealFull")
+	var okOut C.bool
+	r := C.qute_QVariant_toReal_1(self, &okOut)
+	runtime.KeepAlive(this)
+	return float64(r), bool(okOut)
 }
 
 // QVariantFromMetaType wraps QVariant::fromMetaType.

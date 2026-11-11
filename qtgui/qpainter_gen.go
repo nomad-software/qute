@@ -1627,6 +1627,8 @@ func (this *QPainter) DrawText(pArg qtcore.QPoint, sArg string) {
 //
 //	C++: void QPainter::drawText(const QRectF & r, int flags, const QString & text, QRectF * br = …)
 //
+// Arguments with C++ defaults are left at them; DrawTextInFFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawText
 func (this *QPainter) DrawTextInF(rArg qtcore.QRectF, flags int, text string) {
 	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextInF")
@@ -1637,6 +1639,8 @@ func (this *QPainter) DrawTextInF(rArg qtcore.QRectF, flags int, text string) {
 // DrawTextIn wraps QPainter::drawText.
 //
 //	C++: void QPainter::drawText(const QRect & r, int flags, const QString & text, QRect * br = …)
+//
+// Arguments with C++ defaults are left at them; DrawTextInFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawText
 func (this *QPainter) DrawTextIn(rArg qtcore.QRect, flags int, text string) {
@@ -2092,6 +2096,36 @@ func (this *QPainter) DrawImagePartFull(targetRect qtcore.QRect, image *QImage, 
 	C.qute_QPainter_drawImage_7(self, cQRect(targetRect), rt.UseArg(unsafe.Pointer(image), "QPainter.DrawImagePartFull"), cQRect(sourceRect), C.int64_t(flags))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(image)
+}
+
+// DrawTextInFFull wraps QPainter::drawText.
+//
+//	C++: void QPainter::drawText(const QRectF & r, int flags, const QString & text, QRectF * br = …)
+//
+// DrawTextInFFull is DrawTextInF with every argument, including those DrawTextInF leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawText
+func (this *QPainter) DrawTextInFFull(rArg qtcore.QRectF, flags int, text string) qtcore.QRectF {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextInFFull")
+	var brOut C.qute_rectf
+	C.qute_QPainter_drawText_4(self, cQRectF(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), &brOut)
+	runtime.KeepAlive(this)
+	return goQRectF(brOut)
+}
+
+// DrawTextInFull wraps QPainter::drawText.
+//
+//	C++: void QPainter::drawText(const QRect & r, int flags, const QString & text, QRect * br = …)
+//
+// DrawTextInFull is DrawTextIn with every argument, including those DrawTextIn leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpainter.html#drawText
+func (this *QPainter) DrawTextInFull(rArg qtcore.QRect, flags int, text string) qtcore.QRect {
+	self := rt.Use(unsafe.Pointer(this), "QPainter.DrawTextInFull")
+	var brOut C.qute_rect
+	C.qute_QPainter_drawText_5(self, cQRect(rArg), C.int(flags), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), &brOut)
+	runtime.KeepAlive(this)
+	return goQRect(brOut)
 }
 
 // BoundingRectTextFFull wraps QPainter::boundingRect.

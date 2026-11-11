@@ -342,3 +342,35 @@ func NewQPauseAnimationWith(v QPauseAnimationSubclass, parent QObjectLike) *QPau
 	C.qute_QPauseAnimation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QPauseAnimation
 }
+
+// NewQPauseAnimationWithMsecsWith is NewQPauseAnimationWithMsecs for a Go subclass: it constructs a QPauseAnimation whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQPauseAnimationWithMsecsWith(v QPauseAnimationSubclass, msecs int, parent QObjectLike) *QPauseAnimation {
+	rt.CheckThread("NewQPauseAnimationWithMsecsWith")
+	base := v.quteQPauseAnimationBase()
+	if base.QPauseAnimation != nil {
+		panic("NewQPauseAnimationWithMsecsWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQPauseAnimationWithMsecsWith")
+	}
+	p := C.qute_QPauseAnimation_new_shim_1(C.int(msecs), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QPauseAnimation", mode)
+	base.QPauseAnimation = rt.View[QPauseAnimation](h, p)
+	id := h.SetSelf(v, qPauseAnimationVTable)
+	mask := rt.Mask(v, qPauseAnimationVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QPauseAnimation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QPauseAnimation
+}

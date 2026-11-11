@@ -1529,3 +1529,35 @@ func NewQToolBarWith(v QToolBarSubclass, parent QWidgetLike) *QToolBar {
 	C.qute_QToolBar_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QToolBar
 }
+
+// NewQToolBarWithTitleWith is NewQToolBarWithTitle for a Go subclass: it constructs a QToolBar whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQToolBarWithTitleWith(v QToolBarSubclass, title string, parent QWidgetLike) *QToolBar {
+	rt.CheckThread("NewQToolBarWithTitleWith")
+	base := v.quteQToolBarBase()
+	if base.QToolBar != nil {
+		panic("NewQToolBarWithTitleWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQToolBarWithTitleWith")
+	}
+	p := C.qute_QToolBar_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QToolBar", mode)
+	base.QToolBar = rt.View[QToolBar](h, p)
+	id := h.SetSelf(v, qToolBarVTable)
+	mask := rt.Mask(v, qToolBarVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QToolBar_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QToolBar
+}

@@ -127,8 +127,8 @@ QPainter:
   drawText(const QPoint&, const QString&): { name: DrawText }
   drawText(int, int, const QString&): { skip: "use DrawText" }
   drawText(const QPointF&, const QString&, int, int): { skip: "internal overload" }
-  drawText(const QRectF&, int, const QString&, QRectF*): { name: DrawTextInF }
-  drawText(const QRect&, int, const QString&, QRect*): { name: DrawTextIn }
+  drawText(const QRectF&, int, const QString&, QRectF*): { name: DrawTextInF, args: { br: out } }
+  drawText(const QRect&, int, const QString&, QRect*): { name: DrawTextIn, args: { br: out } }
   drawText(int, int, int, int, int, const QString&, QRect*): { skip: "use DrawTextIn" }
   drawText(const QRectF&, const QString&, const QTextOption&): { skip: "QTextOption is not bound" }
   boundingRect(const QRectF&, int, const QString&): { name: BoundingRectF }
@@ -411,12 +411,13 @@ QGlyphRun:
   setRawData: { skip: "on purpose: low-level font internals" }
 
 QFontMetrics:
+  size: { no-full: "tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead" }
   boundingRect(const QString&, const QTextOption&): { name: BoundingRectWithOption }
   QFontMetrics(const QFont&, const QPaintDevice*): { name: NewQFontMetricsFor, reviewed: true }
   horizontalAdvance(QChar): { name: HorizontalAdvanceChar }
   boundingRect(QChar): { name: BoundingRectChar }
   boundingRect(const QString&): { name: BoundingRect }
-  boundingRect(const QRect&, int, const QString&, int, int*): { name: BoundingRectIn }
+  boundingRect(const QRect&, int, const QString&, int, int*): { name: BoundingRectIn, no-full: "tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead" }
   boundingRect(int, int, int, int, int, const QString&, int, int*): { skip: "use BoundingRectIn" }
 
 QCursor:
@@ -431,10 +432,12 @@ QScreen:
   virtualSiblingAt: { return: borrowed }
 
 QDropEvent:
+  QDropEvent: { args: { data: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   source: { return: borrowed }
   mimeData: { return: borrowed }
 
 QPointerEvent:
+  QPointerEvent: { args: { dev: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   pointingDevice: { return: borrowed }
   passiveGrabbers: { return: borrowed }
   exclusiveGrabber: { return: borrowed }
@@ -491,6 +494,7 @@ QRegion:
   intersects(const QRect&): { name: IntersectsRect }
 
 QTransform:
+  inverted: { args: { invertible: out } }
   QTransform(Qt::Initialization): { skip: "internal" }
   QTransform(): { name: NewQTransform }
   QTransform(qreal, qreal, qreal, qreal, qreal, qreal): { name: NewQTransformAffine }
@@ -713,6 +717,7 @@ QInputDevice:
   primaryKeyboard: { return: borrowed }
 
 QInputEvent:
+  QInputEvent: { args: { m_dev: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   device: { return: borrowed }
 
 QPdfWriter:
@@ -838,13 +843,16 @@ QValidator:
   fixup: { args: { 0: in-out } }
 
 QMatrix4x4:
+  inverted: { args: { invertible: out } }
   copyDataTo: { skip: "on purpose: Qt writes 16 floats through the pointer; use CopyDataTo in qmatrix4x4_manual.go" }
 
 QActionEvent:
+  QActionEvent: { args: { action: keep:action, before: keep:before }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   before: { return: borrowed }
   action: { return: borrowed }
 
 QTouchEvent:
+  QTouchEvent: { args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   target: { return: borrowed }
 
 QInputMethodEventAttribute:
@@ -871,9 +879,23 @@ QSyntaxHighlighter:
     test: "skip: only valid inside highlightBlock, which a snippet cannot override; covered by subclass_test.go"
 
 QChildWindowEvent:
+  QChildWindowEvent: { args: { childWindow: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
   child: { return: borrowed }
 
 QScreenOrientationChangeEvent:
+  QScreenOrientationChangeEvent:
+    args: { screen: keep }
+    doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives."
+    test: |
+      s := qtgui.QGuiApplicationPrimaryScreen()
+      e := qtgui.NewQScreenOrientationChangeEventWithScreen(s, qtcore.LandscapeOrientation)
+      if !rt.KeepsArg(unsafe.Pointer(e), unsafe.Pointer(s)) {
+      	t.Error("screen: not kept by the event")
+      }
+      if e.Screen() != s {
+      	t.Error("Screen() is not the screen given")
+      }
+      e.Delete()
   screen: { return: borrowed }
 
 QDesktopServices:
@@ -893,6 +915,8 @@ QFileSystemModel:
   iconProvider: { return: borrowed }
 
 QFontMetricsF:
+  size: { no-full: "tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead" }
+  boundingRect(const QRectF&, int, const QString&, int, int*): { no-full: "tabArray is an input array of tab stops, which Qt reads up to a zero; pass tabStops instead" }
   QFontMetricsF(const QFont&, const QPaintDevice*): { reviewed: true } # the device is read during the call only
 
 QIconEngine:
@@ -933,3 +957,37 @@ QUndoStack:
   createUndoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
   createRedoAction: { args: { parent: borrowed }, return: transfer-to-go, doc: "The action is a child of parent; with a nil parent the caller owns it." }
   command: { return: borrowed }
+
+QDragEnterEvent:
+  QDragEnterEvent: { args: { data: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QDragMoveEvent:
+  QDragMoveEvent: { args: { data: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QEnterEvent:
+  QEnterEvent: { name: NewQEnterEvent, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QHoverEvent:
+  QHoverEvent: { name: NewQHoverEvent, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QKeyEvent:
+  "QKeyEvent(Type, int, Qt::KeyboardModifiers, const QString&, bool, quint16)": { name: NewQKeyEvent }
+  "QKeyEvent(Type, int, Qt::KeyboardModifiers, quint32, quint32, quint32, const QString&, bool, quint16, const QInputDevice*)": { name: NewQKeyEventNative, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QMouseEvent:
+  "QMouseEvent(Type, const QPointF&, const QPointF&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers, const QPointingDevice*)": { name: NewQMouseEvent }
+  "QMouseEvent(Type, const QPointF&, const QPointF&, const QPointF&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers, const QPointingDevice*)": { name: NewQMouseEventWithScenePos }
+  "QMouseEvent(Type, const QPointF&, const QPointF&, const QPointF&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers, Qt::MouseEventSource, const QPointingDevice*)": { name: NewQMouseEventWithSource }
+  QMouseEvent: { args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QNativeGestureEvent:
+  QNativeGestureEvent: { args: { dev: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QShortcutEvent:
+  "QShortcutEvent(const QKeySequence&, const QShortcut*, bool)": { name: NewQShortcutEventForShortcut, args: { shortcut: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QTabletEvent:
+  QTabletEvent: { args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+
+QWheelEvent:
+  QWheelEvent: { name: NewQWheelEvent, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }

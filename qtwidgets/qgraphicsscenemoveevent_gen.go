@@ -29,7 +29,7 @@ func (this *QGraphicsSceneMoveEvent) AsQGraphicsSceneMoveEvent() *QGraphicsScene
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneMoveEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneMoveEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneMoveEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneMoveEvent_delete(p) })
 }
 
 // QGraphicsSceneMoveEventFromPtr wraps an existing C++ QGraphicsSceneMoveEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,18 @@ func QGraphicsSceneMoveEventCast(e qtcore.QEventLike) *QGraphicsSceneMoveEvent {
 	r := rt.View[QGraphicsSceneMoveEvent](rt.WrapClassFrom(p, "QGraphicsSceneMoveEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneMoveEvent wraps the QGraphicsSceneMoveEvent constructor.
+//
+//	C++: QGraphicsSceneMoveEvent::QGraphicsSceneMoveEvent()
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenemoveevent.html#QGraphicsSceneMoveEvent
+func NewQGraphicsSceneMoveEvent() *QGraphicsSceneMoveEvent {
+	rt.CheckThread("NewQGraphicsSceneMoveEvent")
+	p := C.qute_QGraphicsSceneMoveEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneMoveEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneMoveEvent](h, p)
 }
 
 // OldPos wraps QGraphicsSceneMoveEvent::oldPos.

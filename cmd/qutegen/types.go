@@ -138,6 +138,7 @@ var deliberateBases = map[string]string{
 	"QRhi":                        "Qt's rendering hardware interface is not bound",
 	"QAbstractVideoBuffer":        "custom video buffers need C++ subclassing",
 	"QRawFont":                    "low-level font internals",
+	"Qt::Disambiguated_t":         "a tag type that only picks an overload",
 	"QFontVariableAxis":           "low-level font internals",
 	"QTextLayout":                 "low-level text layout; use QTextDocument and QTextCursor",
 	"QTextLayout::FormatRange":    "low-level text layout; use QTextDocument and QTextCursor",
@@ -706,6 +707,12 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			[]string{fmt.Sprintf("(*C.char)(unsafe.Pointer(unsafe.SliceData(%s)))", d), fmt.Sprintf("(*C.ptrdiff_t)(unsafe.SliceData(%s))", l), fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
 	case kList:
 		tmp := v + "C"
+		if inlineVal(c.elem) {
+			// one block of the values in Go memory, which holds no pointers
+			return []string{fmt.Sprintf("%s := rt.InlineBlock(%q, %q, len(%s), func(i int) unsafe.Pointer { return unsafe.Pointer(%s[i]) }, func(n int) unsafe.Pointer { return unsafe.Pointer(unsafe.SliceData(make([]uint64, (n+7)/8))) })",
+					tmp, c.elem.cls.Name, method, v, v)},
+				[]string{tmp, fmt.Sprintf("C.ptrdiff_t(len(%s))", v)}
+		}
 		et := g.cgoType(c.elem)
 		var conv string
 		switch c.elem.k {
@@ -781,7 +788,8 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 	case kFunc:
 		id := v + "ID"
 		var b strings.Builder
-		fmt.Fprintf(&b, "%s := rt.NewFunc(func(args, ret unsafe.Pointer) {\n", id)
+		// a nil func is an empty std::function, which Qt checks for
+		fmt.Fprintf(&b, "var %s uintptr\n\tif %s != nil {\n\t%s = rt.NewFunc(func(args, ret unsafe.Pointer) {\n", id, v, id)
 		var names []string
 		if len(c.fparams) > 0 {
 			fmt.Fprintf(&b, "\t\ta := unsafe.Slice((*unsafe.Pointer)(args), %d)\n", len(c.fparams))
@@ -800,7 +808,7 @@ func (g *Gen) goArg(c *conv, v, method string, ctx *Module) (pre []string, args 
 			ex, _ := g.goVirtRet(c.elem, "r", method, ctx)
 			fmt.Fprintf(&b, "\t\tr := %s\n\t\t*(*%s)(ret) = %s\n", call, g.cgoType(c.elem), ex)
 		}
-		b.WriteString("\t})")
+		b.WriteString("\t})\n\t}")
 		return []string{b.String()}, []string{fmt.Sprintf("C.uintptr_t(%s)", id)}
 	}
 	panic("goArg")
@@ -895,6 +903,11 @@ func (g *Gen) goVirtRet(c *conv, v, method string, ctx *Module) (string, bool) {
 		_, a := g.goArg(c, v, method, ctx)
 		return a[0], true
 	case kList:
+		if inlineVal(c.elem) {
+			// a malloc'd block of the values the shim copies and frees
+			return fmt.Sprintf("C.qute_list{data: rt.InlineBlock(%q, %q, len(%s), func(i int) unsafe.Pointer { return unsafe.Pointer(%s[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(%s))}",
+				c.elem.cls.Name, method, v, v, v), true
+		}
 		// a malloc'd array the shim copies into a QList and frees
 		return fmt.Sprintf("quteCList(len(%s), func(d []%s) {\n\tfor i, e := range %s {\n\t\td[i] = %s\n\t}\n})",
 			v, g.cgoType(c.elem), v, g.elemArg(c.elem, "e", method, ctx)), true
@@ -997,15 +1010,18 @@ func (g *Gen) cppArg(c *conv, n string) string {
 			}
 			body = fmt.Sprintf("%s %s r%s; qute_call(s->id, %s, &r); return %s;", pre, cType(c.elem), init, args, g.cppVirtRet(c.elem, "r"))
 		}
-		return fmt.Sprintf("%s([s = std::make_shared<GoSlot>(%s)](%s) -> %s { %s })", c.base, n, strings.Join(decl, ", "), c.elem.cpp, body)
+		// id 0 is a nil Go func: an empty std::function
+		return fmt.Sprintf("(%s ? %s([s = std::make_shared<GoSlot>(%s)](%s) -> %s { %s }) : %s())", n, c.base, n, strings.Join(decl, ", "), c.elem.cpp, body, c.base)
 	case kList:
 		var dt, el string
-		switch c.elem.k {
-		case kObj, kValue:
+		switch {
+		case inlineVal(c.elem):
+			dt, el = c.elem.cls.Cpp, "d[i]" // a block of the values
+		case c.elem.k == kObj || c.elem.k == kValue:
 			dt, el = "void *", g.cppArg(c.elem, "d[i]")
-		case kString:
+		case c.elem.k == kString:
 			dt, el = "qute_str", "QString::fromUtf8(d[i].data, d[i].len)"
-		case kBytes:
+		case c.elem.k == kBytes:
 			dt, el = "qute_str", "QByteArray(d[i].data, d[i].len)"
 		default:
 			dt, el = cType(c.elem), g.cppArg(c.elem, "d[i]")
@@ -1135,6 +1151,9 @@ func (g *Gen) cppVirtRet(c *conv, n string) string {
 // takeElem builds one Qt list or map element from the C element a Go
 // override wrote, freeing a string's buffer.
 func (g *Gen) takeElem(c *conv, e string) string {
+	if inlineVal(c) {
+		return e
+	}
 	switch c.k {
 	case kString:
 		return fmt.Sprintf("qute_take_qstr(%s)", e)
@@ -1181,7 +1200,16 @@ func (g *Gen) elemArg(c *conv, v, method string, ctx *Module) string {
 	return a[0]
 }
 
+// inlineVal reports whether c is an inline value class (spec option
+// inline): its bytes cross cgo, never a pointer to Go memory C could keep.
+func inlineVal(c *conv) bool {
+	return c != nil && c.k == kValue && c.cls != nil && c.cls.Opts.Inline && !c.ptr
+}
+
 func elemCType(c *conv) string {
+	if inlineVal(c) {
+		return c.cls.Cpp // the values themselves, in one block
+	}
 	switch c.k {
 	case kString, kBytes:
 		return "qute_str"

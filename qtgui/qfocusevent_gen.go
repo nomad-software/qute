@@ -25,7 +25,7 @@ type QFocusEventLike interface{ AsQFocusEvent() *QFocusEvent }
 func (this *QFocusEvent) AsQFocusEvent() *QFocusEvent { return this }
 
 func init() {
-	rt.RegisterClass("QFocusEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QFocusEvent_delete(p) })
+	rt.RegisterClass("QFocusEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QFocusEvent_delete(p) })
 }
 
 // QFocusEventFromPtr wraps an existing C++ QFocusEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,34 @@ func QFocusEventCast(e qtcore.QEventLike) *QFocusEvent {
 	r := rt.View[QFocusEvent](rt.WrapClassFrom(p, "QFocusEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQFocusEventWithType wraps the QFocusEvent constructor.
+//
+//	C++: QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason = …)
+//
+// Arguments with C++ defaults are left at them; NewQFocusEventWithTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfocusevent.html#QFocusEvent
+func NewQFocusEventWithType(typeArg qtcore.QEventType) *QFocusEvent {
+	rt.CheckThread("NewQFocusEventWithType")
+	p := C.qute_QFocusEvent_new(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QFocusEvent", rt.NewOwned)
+	return rt.View[QFocusEvent](h, p)
+}
+
+// NewQFocusEventWithTypeFull wraps the QFocusEvent constructor.
+//
+//	C++: QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason = …)
+//
+// NewQFocusEventWithTypeFull is NewQFocusEventWithType with every argument, including those NewQFocusEventWithType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfocusevent.html#QFocusEvent
+func NewQFocusEventWithTypeFull(typeArg qtcore.QEventType, reason qtcore.FocusReason) *QFocusEvent {
+	rt.CheckThread("NewQFocusEventWithTypeFull")
+	p := C.qute_QFocusEvent_new_1(C.int64_t(typeArg), C.int64_t(reason))
+	h := rt.WrapClass(p, "QFocusEvent", rt.NewOwned)
+	return rt.View[QFocusEvent](h, p)
 }
 
 // GotFocus wraps QFocusEvent::gotFocus.

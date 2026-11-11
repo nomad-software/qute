@@ -25,7 +25,7 @@ type QContextMenuEventLike interface{ AsQContextMenuEvent() *QContextMenuEvent }
 func (this *QContextMenuEvent) AsQContextMenuEvent() *QContextMenuEvent { return this }
 
 func init() {
-	rt.RegisterClass("QContextMenuEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QContextMenuEvent_delete(p) })
+	rt.RegisterClass("QContextMenuEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QContextMenuEvent_delete(p) })
 }
 
 // QContextMenuEventFromPtr wraps an existing C++ QContextMenuEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,34 @@ func QContextMenuEventCast(e qtcore.QEventLike) *QContextMenuEvent {
 	r := rt.View[QContextMenuEvent](rt.WrapClassFrom(p, "QContextMenuEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQContextMenuEventWithReason wraps the QContextMenuEvent constructor.
+//
+//	C++: QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint & pos, const QPoint & globalPos, Qt::KeyboardModifiers modifiers = …)
+//
+// Arguments with C++ defaults are left at them; NewQContextMenuEventWithReasonFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcontextmenuevent.html#QContextMenuEvent
+func NewQContextMenuEventWithReason(reason QContextMenuEventReason, pos qtcore.QPoint, globalPos qtcore.QPoint) *QContextMenuEvent {
+	rt.CheckThread("NewQContextMenuEventWithReason")
+	p := C.qute_QContextMenuEvent_new(C.int64_t(reason), cQPoint(pos), cQPoint(globalPos))
+	h := rt.WrapClass(p, "QContextMenuEvent", rt.NewOwned)
+	return rt.View[QContextMenuEvent](h, p)
+}
+
+// NewQContextMenuEventWithReasonFull wraps the QContextMenuEvent constructor.
+//
+//	C++: QContextMenuEvent::QContextMenuEvent(Reason reason, const QPoint & pos, const QPoint & globalPos, Qt::KeyboardModifiers modifiers = …)
+//
+// NewQContextMenuEventWithReasonFull is NewQContextMenuEventWithReason with every argument, including those NewQContextMenuEventWithReason leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcontextmenuevent.html#QContextMenuEvent
+func NewQContextMenuEventWithReasonFull(reason QContextMenuEventReason, pos qtcore.QPoint, globalPos qtcore.QPoint, modifiers qtcore.KeyboardModifiers) *QContextMenuEvent {
+	rt.CheckThread("NewQContextMenuEventWithReasonFull")
+	p := C.qute_QContextMenuEvent_new_1(C.int64_t(reason), cQPoint(pos), cQPoint(globalPos), C.int64_t(modifiers))
+	h := rt.WrapClass(p, "QContextMenuEvent", rt.NewOwned)
+	return rt.View[QContextMenuEvent](h, p)
 }
 
 // X wraps QContextMenuEvent::x.

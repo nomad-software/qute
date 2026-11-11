@@ -145,15 +145,15 @@ func (h *Handle) registeredKind() bool { return h.kind == KindQObject || h.kind 
 // slotsFor returns the keep slots of owner, creating them if create is set.
 // The caller holds keepMu.
 func slotsFor(owner *Handle, create bool) map[string]any {
-	if owner.keeps == nil && create {
-		owner.keeps = map[string]any{}
+	if owner.x().keeps == nil && create {
+		owner.x().keeps = map[string]any{}
 		if owner.registeredKind() {
 			owner.anchorPin()
 		} else {
 			owner.syncReleaseLocked()
 		}
 	}
-	return owner.keeps
+	return owner.x().keeps
 }
 
 // syncReleaseLocked keeps the release cleanup of an unregistered keeper in
@@ -166,16 +166,16 @@ func (h *Handle) syncReleaseLocked() {
 	if h.registeredKind() {
 		return
 	}
-	want := h.keeps != nil && h.State() != Dead && !h.hasCleanupNow()
-	if want == h.hasRelease {
+	want := h.x().keeps != nil && h.State() != Dead && !h.hasCleanupNow()
+	if want == h.x().hasRelease {
 		return
 	}
 	if want {
-		h.release = runtime.AddCleanup(h, releaseHolds, h.serial)
+		h.x().release = runtime.AddCleanup(h, releaseHolds, h.serial)
 	} else {
-		h.release.Stop()
+		h.x().release.Stop()
 	}
-	h.hasRelease = want
+	h.x().hasRelease = want
 }
 
 // syncRelease is syncReleaseLocked for callers that do not hold keepMu.
@@ -191,15 +191,15 @@ func (h *Handle) syncRelease() {
 // unslotLocked drops one slot and the owner's anchor once nothing is kept.
 // The caller holds keepMu.
 func unslotLocked(owner *Handle, slot string) {
-	if owner.keeps == nil {
+	if owner.x().keeps == nil {
 		return
 	}
-	if old, ok := owner.keeps[slot].(*Handle); ok && unholdLocked(owner.serial, old.serial) {
+	if old, ok := owner.x().keeps[slot].(*Handle); ok && unholdLocked(owner.serial, old.serial) {
 		defer wakeDeferred()
 	}
-	delete(owner.keeps, slot)
-	if len(owner.keeps) == 0 {
-		owner.keeps = nil
+	delete(owner.x().keeps, slot)
+	if len(owner.x().keeps) == 0 {
+		owner.x().keeps = nil
 		if owner.registeredKind() {
 			owner.anchorUnpin()
 		} else {
@@ -251,24 +251,27 @@ func KeepArg(owner *Handle, slot string, arg *Handle, guard bool) {
 // bindScopeLocked binds keeper to the scoped argument that kept is, or is
 // itself bound to. The caller holds keepMu.
 func bindScopeLocked(keeper, kept *Handle) {
-	root := kept.scope
+	root := kept.x().scope
 	if kept.scoped {
 		root = kept
 	}
-	if root == nil || !root.Alive() || keeper.scope == root {
+	if root == nil || !root.Alive() || keeper.x().scope == root {
 		return
 	}
-	keeper.scope = root
-	root.bound = append(root.bound, keeper)
+	keeper.x().scope = root
+	root.x().bound = append(root.x().bound, keeper)
 }
 
 // endBound deletes the keepers bound to the scoped argument h that still
 // use it, directly or through one another. Only plain objects Go owns are
 // deleted; anything else is left to its owner.
 func (h *Handle) endBound() {
+	if h.ext.Load() == nil {
+		return // no keeper was ever bound to it
+	}
 	keepMu.Lock()
-	bound := h.bound
-	h.bound = nil
+	bound := h.x().bound
+	h.x().bound = nil
 	if len(bound) == 0 {
 		keepMu.Unlock()
 		return // nearly every scoped argument: nothing was built on it
@@ -276,8 +279,8 @@ func (h *Handle) endBound() {
 	ending := map[uint64]bool{h.serial: true}
 	var doomed []*Handle
 	for _, k := range bound {
-		if k.scope == h {
-			k.scope = nil
+		if k.x().scope == h {
+			k.x().scope = nil
 		}
 		for _, hd := range holds[k.serial] {
 			if hd.guard && ending[hd.kept] {
@@ -338,7 +341,7 @@ func Keeps(owner, arg *Handle) bool {
 	}
 	keepMu.Lock()
 	defer keepMu.Unlock()
-	for _, v := range owner.keeps {
+	for _, v := range owner.x().keeps {
 		if v == arg {
 			return true
 		}
@@ -364,8 +367,8 @@ func KeepEachArg(owner, arg unsafe.Pointer) {
 // dropHandleKeeps forgets the references a dead handle held.
 func (h *Handle) dropHandleKeeps() {
 	keepMu.Lock()
-	had := h.keeps != nil
-	h.keeps = nil
+	had := h.x().keeps != nil
+	h.x().keeps = nil
 	h.syncReleaseLocked()
 	keepMu.Unlock()
 	if had && h.registeredKind() {
@@ -437,8 +440,8 @@ func depMessage(h, dep *Handle, method string) string {
 func deathNote(h *Handle) string {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if h.deathNote == "" {
+	if h.x().deathNote == "" {
 		return "destroyed"
 	}
-	return h.deathNote
+	return h.x().deathNote
 }

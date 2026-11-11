@@ -25,7 +25,7 @@ type QPlatformSurfaceEventLike interface{ AsQPlatformSurfaceEvent() *QPlatformSu
 func (this *QPlatformSurfaceEvent) AsQPlatformSurfaceEvent() *QPlatformSurfaceEvent { return this }
 
 func init() {
-	rt.RegisterClass("QPlatformSurfaceEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QPlatformSurfaceEvent_delete(p) })
+	rt.RegisterClass("QPlatformSurfaceEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QPlatformSurfaceEvent_delete(p) })
 }
 
 // QPlatformSurfaceEventFromPtr wraps an existing C++ QPlatformSurfaceEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QPlatformSurfaceEventCast(e qtcore.QEventLike) *QPlatformSurfaceEvent {
 	r := rt.View[QPlatformSurfaceEvent](rt.WrapClassFrom(p, "QPlatformSurfaceEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQPlatformSurfaceEventWithSurfaceEventType wraps the QPlatformSurfaceEvent constructor.
+//
+//	C++: QPlatformSurfaceEvent::QPlatformSurfaceEvent(SurfaceEventType surfaceEventType)
+//
+// Qt docs: https://doc.qt.io/qt-6/qplatformsurfaceevent.html#QPlatformSurfaceEvent
+func NewQPlatformSurfaceEventWithSurfaceEventType(surfaceEventType QPlatformSurfaceEventSurfaceEventType) *QPlatformSurfaceEvent {
+	rt.CheckThread("NewQPlatformSurfaceEventWithSurfaceEventType")
+	p := C.qute_QPlatformSurfaceEvent_new(C.int64_t(surfaceEventType))
+	h := rt.WrapClass(p, "QPlatformSurfaceEvent", rt.NewOwned)
+	return rt.View[QPlatformSurfaceEvent](h, p)
 }
 
 // SurfaceEventType wraps QPlatformSurfaceEvent::surfaceEventType.

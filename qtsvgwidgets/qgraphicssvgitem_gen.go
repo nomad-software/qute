@@ -1303,3 +1303,35 @@ func NewQGraphicsSvgItemWith(v QGraphicsSvgItemSubclass, parentItem qtwidgets.QG
 	C.qute_QGraphicsSvgItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsSvgItem
 }
+
+// NewQGraphicsSvgItemWithFileNameWith is NewQGraphicsSvgItemWithFileName for a Go subclass: it constructs a QGraphicsSvgItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsSvgItemWithFileNameWith(v QGraphicsSvgItemSubclass, fileName string, parentItem qtwidgets.QGraphicsItemLike) *QGraphicsSvgItem {
+	rt.CheckThread("NewQGraphicsSvgItemWithFileNameWith")
+	base := v.quteQGraphicsSvgItemBase()
+	if base.QGraphicsSvgItem != nil {
+		panic("NewQGraphicsSvgItemWithFileNameWith: value is already constructed; use a fresh value")
+	}
+	var parentItemPtr unsafe.Pointer
+	if parentItem != nil {
+		parentItemPtr = rt.UseArg(unsafe.Pointer(parentItem.AsQGraphicsItem()), "NewQGraphicsSvgItemWithFileNameWith")
+	}
+	p := C.qute_QGraphicsSvgItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), parentItemPtr)
+	runtime.KeepAlive(parentItem)
+	mode := rt.NewOwned
+	if parentItemPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsSvgItem", mode)
+	base.QGraphicsSvgItem = rt.View[QGraphicsSvgItem](h, p)
+	id := h.SetSelf(v, qGraphicsSvgItemVTable)
+	mask := rt.Mask(v, qGraphicsSvgItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsSvgItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsSvgItem
+}

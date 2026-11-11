@@ -262,7 +262,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				VisualRect(*qtcore.QModelIndex) qtcore.QRect
 			}).VisualRect(index)
@@ -276,7 +276,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			hint := QAbstractItemViewScrollHint(*(*C.int64_t)(a[1]))
 			v.(interface {
 				ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
@@ -294,7 +294,7 @@ var qUndoViewVTable = []rt.Virtual{
 			r := v.(interface {
 				IndexAt(qtcore.QPoint) *qtcore.QModelIndex
 			}).IndexAt(pArg)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QUndoView.IndexAt")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QUndoView.IndexAt")
 		}},
 	{Name: "DoItemsLayout", Has: func(v any) bool { _, ok := v.(interface{ DoItemsLayout() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -309,7 +309,7 @@ var qUndoViewVTable = []rt.Virtual{
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
@@ -337,8 +337,8 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			topLeft := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			bottomRight := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 			roles := quteList(*(*C.qute_list)(a[2]), func(e C.int) int { return int(e) })
 			v.(interface {
 				DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
@@ -352,7 +352,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -367,7 +367,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			parent := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
 			v.(interface {
@@ -495,7 +495,7 @@ var qUndoViewVTable = []rt.Virtual{
 			r := v.(interface {
 				MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
 			}).MoveCursor(cursorAction, modifiers)
-			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QUndoView.MoveCursor")
+			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QUndoView.MoveCursor")
 		}},
 	{Name: "SetSelection", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -529,11 +529,7 @@ var qUndoViewVTable = []rt.Virtual{
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
 			r := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }).SelectedIndexes()
-			*(*C.qute_list)(ret) = quteCList(len(r), func(d []unsafe.Pointer) {
-				for i, e := range r {
-					d[i] = rt.UseArg(unsafe.Pointer(e), "QUndoView.SelectedIndexes")
-				}
-			})
+			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QUndoView.SelectedIndexes", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "UpdateGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometries() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -548,7 +544,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				IsIndexHidden(*qtcore.QModelIndex) bool
 			}).IsIndexHidden(index)
@@ -576,8 +572,8 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
+			current := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
+			previous := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[1]))
 			v.(interface {
 				CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
 			}).CurrentChanged(current, previous)
@@ -642,7 +638,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			r := v.(interface {
 				ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
 			}).ItemDelegateForIndex(index)
@@ -721,7 +717,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			trigger := QAbstractItemViewEditTriggers(*(*C.int64_t)(a[1]))
 			eventP := *(*unsafe.Pointer)(a[2])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
@@ -740,7 +736,7 @@ var qUndoViewVTable = []rt.Virtual{
 	},
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
-			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			index := rt.View[qtcore.QModelIndex](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QModelIndex", rt.CopyInline), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
@@ -2095,6 +2091,84 @@ func NewQUndoViewWith(v QUndoViewSubclass, parent QWidgetLike) *QUndoView {
 		mode = rt.NewParented
 	}
 	h := rt.WrapClass(p, "QUndoView", mode)
+	base.QUndoView = rt.View[QUndoView](h, p)
+	id := h.SetSelf(v, qUndoViewVTable)
+	mask := rt.Mask(v, qUndoViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QUndoView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QUndoView
+}
+
+// NewQUndoViewWithUndoStackWith is NewQUndoViewWithUndoStack for a Go subclass: it constructs a QUndoView whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQUndoViewWithUndoStackWith(v QUndoViewSubclass, stack qtgui.QUndoStackLike, parent QWidgetLike) *QUndoView {
+	rt.CheckThread("NewQUndoViewWithUndoStackWith")
+	base := v.quteQUndoViewBase()
+	if base.QUndoView != nil {
+		panic("NewQUndoViewWithUndoStackWith: value is already constructed; use a fresh value")
+	}
+	var stackPtr unsafe.Pointer
+	var stackH *rt.Handle
+	if stack != nil {
+		stackPtr, stackH = rt.Arg(unsafe.Pointer(stack.AsQUndoStack()), "NewQUndoViewWithUndoStackWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQUndoViewWithUndoStackWith")
+	}
+	p := C.qute_QUndoView_new_shim_1(stackPtr, parentPtr)
+	runtime.KeepAlive(stack)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QUndoView", mode)
+	rt.KeepArg(h, "stack", stackH, false)
+	base.QUndoView = rt.View[QUndoView](h, p)
+	id := h.SetSelf(v, qUndoViewVTable)
+	mask := rt.Mask(v, qUndoViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QUndoView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QUndoView
+}
+
+// NewQUndoViewWithUndoGroupWith is NewQUndoViewWithUndoGroup for a Go subclass: it constructs a QUndoView whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQUndoViewWithUndoGroupWith(v QUndoViewSubclass, group qtgui.QUndoGroupLike, parent QWidgetLike) *QUndoView {
+	rt.CheckThread("NewQUndoViewWithUndoGroupWith")
+	base := v.quteQUndoViewBase()
+	if base.QUndoView != nil {
+		panic("NewQUndoViewWithUndoGroupWith: value is already constructed; use a fresh value")
+	}
+	var groupPtr unsafe.Pointer
+	var groupH *rt.Handle
+	if group != nil {
+		groupPtr, groupH = rt.Arg(unsafe.Pointer(group.AsQUndoGroup()), "NewQUndoViewWithUndoGroupWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQUndoViewWithUndoGroupWith")
+	}
+	p := C.qute_QUndoView_new_shim_2(groupPtr, parentPtr)
+	runtime.KeepAlive(group)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QUndoView", mode)
+	rt.KeepArg(h, "group", groupH, false)
 	base.QUndoView = rt.View[QUndoView](h, p)
 	id := h.SetSelf(v, qUndoViewVTable)
 	mask := rt.Mask(v, qUndoViewVTable)

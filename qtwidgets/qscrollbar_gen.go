@@ -1036,3 +1036,35 @@ func NewQScrollBarWith(v QScrollBarSubclass, parent QWidgetLike) *QScrollBar {
 	C.qute_QScrollBar_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QScrollBar
 }
+
+// NewQScrollBarWithOrientationWith is NewQScrollBarWithOrientation for a Go subclass: it constructs a QScrollBar whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQScrollBarWithOrientationWith(v QScrollBarSubclass, orientation qtcore.Orientations, parent QWidgetLike) *QScrollBar {
+	rt.CheckThread("NewQScrollBarWithOrientationWith")
+	base := v.quteQScrollBarBase()
+	if base.QScrollBar != nil {
+		panic("NewQScrollBarWithOrientationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQScrollBarWithOrientationWith")
+	}
+	p := C.qute_QScrollBar_new_shim_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QScrollBar", mode)
+	base.QScrollBar = rt.View[QScrollBar](h, p)
+	id := h.SetSelf(v, qScrollBarVTable)
+	mask := rt.Mask(v, qScrollBarVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QScrollBar_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QScrollBar
+}

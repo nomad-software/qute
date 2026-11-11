@@ -1154,3 +1154,35 @@ func NewQGroupBoxWith(v QGroupBoxSubclass, parent QWidgetLike) *QGroupBox {
 	C.qute_QGroupBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGroupBox
 }
+
+// NewQGroupBoxWithTitleWith is NewQGroupBoxWithTitle for a Go subclass: it constructs a QGroupBox whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGroupBoxWithTitleWith(v QGroupBoxSubclass, title string, parent QWidgetLike) *QGroupBox {
+	rt.CheckThread("NewQGroupBoxWithTitleWith")
+	base := v.quteQGroupBoxBase()
+	if base.QGroupBox != nil {
+		panic("NewQGroupBoxWithTitleWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQGroupBoxWithTitleWith")
+	}
+	p := C.qute_QGroupBox_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGroupBox", mode)
+	base.QGroupBox = rt.View[QGroupBox](h, p)
+	id := h.SetSelf(v, qGroupBoxVTable)
+	mask := rt.Mask(v, qGroupBoxVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGroupBox_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGroupBox
+}

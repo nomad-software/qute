@@ -1278,3 +1278,36 @@ func NewQFontDialogWith(v QFontDialogSubclass, parent QWidgetLike) *QFontDialog 
 	C.qute_QFontDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QFontDialog
 }
+
+// NewQFontDialogWithFontWith is NewQFontDialogWithFont for a Go subclass: it constructs a QFontDialog whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQFontDialogWithFontWith(v QFontDialogSubclass, initial *qtgui.QFont, parent QWidgetLike) *QFontDialog {
+	rt.CheckThread("NewQFontDialogWithFontWith")
+	base := v.quteQFontDialogBase()
+	if base.QFontDialog != nil {
+		panic("NewQFontDialogWithFontWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQFontDialogWithFontWith")
+	}
+	p := C.qute_QFontDialog_new_shim_1(rt.UseArg(unsafe.Pointer(initial), "NewQFontDialogWithFontWith"), parentPtr)
+	runtime.KeepAlive(initial)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFontDialog", mode)
+	base.QFontDialog = rt.View[QFontDialog](h, p)
+	id := h.SetSelf(v, qFontDialogVTable)
+	mask := rt.Mask(v, qFontDialogVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QFontDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QFontDialog
+}

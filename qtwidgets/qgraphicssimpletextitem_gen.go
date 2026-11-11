@@ -1042,3 +1042,35 @@ func NewQGraphicsSimpleTextItemWith(v QGraphicsSimpleTextItemSubclass, parent QG
 	C.qute_QGraphicsSimpleTextItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsSimpleTextItem
 }
+
+// NewQGraphicsSimpleTextItemWithTextWith is NewQGraphicsSimpleTextItemWithText for a Go subclass: it constructs a QGraphicsSimpleTextItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsSimpleTextItemWithTextWith(v QGraphicsSimpleTextItemSubclass, text string, parent QGraphicsItemLike) *QGraphicsSimpleTextItem {
+	rt.CheckThread("NewQGraphicsSimpleTextItemWithTextWith")
+	base := v.quteQGraphicsSimpleTextItemBase()
+	if base.QGraphicsSimpleTextItem != nil {
+		panic("NewQGraphicsSimpleTextItemWithTextWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsSimpleTextItemWithTextWith")
+	}
+	p := C.qute_QGraphicsSimpleTextItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsSimpleTextItem", mode)
+	base.QGraphicsSimpleTextItem = rt.View[QGraphicsSimpleTextItem](h, p)
+	id := h.SetSelf(v, qGraphicsSimpleTextItemVTable)
+	mask := rt.Mask(v, qGraphicsSimpleTextItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsSimpleTextItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsSimpleTextItem
+}

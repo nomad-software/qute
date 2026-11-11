@@ -15,6 +15,8 @@ void * qute_QWebEngineView_new(void * a0);
 void * qute_QWebEngineView_new_1(void * a0, void * a1);
 void * qute_QWebEngineView_new_2(void * a0, void * a1);
 void * qute_QWebEngineView_new_shim(void * a0);
+void * qute_QWebEngineView_new_shim_1(void * a0, void * a1);
+void * qute_QWebEngineView_new_shim_2(void * a0, void * a1);
 void qute_QWebEngineView_shim_init(void *self, uintptr_t id, const uint64_t *mask);
 qute_size qute_QWebEngineView_super_0(void *self);
 void * qute_QWebEngineView_super_1(void *self, int64_t a0);

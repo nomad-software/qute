@@ -1041,3 +1041,39 @@ func NewQGraphicsPolygonItemWith(v QGraphicsPolygonItemSubclass, parent QGraphic
 	C.qute_QGraphicsPolygonItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsPolygonItem
 }
+
+// NewQGraphicsPolygonItemWithPointFsWith is NewQGraphicsPolygonItemWithPointFs for a Go subclass: it constructs a QGraphicsPolygonItem whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsPolygonItemWithPointFsWith(v QGraphicsPolygonItemSubclass, polygon []qtcore.QPointF, parent QGraphicsItemLike) *QGraphicsPolygonItem {
+	rt.CheckThread("NewQGraphicsPolygonItemWithPointFsWith")
+	base := v.quteQGraphicsPolygonItemBase()
+	if base.QGraphicsPolygonItem != nil {
+		panic("NewQGraphicsPolygonItemWithPointFsWith: value is already constructed; use a fresh value")
+	}
+	polygonC := make([]C.qute_pointf, len(polygon))
+	for i := range polygon {
+		polygonC[i] = cQPointF(polygon[i])
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsItem()), "NewQGraphicsPolygonItemWithPointFsWith")
+	}
+	p := C.qute_QGraphicsPolygonItem_new_shim_1(unsafe.Pointer(unsafe.SliceData(polygonC)), C.ptrdiff_t(len(polygon)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsPolygonItem", mode)
+	base.QGraphicsPolygonItem = rt.View[QGraphicsPolygonItem](h, p)
+	id := h.SetSelf(v, qGraphicsPolygonItemVTable)
+	mask := rt.Mask(v, qGraphicsPolygonItemVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsPolygonItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsPolygonItem
+}

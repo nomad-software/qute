@@ -871,3 +871,74 @@ func NewQMovieWith(v QMovieSubclass, parent qtcore.QObjectLike) *QMovie {
 	C.qute_QMovie_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QMovie
 }
+
+// NewQMovieWithDeviceWith is NewQMovieWithDevice for a Go subclass: it constructs a QMovie whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQMovieWithDeviceWith(v QMovieSubclass, device qtcore.QIODeviceLike, format []byte, parent qtcore.QObjectLike) *QMovie {
+	rt.CheckThread("NewQMovieWithDeviceWith")
+	base := v.quteQMovieBase()
+	if base.QMovie != nil {
+		panic("NewQMovieWithDeviceWith: value is already constructed; use a fresh value")
+	}
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQIODevice()), "NewQMovieWithDeviceWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMovieWithDeviceWith")
+	}
+	p := C.qute_QMovie_new_shim_1(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)), parentPtr)
+	runtime.KeepAlive(device)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMovie", mode)
+	rt.KeepArg(h, "device", deviceH, false)
+	base.QMovie = rt.View[QMovie](h, p)
+	id := h.SetSelf(v, qMovieVTable)
+	mask := rt.Mask(v, qMovieVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QMovie_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QMovie
+}
+
+// NewQMovieWithFileNameWith is NewQMovieWithFileName for a Go subclass: it constructs a QMovie whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQMovieWithFileNameWith(v QMovieSubclass, fileName string, format []byte, parent qtcore.QObjectLike) *QMovie {
+	rt.CheckThread("NewQMovieWithFileNameWith")
+	base := v.quteQMovieBase()
+	if base.QMovie != nil {
+		panic("NewQMovieWithFileNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQMovieWithFileNameWith")
+	}
+	p := C.qute_QMovie_new_shim_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QMovie", mode)
+	base.QMovie = rt.View[QMovie](h, p)
+	id := h.SetSelf(v, qMovieVTable)
+	mask := rt.Mask(v, qMovieVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QMovie_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QMovie
+}

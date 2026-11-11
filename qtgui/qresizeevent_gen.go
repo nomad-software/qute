@@ -25,7 +25,7 @@ type QResizeEventLike interface{ AsQResizeEvent() *QResizeEvent }
 func (this *QResizeEvent) AsQResizeEvent() *QResizeEvent { return this }
 
 func init() {
-	rt.RegisterClass("QResizeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QResizeEvent_delete(p) })
+	rt.RegisterClass("QResizeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QResizeEvent_delete(p) })
 }
 
 // QResizeEventFromPtr wraps an existing C++ QResizeEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,18 @@ func QResizeEventCast(e qtcore.QEventLike) *QResizeEvent {
 	r := rt.View[QResizeEvent](rt.WrapClassFrom(p, "QResizeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQResizeEventWithSize wraps the QResizeEvent constructor.
+//
+//	C++: QResizeEvent::QResizeEvent(const QSize & size, const QSize & oldSize)
+//
+// Qt docs: https://doc.qt.io/qt-6/qresizeevent.html#QResizeEvent
+func NewQResizeEventWithSize(size qtcore.QSize, oldSize qtcore.QSize) *QResizeEvent {
+	rt.CheckThread("NewQResizeEventWithSize")
+	p := C.qute_QResizeEvent_new(cQSize(size), cQSize(oldSize))
+	h := rt.WrapClass(p, "QResizeEvent", rt.NewOwned)
+	return rt.View[QResizeEvent](h, p)
 }
 
 // Size wraps QResizeEvent::size.

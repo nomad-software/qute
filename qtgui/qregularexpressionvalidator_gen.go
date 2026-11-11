@@ -395,3 +395,36 @@ func NewQRegularExpressionValidatorWith(v QRegularExpressionValidatorSubclass, p
 	C.qute_QRegularExpressionValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QRegularExpressionValidator
 }
+
+// NewQRegularExpressionValidatorWithRegularExpressionWith is NewQRegularExpressionValidatorWithRegularExpression for a Go subclass: it constructs a QRegularExpressionValidator whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQRegularExpressionValidatorWithRegularExpressionWith(v QRegularExpressionValidatorSubclass, re *qtcore.QRegularExpression, parent qtcore.QObjectLike) *QRegularExpressionValidator {
+	rt.CheckThread("NewQRegularExpressionValidatorWithRegularExpressionWith")
+	base := v.quteQRegularExpressionValidatorBase()
+	if base.QRegularExpressionValidator != nil {
+		panic("NewQRegularExpressionValidatorWithRegularExpressionWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQRegularExpressionValidatorWithRegularExpressionWith")
+	}
+	p := C.qute_QRegularExpressionValidator_new_shim_1(rt.UseArg(unsafe.Pointer(re), "NewQRegularExpressionValidatorWithRegularExpressionWith"), parentPtr)
+	runtime.KeepAlive(re)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QRegularExpressionValidator", mode)
+	base.QRegularExpressionValidator = rt.View[QRegularExpressionValidator](h, p)
+	id := h.SetSelf(v, qRegularExpressionValidatorVTable)
+	mask := rt.Mask(v, qRegularExpressionValidatorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QRegularExpressionValidator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QRegularExpressionValidator
+}

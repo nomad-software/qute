@@ -27,7 +27,7 @@ type QInputMethodQueryEventLike interface {
 func (this *QInputMethodQueryEvent) AsQInputMethodQueryEvent() *QInputMethodQueryEvent { return this }
 
 func init() {
-	rt.RegisterClass("QInputMethodQueryEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QInputMethodQueryEvent_delete(p) })
+	rt.RegisterClass("QInputMethodQueryEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QInputMethodQueryEvent_delete(p) })
 }
 
 // QInputMethodQueryEventFromPtr wraps an existing C++ QInputMethodQueryEvent. This is an unsafe escape hatch: own says
@@ -53,6 +53,18 @@ func QInputMethodQueryEventCast(e qtcore.QEventLike) *QInputMethodQueryEvent {
 	r := rt.View[QInputMethodQueryEvent](rt.WrapClassFrom(p, "QInputMethodQueryEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQInputMethodQueryEventWithInputMethodQuery wraps the QInputMethodQueryEvent constructor.
+//
+//	C++: QInputMethodQueryEvent::QInputMethodQueryEvent(Qt::InputMethodQueries queries)
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputmethodqueryevent.html#QInputMethodQueryEvent
+func NewQInputMethodQueryEventWithInputMethodQuery(queries qtcore.InputMethodQueries) *QInputMethodQueryEvent {
+	rt.CheckThread("NewQInputMethodQueryEventWithInputMethodQuery")
+	p := C.qute_QInputMethodQueryEvent_new(C.int64_t(queries))
+	h := rt.WrapClass(p, "QInputMethodQueryEvent", rt.NewOwned)
+	return rt.View[QInputMethodQueryEvent](h, p)
 }
 
 // Queries wraps QInputMethodQueryEvent::queries.

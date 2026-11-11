@@ -321,3 +321,26 @@ func NewQSvgGeneratorWith(v QSvgGeneratorSubclass) *QSvgGenerator {
 	C.qute_QSvgGenerator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSvgGenerator
 }
+
+// NewQSvgGeneratorWithSvgVersionWith is NewQSvgGeneratorWithSvgVersion for a Go subclass: it constructs a QSvgGenerator whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSvgGeneratorWithSvgVersionWith(v QSvgGeneratorSubclass, version QSvgGeneratorSvgVersion) *QSvgGenerator {
+	rt.CheckThread("NewQSvgGeneratorWithSvgVersionWith")
+	base := v.quteQSvgGeneratorBase()
+	if base.QSvgGenerator != nil {
+		panic("NewQSvgGeneratorWithSvgVersionWith: value is already constructed; use a fresh value")
+	}
+	p := C.qute_QSvgGenerator_new_shim_1(C.int64_t(version))
+	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
+	id := h.SetSelf(v, qSvgGeneratorVTable)
+	mask := rt.Mask(v, qSvgGeneratorVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSvgGenerator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSvgGenerator
+}

@@ -337,6 +337,22 @@ func TestKeep_QDataStream_SetDevice(t *testing.T) {
 	})
 }
 
+// QEvent * QEvent::clone() const (test from the overlay)
+func TestOwnership_QEvent_Clone(t *testing.T) {
+	qutetest.Run(t, func() {
+		e := qtcore.NewQEvent(qtcore.QEventUser)
+		c := e.Clone()
+		if got := c.Ownership(); got != qtcore.Owned {
+			t.Errorf("clone: %v, want Owned", got)
+		}
+		if c.Type() != qtcore.QEventUser {
+			t.Errorf("clone type: %v", c.Type())
+		}
+		c.Delete()
+		e.Delete()
+	})
+}
+
 // QEventLoop::QEventLoop(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQEventLoop(t *testing.T) {
 	qutetest.Run(t, func() {

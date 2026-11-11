@@ -724,3 +724,104 @@ func NewQSvgRendererWith(v QSvgRendererSubclass, parent qtcore.QObjectLike) *QSv
 	C.qute_QSvgRenderer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSvgRenderer
 }
+
+// NewQSvgRendererWithFilenameWith is NewQSvgRendererWithFilename for a Go subclass: it constructs a QSvgRenderer whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSvgRendererWithFilenameWith(v QSvgRendererSubclass, filename string, parent qtcore.QObjectLike) *QSvgRenderer {
+	rt.CheckThread("NewQSvgRendererWithFilenameWith")
+	base := v.quteQSvgRendererBase()
+	if base.QSvgRenderer != nil {
+		panic("NewQSvgRendererWithFilenameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSvgRendererWithFilenameWith")
+	}
+	p := C.qute_QSvgRenderer_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
+	id := h.SetSelf(v, qSvgRendererVTable)
+	mask := rt.Mask(v, qSvgRendererVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSvgRenderer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSvgRenderer
+}
+
+// NewQSvgRendererWithBytesWith is NewQSvgRendererWithBytes for a Go subclass: it constructs a QSvgRenderer whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSvgRendererWithBytesWith(v QSvgRendererSubclass, contents []byte, parent qtcore.QObjectLike) *QSvgRenderer {
+	rt.CheckThread("NewQSvgRendererWithBytesWith")
+	base := v.quteQSvgRendererBase()
+	if base.QSvgRenderer != nil {
+		panic("NewQSvgRendererWithBytesWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSvgRendererWithBytesWith")
+	}
+	p := C.qute_QSvgRenderer_new_shim_2((*C.char)(unsafe.Pointer(unsafe.SliceData(contents))), C.ptrdiff_t(len(contents)), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
+	id := h.SetSelf(v, qSvgRendererVTable)
+	mask := rt.Mask(v, qSvgRendererVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSvgRenderer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSvgRenderer
+}
+
+// NewQSvgRendererWithXmlStreamReaderWith is NewQSvgRendererWithXmlStreamReader for a Go subclass: it constructs a QSvgRenderer whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSvgRendererWithXmlStreamReaderWith(v QSvgRendererSubclass, contents qtcore.QXmlStreamReaderLike, parent qtcore.QObjectLike) *QSvgRenderer {
+	rt.CheckThread("NewQSvgRendererWithXmlStreamReaderWith")
+	base := v.quteQSvgRendererBase()
+	if base.QSvgRenderer != nil {
+		panic("NewQSvgRendererWithXmlStreamReaderWith: value is already constructed; use a fresh value")
+	}
+	var contentsPtr unsafe.Pointer
+	if contents != nil {
+		contentsPtr = rt.UseArg(unsafe.Pointer(contents.AsQXmlStreamReader()), "NewQSvgRendererWithXmlStreamReaderWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSvgRendererWithXmlStreamReaderWith")
+	}
+	p := C.qute_QSvgRenderer_new_shim_3(contentsPtr, parentPtr)
+	runtime.KeepAlive(contents)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
+	id := h.SetSelf(v, qSvgRendererVTable)
+	mask := rt.Mask(v, qSvgRendererVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSvgRenderer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSvgRenderer
+}

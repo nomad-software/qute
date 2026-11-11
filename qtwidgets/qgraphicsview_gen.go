@@ -2231,3 +2231,42 @@ func NewQGraphicsViewWith(v QGraphicsViewSubclass, parent QWidgetLike) *QGraphic
 	C.qute_QGraphicsView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsView
 }
+
+// NewQGraphicsViewWithSceneWith is NewQGraphicsViewWithScene for a Go subclass: it constructs a QGraphicsView whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsViewWithSceneWith(v QGraphicsViewSubclass, scene QGraphicsSceneLike, parent QWidgetLike) *QGraphicsView {
+	rt.CheckThread("NewQGraphicsViewWithSceneWith")
+	base := v.quteQGraphicsViewBase()
+	if base.QGraphicsView != nil {
+		panic("NewQGraphicsViewWithSceneWith: value is already constructed; use a fresh value")
+	}
+	var scenePtr unsafe.Pointer
+	var sceneH *rt.Handle
+	if scene != nil {
+		scenePtr, sceneH = rt.Arg(unsafe.Pointer(scene.AsQGraphicsScene()), "NewQGraphicsViewWithSceneWith")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "NewQGraphicsViewWithSceneWith")
+	}
+	p := C.qute_QGraphicsView_new_shim_1(scenePtr, parentPtr)
+	runtime.KeepAlive(scene)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsView", mode)
+	rt.KeepArg(h, "scene", sceneH, false)
+	base.QGraphicsView = rt.View[QGraphicsView](h, p)
+	id := h.SetSelf(v, qGraphicsViewVTable)
+	mask := rt.Mask(v, qGraphicsViewVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsView
+}

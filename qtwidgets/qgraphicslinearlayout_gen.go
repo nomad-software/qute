@@ -663,3 +663,35 @@ func NewQGraphicsLinearLayoutWith(v QGraphicsLinearLayoutSubclass, parent QGraph
 	C.qute_QGraphicsLinearLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QGraphicsLinearLayout
 }
+
+// NewQGraphicsLinearLayoutWithOrientationWith is NewQGraphicsLinearLayoutWithOrientation for a Go subclass: it constructs a QGraphicsLinearLayout whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQGraphicsLinearLayoutWithOrientationWith(v QGraphicsLinearLayoutSubclass, orientation qtcore.Orientations, parent QGraphicsLayoutItemLike) *QGraphicsLinearLayout {
+	rt.CheckThread("NewQGraphicsLinearLayoutWithOrientationWith")
+	base := v.quteQGraphicsLinearLayoutBase()
+	if base.QGraphicsLinearLayout != nil {
+		panic("NewQGraphicsLinearLayoutWithOrientationWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQGraphicsLayoutItem()), "NewQGraphicsLinearLayoutWithOrientationWith")
+	}
+	p := C.qute_QGraphicsLinearLayout_new_shim_1(C.int64_t(orientation), parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
+	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
+	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QGraphicsLinearLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QGraphicsLinearLayout
+}

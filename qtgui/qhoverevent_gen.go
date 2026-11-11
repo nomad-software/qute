@@ -25,7 +25,7 @@ type QHoverEventLike interface{ AsQHoverEvent() *QHoverEvent }
 func (this *QHoverEvent) AsQHoverEvent() *QHoverEvent { return this }
 
 func init() {
-	rt.RegisterClass("QHoverEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QHoverEvent_delete(p) })
+	rt.RegisterClass("QHoverEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QHoverEvent_delete(p) })
 }
 
 // QHoverEventFromPtr wraps an existing C++ QHoverEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,47 @@ func QHoverEventCast(e qtcore.QEventLike) *QHoverEvent {
 	r := rt.View[QHoverEvent](rt.WrapClassFrom(p, "QHoverEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQHoverEvent wraps the QHoverEvent constructor.
+//
+//	C++: QHoverEvent::QHoverEvent(Type type, const QPointF & scenePos, const QPointF & globalPos, const QPointF & oldPos, Qt::KeyboardModifiers modifiers = …, const QPointingDevice * device = …)
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQHoverEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qhoverevent.html#QHoverEvent
+func NewQHoverEvent(typeArg qtcore.QEventType, scenePos qtcore.QPointF, globalPos qtcore.QPointF, oldPos qtcore.QPointF) *QHoverEvent {
+	rt.CheckThread("NewQHoverEvent")
+	p := C.qute_QHoverEvent_new(C.int64_t(typeArg), cQPointF(scenePos), cQPointF(globalPos), cQPointF(oldPos))
+	h := rt.WrapClass(p, "QHoverEvent", rt.NewOwned)
+	return rt.View[QHoverEvent](h, p)
+}
+
+// NewQHoverEventFull wraps the QHoverEvent constructor.
+//
+//	C++: QHoverEvent::QHoverEvent(Type type, const QPointF & scenePos, const QPointF & globalPos, const QPointF & oldPos, Qt::KeyboardModifiers modifiers = …, const QPointingDevice * device = …)
+//
+// Ownership: device is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQHoverEventFull is NewQHoverEvent with every argument, including those NewQHoverEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qhoverevent.html#QHoverEvent
+func NewQHoverEventFull(typeArg qtcore.QEventType, scenePos qtcore.QPointF, globalPos qtcore.QPointF, oldPos qtcore.QPointF, modifiers qtcore.KeyboardModifiers, device QPointingDeviceLike) *QHoverEvent {
+	rt.CheckThread("NewQHoverEventFull")
+	var devicePtr unsafe.Pointer
+	var deviceH *rt.Handle
+	if device != nil {
+		devicePtr, deviceH = rt.Arg(unsafe.Pointer(device.AsQPointingDevice()), "NewQHoverEventFull")
+	}
+	p := C.qute_QHoverEvent_new_1(C.int64_t(typeArg), cQPointF(scenePos), cQPointF(globalPos), cQPointF(oldPos), C.int64_t(modifiers), devicePtr)
+	runtime.KeepAlive(device)
+	h := rt.WrapClass(p, "QHoverEvent", rt.NewOwned)
+	rt.KeepArg(h, "QHoverEvent.device", deviceH, true)
+	return rt.View[QHoverEvent](h, p)
 }
 
 // OldPos wraps QHoverEvent::oldPos.

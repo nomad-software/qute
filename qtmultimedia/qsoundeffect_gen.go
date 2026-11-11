@@ -717,3 +717,36 @@ func NewQSoundEffectWith(v QSoundEffectSubclass, parent qtcore.QObjectLike) *QSo
 	C.qute_QSoundEffect_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
 	return base.QSoundEffect
 }
+
+// NewQSoundEffectWithAudioDeviceWith is NewQSoundEffectWithAudioDevice for a Go subclass: it constructs a QSoundEffect whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQSoundEffectWithAudioDeviceWith(v QSoundEffectSubclass, audioDevice *QAudioDevice, parent qtcore.QObjectLike) *QSoundEffect {
+	rt.CheckThread("NewQSoundEffectWithAudioDeviceWith")
+	base := v.quteQSoundEffectBase()
+	if base.QSoundEffect != nil {
+		panic("NewQSoundEffectWithAudioDeviceWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQSoundEffectWithAudioDeviceWith")
+	}
+	p := C.qute_QSoundEffect_new_shim_1(rt.UseArg(unsafe.Pointer(audioDevice), "NewQSoundEffectWithAudioDeviceWith"), parentPtr)
+	runtime.KeepAlive(audioDevice)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QSoundEffect", mode)
+	base.QSoundEffect = rt.View[QSoundEffect](h, p)
+	id := h.SetSelf(v, qSoundEffectVTable)
+	mask := rt.Mask(v, qSoundEffectVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QSoundEffect_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QSoundEffect
+}

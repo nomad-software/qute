@@ -644,6 +644,8 @@ func (this *QInputDialog) SetOptionFull(option QInputDialogInputDialogOptions, o
 //
 //	C++: QString QInputDialog::getText(QWidget * parent, const QString & title, const QString & label, QLineEdit::EchoMode echo = …, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
 //
+// Arguments with C++ defaults are left at them; QInputDialogGetTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getText
 func QInputDialogGetText(parent QWidgetLike, title string, label string) string {
 	rt.CheckThread("QInputDialogGetText")
@@ -660,6 +662,8 @@ func QInputDialogGetText(parent QWidgetLike, title string, label string) string 
 //
 //	C++: QString QInputDialog::getMultiLineText(QWidget * parent, const QString & title, const QString & label, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
 //
+// Arguments with C++ defaults are left at them; QInputDialogGetMultiLineTextFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getMultiLineText
 func QInputDialogGetMultiLineText(parent QWidgetLike, title string, label string) string {
 	rt.CheckThread("QInputDialogGetMultiLineText")
@@ -675,6 +679,8 @@ func QInputDialogGetMultiLineText(parent QWidgetLike, title string, label string
 // QInputDialogGetItem wraps QInputDialog::getItem.
 //
 //	C++: QString QInputDialog::getItem(QWidget * parent, const QString & title, const QString & label, const QStringList & items, int current = …, bool editable = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
+//
+// Arguments with C++ defaults are left at them; QInputDialogGetItemFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getItem
 func QInputDialogGetItem(parent QWidgetLike, title string, label string, items []string) string {
@@ -693,6 +699,8 @@ func QInputDialogGetItem(parent QWidgetLike, title string, label string, items [
 //
 //	C++: int QInputDialog::getInt(QWidget * parent, const QString & title, const QString & label, int value = …, int minValue = …, int maxValue = …, int step = …, bool * ok = …, Qt::WindowFlags flags = …)
 //
+// Arguments with C++ defaults are left at them; QInputDialogGetIntFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getInt
 func QInputDialogGetInt(parent QWidgetLike, title string, label string) int {
 	rt.CheckThread("QInputDialogGetInt")
@@ -709,6 +717,8 @@ func QInputDialogGetInt(parent QWidgetLike, title string, label string) int {
 //
 //	C++: double QInputDialog::getDouble(QWidget * parent, const QString & title, const QString & label, double value = …, double minValue = …, double maxValue = …, int decimals = …, bool * ok = …, Qt::WindowFlags flags = …, double step = …)
 //
+// Arguments with C++ defaults are left at them; QInputDialogGetDoubleFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getDouble
 func QInputDialogGetDouble(parent QWidgetLike, title string, label string) float64 {
 	rt.CheckThread("QInputDialogGetDouble")
@@ -719,6 +729,102 @@ func QInputDialogGetDouble(parent QWidgetLike, title string, label string) float
 	r := C.qute_QInputDialog_getDouble(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)))
 	runtime.KeepAlive(parent)
 	return float64(r)
+}
+
+// QInputDialogGetTextFull wraps QInputDialog::getText.
+//
+//	C++: QString QInputDialog::getText(QWidget * parent, const QString & title, const QString & label, QLineEdit::EchoMode echo = …, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
+//
+// QInputDialogGetTextFull is QInputDialogGetText with every argument, including those QInputDialogGetText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getText
+func QInputDialogGetTextFull(parent QWidgetLike, title string, label string, echo QLineEditEchoMode, text string, flags qtcore.WindowFlags, inputMethodHints qtcore.InputMethodHints) (string, bool) {
+	rt.CheckThread("QInputDialogGetTextFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetTextFull")
+	}
+	var okOut C.bool
+	r := C.qute_QInputDialog_getText_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), C.int64_t(echo), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), &okOut, C.int64_t(flags), C.int64_t(inputMethodHints))
+	runtime.KeepAlive(parent)
+	return quteStr(r), bool(okOut)
+}
+
+// QInputDialogGetMultiLineTextFull wraps QInputDialog::getMultiLineText.
+//
+//	C++: QString QInputDialog::getMultiLineText(QWidget * parent, const QString & title, const QString & label, const QString & text = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
+//
+// QInputDialogGetMultiLineTextFull is QInputDialogGetMultiLineText with every argument, including those QInputDialogGetMultiLineText leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getMultiLineText
+func QInputDialogGetMultiLineTextFull(parent QWidgetLike, title string, label string, text string, flags qtcore.WindowFlags, inputMethodHints qtcore.InputMethodHints) (string, bool) {
+	rt.CheckThread("QInputDialogGetMultiLineTextFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetMultiLineTextFull")
+	}
+	var okOut C.bool
+	r := C.qute_QInputDialog_getMultiLineText_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), &okOut, C.int64_t(flags), C.int64_t(inputMethodHints))
+	runtime.KeepAlive(parent)
+	return quteStr(r), bool(okOut)
+}
+
+// QInputDialogGetItemFull wraps QInputDialog::getItem.
+//
+//	C++: QString QInputDialog::getItem(QWidget * parent, const QString & title, const QString & label, const QStringList & items, int current = …, bool editable = …, bool * ok = …, Qt::WindowFlags flags = …, Qt::InputMethodHints inputMethodHints = …)
+//
+// QInputDialogGetItemFull is QInputDialogGetItem with every argument, including those QInputDialogGetItem leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getItem
+func QInputDialogGetItemFull(parent QWidgetLike, title string, label string, items []string, current int, editable bool, flags qtcore.WindowFlags, inputMethodHints qtcore.InputMethodHints) (string, bool) {
+	rt.CheckThread("QInputDialogGetItemFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetItemFull")
+	}
+	itemsData, itemsLens := quteStrListArg(items)
+	var okOut C.bool
+	r := C.qute_QInputDialog_getItem_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), (*C.char)(unsafe.Pointer(unsafe.SliceData(itemsData))), (*C.ptrdiff_t)(unsafe.SliceData(itemsLens)), C.ptrdiff_t(len(items)), C.int(current), C.bool(editable), &okOut, C.int64_t(flags), C.int64_t(inputMethodHints))
+	runtime.KeepAlive(parent)
+	return quteStr(r), bool(okOut)
+}
+
+// QInputDialogGetIntFull wraps QInputDialog::getInt.
+//
+//	C++: int QInputDialog::getInt(QWidget * parent, const QString & title, const QString & label, int value = …, int minValue = …, int maxValue = …, int step = …, bool * ok = …, Qt::WindowFlags flags = …)
+//
+// QInputDialogGetIntFull is QInputDialogGetInt with every argument, including those QInputDialogGetInt leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getInt
+func QInputDialogGetIntFull(parent QWidgetLike, title string, label string, value int, minValue int, maxValue int, step int, flags qtcore.WindowFlags) (int, bool) {
+	rt.CheckThread("QInputDialogGetIntFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetIntFull")
+	}
+	var okOut C.bool
+	r := C.qute_QInputDialog_getInt_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), C.int(value), C.int(minValue), C.int(maxValue), C.int(step), &okOut, C.int64_t(flags))
+	runtime.KeepAlive(parent)
+	return int(r), bool(okOut)
+}
+
+// QInputDialogGetDoubleFull wraps QInputDialog::getDouble.
+//
+//	C++: double QInputDialog::getDouble(QWidget * parent, const QString & title, const QString & label, double value = …, double minValue = …, double maxValue = …, int decimals = …, bool * ok = …, Qt::WindowFlags flags = …, double step = …)
+//
+// QInputDialogGetDoubleFull is QInputDialogGetDouble with every argument, including those QInputDialogGetDouble leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qinputdialog.html#getDouble
+func QInputDialogGetDoubleFull(parent QWidgetLike, title string, label string, value float64, minValue float64, maxValue float64, decimals int, flags qtcore.WindowFlags, step float64) (float64, bool) {
+	rt.CheckThread("QInputDialogGetDoubleFull")
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQWidget()), "QInputDialogGetDoubleFull")
+	}
+	var okOut C.bool
+	r := C.qute_QInputDialog_getDouble_1(parentPtr, (*C.char)(unsafe.Pointer(unsafe.StringData(title))), C.ptrdiff_t(len(title)), (*C.char)(unsafe.Pointer(unsafe.StringData(label))), C.ptrdiff_t(len(label)), C.double(value), C.double(minValue), C.double(maxValue), C.int(decimals), &okOut, C.int64_t(flags), C.double(step))
+	runtime.KeepAlive(parent)
+	return float64(r), bool(okOut)
 }
 
 // OnTextValueChanged connects f to the textValueChanged signal. The connection ends when the

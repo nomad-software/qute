@@ -46,7 +46,8 @@ func (g *Gen) writeReport(path string) error {
 	var blind []string // results whose death qute cannot see
 	var noSub []row    // object classes Go cannot subclass, with why
 	subclassable := 0
-	var noVirt []row // virtuals Go cannot override, with why
+	var noVirt []row             // virtuals Go cannot override, with why
+	var noFull, noFullOpen []row // methods without a Full form, with why
 	inherited := map[string]bool{}
 	for _, m := range g.modules {
 		for _, c := range m.Classes {
@@ -103,6 +104,19 @@ func (g *Gen) writeReport(path string) error {
 					if d := virtualDefaults(v); len(d) > 0 {
 						rules = append(rules, row{v.Owner.Name, fmt.Sprintf("- virtual `%s` → %s", v.Sig, strings.Join(d, ", "))})
 					}
+				}
+			}
+			seenFull := map[string]bool{}
+			for _, n := range c.NoFull {
+				if seenFull[n.Sig] {
+					continue
+				}
+				seenFull[n.Sig] = true
+				r := row{c.Name, fmt.Sprintf("- `%s`: %s", n.Sig, n.Why)}
+				if strings.HasPrefix(n.Why, "on purpose") {
+					noFull = append(noFull, r)
+				} else {
+					noFullOpen = append(noFullOpen, r)
 				}
 			}
 			for _, n := range c.NoVirtuals {
@@ -197,6 +211,13 @@ func (g *Gen) writeReport(path string) error {
 	section("Skipped: missing type support, by class", missing)
 	section("Skipped on purpose", onPurpose)
 	section("Virtuals Go cannot override", noVirt)
+	p("## Full forms not built\n")
+	p("These methods are bound without their defaulted arguments, but their Full")
+	p("form, which takes every argument, cannot be built. Open ones need an `out` or")
+	p("`in-out` rule on a defaulted pointer (`bool *ok`), or type support; the others")
+	p("are left out on purpose (`no-full` in the overlay, or a type-wide reason).\n")
+	section("Full forms not built: open", noFullOpen)
+	section("Full forms not built on purpose", noFull)
 	p("## Classes Go cannot subclass (%d)\n", len(noSub))
 	p("Every other bound class with virtuals can be subclassed from Go: embed its")
 	p("Base and construct with New<Class>With. These cannot:\n")
@@ -247,7 +268,7 @@ func (g *Gen) writeReport(path string) error {
 			p("- %s", w)
 		}
 	}
-	open := len(rules) + len(numbered) + len(missing) + len(g.report.noTest) + len(blind)
+	open := len(rules) + len(numbered) + len(missing) + len(g.report.noTest) + len(blind) + len(noFullOpen)
 	var sum strings.Builder
 	fmt.Fprintf(&sum, "## Summary\n\n| | Count |\n| --- | --- |\n")
 	fmt.Fprintf(&sum, "| Bound constructors, methods and functions | %d |\n", total)
@@ -262,6 +283,8 @@ func (g *Gen) writeReport(path string) error {
 	fmt.Fprintf(&sum, "| Default ownership rules to review | %d |\n", len(rules))
 	fmt.Fprintf(&sum, "| Numbered overload names | %d |\n", len(numbered))
 	fmt.Fprintf(&sum, "| Waiting for type support | %d |\n", len(missing))
+	fmt.Fprintf(&sum, "| Full forms not built (open) | %d |\n", len(noFullOpen))
+	fmt.Fprintf(&sum, "| Full forms not built on purpose | %d |\n", len(noFull))
 	fmt.Fprintf(&sum, "| Ownership rules without a generated test | %d |\n", len(g.report.noTest))
 	fmt.Fprintf(&sum, "| Results whose death qute cannot see | %d |\n\n", len(blind))
 	if open == 0 {

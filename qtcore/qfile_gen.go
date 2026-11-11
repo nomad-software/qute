@@ -322,6 +322,8 @@ func QFileSupportsMoveToTrash() bool {
 //
 //	C++: bool QFile::moveToTrash(const QString & fileName, QString * pathInTrash = …)
 //
+// Arguments with C++ defaults are left at them; QFileMoveToTrashFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qfile.html#moveToTrash
 func QFileMoveToTrash(fileName string) bool {
 	rt.CheckThread("QFileMoveToTrash")
@@ -393,6 +395,20 @@ func QFileSetPermissions(filename string, permissionSpec QFileDevicePermissions)
 	rt.CheckThread("QFileSetPermissions")
 	r := C.qute_QFile_setPermissions((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)), C.int64_t(permissionSpec))
 	return bool(r)
+}
+
+// QFileMoveToTrashFull wraps QFile::moveToTrash.
+//
+//	C++: bool QFile::moveToTrash(const QString & fileName, QString * pathInTrash = …)
+//
+// QFileMoveToTrashFull is QFileMoveToTrash with every argument, including those QFileMoveToTrash leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfile.html#moveToTrash
+func QFileMoveToTrashFull(fileName string) (bool, string) {
+	rt.CheckThread("QFileMoveToTrashFull")
+	var pathInTrashOut C.qute_str
+	r := C.qute_QFile_moveToTrash_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), &pathInTrashOut)
+	return bool(r), quteStr(pathInTrashOut)
 }
 
 var qFileVTable = []rt.Virtual{
@@ -853,6 +869,38 @@ func NewQFileWith(v QFileSubclass, parent QObjectLike) *QFile {
 		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWith")
 	}
 	p := C.qute_QFile_new_shim(parentPtr)
+	runtime.KeepAlive(parent)
+	mode := rt.NewOwned
+	if parentPtr != nil {
+		mode = rt.NewParented
+	}
+	h := rt.WrapClass(p, "QFile", mode)
+	base.QFile = rt.View[QFile](h, p)
+	id := h.SetSelf(v, qFileVTable)
+	mask := rt.Mask(v, qFileVTable)
+	if len(mask) == 0 {
+		mask = []uint64{0}
+	}
+	C.qute_QFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(&mask[0])))
+	return base.QFile
+}
+
+// NewQFileWithNameWith is NewQFileWithName for a Go subclass: it constructs a QFile whose
+// virtual methods dispatch to v. The
+// object holds v for as long as it lives, so v's Go state survives even when
+// only Qt refers to it: through its window's handle, or pinned (Delete it when
+// done) if it has no parent.
+func NewQFileWithNameWith(v QFileSubclass, name string, parent QObjectLike) *QFile {
+	rt.CheckThread("NewQFileWithNameWith")
+	base := v.quteQFileBase()
+	if base.QFile != nil {
+		panic("NewQFileWithNameWith: value is already constructed; use a fresh value")
+	}
+	var parentPtr unsafe.Pointer
+	if parent != nil {
+		parentPtr = rt.UseArg(unsafe.Pointer(parent.AsQObject()), "NewQFileWithNameWith")
+	}
+	p := C.qute_QFile_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), parentPtr)
 	runtime.KeepAlive(parent)
 	mode := rt.NewOwned
 	if parentPtr != nil {

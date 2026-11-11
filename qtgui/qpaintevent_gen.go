@@ -25,7 +25,7 @@ type QPaintEventLike interface{ AsQPaintEvent() *QPaintEvent }
 func (this *QPaintEvent) AsQPaintEvent() *QPaintEvent { return this }
 
 func init() {
-	rt.RegisterClass("QPaintEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QPaintEvent_delete(p) })
+	rt.RegisterClass("QPaintEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QPaintEvent_delete(p) })
 }
 
 // QPaintEventFromPtr wraps an existing C++ QPaintEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,31 @@ func QPaintEventCast(e qtcore.QEventLike) *QPaintEvent {
 	r := rt.View[QPaintEvent](rt.WrapClassFrom(p, "QPaintEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQPaintEventWithRegion wraps the QPaintEvent constructor.
+//
+//	C++: QPaintEvent::QPaintEvent(const QRegion & paintRegion)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpaintevent.html#QPaintEvent
+func NewQPaintEventWithRegion(paintRegion *QRegion) *QPaintEvent {
+	rt.CheckThread("NewQPaintEventWithRegion")
+	p := C.qute_QPaintEvent_new(rt.UseArg(unsafe.Pointer(paintRegion), "NewQPaintEventWithRegion"))
+	runtime.KeepAlive(paintRegion)
+	h := rt.WrapClass(p, "QPaintEvent", rt.NewOwned)
+	return rt.View[QPaintEvent](h, p)
+}
+
+// NewQPaintEventWithRect wraps the QPaintEvent constructor.
+//
+//	C++: QPaintEvent::QPaintEvent(const QRect & paintRect)
+//
+// Qt docs: https://doc.qt.io/qt-6/qpaintevent.html#QPaintEvent
+func NewQPaintEventWithRect(paintRect qtcore.QRect) *QPaintEvent {
+	rt.CheckThread("NewQPaintEventWithRect")
+	p := C.qute_QPaintEvent_new_1(cQRect(paintRect))
+	h := rt.WrapClass(p, "QPaintEvent", rt.NewOwned)
+	return rt.View[QPaintEvent](h, p)
 }
 
 // Rect wraps QPaintEvent::rect.

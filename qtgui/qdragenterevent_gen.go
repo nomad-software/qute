@@ -25,7 +25,7 @@ type QDragEnterEventLike interface{ AsQDragEnterEvent() *QDragEnterEvent }
 func (this *QDragEnterEvent) AsQDragEnterEvent() *QDragEnterEvent { return this }
 
 func init() {
-	rt.RegisterClass("QDragEnterEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QDragEnterEvent_delete(p) })
+	rt.RegisterClass("QDragEnterEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QDragEnterEvent_delete(p) })
 }
 
 // QDragEnterEventFromPtr wraps an existing C++ QDragEnterEvent. This is an unsafe escape hatch: own says
@@ -51,4 +51,27 @@ func QDragEnterEventCast(e qtcore.QEventLike) *QDragEnterEvent {
 	r := rt.View[QDragEnterEvent](rt.WrapClassFrom(p, "QDragEnterEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQDragEnterEventWithPointF wraps the QDragEnterEvent constructor.
+//
+//	C++: QDragEnterEvent::QDragEnterEvent(QPointF pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
+//
+// Ownership: data is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Qt docs: https://doc.qt.io/qt-6/qdragenterevent.html#QDragEnterEvent
+func NewQDragEnterEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions, data qtcore.QMimeDataLike, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QDragEnterEvent {
+	rt.CheckThread("NewQDragEnterEventWithPointF")
+	var dataPtr unsafe.Pointer
+	var dataH *rt.Handle
+	if data != nil {
+		dataPtr, dataH = rt.Arg(unsafe.Pointer(data.AsQMimeData()), "NewQDragEnterEventWithPointF")
+	}
+	p := C.qute_QDragEnterEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
+	runtime.KeepAlive(data)
+	h := rt.WrapClass(p, "QDragEnterEvent", rt.NewOwned)
+	rt.KeepArg(h, "QDragEnterEvent.data", dataH, true)
+	return rt.View[QDragEnterEvent](h, p)
 }

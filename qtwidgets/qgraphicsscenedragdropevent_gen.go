@@ -29,7 +29,7 @@ func (this *QGraphicsSceneDragDropEvent) AsQGraphicsSceneDragDropEvent() *QGraph
 }
 
 func init() {
-	rt.RegisterClass("QGraphicsSceneDragDropEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QGraphicsSceneDragDropEvent_delete(p) })
+	rt.RegisterClass("QGraphicsSceneDragDropEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QGraphicsSceneDragDropEvent_delete(p) })
 }
 
 // QGraphicsSceneDragDropEventFromPtr wraps an existing C++ QGraphicsSceneDragDropEvent. This is an unsafe escape hatch: own says
@@ -55,6 +55,34 @@ func QGraphicsSceneDragDropEventCast(e qtcore.QEventLike) *QGraphicsSceneDragDro
 	r := rt.View[QGraphicsSceneDragDropEvent](rt.WrapClassFrom(p, "QGraphicsSceneDragDropEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQGraphicsSceneDragDropEvent wraps the QGraphicsSceneDragDropEvent constructor.
+//
+//	C++: QGraphicsSceneDragDropEvent::QGraphicsSceneDragDropEvent(Type type = …)
+//
+// Arguments with C++ defaults are left at them; NewQGraphicsSceneDragDropEventFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenedragdropevent.html#QGraphicsSceneDragDropEvent
+func NewQGraphicsSceneDragDropEvent() *QGraphicsSceneDragDropEvent {
+	rt.CheckThread("NewQGraphicsSceneDragDropEvent")
+	p := C.qute_QGraphicsSceneDragDropEvent_new()
+	h := rt.WrapClass(p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneDragDropEvent](h, p)
+}
+
+// NewQGraphicsSceneDragDropEventFull wraps the QGraphicsSceneDragDropEvent constructor.
+//
+//	C++: QGraphicsSceneDragDropEvent::QGraphicsSceneDragDropEvent(Type type = …)
+//
+// NewQGraphicsSceneDragDropEventFull is NewQGraphicsSceneDragDropEvent with every argument, including those NewQGraphicsSceneDragDropEvent leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscenedragdropevent.html#QGraphicsSceneDragDropEvent
+func NewQGraphicsSceneDragDropEventFull(typeArg qtcore.QEventType) *QGraphicsSceneDragDropEvent {
+	rt.CheckThread("NewQGraphicsSceneDragDropEventFull")
+	p := C.qute_QGraphicsSceneDragDropEvent_new_1(C.int64_t(typeArg))
+	h := rt.WrapClass(p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
+	return rt.View[QGraphicsSceneDragDropEvent](h, p)
 }
 
 // Pos wraps QGraphicsSceneDragDropEvent::pos.

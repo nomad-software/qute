@@ -28,7 +28,7 @@ func (this *QDynamicPropertyChangeEvent) AsQDynamicPropertyChangeEvent() *QDynam
 }
 
 func init() {
-	rt.RegisterClass("QDynamicPropertyChangeEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QDynamicPropertyChangeEvent_delete(p) })
+	rt.RegisterClass("QDynamicPropertyChangeEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QDynamicPropertyChangeEvent_delete(p) })
 }
 
 // QDynamicPropertyChangeEventFromPtr wraps an existing C++ QDynamicPropertyChangeEvent. This is an unsafe escape hatch: own says
@@ -54,6 +54,18 @@ func QDynamicPropertyChangeEventCast(e QEventLike) *QDynamicPropertyChangeEvent 
 	r := rt.View[QDynamicPropertyChangeEvent](rt.WrapClassFrom(p, "QDynamicPropertyChangeEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQDynamicPropertyChangeEventWithBytes wraps the QDynamicPropertyChangeEvent constructor.
+//
+//	C++: QDynamicPropertyChangeEvent::QDynamicPropertyChangeEvent(const QByteArray & name)
+//
+// Qt docs: https://doc.qt.io/qt-6/qdynamicpropertychangeevent.html#QDynamicPropertyChangeEvent
+func NewQDynamicPropertyChangeEventWithBytes(name []byte) *QDynamicPropertyChangeEvent {
+	rt.CheckThread("NewQDynamicPropertyChangeEventWithBytes")
+	p := C.qute_QDynamicPropertyChangeEvent_new((*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)))
+	h := rt.WrapClass(p, "QDynamicPropertyChangeEvent", rt.NewOwned)
+	return rt.View[QDynamicPropertyChangeEvent](h, p)
 }
 
 // PropertyName wraps QDynamicPropertyChangeEvent::propertyName.

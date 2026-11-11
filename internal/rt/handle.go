@@ -57,22 +57,41 @@ const (
 	KindValue
 )
 
-// Handle is the Go-side identity of one C++ object.
+// Handle is the Go-side identity of one C++ object. It holds what every
+// handle needs; the state only some objects have (pins, connections, kept
+// references, anchoring, a Go subclass's slot, debug call sites) is in its
+// handleExt, made the first time it is needed. A value handed to a model's
+// override for every row then costs a small handle.
 type Handle struct {
 	ptr     unsafe.Pointer // registry key: QObject* or the object pointer
 	class   string
 	kind    Kind
+	inline  bool // an inline value: its bytes are in Go memory (inline.go)
+	scoped  bool // a scoped argument: Dead when its callback returns (keepMu)
 	state   atomic.Uint32
 	pins    atomic.Int32
 	serial  uint64
 	deleter func(unsafe.Pointer)
 
 	mu         sync.Mutex
-	cleanup    runtime.Cleanup
 	hasCleanup bool
+	cleanup    runtime.Cleanup
+	cache      []any
+	cache1     [1]any // cache's first element, which most handles only need
+
+	// deps are the objects this one only makes sense with (a QModelIndex's
+	// model); set once at creation, so Use reads them without a lock.
+	deps []*Handle
+
+	ext atomic.Pointer[handleExt]
+}
+
+// handleExt is the state of a handle that only some objects have. Each field
+// keeps the lock it had on Handle.
+type handleExt struct {
+	// guarded by Handle.mu
 	visiblePin bool
 	keepPins   int32
-	cache      []any
 	selfSlot   uintptr // the id the shim dispatches virtuals with
 	deathNote  string
 	callbacks  map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
@@ -85,9 +104,8 @@ type Handle struct {
 	hasRelease bool
 
 	// scope binding (keep.go), guarded by keepMu
-	scoped bool      // a scoped argument: Dead when its callback returns
-	scope  *Handle   // on a keeper: the scoped argument it must not outlive
-	bound  []*Handle // on a scoped argument: the keepers bound to it, oldest first
+	scope *Handle   // on a keeper: the scoped argument it must not outlive
+	bound []*Handle // on a scoped argument: the keepers bound to it, oldest first
 
 	// anchoring (anchor.go), guarded by anchorMu
 	anchorN  int32                // reasons to hold the Go state: connections, Self, keeps
@@ -95,17 +113,31 @@ type Handle struct {
 	holder   *Handle              // the root handle holding this one
 	anchored map[*Handle]struct{} // handles this root holds
 
-	// deps are the objects this one only makes sense with (a QModelIndex's
-	// model); set once at creation, so Use reads them without a lock.
-	deps []*Handle
-
-	// Self is the Go value that overrides virtuals (nil for plain wrappers).
-	Self any
-	// VTable is the generated dispatch table for Self.
-	VTable []Virtual
+	// self is the Go value that overrides virtuals, vtable its generated
+	// dispatch table (set once by SetSelf, before Qt can dispatch)
+	self   any
+	vtable []Virtual
 
 	created string // call site of creation (debug builds)
 	died    string // call site of death (debug builds)
+}
+
+// memBytesNow is the external memory counted for the handle (memory.go),
+// read without making its extension.
+func (h *Handle) memBytesNow() int64 {
+	if e := h.ext.Load(); e != nil {
+		return e.memBytes
+	}
+	return 0
+}
+
+// x returns the handle's extension, making it the first time.
+func (h *Handle) x() *handleExt {
+	if e := h.ext.Load(); e != nil {
+		return e
+	}
+	h.ext.CompareAndSwap(nil, &handleExt{})
+	return h.ext.Load()
 }
 
 // Ref is the only field of every generated wrapper root struct. All wrapper
@@ -220,6 +252,12 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 			return h
 		}
 	}
+	if kind == KindQObject && mode == KeepOrBorrow && isDying(key) {
+		// the object is being destroyed: nothing may be registered (dying.go)
+		h := wrapDyingLocked(key, class)
+		regMu.Unlock()
+		return h
+	}
 	st := mode.state()
 	if st == Owned && kind == KindQObject && AppExists() && HasParent(key) {
 		st = Parented // a transfer-to-go result Qt gave a parent (see TransferToGo)
@@ -235,6 +273,7 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	} else {
 		registry[key] = &regEntry{w: weak.Make(h), serial: h.serial, watched: needWatch}
 	}
+	delete(dying, key) // a new object at the address of one destroyed earlier
 	regMu.Unlock()
 	if needWatch {
 		watch(key)
@@ -273,7 +312,7 @@ func newHandle(key unsafe.Pointer, class string, kind Kind, st State, deleter fu
 	h := &Handle{ptr: key, class: class, kind: kind, deleter: deleter, serial: serialCounter.Add(1)}
 	h.state.Store(uint32(st))
 	if debugEnabled {
-		h.created = callSite()
+		h.x().created = callSite()
 	}
 	return h
 }
@@ -283,8 +322,20 @@ func View[T any](h *Handle, p unsafe.Pointer) *T {
 	if h == nil || p == nil {
 		return nil
 	}
+	if h.inline {
+		p = h.ptr // the Go copy, not the C++ object it was copied from
+	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
+	if len(h.cache) == 0 {
+		// the first wrapper (most handles have only one), with no slice to
+		// allocate: cache starts on the array inside the handle
+		v := new(T)
+		*RefOf(unsafe.Pointer(v)) = Ref{H: h, P: p}
+		h.cache1[0] = v
+		h.cache = h.cache1[:1]
+		return v
+	}
 	for _, c := range h.cache {
 		if v, ok := c.(*T); ok && RefOf(unsafe.Pointer(v)).P == p {
 			return v
@@ -389,7 +440,7 @@ func (h *Handle) attachCleanup() {
 		return
 	}
 	arg := cleanupArg{key: h.ptr, serial: h.serial, class: h.class, kind: h.kind, deleter: h.deleter,
-		registered: h.registeredKind(), mem: h.memBytes}
+		registered: h.registeredKind(), mem: h.memBytesNow()}
 	h.cleanup = runtime.AddCleanup(h, enqueueCleanup, arg)
 	h.hasCleanup = true
 	h.mu.Unlock()
@@ -453,7 +504,7 @@ func (h *Handle) Keep() {
 		return
 	}
 	h.mu.Lock()
-	h.keepPins++
+	h.x().keepPins++
 	h.mu.Unlock()
 	h.Pin()
 }
@@ -461,11 +512,11 @@ func (h *Handle) Keep() {
 // Unkeep releases one Keep.
 func (h *Handle) Unkeep() {
 	h.mu.Lock()
-	if h.keepPins == 0 {
+	if h.x().keepPins == 0 {
 		h.mu.Unlock()
 		return
 	}
-	h.keepPins--
+	h.x().keepPins--
 	h.mu.Unlock()
 	h.Unpin()
 }
@@ -473,11 +524,11 @@ func (h *Handle) Unkeep() {
 // SetVisiblePin pins or unpins the handle for being a visible top-level window.
 func (h *Handle) SetVisiblePin(visible bool) {
 	h.mu.Lock()
-	if h.visiblePin == visible {
+	if h.x().visiblePin == visible {
 		h.mu.Unlock()
 		return
 	}
-	h.visiblePin = visible
+	h.x().visiblePin = visible
 	h.mu.Unlock()
 	if visible {
 		h.Pin()
@@ -492,10 +543,10 @@ func (h *Handle) SetVisiblePin(visible bool) {
 // dispatches with.
 func (h *Handle) SetSelf(self any, vt []Virtual) uintptr {
 	h.mu.Lock()
-	h.Self = self
-	h.VTable = vt
-	h.selfSlot = newSlot(h)
-	id := h.selfSlot
+	h.x().self = self
+	h.x().vtable = vt
+	h.x().selfSlot = newSlot(h)
+	id := h.x().selfSlot
 	h.mu.Unlock()
 	// The death notice drops the id. A handle collected first (with its tree,
 	// which the GUI thread then deletes) is gone by then, so its id goes with
@@ -515,7 +566,21 @@ func (h *Handle) GoValue() any {
 	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	return h.Self
+	if e := h.ext.Load(); e != nil {
+		return e.self
+	}
+	return nil
+}
+
+// Subclass returns the Go value that overrides virtuals and its dispatch
+// table (tests call an override as the shim does).
+func (h *Handle) Subclass() (any, []Virtual) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if e := h.ext.Load(); e != nil {
+		return e.self, e.vtable
+	}
+	return nil, nil
 }
 
 // Destroyed is called when Qt (or a shim destructor) reports that the object
@@ -525,9 +590,16 @@ func Destroyed(key unsafe.Pointer, why string) {
 	regMu.Lock()
 	e := registry[key]
 	delete(registry, key)
+	var h *Handle
+	if e != nil {
+		h = e.w.Value()
+		if h != nil && h.kind == KindQObject {
+			buryLocked(key, h) // handed back if Qt passes the dying object to Go
+		}
+	}
 	regMu.Unlock()
 	if e != nil {
-		if h := e.w.Value(); h != nil {
+		if h != nil {
 			h.markDead(why)
 		} else {
 			// the handle was collected first (its tree is being freed):
@@ -544,15 +616,20 @@ func (h *Handle) markDead(why string) {
 		return
 	}
 	h.stopCleanup()
+	if h.ext.Load() == nil && why == scopedNote && !debugEnabled {
+		// a scoped argument with no other state (the usual case): nothing
+		// to release, and deadMessage knows its note
+		return
+	}
 	h.mu.Lock()
-	if h.deathNote == "" {
-		h.deathNote = why
+	if h.x().deathNote == "" {
+		h.x().deathNote = why
 	}
 	if debugEnabled {
-		h.died = callSite()
+		h.x().died = callSite()
 	}
-	visible, keeps, id := h.visiblePin, h.keepPins, h.selfSlot
-	h.visiblePin, h.keepPins, h.selfSlot = false, 0, 0
+	visible, keeps, id := h.x().visiblePin, h.x().keepPins, h.x().selfSlot
+	h.x().visiblePin, h.x().keepPins, h.x().selfSlot = false, 0, 0
 	h.mu.Unlock()
 	if visible {
 		h.Unpin()
@@ -603,12 +680,16 @@ func (h *Handle) Delete(method string) {
 				method, h.class, hint))
 		}
 	}
+	if h.inline {
+		h.markDead("deleted by Delete()") // the GC frees its memory
+		return
+	}
 	if h.deleter == nil {
 		panic(fmt.Sprintf("%s: %s has no public destructor", method, h.class))
 	}
 	h.stopCleanup()
 	h.mu.Lock()
-	h.deathNote = "deleted by Delete()"
+	h.x().deathNote = "deleted by Delete()"
 	h.mu.Unlock()
 	key, del := h.ptr, h.deleter
 	if h.registeredKind() {
@@ -668,7 +749,10 @@ func CheckThread(method string) {
 
 func deadMessage(h *Handle, method string) string {
 	h.mu.Lock()
-	why, site, created := h.deathNote, h.died, h.created
+	why, site, created := h.x().deathNote, h.x().died, h.x().created
+	if why == "" && h.scoped {
+		why = scopedNote
+	}
 	h.mu.Unlock()
 	var msg string
 	if why == scopedNote {
@@ -717,6 +801,8 @@ type classInfo struct {
 	// parentedDelete, when set, is the fix Delete() names for a Parented
 	// object of this class (see RegisterParentedDelete)
 	parentedDelete string
+	// inline, when set, is the size of an inline value class (inline.go)
+	inline int
 }
 
 var classes sync.Map // name -> classInfo
@@ -774,6 +860,17 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	}
 	ci := v.(classInfo)
 	kind := ci.kind
+	if ci.inline > 0 {
+		switch mode {
+		case CopyInline:
+			return newInline(p, class, ci.inline)
+		case TakeOwned, NewOwned:
+			// a heap copy that is Go's: keep its bytes, free it now
+			h := newInline(p, class, ci.inline)
+			ci.deleter(p)
+			return h
+		}
+	}
 	switch mode {
 	case NewOwned:
 		h := Wrap(p, class, kind, TakeOwned, ci.deleter)
@@ -797,7 +894,11 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 			return Wrap(q, classNameC(q), KindQObject, mode, DeleteQObject)
 		}
 	}
-	if kind == KindNotify {
+	if kind == KindNotify && mode != NewScoped {
+		// A scoped argument always gets a handle of its own (Wrap), even for
+		// an object Go built and holds (an event it sent): expiring it when
+		// the handler returns must not kill the caller's handle.
+		//
 		// Only objects built by our shim constructors report their death, so
 		// only those may be registered. Others get a fresh plain handle.
 		if h := Lookup(p); h != nil {

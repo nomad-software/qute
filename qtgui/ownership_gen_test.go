@@ -91,6 +91,18 @@ func TestOwnership_NewQActionWithIcon(t *testing.T) {
 	})
 }
 
+// QActionEvent::QActionEvent(int type, QAction * action, QAction * before = …): keep rules
+func TestKeep_QActionEvent_QActionEventWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQAction(nil)
+		x := qtgui.NewQActionEventWithType(1, a1)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("action: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QActionGroup::QActionGroup(QObject * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQActionGroup(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -184,6 +196,18 @@ func TestKeep_QActionGroup_RemoveAction(t *testing.T) {
 			t.Error("aArg: still kept after the call")
 		}
 		recv.Delete()
+	})
+}
+
+// QChildWindowEvent::QChildWindowEvent(Type type, QWindow * childWindow): keep rules
+func TestKeep_QChildWindowEvent_QChildWindowEventWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQWindow(nil)
+		x := qtgui.NewQChildWindowEventWithType(qtcore.QEventType(1), a1)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("childWindow: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 
@@ -289,6 +313,42 @@ func TestOwnership_QDrag_SetMimeData(t *testing.T) {
 		if recv.Alive() {
 			recv.Delete()
 		}
+	})
+}
+
+// QDragEnterEvent::QDragEnterEvent(QPointF pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers): keep rules
+func TestKeep_QDragEnterEvent_QDragEnterEventWithPointF(t *testing.T) {
+	qutetest.Run(t, func() {
+		a2 := qtcore.NewQMimeData()
+		x := qtgui.NewQDragEnterEventWithPointF(qtcore.QPointF{}, qtcore.DropActions(0), a2, qtcore.MouseButtons(0), qtcore.KeyboardModifiers(0))
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a2)) {
+			t.Error("data: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// QDragMoveEvent::QDragMoveEvent(QPointF pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …): keep rules
+func TestKeep_QDragMoveEvent_QDragMoveEventWithPointF(t *testing.T) {
+	qutetest.Run(t, func() {
+		a2 := qtcore.NewQMimeData()
+		x := qtgui.NewQDragMoveEventWithPointF(qtcore.QPointF{}, qtcore.DropActions(0), a2, qtcore.MouseButtons(0), qtcore.KeyboardModifiers(0))
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a2)) {
+			t.Error("data: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
+// QDropEvent::QDropEvent(const QPointF & pos, Qt::DropActions actions, const QMimeData * data, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type = …): keep rules
+func TestKeep_QDropEvent_QDropEventWithPointF(t *testing.T) {
+	qutetest.Run(t, func() {
+		a2 := qtcore.NewQMimeData()
+		x := qtgui.NewQDropEventWithPointF(qtcore.QPointF{}, qtcore.DropActions(0), a2, qtcore.MouseButtons(0), qtcore.KeyboardModifiers(0))
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a2)) {
+			t.Error("data: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 
@@ -424,6 +484,18 @@ func TestOwnership_NewQInputDeviceWithName(t *testing.T) {
 	})
 }
 
+// QInputEvent::QInputEvent(Type type, const QInputDevice * m_dev, Qt::KeyboardModifiers modifiers = …): keep rules
+func TestKeep_QInputEvent_QInputEventWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQInputDevice(nil)
+		x := qtgui.NewQInputEventWithType(qtcore.QEventType(1), a1)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("m_dev: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QIntValidator::QIntValidator(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQIntValidator(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -543,6 +615,18 @@ func TestKeep_QMovie_SetDevice(t *testing.T) {
 			t.Error("device: not kept by the receiver")
 		}
 		recv.Delete()
+	})
+}
+
+// QNativeGestureEvent::QNativeGestureEvent(Qt::NativeGestureType type, const QPointingDevice * dev, int fingerCount, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, qreal value, const QPointF & delta, quint64 sequenceId = …): keep rules
+func TestKeep_QNativeGestureEvent_QNativeGestureEventWithNativeGestureType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQPointingDevice(nil)
+		x := qtgui.NewQNativeGestureEventWithNativeGestureType(qtcore.NativeGestureType(0), a1, 1, qtcore.QPointF{}, qtcore.QPointF{}, qtcore.QPointF{}, 1, qtcore.QPointF{})
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("dev: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 
@@ -696,6 +780,18 @@ func TestKeep_QPdfWriter_QPdfWriterWithIODevice(t *testing.T) {
 	})
 }
 
+// QPointerEvent::QPointerEvent(Type type, const QPointingDevice * dev, Qt::KeyboardModifiers modifiers = …, const QList<QEventPoint> & points = …): keep rules
+func TestKeep_QPointerEvent_QPointerEventWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQPointingDevice(nil)
+		x := qtgui.NewQPointerEventWithType(qtcore.QEventType(1), a1)
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("dev: not kept by the new object")
+		}
+		x.Delete()
+	})
+}
+
 // QPointingDevice::QPointingDevice(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQPointingDevice(t *testing.T) {
 	qutetest.Run(t, func() {
@@ -808,6 +904,21 @@ func TestOwnership_NewQRegularExpressionValidatorWithRegularExpression(t *testin
 		if y.Alive() {
 			t.Error("alive after Delete")
 		}
+	})
+}
+
+// QScreenOrientationChangeEvent::QScreenOrientationChangeEvent(QScreen * screen, Qt::ScreenOrientation orientation) (test from the overlay)
+func TestOwnership_QScreenOrientationChangeEvent_NewQScreenOrientationChangeEventWithScreen(t *testing.T) {
+	qutetest.Run(t, func() {
+		s := qtgui.QGuiApplicationPrimaryScreen()
+		e := qtgui.NewQScreenOrientationChangeEventWithScreen(s, qtcore.LandscapeOrientation)
+		if !rt.KeepsArg(unsafe.Pointer(e), unsafe.Pointer(s)) {
+			t.Error("screen: not kept by the event")
+		}
+		if e.Screen() != s {
+			t.Error("Screen() is not the screen given")
+		}
+		e.Delete()
 	})
 }
 
@@ -1462,6 +1573,18 @@ func TestOwnership_QSyntaxHighlighter_SetDocument(t *testing.T) {
 		}
 		h.Delete()
 		doc.Delete()
+	})
+}
+
+// QTabletEvent::QTabletEvent(Type t, const QPointingDevice * device, const QPointF & pos, const QPointF & globalPos, qreal pressure, float xTilt, float yTilt, float tangentialPressure, qreal rotation, float z, Qt::KeyboardModifiers keyState, Qt::MouseButton button, Qt::MouseButtons buttons): keep rules
+func TestKeep_QTabletEvent_QTabletEventWithType(t *testing.T) {
+	qutetest.Run(t, func() {
+		a1 := qtgui.NewQPointingDevice(nil)
+		x := qtgui.NewQTabletEventWithType(qtcore.QEventType(1), a1, qtcore.QPointF{}, qtcore.QPointF{}, 1, 1, 1, 1, 1, 1, qtcore.KeyboardModifiers(0), qtcore.MouseButtons(1), qtcore.MouseButtons(0))
+		if !rt.KeepsArg(unsafe.Pointer(x), unsafe.Pointer(a1)) {
+			t.Error("device: not kept by the new object")
+		}
+		x.Delete()
 	})
 }
 

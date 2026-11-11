@@ -25,7 +25,7 @@ type QNativeGestureEventLike interface{ AsQNativeGestureEvent() *QNativeGestureE
 func (this *QNativeGestureEvent) AsQNativeGestureEvent() *QNativeGestureEvent { return this }
 
 func init() {
-	rt.RegisterClass("QNativeGestureEvent", rt.KindPlain, func(p unsafe.Pointer) { C.qute_QNativeGestureEvent_delete(p) })
+	rt.RegisterClass("QNativeGestureEvent", rt.KindNotify, func(p unsafe.Pointer) { C.qute_QNativeGestureEvent_delete(p) })
 }
 
 // QNativeGestureEventFromPtr wraps an existing C++ QNativeGestureEvent. This is an unsafe escape hatch: own says
@@ -51,6 +51,56 @@ func QNativeGestureEventCast(e qtcore.QEventLike) *QNativeGestureEvent {
 	r := rt.View[QNativeGestureEvent](rt.WrapClassFrom(p, "QNativeGestureEvent", rt.KeepOrBorrow, rt.RefOf(unsafe.Pointer(e.AsQEvent())).H), p)
 	runtime.KeepAlive(e)
 	return r
+}
+
+// NewQNativeGestureEventWithNativeGestureType wraps the QNativeGestureEvent constructor.
+//
+//	C++: QNativeGestureEvent::QNativeGestureEvent(Qt::NativeGestureType type, const QPointingDevice * dev, int fingerCount, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, qreal value, const QPointF & delta, quint64 sequenceId = …)
+//
+// Ownership: dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// Arguments with C++ defaults are left at them; NewQNativeGestureEventWithNativeGestureTypeFull takes every argument.
+//
+// Qt docs: https://doc.qt.io/qt-6/qnativegestureevent.html#QNativeGestureEvent
+func NewQNativeGestureEventWithNativeGestureType(typeArg qtcore.NativeGestureType, dev QPointingDeviceLike, fingerCount int, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, value float64, delta qtcore.QPointF) *QNativeGestureEvent {
+	rt.CheckThread("NewQNativeGestureEventWithNativeGestureType")
+	var devPtr unsafe.Pointer
+	var devH *rt.Handle
+	if dev != nil {
+		devPtr, devH = rt.Arg(unsafe.Pointer(dev.AsQPointingDevice()), "NewQNativeGestureEventWithNativeGestureType")
+	}
+	p := C.qute_QNativeGestureEvent_new(C.int64_t(typeArg), devPtr, C.int(fingerCount), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.double(value), cQPointF(delta))
+	runtime.KeepAlive(dev)
+	h := rt.WrapClass(p, "QNativeGestureEvent", rt.NewOwned)
+	rt.KeepArg(h, "QNativeGestureEvent.dev", devH, true)
+	return rt.View[QNativeGestureEvent](h, p)
+}
+
+// NewQNativeGestureEventWithNativeGestureTypeFull wraps the QNativeGestureEvent constructor.
+//
+//	C++: QNativeGestureEvent::QNativeGestureEvent(Qt::NativeGestureType type, const QPointingDevice * dev, int fingerCount, const QPointF & localPos, const QPointF & scenePos, const QPointF & globalPos, qreal value, const QPointF & delta, quint64 sequenceId = …)
+//
+// Ownership: dev is borrowed, and the new object keeps it from being garbage collected while it lives.
+//
+// The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives.
+//
+// NewQNativeGestureEventWithNativeGestureTypeFull is NewQNativeGestureEventWithNativeGestureType with every argument, including those NewQNativeGestureEventWithNativeGestureType leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qnativegestureevent.html#QNativeGestureEvent
+func NewQNativeGestureEventWithNativeGestureTypeFull(typeArg qtcore.NativeGestureType, dev QPointingDeviceLike, fingerCount int, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, value float64, delta qtcore.QPointF, sequenceId uint64) *QNativeGestureEvent {
+	rt.CheckThread("NewQNativeGestureEventWithNativeGestureTypeFull")
+	var devPtr unsafe.Pointer
+	var devH *rt.Handle
+	if dev != nil {
+		devPtr, devH = rt.Arg(unsafe.Pointer(dev.AsQPointingDevice()), "NewQNativeGestureEventWithNativeGestureTypeFull")
+	}
+	p := C.qute_QNativeGestureEvent_new_1(C.int64_t(typeArg), devPtr, C.int(fingerCount), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.double(value), cQPointF(delta), C.ulonglong(sequenceId))
+	runtime.KeepAlive(dev)
+	h := rt.WrapClass(p, "QNativeGestureEvent", rt.NewOwned)
+	rt.KeepArg(h, "QNativeGestureEvent.dev", devH, true)
+	return rt.View[QNativeGestureEvent](h, p)
 }
 
 // GestureType wraps QNativeGestureEvent::gestureType.

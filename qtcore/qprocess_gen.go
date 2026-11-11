@@ -113,6 +113,8 @@ func (this *QProcess) StartCommand(command string) {
 //
 //	C++: bool QProcess::startDetached(qint64 * pid = …)
 //
+// Arguments with C++ defaults are left at them; StartDetachedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qprocess.html#startDetached
 func (this *QProcess) StartDetached() bool {
 	self := rt.Use(unsafe.Pointer(this), "QProcess.StartDetached")
@@ -622,6 +624,21 @@ func (this *QProcess) StartCommandFull(command string, mode QIODeviceBaseOpenMod
 	runtime.KeepAlive(this)
 }
 
+// StartDetachedFull wraps QProcess::startDetached.
+//
+//	C++: bool QProcess::startDetached(qint64 * pid = …)
+//
+// StartDetachedFull is StartDetached with every argument, including those StartDetached leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qprocess.html#startDetached
+func (this *QProcess) StartDetachedFull() (bool, int64) {
+	self := rt.Use(unsafe.Pointer(this), "QProcess.StartDetachedFull")
+	var pidOut C.longlong
+	r := C.qute_QProcess_startDetached_3(self, &pidOut)
+	runtime.KeepAlive(this)
+	return bool(r), int64(pidOut)
+}
+
 // SetStandardOutputFileFull wraps QProcess::setStandardOutputFile.
 //
 //	C++: void QProcess::setStandardOutputFile(const QString & fileName, OpenMode mode = …)
@@ -693,6 +710,8 @@ func QProcessExecute(program string) int {
 //
 //	C++: bool QProcess::startDetached(const QString & program, const QStringList & arguments = …, const QString & workingDirectory = …, qint64 * pid = …)
 //
+// Arguments with C++ defaults are left at them; QProcessStartDetachedFull takes every argument.
+//
 // Qt docs: https://doc.qt.io/qt-6/qprocess.html#startDetached
 func QProcessStartDetached(program string) bool {
 	rt.CheckThread("QProcessStartDetached")
@@ -745,6 +764,21 @@ func QProcessExecuteFull(program string, arguments []string) int {
 	argumentsData, argumentsLens := quteStrListArg(arguments)
 	r := C.qute_QProcess_execute_1((*C.char)(unsafe.Pointer(unsafe.StringData(program))), C.ptrdiff_t(len(program)), (*C.char)(unsafe.Pointer(unsafe.SliceData(argumentsData))), (*C.ptrdiff_t)(unsafe.SliceData(argumentsLens)), C.ptrdiff_t(len(arguments)))
 	return int(r)
+}
+
+// QProcessStartDetachedFull wraps QProcess::startDetached.
+//
+//	C++: bool QProcess::startDetached(const QString & program, const QStringList & arguments = …, const QString & workingDirectory = …, qint64 * pid = …)
+//
+// QProcessStartDetachedFull is QProcessStartDetached with every argument, including those QProcessStartDetached leaves at their C++ defaults.
+//
+// Qt docs: https://doc.qt.io/qt-6/qprocess.html#startDetached
+func QProcessStartDetachedFull(program string, arguments []string, workingDirectory string) (bool, int64) {
+	rt.CheckThread("QProcessStartDetachedFull")
+	argumentsData, argumentsLens := quteStrListArg(arguments)
+	var pidOut C.longlong
+	r := C.qute_QProcess_startDetached_2((*C.char)(unsafe.Pointer(unsafe.StringData(program))), C.ptrdiff_t(len(program)), (*C.char)(unsafe.Pointer(unsafe.SliceData(argumentsData))), (*C.ptrdiff_t)(unsafe.SliceData(argumentsLens)), C.ptrdiff_t(len(arguments)), (*C.char)(unsafe.Pointer(unsafe.StringData(workingDirectory))), C.ptrdiff_t(len(workingDirectory)), &pidOut)
+	return bool(r), int64(pidOut)
 }
 
 // OnStarted connects f to the started signal. The connection ends when the

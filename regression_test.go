@@ -486,3 +486,42 @@ func TestHandlerPanicIsReported(t *testing.T) {
 		}
 	})
 }
+
+// The destroyed signal hands its handler the dying object. That used to be
+// wrapped as a new handle, registered while Qt destroyed the object, so it
+// never learnt of the death: the next object Qt put at the address was given
+// that stale handle, never watched, and used after it was freed (an
+// application's window benchmark crashed). The handler now gets the handle Go
+// had, Dead, and nothing is registered for the dead address.
+func TestOnDestroyedArgument(t *testing.T) {
+	qutetest.Run(t, func() {
+		for range 50 {
+			w := qtwidgets.NewQWidget(nil)
+			child := qtcore.NewQObject(w)
+			var gotChild, gotW *qtcore.QObject
+			childAlive, wAlive := true, true
+			child.OnDestroyed(func(o *qtcore.QObject) { gotChild, childAlive = o, o.Alive() })
+			w.OnDestroyed(func(o *qtcore.QObject) { gotW, wAlive = o, o.Alive() })
+			wp, cp := w.AsQObject().Ptr(), child.Ptr()
+			w.Delete()
+			if gotChild != child || gotW != w.AsQObject() {
+				t.Fatalf("destroyed handlers got %p and %p, want the wrappers Go had (%p, %p)", gotChild, gotW, child, w.AsQObject())
+			}
+			if childAlive || wAlive {
+				t.Fatalf("the dying object was alive in its destroyed handler (child %v, widget %v)", childAlive, wAlive)
+			}
+			if rt.Lookup(wp) != nil || rt.Lookup(cp) != nil {
+				t.Fatal("a handle is registered for a destroyed object's address")
+			}
+			// objects Qt may put at the freed addresses are watched as usual
+			for range 4 {
+				o := qtcore.NewQObject(nil)
+				c := qtcore.NewQObject(o)
+				o.Delete()
+				if c.Alive() {
+					t.Fatal("a child of a deleted object is alive: its death notice was lost")
+				}
+			}
+		}
+	})
+}

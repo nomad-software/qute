@@ -2,9 +2,11 @@ package qute_test
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtwidgets"
 	"github.com/nomad-software/qute/qutetest"
 )
 
@@ -56,4 +58,82 @@ func BenchmarkBuildTreeFromSubtrees(b *testing.B) {
 			})
 		})
 	}
+}
+
+// benchModel is a Go table model of the shape an application has: Qt asks it,
+// through its overrides, for counts, flags and data, each call with an index.
+type benchModel struct {
+	qtcore.QAbstractTableModelBase
+	rows int
+	text *qtcore.QVariant
+}
+
+func (m *benchModel) RowCount(parent *qtcore.QModelIndex) int {
+	if parent.IsValid() {
+		return 0
+	}
+	return m.rows
+}
+
+func (m *benchModel) ColumnCount(parent *qtcore.QModelIndex) int {
+	if parent.IsValid() {
+		return 0
+	}
+	return 4
+}
+
+func (m *benchModel) Flags(index *qtcore.QModelIndex) qtcore.ItemFlags {
+	return qtcore.ItemIsEnabled | qtcore.ItemIsSelectable
+}
+
+func (m *benchModel) Data(index *qtcore.QModelIndex, role int) *qtcore.QVariant {
+	if role != int(qtcore.DisplayRole) {
+		return nil
+	}
+	return m.text
+}
+
+func withBenchView(b *testing.B, rows int, f func(v *qtwidgets.QTableView, m *benchModel)) {
+	qutetest.Run(b, func() {
+		v := qtwidgets.NewQTableView(nil)
+		defer v.Delete()
+		m := &benchModel{rows: rows, text: qtcore.NewQVariantOf("cell")}
+		qtcore.NewQAbstractTableModelWith(m, v)
+		v.SetModel(m)
+		v.SetSelectionBehavior(qtwidgets.QAbstractItemViewSelectRows)
+		v.Resize(800, 600)
+		f(v, m)
+	})
+}
+
+// BenchmarkModelSelectAll selects every row of a 100,000-row Go model and
+// asks the selection about each row, which has Qt call the model's overrides
+// (RowCount, ColumnCount, Flags) several times a row.
+func BenchmarkModelSelectAll(b *testing.B) {
+	withBenchView(b, 100000, func(v *qtwidgets.QTableView, m *benchModel) {
+		for b.Loop() {
+			v.SelectAll()
+			sm := v.SelectionModel()
+			n := 0
+			for i := range m.rows {
+				if sm.RowIntersectsSelection(i) {
+					n++
+				}
+			}
+			if n != m.rows {
+				b.Fatalf("%d selected", n)
+			}
+			v.ClearSelection()
+		}
+	})
+}
+
+// BenchmarkModelPaint draws a view of a Go model: Qt asks Data in each role
+// for every visible cell.
+func BenchmarkModelPaint(b *testing.B) {
+	withBenchView(b, 100000, func(v *qtwidgets.QTableView, m *benchModel) {
+		for b.Loop() {
+			runtime.KeepAlive(v.Viewport().Grab())
+		}
+	})
 }
