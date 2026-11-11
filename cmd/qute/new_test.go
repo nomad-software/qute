@@ -8,6 +8,12 @@ import (
 	"testing"
 )
 
+// childTags are the build tags this test binary was built with, passed on to
+// the starter app's builds: with other tags they would compile every Qt
+// package a second time, which on a cold CI cache (the qute_debug job) took
+// longer than the test's timeout.
+var childTags []string
+
 // TestNewAppPasses writes a starter app with `qute new`, points it at this
 // checkout and runs its own tests: the templates must build, pass and pass
 // qute vet from the start. It needs no network (GOPROXY=off).
@@ -47,8 +53,8 @@ func TestNewAppPasses(t *testing.T) {
 			t.Fatalf("%s %s: %v\n%s", name, strings.Join(args, " "), err, out)
 		}
 	}
-	run("go", "vet", "./...")
-	run("go", "test", "./...")
+	run("go", append(append([]string{"vet"}, childTags...), "./...")...)
+	run("go", append(append([]string{"test"}, childTags...), "./...")...)
 	run("go", "run", "github.com/nomad-software/qute/cmd/qute", "vet", "./...") // exits non-zero on a finding
 	if b, _ := os.ReadFile(filepath.Join(dir, "window.go")); !strings.Contains(string(b), `SetWindowTitle("My App")`) {
 		t.Error("the window title is not taken from the directory name")
