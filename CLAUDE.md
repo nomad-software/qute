@@ -401,7 +401,9 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   it and rejects the generated wrappers and Base types, so a public virtual
   like `SizeHint` can't dispatch to itself, while an override declared on a
   user type that another user type embeds (`type Fancy struct{ Canvas }`)
-  still counts. `b.Super().X()`
+  still counts. The answer is fixed by the type's methods, so `rt.Mask` works
+  it out once per Go type and class and caches it (an icon engine per row
+  pays the reflection once). `b.Super().X()`
   calls the C++ base. An override has the Go name and signature of the
   method's binding (`IndexOfItem`; a confirmed in-out parameter is a
   parameter plus a result, `Validate(input string, pos int) (State, string,

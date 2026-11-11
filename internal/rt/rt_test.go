@@ -877,3 +877,32 @@ func TestInlineValues(t *testing.T) {
 		t.Fatalf("after Delete: %v", h.State())
 	}
 }
+
+type maskPaints struct{}
+
+func (maskPaints) Paint() {}
+
+type maskPlain struct{}
+
+// Which virtuals a Go type overrides is worked out once per type and table:
+// later objects of the type reuse the answer, other types and tables get
+// their own.
+func TestMaskCachedPerType(t *testing.T) {
+	has := func(v any) bool { _, ok := v.(interface{ Paint() }); return ok }
+	vt := []Virtual{{Name: "Size"}, {Name: "Paint", Has: has}}
+	vt[0].Has = func(any) bool { return false }
+	a := Mask(maskPaints{}, vt)
+	if len(a) != 1 || a[0] != 0b10 {
+		t.Fatalf("mask of a type overriding Paint = %b, want 10", a)
+	}
+	if b := Mask(maskPaints{}, vt); &b[0] != &a[0] {
+		t.Error("the mask of a type was worked out again, not reused")
+	}
+	if p := Mask(maskPlain{}, vt); p[0] != 0 {
+		t.Errorf("mask of a type overriding nothing = %b", p)
+	}
+	other := []Virtual{{Name: "Paint", Has: has}}
+	if o := Mask(maskPaints{}, other); o[0] != 0b1 {
+		t.Errorf("mask for another table = %b, want 1", o)
+	}
+}

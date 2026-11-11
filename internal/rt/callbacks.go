@@ -2,9 +2,11 @@ package rt
 
 import (
 	"fmt"
+	"reflect"
 	"runtime"
 	"runtime/cgo"
 	"runtime/debug"
+	"sync"
 	"sync/atomic"
 	"unsafe"
 	"weak"
@@ -237,14 +239,35 @@ func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer) bool {
 
 // Mask computes the override bitmask for self against vt.
 func Mask(self any, vt []Virtual) []uint64 {
+	if len(vt) == 0 {
+		return nil
+	}
+	// Which virtuals a Go type overrides is fixed by its methods, and
+	// working it out takes reflection (UserDefined): it is done once per
+	// type and table, as an application may make many objects of one type
+	// (an icon engine per row).
+	key := maskKey{reflect.TypeOf(self), &vt[0]}
+	if m, ok := masks.Load(key); ok {
+		return m.([]uint64)
+	}
 	m := make([]uint64, (len(vt)+63)/64)
 	for i, v := range vt {
 		if v.Has(self) && UserDefined(self, v.Name) {
 			m[i/64] |= 1 << (i % 64)
 		}
 	}
+	masks.Store(key, m)
 	return m
 }
+
+// maskKey identifies a Go subclass type and the dispatch table of the class
+// it subclasses (a type may embed the Base of more than one class).
+type maskKey struct {
+	t  reflect.Type
+	vt *Virtual
+}
+
+var masks sync.Map // maskKey -> []uint64, read only once stored
 
 // RequireOverride panics unless self defines the virtual called name. A
 // pure virtual Go leaves out returns its zero value, which is fine for most
