@@ -115,11 +115,56 @@ func releaseHolds(keeper uint64) {
 	}
 }
 
+// A lend is a guarded use of an object that lasts one call (the device of
+// the painter qtgui.PaintOn draws with): cheaper than a keep, since the
+// caller's own reference keeps the object from the GC and the user is
+// scoped, so there is nothing to anchor, bind or release later.
+type lend struct {
+	class string // the C++ user's class, for the panic message
+	n     int
+}
+
+var lent = map[uint64]lend{} // serial -> lend (keepMu)
+
+// Lend marks obj as used by a C++ object of class user until Unlend: Delete()
+// of obj panics meanwhile, naming user, as it does for a guarded keep. Calls
+// nest.
+func Lend(obj *Handle, user string) {
+	if obj == nil {
+		return
+	}
+	keepMu.Lock()
+	l := lent[obj.serial]
+	l.class, l.n = user, l.n+1
+	lent[obj.serial] = l
+	keepMu.Unlock()
+}
+
+// Unlend ends one Lend of obj.
+func Unlend(obj *Handle) {
+	if obj == nil {
+		return
+	}
+	keepMu.Lock()
+	if l, ok := lent[obj.serial]; ok {
+		if l.n <= 1 {
+			delete(lent, obj.serial)
+		} else {
+			l.n--
+			lent[obj.serial] = l
+		}
+	}
+	keepMu.Unlock()
+}
+
 // guardingKeeper returns the class of a live keeper whose guarded hold on
 // the object with serial would make deleting it unsafe, or "".
 func guardingKeeper(serial uint64) string {
 	keepMu.Lock()
 	defer keepMu.Unlock()
+	if l, ok := lent[serial]; ok {
+		return l.class
+	}
 	if guardedBy[serial] == 0 {
 		return ""
 	}

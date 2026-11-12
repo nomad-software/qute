@@ -49,11 +49,13 @@ func QWidgetCast(o qtcore.QObjectLike) *QWidget {
 	return rt.View[QWidget](rt.WrapClass(p, "QWidget", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQWidgetQPaintDevice is where the QPaintDevice part of a QWidget starts (the C++ static_cast).
+var quteOffsetQWidgetQPaintDevice = uintptr(C.qute_QWidget_offset_QPaintDevice())
+
 // AsQPaintDevice returns the QPaintDevice part of this object, sharing its ownership state.
 func (this *QWidget) AsQPaintDevice() *qtgui.QPaintDevice {
 	self := rt.Use(unsafe.Pointer(this), "QWidget.AsQPaintDevice")
-	p := C.qute_QWidget_as_QPaintDevice(self)
-	return rt.View[qtgui.QPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[qtgui.QPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQWidgetQPaintDevice))
 }
 
 // NewQWidget wraps the QWidget constructor.

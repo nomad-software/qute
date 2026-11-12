@@ -295,10 +295,6 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 				fmt.Sprintf("return const_cast<void *>(static_cast<const void *>(%s));", expr))
 		}
 	}
-	for _, s := range c.Secondary {
-		add(cDecl("void *", fmt.Sprintf("qute_%s_as_%s", cls, s.Name), []string{"void *self"}),
-			fmt.Sprintf("return static_cast<void *>(static_cast<%s *>(%s));", s.Cpp, self))
-	}
 	for _, mm := range append(append([]*Method{}, c.Methods...), c.Statics...) {
 		pre, args, post := g.cppCall(mm.Params)
 		var call string
@@ -438,6 +434,11 @@ func (g *Gen) emitHeader(m *Module, b *buf) {
 	b.p("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 	b.p("const char *qute_%s_check_layout(void);", m.Pkg)
 	for _, c := range m.Classes {
+		for _, s := range c.Secondary {
+			b.p("ptrdiff_t qute_%s_offset_%s(void);", c.Name, s.Name)
+		}
+	}
+	for _, c := range m.Classes {
 		b.p("\n// %s", c.Name)
 		for _, f := range g.classCFuncs(c) {
 			b.p("%s;", f.decl)
@@ -538,6 +539,11 @@ func (g *Gen) emitCppBody(m *Module, b *buf) {
 	b.p("static inline void qute_gui_only() {")
 	b.p("\tQCoreApplication *app = QCoreApplication::instance();")
 	b.p("\tif (app && QThread::currentThread() != app->thread()) {\n\t\tqute_%s_wrong_thread();\n\t}\n}\n", m.Pkg)
+	b.p("// qute_fixed_base says Base sits at a fixed offset in Derived: a")
+	b.p("// static_cast back from Base is well-formed, which it is not for a virtual")
+	b.p("// or ambiguous base.")
+	b.p("template <class B, class D, class = void> struct qute_fixed_base : std::false_type {};")
+	b.p("template <class B, class D> struct qute_fixed_base<B, D, std::void_t<decltype(static_cast<D *>(std::declval<B *>()))>> : std::true_type {};\n")
 	b.p("namespace {")
 	b.p("// GoSlot owns a Go closure id; Qt destroys the slot object on disconnect")
 	b.p("// or when the sender dies, which releases the closure.")
@@ -558,6 +564,19 @@ func (g *Gen) emitCppBody(m *Module, b *buf) {
 		b.p("\t{ %s *d = reinterpret_cast<%s *>(uintptr_t(0x10000)); %s *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return %q; }", c.Cpp, c.Cpp, c.Base.Cpp, c.Name)
 	}
 	b.p("\treturn nullptr;\n}\n")
+	// secondary base offsets: As<Base>() adds them in Go instead of calling
+	// C++ for a static_cast. A static_cast from a base to the derived class is
+	// ill-formed exactly when the base is virtual (or ambiguous), whose offset
+	// is not fixed, so the assertion keeps such a base out at compile time.
+	for _, c := range m.Classes {
+		for _, s := range c.Secondary {
+			b.p("static_assert(qute_fixed_base<%s, %s>::value, \"%s: %s is a virtual or ambiguous base\");", s.Cpp, c.Cpp, c.Name, s.Name)
+			b.p("ptrdiff_t qute_%s_offset_%s(void) {", c.Name, s.Name)
+			b.p("\t%s *d = reinterpret_cast<%s *>(uintptr_t(0x10000));\n\t%s *bp = d;", c.Cpp, c.Cpp, s.Cpp)
+			b.p("\treturn ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;\n}")
+		}
+	}
+	b.p("")
 	for _, c := range m.Classes {
 		b.p("// ---- %s", c.Name)
 		for _, f := range g.classCFuncs(c) {
@@ -1196,11 +1215,13 @@ func (g *Gen) emitClass(c *Class) []byte {
 	}
 	for _, s := range c.Secondary {
 		st := g.qual(s.Module, m, s.Name)
+		off := fmt.Sprintf("quteOffset%s%s", cls, s.Name)
+		b.p("// %s is where the %s part of a %s starts (the C++ static_cast).", off, s.Name, cls)
+		b.p("var %s = uintptr(C.qute_%s_offset_%s())\n", off, cls, s.Name)
 		b.p("// As%s returns the %s part of this object, sharing its ownership state.", s.Name, s.Name)
 		b.p("func (this *%s) As%s() *%s {", cls, s.Name, st)
 		b.p("\tself := rt.Use(unsafe.Pointer(this), %q)", cls+".As"+s.Name)
-		b.p("\tp := C.qute_%s_as_%s(self)", cls, s.Name)
-		b.p("\treturn rt.View[%s](rt.RefOf(unsafe.Pointer(this)).H, p)\n}\n", st)
+		b.p("\treturn rt.View[%s](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, %s))\n}\n", st, off)
 	}
 	for _, mm := range c.Ctors {
 		g.emitCtor(c, mm, &b)

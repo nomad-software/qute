@@ -9,6 +9,7 @@ extern "C" {
 #endif
 
 const char *qute_qtcore_check_layout(void);
+ptrdiff_t qute_QIODevice_offset_QIODeviceBase(void);
 
 // QAbstractAnimation
 void * qute_QAbstractAnimation_new_shim(void * a0);
@@ -1543,7 +1544,6 @@ void * qute_QFileSystemWatcher_directoryChanged(void *self, uintptr_t id);
 
 // QIODevice
 void * qute_QIODevice_cast(void *obj);
-void * qute_QIODevice_as_QIODeviceBase(void *self);
 int64_t qute_QIODevice_openMode(void *self);
 void qute_QIODevice_setTextModeEnabled(void *self, bool a0);
 bool qute_QIODevice_isTextModeEnabled(void *self);

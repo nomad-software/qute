@@ -9,6 +9,10 @@ extern "C" {
 #endif
 
 const char *qute_qtgui_check_layout(void);
+ptrdiff_t qute_QOffscreenSurface_offset_QSurface(void);
+ptrdiff_t qute_QPaintDeviceWindow_offset_QPaintDevice(void);
+ptrdiff_t qute_QPdfWriter_offset_QPagedPaintDevice(void);
+ptrdiff_t qute_QWindow_offset_QSurface(void);
 
 // QAbstractFileIconProvider
 void * qute_QAbstractFileIconProvider_new(void);
@@ -1647,7 +1651,6 @@ void qute_QOffscreenSurface_super_6(void *self, void * a0);
 void qute_QOffscreenSurface_super_7(void *self, void * a0);
 void * qute_QOffscreenSurface_prot_resolveInterface(void *self, const char * a0, int a1);
 void * qute_QOffscreenSurface_cast(void *obj);
-void * qute_QOffscreenSurface_as_QSurface(void *self);
 int64_t qute_QOffscreenSurface_surfaceType(void *self);
 void qute_QOffscreenSurface_create(void *self);
 void qute_QOffscreenSurface_destroy(void *self);
@@ -2101,7 +2104,6 @@ int qute_QPaintDevice_encodeMetricF(int64_t a0, double a1);
 
 // QPaintDeviceWindow
 void * qute_QPaintDeviceWindow_cast(void *obj);
-void * qute_QPaintDeviceWindow_as_QPaintDevice(void *self);
 void qute_QPaintDeviceWindow_update(void *self, qute_rect a0);
 void qute_QPaintDeviceWindow_update_1(void *self, void * a0);
 void qute_QPaintDeviceWindow_update_2(void *self);
@@ -2468,7 +2470,6 @@ void qute_QPdfWriter_super_4(void *self, void * a0);
 void qute_QPdfWriter_super_5(void *self, void * a0);
 double qute_QPdfWriter_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1);
 void * qute_QPdfWriter_cast(void *obj);
-void * qute_QPdfWriter_as_QPagedPaintDevice(void *self);
 void qute_QPdfWriter_setPdfVersion(void *self, int64_t a0);
 int64_t qute_QPdfWriter_pdfVersion(void *self);
 qute_str qute_QPdfWriter_title(void *self);
@@ -4463,7 +4464,6 @@ void qute_QWindow_super_25(void *self, void * a0);
 void qute_QWindow_super_26(void *self, void * a0);
 void * qute_QWindow_prot_resolveInterface(void *self, const char * a0, int a1);
 void * qute_QWindow_cast(void *obj);
-void * qute_QWindow_as_QSurface(void *self);
 void qute_QWindow_setSurfaceType(void *self, int64_t a0);
 int64_t qute_QWindow_surfaceType(void *self);
 bool qute_QWindow_isVisible(void *self);

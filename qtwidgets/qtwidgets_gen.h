@@ -9,6 +9,10 @@ extern "C" {
 #endif
 
 const char *qute_qtwidgets_check_layout(void);
+ptrdiff_t qute_QGraphicsObject_offset_QGraphicsItem(void);
+ptrdiff_t qute_QGraphicsWidget_offset_QGraphicsLayoutItem(void);
+ptrdiff_t qute_QLayout_offset_QLayoutItem(void);
+ptrdiff_t qute_QWidget_offset_QPaintDevice(void);
 
 // QAbstractButton
 void * qute_QAbstractButton_new_shim(void * a0);
@@ -3400,7 +3404,6 @@ void qute_QGraphicsObject_prot_addToIndex(void *self);
 void qute_QGraphicsObject_prot_removeFromIndex(void *self);
 void qute_QGraphicsObject_prot_prepareGeometryChange(void *self);
 void * qute_QGraphicsObject_cast(void *obj);
-void * qute_QGraphicsObject_as_QGraphicsItem(void *self);
 void qute_QGraphicsObject_grabGesture(void *self, int64_t a0);
 void qute_QGraphicsObject_ungrabGesture(void *self, int64_t a0);
 void qute_QGraphicsObject_parentChanged_1(void *self);
@@ -4430,7 +4433,6 @@ void qute_QGraphicsWidget_prot_prepareGeometryChange(void *self);
 void qute_QGraphicsWidget_prot_setGraphicsItem(void *self, void * a0);
 void qute_QGraphicsWidget_prot_setOwnedByLayout(void *self, bool a0);
 void * qute_QGraphicsWidget_cast(void *obj);
-void * qute_QGraphicsWidget_as_QGraphicsLayoutItem(void *self);
 void * qute_QGraphicsWidget_layout(void *self);
 void qute_QGraphicsWidget_setLayout(void *self, void * a0);
 void qute_QGraphicsWidget_adjustSize(void *self);
@@ -5310,7 +5312,6 @@ void qute_QLayout_prot_addChildWidget(void *self, void * a0);
 bool qute_QLayout_prot_adoptLayout(void *self, void * a0);
 qute_rect qute_QLayout_prot_alignmentRect(void *self, qute_rect a0);
 void * qute_QLayout_cast(void *obj);
-void * qute_QLayout_as_QLayoutItem(void *self);
 int qute_QLayout_spacing(void *self);
 void qute_QLayout_setSpacing(void *self, int a0);
 void qute_QLayout_setContentsMargins(void *self, qute_margins a0);
@@ -10416,7 +10417,6 @@ bool qute_QWidget_prot_focusNextChild(void *self);
 bool qute_QWidget_prot_focusPreviousChild(void *self);
 double qute_QWidget_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1);
 void * qute_QWidget_cast(void *obj);
-void * qute_QWidget_as_QPaintDevice(void *self);
 unsigned long long qute_QWidget_winId(void *self);
 void qute_QWidget_createWinId(void *self);
 unsigned long long qute_QWidget_internalWinId(void *self);

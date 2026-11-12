@@ -160,3 +160,22 @@ func (d *Dot) Helper() {
 func (d *Dot) drawGrid(p *qtgui.QPainter) {
 	lastPainter = p
 }
+
+// PaintOn's painter is scoped to the call, and the function runs at once,
+// so the handler's event may be used inside it.
+type Board struct{ qtwidgets.QWidgetBase }
+
+func (b *Board) PaintEvent(e *qtgui.QPaintEvent) {
+	qtgui.PaintOn(b, func(p *qtgui.QPainter) {
+		p.FillRect(e.Rect(), qtgui.RGB(0, 0, 0))
+		lastPainter = p // want scoped-escape
+	})
+}
+
+var painters []*qtgui.QPainter
+
+func PaintImage(img *qtgui.QImage) {
+	qtgui.PaintOn(img, func(p *qtgui.QPainter) {
+		painters = append(painters, p) // want scoped-escape
+	})
+}

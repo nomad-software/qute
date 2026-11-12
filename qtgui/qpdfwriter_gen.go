@@ -48,11 +48,13 @@ func QPdfWriterCast(o qtcore.QObjectLike) *QPdfWriter {
 	return rt.View[QPdfWriter](rt.WrapClass(p, "QPdfWriter", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQPdfWriterQPagedPaintDevice is where the QPagedPaintDevice part of a QPdfWriter starts (the C++ static_cast).
+var quteOffsetQPdfWriterQPagedPaintDevice = uintptr(C.qute_QPdfWriter_offset_QPagedPaintDevice())
+
 // AsQPagedPaintDevice returns the QPagedPaintDevice part of this object, sharing its ownership state.
 func (this *QPdfWriter) AsQPagedPaintDevice() *QPagedPaintDevice {
 	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.AsQPagedPaintDevice")
-	p := C.qute_QPdfWriter_as_QPagedPaintDevice(self)
-	return rt.View[QPagedPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QPagedPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQPdfWriterQPagedPaintDevice))
 }
 
 // NewQPdfWriterWithFilename wraps the QPdfWriter constructor.

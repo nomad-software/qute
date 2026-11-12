@@ -194,3 +194,80 @@ func BenchmarkWidgetRows(b *testing.B) {
 		}
 	})
 }
+
+// BenchmarkPainter makes, ends and frees a painter: on an image, and in a
+// widget's paint event (with an empty paint event for the cost of the event
+// itself), with NewQPainterOn/End/Delete and with the scoped PaintOn.
+func BenchmarkPainter(b *testing.B) {
+	for _, way := range []string{"new", "paint-on"} {
+		b.Run("image/"+way, func(b *testing.B) {
+			qutetest.Run(b, func() {
+				img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 64, Height: 64}, qtgui.QImageFormat_ARGB32_Premultiplied)
+				b.ReportAllocs()
+				for b.Loop() {
+					if way == "new" {
+						p := qtgui.NewQPainterOn(img)
+						p.End()
+						p.Delete()
+					} else {
+						qtgui.PaintOn(img, func(*qtgui.QPainter) {})
+					}
+				}
+			})
+		})
+	}
+	for _, way := range []string{"none", "new", "paint-on"} {
+		b.Run("widget/"+way, func(b *testing.B) {
+			qutetest.Run(b, func() {
+				w := qtwidgets.NewQWidgetWith(&benchCanvas{way: way}, nil)
+				defer w.Delete()
+				w.Resize(200, 100)
+				w.Show()
+				img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 200, Height: 100}, qtgui.QImageFormat_ARGB32_Premultiplied)
+				b.ReportAllocs()
+				for b.Loop() {
+					w.Render(img)
+				}
+			})
+		})
+	}
+}
+
+// benchCanvas paints in the way named: not at all, or with a painter.
+type benchCanvas struct {
+	qtwidgets.QWidgetBase
+	way string
+}
+
+func (c *benchCanvas) PaintEvent(e *qtgui.QPaintEvent) {
+	switch c.way {
+	case "new":
+		p := qtgui.NewQPainterOn(c)
+		defer p.Delete()
+		defer p.End()
+	case "paint-on":
+		qtgui.PaintOn(c, func(*qtgui.QPainter) {})
+	}
+}
+
+// BenchmarkTreeRows fills a tree the way a process list does (an item of
+// eight cells per row, each cell aligned), then clears it.
+func BenchmarkTreeRows(b *testing.B) {
+	qutetest.Run(b, func() {
+		tree := qtwidgets.NewQTreeWidget(nil)
+		defer tree.Delete()
+		tree.SetColumnCount(8)
+		cells := []string{"1234", "name", "user", "1.0", "2.0", "3 MiB", "S", "cmd --flag"}
+		b.ReportAllocs()
+		for b.Loop() {
+			tree.Clear()
+			for range 400 {
+				it := qtwidgets.NewQTreeWidgetItemWithStrings(cells)
+				for col := range 8 {
+					it.SetTextAlignment(col, qtcore.AlignRight)
+				}
+				tree.AddTopLevelItem(it)
+			}
+		}
+	})
+}

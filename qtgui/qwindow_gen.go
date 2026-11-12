@@ -48,11 +48,13 @@ func QWindowCast(o qtcore.QObjectLike) *QWindow {
 	return rt.View[QWindow](rt.WrapClass(p, "QWindow", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQWindowQSurface is where the QSurface part of a QWindow starts (the C++ static_cast).
+var quteOffsetQWindowQSurface = uintptr(C.qute_QWindow_offset_QSurface())
+
 // AsQSurface returns the QSurface part of this object, sharing its ownership state.
 func (this *QWindow) AsQSurface() *QSurface {
 	self := rt.Use(unsafe.Pointer(this), "QWindow.AsQSurface")
-	p := C.qute_QWindow_as_QSurface(self)
-	return rt.View[QSurface](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QSurface](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQWindowQSurface))
 }
 
 // NewQWindow wraps the QWindow constructor.

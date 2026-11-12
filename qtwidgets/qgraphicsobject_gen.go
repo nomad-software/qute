@@ -49,11 +49,13 @@ func QGraphicsObjectCast(o qtcore.QObjectLike) *QGraphicsObject {
 	return rt.View[QGraphicsObject](rt.WrapClass(p, "QGraphicsObject", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQGraphicsObjectQGraphicsItem is where the QGraphicsItem part of a QGraphicsObject starts (the C++ static_cast).
+var quteOffsetQGraphicsObjectQGraphicsItem = uintptr(C.qute_QGraphicsObject_offset_QGraphicsItem())
+
 // AsQGraphicsItem returns the QGraphicsItem part of this object, sharing its ownership state.
 func (this *QGraphicsObject) AsQGraphicsItem() *QGraphicsItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsObject.AsQGraphicsItem")
-	p := C.qute_QGraphicsObject_as_QGraphicsItem(self)
-	return rt.View[QGraphicsItem](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QGraphicsItem](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQGraphicsObjectQGraphicsItem))
 }
 
 // GrabGesture wraps QGraphicsObject::grabGesture.

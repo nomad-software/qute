@@ -658,3 +658,54 @@ func TestOnDestroyedArgument(t *testing.T) {
 		}
 	})
 }
+
+// An upcast to a secondary base (AsQPaintDevice, AsQSurface...) adds an
+// offset worked out once in C++ instead of calling C++ each time. Calling a
+// virtual through each upcast checks the offset lands on the base: a wrong
+// one would read another vtable.
+func TestSecondaryBaseUpcasts(t *testing.T) {
+	qutetest.Run(t, func() {
+		w := qtwidgets.NewQWidget(nil)
+		defer w.Delete()
+		w.Resize(30, 20)
+		if pd := w.AsQPaintDevice(); pd.Width() != 30 || pd.Height() != 20 {
+			t.Errorf("QWidget.AsQPaintDevice: %dx%d, want 30x20", pd.Width(), pd.Height())
+		}
+		lay := qtwidgets.NewQVBoxLayout(w)
+		if got := lay.AsQLayoutItem().Layout(); got.Ptr() != lay.AsQLayout().Ptr() {
+			t.Error("QLayout.AsQLayoutItem().Layout() is not the layout")
+		}
+
+		win := qtgui.NewQWindow(nil)
+		defer win.Delete()
+		if c := win.AsQSurface().SurfaceClass(); c != qtgui.QSurfaceWindow {
+			t.Errorf("QWindow.AsQSurface: class %v, want Window", c)
+		}
+		rw := qtgui.NewQRasterWindow(nil)
+		defer rw.Delete()
+		rw.Resize(qtcore.QSize{Width: 12, Height: 7})
+		if pd := rw.AsQPaintDevice(); pd.Width() != 12 {
+			t.Errorf("QPaintDeviceWindow.AsQPaintDevice: width %d, want 12", pd.Width())
+		}
+		off := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
+		defer off.Delete()
+		if c := off.AsQSurface().SurfaceClass(); c != qtgui.QSurfaceOffscreen {
+			t.Errorf("QOffscreenSurface.AsQSurface: class %v, want Offscreen", c)
+		}
+		pdf := qtgui.NewQPdfWriterWithFilename(filepath.Join(t.TempDir(), "x.pdf"))
+		defer pdf.Delete()
+		if pd := pdf.AsQPagedPaintDevice(); pd.Width() <= 0 {
+			t.Errorf("QPdfWriter.AsQPagedPaintDevice: width %d", pd.Width())
+		}
+
+		gw := qtwidgets.NewQGraphicsWidget(nil)
+		defer gw.Delete()
+		item := gw.AsQGraphicsItem()
+		if o := item.ToGraphicsObject(); o == nil || o.Ptr() != gw.AsQGraphicsObject().Ptr() {
+			t.Error("QGraphicsObject.AsQGraphicsItem().ToGraphicsObject() is not the object")
+		}
+		if gi := gw.AsQGraphicsLayoutItem().GraphicsItem(); gi == nil || gi.Ptr() != item.Ptr() {
+			t.Error("QGraphicsWidget.AsQGraphicsLayoutItem().GraphicsItem() is not the item")
+		}
+	})
+}

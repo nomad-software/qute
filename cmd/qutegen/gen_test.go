@@ -1270,3 +1270,34 @@ func TestHandleMethods(t *testing.T) {
 	}
 	t.Error("QWindow::handle is not listed as skipped on purpose")
 }
+
+// An upcast to a secondary base adds an offset worked out once in C++,
+// instead of calling C++ for each static_cast (it ran on every
+// NewQPainterOn(widget)); the C++ side asserts at compile time that the base
+// is not virtual, whose offset would not be fixed.
+func TestSecondaryBaseOffset(t *testing.T) {
+	g := gen(t)
+	src := string(g.emitClass(class(t, "QWidget")))
+	for _, want := range []string{
+		"var quteOffsetQWidgetQPaintDevice = uintptr(C.qute_QWidget_offset_QPaintDevice())",
+		"unsafe.Add(self, quteOffsetQWidgetQPaintDevice)",
+	} {
+		if !strings.Contains(src, want) {
+			t.Errorf("QWidget.AsQPaintDevice: missing %q", want)
+		}
+	}
+	if strings.Contains(src, "_as_QPaintDevice") {
+		t.Error("QWidget.AsQPaintDevice still calls C++")
+	}
+	var cpp buf
+	g.emitCpp(g.byName["QtWidgets"], &cpp)
+	c := cpp.String()
+	for _, want := range []string{
+		"static_assert(qute_fixed_base<QPaintDevice, QWidget>::value",
+		"ptrdiff_t qute_QWidget_offset_QPaintDevice(void) {",
+	} {
+		if !strings.Contains(c, want) {
+			t.Errorf("C++: missing %q", want)
+		}
+	}
+}

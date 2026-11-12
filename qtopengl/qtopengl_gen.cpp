@@ -85,6 +85,12 @@ static inline void qute_gui_only() {
 	}
 }
 
+// qute_fixed_base says Base sits at a fixed offset in Derived: a
+// static_cast back from Base is well-formed, which it is not for a virtual
+// or ambiguous base.
+template <class B, class D, class = void> struct qute_fixed_base : std::false_type {};
+template <class B, class D> struct qute_fixed_base<B, D, std::void_t<decltype(static_cast<D *>(std::declval<B *>()))>> : std::true_type {};
+
 namespace {
 // GoSlot owns a Go closure id; Qt destroys the slot object on disconnect
 // or when the sender dies, which releases the closure.
@@ -762,6 +768,7 @@ const char *qute_qtopengl_check_layout(void) {
 	{ QOpenGLWindow *d = reinterpret_cast<QOpenGLWindow *>(uintptr_t(0x10000)); QPaintDeviceWindow *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QOpenGLWindow"; }
 	return nullptr;
 }
+
 
 // ---- QOpenGLBuffer
 void * qute_QOpenGLBuffer_new(void) {

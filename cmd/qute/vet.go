@@ -331,7 +331,23 @@ func isScopedType(t types.Type) bool {
 // scoped-escape: an event/painter parameter assigned to anything but a local,
 // appended, sent on a channel, or captured by a goroutine or closure.
 func (v *vetter) checkScoped(f *ast.File) {
-	v.handlerBodies(f, func(body *ast.BlockStmt, params *ast.FieldList, what string) {
+	// qtgui.PaintOn runs its function before it returns, with a painter that
+	// is Dead afterwards: the function is a callback with a scoped argument,
+	// and a scoped argument of an enclosing handler may be used inside it.
+	paintOn := map[*ast.FuncLit]bool{}
+	ast.Inspect(f, func(n ast.Node) bool {
+		if call, ok := n.(*ast.CallExpr); ok {
+			if fn, name := v.qtMethod(call); fn != nil && name == "PaintOn" && fn.Pkg().Path() == modPath+"qtgui" {
+				for _, a := range call.Args {
+					if lit, ok := a.(*ast.FuncLit); ok {
+						paintOn[lit] = true
+					}
+				}
+			}
+		}
+		return true
+	})
+	check := func(body *ast.BlockStmt, params *ast.FieldList, what string) {
 		scoped := map[types.Object]bool{}
 		if params == nil {
 			return
@@ -395,6 +411,9 @@ func (v *vetter) checkScoped(f *ast.File) {
 				}
 				return false
 			case *ast.FuncLit:
+				if paintOn[x] {
+					return true // runs now, inside the callback
+				}
 				if hit := uses(x.Body); hit != nil {
 					v.report(x, "scoped-escape", "%s argument %s is captured by a closure that may run later (rule 6)", what, hit.Name)
 				}
@@ -402,7 +421,11 @@ func (v *vetter) checkScoped(f *ast.File) {
 			}
 			return true
 		})
-	})
+	}
+	v.handlerBodies(f, check)
+	for lit := range paintOn {
+		check(lit.Body, lit.Type.Params, "PaintOn")
+	}
 }
 
 // owned-leak: x := qtX.NewY(..., nil) with x.OnZ(...) and no Delete,

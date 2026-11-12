@@ -22,15 +22,16 @@ type Swatch struct {
 }
 
 func (s *Swatch) PaintEvent(e *qtgui.QPaintEvent) {
-	p := qtgui.NewQPainterOn(s)
-	defer p.Delete() // ends painting before the handler returns
-	p.SetRenderHint(qtgui.QPainterAntialiasing)
-	r := s.Rect()
-	p.FillRect(r, qtgui.RGB(250, 250, 250))
-	p.SetBrushColor(s.color)
-	p.SetPenColor(qtgui.RGB(40, 40, 40))
-	p.DrawEllipse(r.Adjusted(8, 8, -8, -8))
-	p.DrawText(qtcore.QPoint{X: 12, Y: r.Height - 12}, s.color.Name())
+	// the painter ends, and is freed, when the function returns
+	qtgui.PaintOn(s, func(p *qtgui.QPainter) {
+		p.SetRenderHint(qtgui.QPainterAntialiasing)
+		r := s.Rect()
+		p.FillRect(r, qtgui.RGB(250, 250, 250))
+		p.SetBrushColor(s.color)
+		p.SetPenColor(qtgui.RGB(40, 40, 40))
+		p.DrawEllipse(r.Adjusted(8, 8, -8, -8))
+		p.DrawText(qtcore.QPoint{X: 12, Y: r.Height - 12}, s.color.Name())
+	})
 }
 
 func (s *Swatch) SizeHint() qtcore.QSize { return qtcore.QSize{Width: 140, Height: 140} }

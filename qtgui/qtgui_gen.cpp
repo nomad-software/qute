@@ -211,6 +211,12 @@ static inline void qute_gui_only() {
 	}
 }
 
+// qute_fixed_base says Base sits at a fixed offset in Derived: a
+// static_cast back from Base is well-formed, which it is not for a virtual
+// or ambiguous base.
+template <class B, class D, class = void> struct qute_fixed_base : std::false_type {};
+template <class B, class D> struct qute_fixed_base<B, D, std::void_t<decltype(static_cast<D *>(std::declval<B *>()))>> : std::true_type {};
+
 namespace {
 // GoSlot owns a Go closure id; Qt destroys the slot object on disconnect
 // or when the sender dies, which releases the closure.
@@ -4217,6 +4223,31 @@ const char *qute_qtgui_check_layout(void) {
 	{ QWindow *d = reinterpret_cast<QWindow *>(uintptr_t(0x10000)); QObject *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QWindow"; }
 	{ QWindowStateChangeEvent *d = reinterpret_cast<QWindowStateChangeEvent *>(uintptr_t(0x10000)); QEvent *bp = d; if (reinterpret_cast<uintptr_t>(bp) != 0x10000) return "QWindowStateChangeEvent"; }
 	return nullptr;
+}
+
+static_assert(qute_fixed_base<QSurface, QOffscreenSurface>::value, "QOffscreenSurface: QSurface is a virtual or ambiguous base");
+ptrdiff_t qute_QOffscreenSurface_offset_QSurface(void) {
+	QOffscreenSurface *d = reinterpret_cast<QOffscreenSurface *>(uintptr_t(0x10000));
+	QSurface *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QPaintDevice, QPaintDeviceWindow>::value, "QPaintDeviceWindow: QPaintDevice is a virtual or ambiguous base");
+ptrdiff_t qute_QPaintDeviceWindow_offset_QPaintDevice(void) {
+	QPaintDeviceWindow *d = reinterpret_cast<QPaintDeviceWindow *>(uintptr_t(0x10000));
+	QPaintDevice *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QPagedPaintDevice, QPdfWriter>::value, "QPdfWriter: QPagedPaintDevice is a virtual or ambiguous base");
+ptrdiff_t qute_QPdfWriter_offset_QPagedPaintDevice(void) {
+	QPdfWriter *d = reinterpret_cast<QPdfWriter *>(uintptr_t(0x10000));
+	QPagedPaintDevice *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QSurface, QWindow>::value, "QWindow: QSurface is a virtual or ambiguous base");
+ptrdiff_t qute_QWindow_offset_QSurface(void) {
+	QWindow *d = reinterpret_cast<QWindow *>(uintptr_t(0x10000));
+	QSurface *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
 }
 
 // ---- QAbstractFileIconProvider
@@ -10509,10 +10540,6 @@ void * qute_QOffscreenSurface_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QOffscreenSurface *>(static_cast<QObject *>(obj)));
 }
-void * qute_QOffscreenSurface_as_QSurface(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QSurface *>(static_cast<QOffscreenSurface *>(self)));
-}
 int64_t qute_QOffscreenSurface_surfaceType(void *self) {
 	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QOffscreenSurface *>(self)->surfaceType());
@@ -12287,10 +12314,6 @@ void * qute_QPaintDeviceWindow_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QPaintDeviceWindow *>(static_cast<QObject *>(obj)));
 }
-void * qute_QPaintDeviceWindow_as_QPaintDevice(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QPaintDevice *>(static_cast<QPaintDeviceWindow *>(self)));
-}
 void qute_QPaintDeviceWindow_update(void *self, qute_rect a0) {
 	qute_gui_only();
 	static_cast<QPaintDeviceWindow *>(self)->update(qute_to_QRect(a0));
@@ -13706,10 +13729,6 @@ double qute_QPdfWriter_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1
 void * qute_QPdfWriter_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QPdfWriter *>(static_cast<QObject *>(obj)));
-}
-void * qute_QPdfWriter_as_QPagedPaintDevice(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QPagedPaintDevice *>(static_cast<QPdfWriter *>(self)));
 }
 void qute_QPdfWriter_setPdfVersion(void *self, int64_t a0) {
 	qute_gui_only();
@@ -21418,10 +21437,6 @@ void * qute_QWindow_prot_resolveInterface(void *self, const char * a0, int a1) {
 void * qute_QWindow_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWindow *>(static_cast<QObject *>(obj)));
-}
-void * qute_QWindow_as_QSurface(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QSurface *>(static_cast<QWindow *>(self)));
 }
 void qute_QWindow_setSurfaceType(void *self, int64_t a0) {
 	qute_gui_only();

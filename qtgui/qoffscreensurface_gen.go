@@ -48,11 +48,13 @@ func QOffscreenSurfaceCast(o qtcore.QObjectLike) *QOffscreenSurface {
 	return rt.View[QOffscreenSurface](rt.WrapClass(p, "QOffscreenSurface", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQOffscreenSurfaceQSurface is where the QSurface part of a QOffscreenSurface starts (the C++ static_cast).
+var quteOffsetQOffscreenSurfaceQSurface = uintptr(C.qute_QOffscreenSurface_offset_QSurface())
+
 // AsQSurface returns the QSurface part of this object, sharing its ownership state.
 func (this *QOffscreenSurface) AsQSurface() *QSurface {
 	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.AsQSurface")
-	p := C.qute_QOffscreenSurface_as_QSurface(self)
-	return rt.View[QSurface](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QSurface](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQOffscreenSurfaceQSurface))
 }
 
 // NewQOffscreenSurfaceWithScreen wraps the QOffscreenSurface constructor.

@@ -48,11 +48,13 @@ func QLayoutCast(o qtcore.QObjectLike) *QLayout {
 	return rt.View[QLayout](rt.WrapClass(p, "QLayout", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQLayoutQLayoutItem is where the QLayoutItem part of a QLayout starts (the C++ static_cast).
+var quteOffsetQLayoutQLayoutItem = uintptr(C.qute_QLayout_offset_QLayoutItem())
+
 // AsQLayoutItem returns the QLayoutItem part of this object, sharing its ownership state.
 func (this *QLayout) AsQLayoutItem() *QLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QLayout.AsQLayoutItem")
-	p := C.qute_QLayout_as_QLayoutItem(self)
-	return rt.View[QLayoutItem](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QLayoutItem](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQLayoutQLayoutItem))
 }
 
 // Spacing wraps QLayout::spacing.

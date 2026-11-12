@@ -307,6 +307,12 @@ static inline void qute_gui_only() {
 	}
 }
 
+// qute_fixed_base says Base sits at a fixed offset in Derived: a
+// static_cast back from Base is well-formed, which it is not for a virtual
+// or ambiguous base.
+template <class B, class D, class = void> struct qute_fixed_base : std::false_type {};
+template <class B, class D> struct qute_fixed_base<B, D, std::void_t<decltype(static_cast<D *>(std::declval<B *>()))>> : std::true_type {};
+
 namespace {
 // GoSlot owns a Go closure id; Qt destroys the slot object on disconnect
 // or when the sender dies, which releases the closure.
@@ -52838,6 +52844,31 @@ const char *qute_qtwidgets_check_layout(void) {
 	return nullptr;
 }
 
+static_assert(qute_fixed_base<QGraphicsItem, QGraphicsObject>::value, "QGraphicsObject: QGraphicsItem is a virtual or ambiguous base");
+ptrdiff_t qute_QGraphicsObject_offset_QGraphicsItem(void) {
+	QGraphicsObject *d = reinterpret_cast<QGraphicsObject *>(uintptr_t(0x10000));
+	QGraphicsItem *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QGraphicsLayoutItem, QGraphicsWidget>::value, "QGraphicsWidget: QGraphicsLayoutItem is a virtual or ambiguous base");
+ptrdiff_t qute_QGraphicsWidget_offset_QGraphicsLayoutItem(void) {
+	QGraphicsWidget *d = reinterpret_cast<QGraphicsWidget *>(uintptr_t(0x10000));
+	QGraphicsLayoutItem *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QLayoutItem, QLayout>::value, "QLayout: QLayoutItem is a virtual or ambiguous base");
+ptrdiff_t qute_QLayout_offset_QLayoutItem(void) {
+	QLayout *d = reinterpret_cast<QLayout *>(uintptr_t(0x10000));
+	QLayoutItem *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+static_assert(qute_fixed_base<QPaintDevice, QWidget>::value, "QWidget: QPaintDevice is a virtual or ambiguous base");
+ptrdiff_t qute_QWidget_offset_QPaintDevice(void) {
+	QWidget *d = reinterpret_cast<QWidget *>(uintptr_t(0x10000));
+	QPaintDevice *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+
 // ---- QAbstractButton
 void * qute_QAbstractButton_new_shim(void * a0) {
 	qute_gui_only();
@@ -66383,10 +66414,6 @@ void * qute_QGraphicsObject_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsObject *>(static_cast<QObject *>(obj)));
 }
-void * qute_QGraphicsObject_as_QGraphicsItem(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QGraphicsItem *>(static_cast<QGraphicsObject *>(self)));
-}
 void qute_QGraphicsObject_grabGesture(void *self, int64_t a0) {
 	qute_gui_only();
 	static_cast<QGraphicsObject *>(self)->grabGesture(static_cast<Qt::GestureType>(a0));
@@ -70439,10 +70466,6 @@ void * qute_QGraphicsWidget_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QGraphicsWidget *>(static_cast<QObject *>(obj)));
 }
-void * qute_QGraphicsWidget_as_QGraphicsLayoutItem(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QGraphicsLayoutItem *>(static_cast<QGraphicsWidget *>(self)));
-}
 void * qute_QGraphicsWidget_layout(void *self) {
 	qute_gui_only();
 	return (void *)(static_cast<QGraphicsWidget *>(self)->layout());
@@ -73983,10 +74006,6 @@ qute_rect qute_QLayout_prot_alignmentRect(void *self, qute_rect a0) {
 void * qute_QLayout_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QLayout *>(static_cast<QObject *>(obj)));
-}
-void * qute_QLayout_as_QLayoutItem(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QLayoutItem *>(static_cast<QLayout *>(self)));
 }
 int qute_QLayout_spacing(void *self) {
 	qute_gui_only();
@@ -94105,10 +94124,6 @@ double qute_QWidget_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
 void * qute_QWidget_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWidget *>(static_cast<QObject *>(obj)));
-}
-void * qute_QWidget_as_QPaintDevice(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QPaintDevice *>(static_cast<QWidget *>(self)));
 }
 unsigned long long qute_QWidget_winId(void *self) {
 	qute_gui_only();

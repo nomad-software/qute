@@ -101,7 +101,8 @@ Rules (panic messages cite these numbers; keep them stable):
    marked Dead when the callback returns. Long-lived arguments stay Borrowed.
    A plain object Go built on one inside the handler and left alive (a
    `QPainterStateGuard` on the handler's painter) is deleted first, as its
-   C++ scope would have (see Kept references).
+   C++ scope would have (see Kept references). `qtgui.PaintOn`'s painter is
+   scoped to its function the same way.
 7. Safety net: GC never deletes a QObject that has a parent, even if a rule
    was missed (it prints a warning naming the class, since the Go state its
    tree anchored was collected), and an Owned QObject that Qt gives a parent
@@ -177,7 +178,12 @@ QObject references are usually watched by Qt; `Delete()` of a guarded object
 panics, naming the keeper. The overlay key `kept-delete: allow|guard`
 overrides it per method (`QTextCursor` allows, a page's profile guards), and
 `release-slot: <slot>` empties a slot when a method ends the use
-(`QPainter::end`).
+(`QPainter::end`). A use that lasts one call is a *lend* instead
+(`rt.Lend`/`Unlend`): `qtgui.PaintOn` lends the device to a painter with a
+scoped handle (`rt.WrapScoped`, Dead when its function returns), so
+`Delete()` of the device panics meanwhile, with no keep, anchoring or GC
+cleanup to undo; it costs well under half of `NewQPainterOn`, `End` and
+`Delete` (`BenchmarkPainter`).
 A scoped argument is not deleted by Go, so the guard cannot protect it: Qt
 frees a handler's painter whatever still points at it, and a keeper left
 alive would run its destructor on freed memory when GC got to it. A keeper
@@ -216,7 +222,11 @@ class: <bound class>}` when Qt has no getter; a class may list several
 - **Registry.** Object address to a `weak.Pointer[Handle]` plus a serial.
   Wrapping a pointer twice returns the same handle, and the same Go wrapper
   per type; an upcast of a derived wrapper returns its embedded base, so
-  comparing wrappers of the same object with `==` works.
+  comparing wrappers of the same object with `==` works. An upcast to a
+  secondary base (`QWidget.AsQPaintDevice`) adds an offset the shim works
+  out once at init (`qute_<Class>_offset_<Base>`), with no call into C++;
+  a `static_assert` (`qute_fixed_base`) keeps a virtual base, whose offset
+  is not fixed, from compiling.
 - **Death notice.** On first wrap of a QObject, `rt` connects
   `QObject::destroyed`, with a separate never-destroyed context object
   (`~QVideoSink` drops connections whose receiver is itself before
@@ -448,9 +458,9 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
 type Canvas struct{ qtwidgets.QWidgetBase }
 
 func (c *Canvas) PaintEvent(e *qtgui.QPaintEvent) {
-	p := qtgui.NewQPainterOn(c)
-	defer p.Delete()
-	p.FillRect(e.Rect(), qtgui.RGB(200, 30, 30))
+	qtgui.PaintOn(c, func(p *qtgui.QPainter) {
+		p.FillRect(e.Rect(), qtgui.RGB(200, 30, 30))
+	})
 }
 
 qtwidgets.NewQWidgetWith(&Canvas{}, nil)
@@ -617,7 +627,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `qutetest`), scoped-escape. A handler is an `On*` closure or an override: a
   method of a type that embeds a Base (directly or through a type it embeds)
   whose name ends in `Event` or that takes a scoped argument (`Paint` of a
-  graphics item or delegate).
+  graphics item or delegate). A function passed to `qtgui.PaintOn` is
+  checked for scoped-escape too (its painter is scoped); it runs at once,
+  so a handler's event used inside it does not escape.
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
   screenshot test.
 
@@ -797,6 +809,9 @@ Layout:
 - `cmd/qutegen`: `types.go` (type mapping), `model.go` (resolution, naming,
   rules, out-parameters, pairs, fields), `emit.go` (Go/C/C++ output),
   `tests.go`, `report.go`.
+- `qtgui/paint_manual_test.go` covers `PaintOn` (drawing, the device
+  guard, a panic in its function, a state guard left on its painter), and
+  `regression_test.go` calls a virtual through every secondary-base upcast.
 - `features_test.go` checks each extra type kind end to end (out-parameters,
   chaining, buffers, maps, durations, fields, callbacks, GUI values in
   variants, images from bytes, defaulted out-parameters in Full forms).
@@ -805,7 +820,10 @@ Layout:
   that dropped events are collected. `qtwidgets/dialogs_test.go` answers the
   static file and input dialogs (`QFileDialogGetOpenFileNameFull`,
   `QInputDialogGetTextFull`) from a timer.
-- `bench_test.go` also measures a Go table model under a view
+- `bench_test.go` also measures painters (`BenchmarkPainter`:
+  `NewQPainterOn`/`End`/`Delete` against `PaintOn`, on an image and in a
+  paint event), a process-list tree (`BenchmarkTreeRows`), and a Go table
+  model under a view
   (`BenchmarkModelSelectAll`, `BenchmarkModelPaint`): Qt calls its overrides
   with an index for every row; and rows of list items and of widgets made
   and destroyed (`BenchmarkListRows`, `BenchmarkWidgetRows`).

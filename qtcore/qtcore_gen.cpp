@@ -160,6 +160,12 @@ static inline void qute_gui_only() {
 	}
 }
 
+// qute_fixed_base says Base sits at a fixed offset in Derived: a
+// static_cast back from Base is well-formed, which it is not for a virtual
+// or ambiguous base.
+template <class B, class D, class = void> struct qute_fixed_base : std::false_type {};
+template <class B, class D> struct qute_fixed_base<B, D, std::void_t<decltype(static_cast<D *>(std::declval<B *>()))>> : std::true_type {};
+
 namespace {
 // GoSlot owns a Go closure id; Qt destroys the slot object on disconnect
 // or when the sender dies, which releases the closure.
@@ -8732,6 +8738,13 @@ const char *qute_qtcore_check_layout(void) {
 	return nullptr;
 }
 
+static_assert(qute_fixed_base<QIODeviceBase, QIODevice>::value, "QIODevice: QIODeviceBase is a virtual or ambiguous base");
+ptrdiff_t qute_QIODevice_offset_QIODeviceBase(void) {
+	QIODevice *d = reinterpret_cast<QIODevice *>(uintptr_t(0x10000));
+	QIODeviceBase *bp = d;
+	return ptrdiff_t(reinterpret_cast<uintptr_t>(bp)) - 0x10000;
+}
+
 // ---- QAbstractAnimation
 void * qute_QAbstractAnimation_new_shim(void * a0) {
 	qute_gui_only();
@@ -14694,10 +14707,6 @@ void * qute_QFileSystemWatcher_directoryChanged(void *self, uintptr_t id) {
 void * qute_QIODevice_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QIODevice *>(static_cast<QObject *>(obj)));
-}
-void * qute_QIODevice_as_QIODeviceBase(void *self) {
-	qute_gui_only();
-	return static_cast<void *>(static_cast<QIODeviceBase *>(static_cast<QIODevice *>(self)));
 }
 int64_t qute_QIODevice_openMode(void *self) {
 	qute_gui_only();

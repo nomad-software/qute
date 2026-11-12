@@ -48,11 +48,13 @@ func QPaintDeviceWindowCast(o qtcore.QObjectLike) *QPaintDeviceWindow {
 	return rt.View[QPaintDeviceWindow](rt.WrapClass(p, "QPaintDeviceWindow", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQPaintDeviceWindowQPaintDevice is where the QPaintDevice part of a QPaintDeviceWindow starts (the C++ static_cast).
+var quteOffsetQPaintDeviceWindowQPaintDevice = uintptr(C.qute_QPaintDeviceWindow_offset_QPaintDevice())
+
 // AsQPaintDevice returns the QPaintDevice part of this object, sharing its ownership state.
 func (this *QPaintDeviceWindow) AsQPaintDevice() *QPaintDevice {
 	self := rt.Use(unsafe.Pointer(this), "QPaintDeviceWindow.AsQPaintDevice")
-	p := C.qute_QPaintDeviceWindow_as_QPaintDevice(self)
-	return rt.View[QPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QPaintDevice](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQPaintDeviceWindowQPaintDevice))
 }
 
 // UpdateWithRect wraps QPaintDeviceWindow::update.

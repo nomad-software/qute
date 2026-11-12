@@ -1167,3 +1167,56 @@ func TestWrapNew(t *testing.T) {
 		t.Error("an existing handle was replaced")
 	}
 }
+
+// A lend guards an object for one call (PaintOn's device): Delete() panics
+// naming the user while any lend is open, and works again after the last.
+func TestLendGuardsDelete(t *testing.T) {
+	freed := 0
+	dev := Wrap(fakePtr(1), "QImage", KindValue, TakeOwned, func(unsafe.Pointer) { freed++ })
+	Lend(dev, "QPainter")
+	Lend(dev, "QPainter") // nested
+	mustPanic := func() {
+		t.Helper()
+		defer func() {
+			if p, _ := recover().(string); !strings.Contains(p, "a QPainter still uses this QImage") {
+				t.Errorf("Delete of a lent object: panic %q, want it to name the QPainter", p)
+			}
+		}()
+		dev.Delete("QImage.Delete")
+	}
+	mustPanic()
+	Unlend(dev)
+	mustPanic()
+	Unlend(dev)
+	dev.Delete("QImage.Delete")
+	if freed != 1 || dev.State() != Dead {
+		t.Errorf("after the last Unlend: freed %d, state %v; want 1, Dead", freed, dev.State())
+	}
+	Lend(nil, "QPainter") // a nil handle is ignored
+	Unlend(nil)
+}
+
+// WrapScoped makes a scoped, Borrowed handle with its wrapper cached; Expire
+// makes it Dead with the scoped message.
+func TestWrapScoped(t *testing.T) {
+	type wrapper struct{ Ref }
+	p := fakePtr(2)
+	h := WrapScoped[wrapper](p, "QPainter")
+	if h.State() != Borrowed || !h.scoped {
+		t.Fatalf("state %v scoped %v, want Borrowed true", h.State(), h.scoped)
+	}
+	w := View[wrapper](h, p)
+	if w != h.cache1[0] || RefOf(unsafe.Pointer(w)).H != h {
+		t.Error("the wrapper made with the handle is not the one View returns")
+	}
+	if Lookup(p) != nil {
+		t.Error("a scoped handle was registered")
+	}
+	h.Expire()
+	defer func() {
+		if r, _ := recover().(string); !strings.Contains(r, "rule 6") {
+			t.Errorf("use after Expire: panic %q, want rule 6", r)
+		}
+	}()
+	Use(unsafe.Pointer(w), "QPainter.End")
+}

@@ -49,11 +49,13 @@ func QGraphicsWidgetCast(o qtcore.QObjectLike) *QGraphicsWidget {
 	return rt.View[QGraphicsWidget](rt.WrapClass(p, "QGraphicsWidget", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQGraphicsWidgetQGraphicsLayoutItem is where the QGraphicsLayoutItem part of a QGraphicsWidget starts (the C++ static_cast).
+var quteOffsetQGraphicsWidgetQGraphicsLayoutItem = uintptr(C.qute_QGraphicsWidget_offset_QGraphicsLayoutItem())
+
 // AsQGraphicsLayoutItem returns the QGraphicsLayoutItem part of this object, sharing its ownership state.
 func (this *QGraphicsWidget) AsQGraphicsLayoutItem() *QGraphicsLayoutItem {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsWidget.AsQGraphicsLayoutItem")
-	p := C.qute_QGraphicsWidget_as_QGraphicsLayoutItem(self)
-	return rt.View[QGraphicsLayoutItem](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QGraphicsLayoutItem](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQGraphicsWidgetQGraphicsLayoutItem))
 }
 
 // NewQGraphicsWidget wraps the QGraphicsWidget constructor.

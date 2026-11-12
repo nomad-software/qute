@@ -268,7 +268,7 @@ happened and the fix.
   `main` included) and the method name in thread panics.
 - `Delete()` also panics where Qt would be left with a dangling pointer: on
   an object something still uses without watching for its destruction (the
-  image a `QPainter` draws on until `End()`, a stream's device), and on a
+  image a `QPainter` draws on until `End()`, or while `PaintOn` runs; a stream's device), and on a
   layout item inside a layout (take it out with `TakeAt` first).
 - GC never frees a window you can see: a visible top-level widget or
   `QWindow` is pinned, and so is anything after `Keep()` until `Unkeep()`.
@@ -364,16 +364,19 @@ conn.Disconnect() // optional; the connection also ends when btn dies
 type Canvas struct{ qtwidgets.QWidgetBase }
 
 func (c *Canvas) PaintEvent(e *qtgui.QPaintEvent) {
-	p := qtgui.NewQPainterOn(c)
-	defer p.Delete()
-	p.FillRect(e.Rect(), qtgui.RGB(200, 30, 30))
+	qtgui.PaintOn(c, func(p *qtgui.QPainter) {
+		p.FillRect(e.Rect(), qtgui.RGB(200, 30, 30))
+	})
 }
 
 qtwidgets.NewQWidgetWith(&Canvas{}, nil)
 ```
 
 Event arguments are scoped: they are Dead once the handler returns, so copy
-out the values you need. A helper you build on one and leave alive (a
+out the values you need. `qtgui.PaintOn(device, f)` gives `f` a painter
+that is scoped the same way: it is ended and freed when `f` returns, which
+costs less than `NewQPainterOn` with `End()` and `Delete()` (keep that for
+a painter that outlives one call). A helper you build on one and leave alive (a
 `QPainterStateGuard` on a delegate's painter) is deleted when the handler
 returns, as it would be at the end of its C++ scope. Call `c.Super().PaintEvent(e)` for the base
 implementation. Models work the same way: embed
@@ -474,7 +477,7 @@ a triangle with a shader program, a vertex buffer and a VAO.
   inside handlers and overrides (a painter, image or other non-QObject made
   in a handler is deleted there), Qt calls (including `qute.Screenshot` and the `qutetest`
   input helpers) from goroutines, and event, painter and style-option
-  arguments stored past their callback.
+  arguments (also `PaintOn`'s painter) stored past their callback.
 
 Try the example: `go run ./examples/hello`, or render it headlessly with
 `go run ./examples/hello -screenshot out.png -tree`.

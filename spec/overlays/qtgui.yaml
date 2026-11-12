@@ -36,7 +36,7 @@ QPainter:
   fillRect(int, int, int, int, QGradient::Preset): { skip: "use FillRectPreset" }
   drawTextItem: { reviewed: true }
   boundingRect(const QRectF&, const QString&, const QTextOption&): { name: BoundingRectTextF }
-  QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: keep:device }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns." }
+  QPainter(QPaintDevice*): { name: NewQPainterOn, args: { 0: keep:device }, doc: "Painting ends when the painter is deleted; call End() or Delete() before the handler returns. PaintOn is cheaper for a painter used within one call: it ends and frees the painter itself." }
   begin: { args: { 0: keep:device }, reviewed: true }
   end: { release-slot: device, reviewed: true, doc: "An inactive painter no longer uses its device, so End() drops the painter's reference to it: the device may be deleted afterwards." }
   device: { return: borrowed }

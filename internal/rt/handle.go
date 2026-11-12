@@ -1026,6 +1026,25 @@ func wrapNew(p unsafe.Pointer, class string, ci classInfo, mode WrapMode, fresh 
 	return h
 }
 
+// WrapScoped makes the handle of an object Go builds for the length of one
+// call (the painter qtgui.PaintOn draws with) and its wrapper of type T, in
+// one allocation. Like a scoped argument it is Borrowed, so Go code cannot
+// delete it, and Expire makes it Dead when the call returns; the caller then
+// frees the object. It has no GC cleanup and is never registered.
+func WrapScoped[T any](p unsafe.Pointer, class string) *Handle {
+	if p == nil {
+		return nil
+	}
+	x := new(viewPair[T])
+	h := &x.h
+	h.init(p, class, KindPlain, Borrowed, nil)
+	h.scoped = true
+	*RefOf(unsafe.Pointer(&x.v)) = Ref{H: h, P: p}
+	h.cache1[0] = &x.v
+	h.cache = h.cache1[:1]
+	return h
+}
+
 // WrapClassFrom is WrapClass for an object pointer returned by a method of
 // owner. When the result is a plain object qute cannot watch (a QLayoutItem
 // Qt made, the QPaintDevice a QPainter draws on) and Go does not own it, it

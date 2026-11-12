@@ -106,7 +106,7 @@ func NewQPainter() *QPainter {
 //
 // Ownership: paintDevice is borrowed, and the new object keeps it from being garbage collected while it lives.
 //
-// Painting ends when the painter is deleted; call End() or Delete() before the handler returns.
+// Painting ends when the painter is deleted; call End() or Delete() before the handler returns. PaintOn is cheaper for a painter used within one call: it ends and frees the painter itself.
 //
 // Qt docs: https://doc.qt.io/qt-6/qpainter.html#QPainter
 func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {

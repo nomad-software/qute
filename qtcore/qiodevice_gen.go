@@ -47,11 +47,13 @@ func QIODeviceCast(o QObjectLike) *QIODevice {
 	return rt.View[QIODevice](rt.WrapClass(p, "QIODevice", rt.KeepOrBorrow), p)
 }
 
+// quteOffsetQIODeviceQIODeviceBase is where the QIODeviceBase part of a QIODevice starts (the C++ static_cast).
+var quteOffsetQIODeviceQIODeviceBase = uintptr(C.qute_QIODevice_offset_QIODeviceBase())
+
 // AsQIODeviceBase returns the QIODeviceBase part of this object, sharing its ownership state.
 func (this *QIODevice) AsQIODeviceBase() *QIODeviceBase {
 	self := rt.Use(unsafe.Pointer(this), "QIODevice.AsQIODeviceBase")
-	p := C.qute_QIODevice_as_QIODeviceBase(self)
-	return rt.View[QIODeviceBase](rt.RefOf(unsafe.Pointer(this)).H, p)
+	return rt.View[QIODeviceBase](rt.RefOf(unsafe.Pointer(this)).H, unsafe.Add(self, quteOffsetQIODeviceQIODeviceBase))
 }
 
 // OpenMode wraps QIODevice::openMode.
