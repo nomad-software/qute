@@ -1806,6 +1806,16 @@ type QStyleSubclass interface{ quteQStyleBase() *QStyleBase }
 // Super returns the C++ base implementations of QStyle's virtual methods.
 func (b *QStyleBase) Super() *QStyleSuper { return &QStyleSuper{this: b.QStyle} }
 
+// Protected returns the object's protected methods (those of QStyleBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QStyle: call it on that
+// class's wrapper.
+func (this *QStyle) Protected() *QStyleBase {
+	rt.UseProtected(unsafe.Pointer(this), "QStyle.Protected", "QStyle")
+	return &QStyleBase{this}
+}
+
 // QStyleSuper calls the C++ base implementations of QStyle's virtuals.
 type QStyleSuper struct{ this *QStyle }
 

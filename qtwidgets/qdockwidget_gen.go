@@ -1164,6 +1164,16 @@ type QDockWidgetSubclass interface{ quteQDockWidgetBase() *QDockWidgetBase }
 // Super returns the C++ base implementations of QDockWidget's virtual methods.
 func (b *QDockWidgetBase) Super() *QDockWidgetSuper { return &QDockWidgetSuper{this: b.QDockWidget} }
 
+// Protected returns the object's protected methods (those of QDockWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDockWidget: call it on that
+// class's wrapper.
+func (this *QDockWidget) Protected() *QDockWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDockWidget.Protected", "QDockWidget")
+	return &QDockWidgetBase{this}
+}
+
 // QDockWidgetSuper calls the C++ base implementations of QDockWidget's virtuals.
 type QDockWidgetSuper struct{ this *QDockWidget }
 

@@ -366,6 +366,16 @@ func (b *QGraphicsEffectBase) Super() *QGraphicsEffectSuper {
 	return &QGraphicsEffectSuper{this: b.QGraphicsEffect}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsEffectBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsEffect: call it on that
+// class's wrapper.
+func (this *QGraphicsEffect) Protected() *QGraphicsEffectBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsEffect.Protected", "QGraphicsEffect")
+	return &QGraphicsEffectBase{this}
+}
+
 // QGraphicsEffectSuper calls the C++ base implementations of QGraphicsEffect's virtuals.
 type QGraphicsEffectSuper struct{ this *QGraphicsEffect }
 

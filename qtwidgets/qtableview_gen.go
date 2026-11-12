@@ -1939,6 +1939,16 @@ type QTableViewSubclass interface{ quteQTableViewBase() *QTableViewBase }
 // Super returns the C++ base implementations of QTableView's virtual methods.
 func (b *QTableViewBase) Super() *QTableViewSuper { return &QTableViewSuper{this: b.QTableView} }
 
+// Protected returns the object's protected methods (those of QTableViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTableView: call it on that
+// class's wrapper.
+func (this *QTableView) Protected() *QTableViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTableView.Protected", "QTableView")
+	return &QTableViewBase{this}
+}
+
 // QTableViewSuper calls the C++ base implementations of QTableView's virtuals.
 type QTableViewSuper struct{ this *QTableView }
 

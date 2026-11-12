@@ -508,6 +508,16 @@ type QPdfWriterSubclass interface{ quteQPdfWriterBase() *QPdfWriterBase }
 // Super returns the C++ base implementations of QPdfWriter's virtual methods.
 func (b *QPdfWriterBase) Super() *QPdfWriterSuper { return &QPdfWriterSuper{this: b.QPdfWriter} }
 
+// Protected returns the object's protected methods (those of QPdfWriterBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QPdfWriter: call it on that
+// class's wrapper.
+func (this *QPdfWriter) Protected() *QPdfWriterBase {
+	rt.UseProtected(unsafe.Pointer(this), "QPdfWriter.Protected", "QPdfWriter")
+	return &QPdfWriterBase{this}
+}
+
 // QPdfWriterSuper calls the C++ base implementations of QPdfWriter's virtuals.
 type QPdfWriterSuper struct{ this *QPdfWriter }
 

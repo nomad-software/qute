@@ -465,6 +465,16 @@ func (b *QScreenCaptureBase) Super() *QScreenCaptureSuper {
 	return &QScreenCaptureSuper{this: b.QScreenCapture}
 }
 
+// Protected returns the object's protected methods (those of QScreenCaptureBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QScreenCapture: call it on that
+// class's wrapper.
+func (this *QScreenCapture) Protected() *QScreenCaptureBase {
+	rt.UseProtected(unsafe.Pointer(this), "QScreenCapture.Protected", "QScreenCapture")
+	return &QScreenCaptureBase{this}
+}
+
 // QScreenCaptureSuper calls the C++ base implementations of QScreenCapture's virtuals.
 type QScreenCaptureSuper struct{ this *QScreenCapture }
 

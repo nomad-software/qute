@@ -504,6 +504,16 @@ func (b *QOpenGLDebugLoggerBase) Super() *QOpenGLDebugLoggerSuper {
 	return &QOpenGLDebugLoggerSuper{this: b.QOpenGLDebugLogger}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLDebugLoggerBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLDebugLogger: call it on that
+// class's wrapper.
+func (this *QOpenGLDebugLogger) Protected() *QOpenGLDebugLoggerBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLDebugLogger.Protected", "QOpenGLDebugLogger")
+	return &QOpenGLDebugLoggerBase{this}
+}
+
 // QOpenGLDebugLoggerSuper calls the C++ base implementations of QOpenGLDebugLogger's virtuals.
 type QOpenGLDebugLoggerSuper struct{ this *QOpenGLDebugLogger }
 

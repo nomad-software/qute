@@ -773,6 +773,16 @@ type QRubberBandSubclass interface{ quteQRubberBandBase() *QRubberBandBase }
 // Super returns the C++ base implementations of QRubberBand's virtual methods.
 func (b *QRubberBandBase) Super() *QRubberBandSuper { return &QRubberBandSuper{this: b.QRubberBand} }
 
+// Protected returns the object's protected methods (those of QRubberBandBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QRubberBand: call it on that
+// class's wrapper.
+func (this *QRubberBand) Protected() *QRubberBandBase {
+	rt.UseProtected(unsafe.Pointer(this), "QRubberBand.Protected", "QRubberBand")
+	return &QRubberBandBase{this}
+}
+
 // QRubberBandSuper calls the C++ base implementations of QRubberBand's virtuals.
 type QRubberBandSuper struct{ this *QRubberBand }
 

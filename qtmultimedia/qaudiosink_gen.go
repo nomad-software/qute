@@ -529,6 +529,16 @@ type QAudioSinkSubclass interface{ quteQAudioSinkBase() *QAudioSinkBase }
 // Super returns the C++ base implementations of QAudioSink's virtual methods.
 func (b *QAudioSinkBase) Super() *QAudioSinkSuper { return &QAudioSinkSuper{this: b.QAudioSink} }
 
+// Protected returns the object's protected methods (those of QAudioSinkBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAudioSink: call it on that
+// class's wrapper.
+func (this *QAudioSink) Protected() *QAudioSinkBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAudioSink.Protected", "QAudioSink")
+	return &QAudioSinkBase{this}
+}
+
 // QAudioSinkSuper calls the C++ base implementations of QAudioSink's virtuals.
 type QAudioSinkSuper struct{ this *QAudioSink }
 

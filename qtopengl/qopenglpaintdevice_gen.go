@@ -274,6 +274,16 @@ func (b *QOpenGLPaintDeviceBase) Super() *QOpenGLPaintDeviceSuper {
 	return &QOpenGLPaintDeviceSuper{this: b.QOpenGLPaintDevice}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLPaintDeviceBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLPaintDevice: call it on that
+// class's wrapper.
+func (this *QOpenGLPaintDevice) Protected() *QOpenGLPaintDeviceBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLPaintDevice.Protected", "QOpenGLPaintDevice")
+	return &QOpenGLPaintDeviceBase{this}
+}
+
 // QOpenGLPaintDeviceSuper calls the C++ base implementations of QOpenGLPaintDevice's virtuals.
 type QOpenGLPaintDeviceSuper struct{ this *QOpenGLPaintDevice }
 

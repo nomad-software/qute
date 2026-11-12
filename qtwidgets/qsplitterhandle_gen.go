@@ -785,6 +785,16 @@ func (b *QSplitterHandleBase) Super() *QSplitterHandleSuper {
 	return &QSplitterHandleSuper{this: b.QSplitterHandle}
 }
 
+// Protected returns the object's protected methods (those of QSplitterHandleBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSplitterHandle: call it on that
+// class's wrapper.
+func (this *QSplitterHandle) Protected() *QSplitterHandleBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSplitterHandle.Protected", "QSplitterHandle")
+	return &QSplitterHandleBase{this}
+}
+
 // QSplitterHandleSuper calls the C++ base implementations of QSplitterHandle's virtuals.
 type QSplitterHandleSuper struct{ this *QSplitterHandle }
 

@@ -866,6 +866,16 @@ func (b *QCommandLinkButtonBase) Super() *QCommandLinkButtonSuper {
 	return &QCommandLinkButtonSuper{this: b.QCommandLinkButton}
 }
 
+// Protected returns the object's protected methods (those of QCommandLinkButtonBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QCommandLinkButton: call it on that
+// class's wrapper.
+func (this *QCommandLinkButton) Protected() *QCommandLinkButtonBase {
+	rt.UseProtected(unsafe.Pointer(this), "QCommandLinkButton.Protected", "QCommandLinkButton")
+	return &QCommandLinkButtonBase{this}
+}
+
 // QCommandLinkButtonSuper calls the C++ base implementations of QCommandLinkButton's virtuals.
 type QCommandLinkButtonSuper struct{ this *QCommandLinkButton }
 

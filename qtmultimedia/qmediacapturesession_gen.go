@@ -936,6 +936,16 @@ func (b *QMediaCaptureSessionBase) Super() *QMediaCaptureSessionSuper {
 	return &QMediaCaptureSessionSuper{this: b.QMediaCaptureSession}
 }
 
+// Protected returns the object's protected methods (those of QMediaCaptureSessionBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMediaCaptureSession: call it on that
+// class's wrapper.
+func (this *QMediaCaptureSession) Protected() *QMediaCaptureSessionBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMediaCaptureSession.Protected", "QMediaCaptureSession")
+	return &QMediaCaptureSessionBase{this}
+}
+
 // QMediaCaptureSessionSuper calls the C++ base implementations of QMediaCaptureSession's virtuals.
 type QMediaCaptureSessionSuper struct{ this *QMediaCaptureSession }
 

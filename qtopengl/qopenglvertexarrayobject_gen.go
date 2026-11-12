@@ -282,6 +282,16 @@ func (b *QOpenGLVertexArrayObjectBase) Super() *QOpenGLVertexArrayObjectSuper {
 	return &QOpenGLVertexArrayObjectSuper{this: b.QOpenGLVertexArrayObject}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLVertexArrayObjectBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLVertexArrayObject: call it on that
+// class's wrapper.
+func (this *QOpenGLVertexArrayObject) Protected() *QOpenGLVertexArrayObjectBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLVertexArrayObject.Protected", "QOpenGLVertexArrayObject")
+	return &QOpenGLVertexArrayObjectBase{this}
+}
+
 // QOpenGLVertexArrayObjectSuper calls the C++ base implementations of QOpenGLVertexArrayObject's virtuals.
 type QOpenGLVertexArrayObjectSuper struct{ this *QOpenGLVertexArrayObject }
 

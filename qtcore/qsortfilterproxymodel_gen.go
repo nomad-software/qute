@@ -1619,6 +1619,16 @@ func (b *QSortFilterProxyModelBase) Super() *QSortFilterProxyModelSuper {
 	return &QSortFilterProxyModelSuper{this: b.QSortFilterProxyModel}
 }
 
+// Protected returns the object's protected methods (those of QSortFilterProxyModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSortFilterProxyModel: call it on that
+// class's wrapper.
+func (this *QSortFilterProxyModel) Protected() *QSortFilterProxyModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSortFilterProxyModel.Protected", "QSortFilterProxyModel")
+	return &QSortFilterProxyModelBase{this}
+}
+
 // QSortFilterProxyModelSuper calls the C++ base implementations of QSortFilterProxyModel's virtuals.
 type QSortFilterProxyModelSuper struct{ this *QSortFilterProxyModel }
 

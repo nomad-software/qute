@@ -568,6 +568,16 @@ func (b *QRasterWindowBase) Super() *QRasterWindowSuper {
 	return &QRasterWindowSuper{this: b.QRasterWindow}
 }
 
+// Protected returns the object's protected methods (those of QRasterWindowBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QRasterWindow: call it on that
+// class's wrapper.
+func (this *QRasterWindow) Protected() *QRasterWindowBase {
+	rt.UseProtected(unsafe.Pointer(this), "QRasterWindow.Protected", "QRasterWindow")
+	return &QRasterWindowBase{this}
+}
+
 // QRasterWindowSuper calls the C++ base implementations of QRasterWindow's virtuals.
 type QRasterWindowSuper struct{ this *QRasterWindow }
 

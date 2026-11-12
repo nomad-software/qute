@@ -1015,6 +1015,16 @@ type QLCDNumberSubclass interface{ quteQLCDNumberBase() *QLCDNumberBase }
 // Super returns the C++ base implementations of QLCDNumber's virtual methods.
 func (b *QLCDNumberBase) Super() *QLCDNumberSuper { return &QLCDNumberSuper{this: b.QLCDNumber} }
 
+// Protected returns the object's protected methods (those of QLCDNumberBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QLCDNumber: call it on that
+// class's wrapper.
+func (this *QLCDNumber) Protected() *QLCDNumberBase {
+	rt.UseProtected(unsafe.Pointer(this), "QLCDNumber.Protected", "QLCDNumber")
+	return &QLCDNumberBase{this}
+}
+
 // QLCDNumberSuper calls the C++ base implementations of QLCDNumber's virtuals.
 type QLCDNumberSuper struct{ this *QLCDNumber }
 

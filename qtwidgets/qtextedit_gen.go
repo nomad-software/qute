@@ -2322,6 +2322,16 @@ type QTextEditSubclass interface{ quteQTextEditBase() *QTextEditBase }
 // Super returns the C++ base implementations of QTextEdit's virtual methods.
 func (b *QTextEditBase) Super() *QTextEditSuper { return &QTextEditSuper{this: b.QTextEdit} }
 
+// Protected returns the object's protected methods (those of QTextEditBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTextEdit: call it on that
+// class's wrapper.
+func (this *QTextEdit) Protected() *QTextEditBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTextEdit.Protected", "QTextEdit")
+	return &QTextEditBase{this}
+}
+
 // QTextEditSuper calls the C++ base implementations of QTextEdit's virtuals.
 type QTextEditSuper struct{ this *QTextEdit }
 

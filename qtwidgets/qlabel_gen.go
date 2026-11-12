@@ -1306,6 +1306,16 @@ type QLabelSubclass interface{ quteQLabelBase() *QLabelBase }
 // Super returns the C++ base implementations of QLabel's virtual methods.
 func (b *QLabelBase) Super() *QLabelSuper { return &QLabelSuper{this: b.QLabel} }
 
+// Protected returns the object's protected methods (those of QLabelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QLabel: call it on that
+// class's wrapper.
+func (this *QLabel) Protected() *QLabelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QLabel.Protected", "QLabel")
+	return &QLabelBase{this}
+}
+
 // QLabelSuper calls the C++ base implementations of QLabel's virtuals.
 type QLabelSuper struct{ this *QLabel }
 

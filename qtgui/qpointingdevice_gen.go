@@ -356,6 +356,16 @@ func (b *QPointingDeviceBase) Super() *QPointingDeviceSuper {
 	return &QPointingDeviceSuper{this: b.QPointingDevice}
 }
 
+// Protected returns the object's protected methods (those of QPointingDeviceBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QPointingDevice: call it on that
+// class's wrapper.
+func (this *QPointingDevice) Protected() *QPointingDeviceBase {
+	rt.UseProtected(unsafe.Pointer(this), "QPointingDevice.Protected", "QPointingDevice")
+	return &QPointingDeviceBase{this}
+}
+
 // QPointingDeviceSuper calls the C++ base implementations of QPointingDevice's virtuals.
 type QPointingDeviceSuper struct{ this *QPointingDevice }
 

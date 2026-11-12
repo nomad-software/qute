@@ -887,6 +887,16 @@ func (b *QGraphicsEllipseItemBase) Super() *QGraphicsEllipseItemSuper {
 	return &QGraphicsEllipseItemSuper{this: b.QGraphicsEllipseItem}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsEllipseItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsEllipseItem: call it on that
+// class's wrapper.
+func (this *QGraphicsEllipseItem) Protected() *QGraphicsEllipseItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsEllipseItem.Protected", "QGraphicsEllipseItem")
+	return &QGraphicsEllipseItemBase{this}
+}
+
 // QGraphicsEllipseItemSuper calls the C++ base implementations of QGraphicsEllipseItem's virtuals.
 type QGraphicsEllipseItemSuper struct{ this *QGraphicsEllipseItem }
 

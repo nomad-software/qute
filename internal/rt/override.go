@@ -129,3 +129,23 @@ func (h *Handle) OverrideCount() int {
 // IsShim reports whether a qute constructor built the object as its class's
 // shim subclass, so Go can override its virtuals per object.
 func (h *Handle) IsShim() bool { return h != nil && h.shim }
+
+// UseProtected checks that the object behind wrapper may have class's
+// protected methods called on it: the shim's C functions cast to class's
+// shim, so the object must have been built as exactly that shim (by any of
+// class's constructors, plain or New...With). An object Qt created, or one
+// of a derived class reached through a base wrapper, would make that cast
+// undefined behaviour in C++, so both panic.
+func UseProtected(wrapper unsafe.Pointer, method, class string) {
+	Use(wrapper, method)
+	GUIOnly(method)
+	h := (*Ref)(wrapper).H
+	if !h.shim {
+		panic(fmt.Sprintf("%s: this %s was not made by a qute constructor (Qt created it), so Go cannot call its protected methods",
+			method, h.class))
+	}
+	if h.class != class {
+		panic(fmt.Sprintf("%s: the object is a %s; call Protected on its *%s wrapper (a %sCast or the wrapper its constructor returned)",
+			method, h.class, h.class, h.class))
+	}
+}

@@ -384,6 +384,16 @@ func (b *QAudioOutputBase) Super() *QAudioOutputSuper {
 	return &QAudioOutputSuper{this: b.QAudioOutput}
 }
 
+// Protected returns the object's protected methods (those of QAudioOutputBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAudioOutput: call it on that
+// class's wrapper.
+func (this *QAudioOutput) Protected() *QAudioOutputBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAudioOutput.Protected", "QAudioOutput")
+	return &QAudioOutputBase{this}
+}
+
 // QAudioOutputSuper calls the C++ base implementations of QAudioOutput's virtuals.
 type QAudioOutputSuper struct{ this *QAudioOutput }
 

@@ -265,6 +265,16 @@ func (b *QSyntaxHighlighterBase) Super() *QSyntaxHighlighterSuper {
 	return &QSyntaxHighlighterSuper{this: b.QSyntaxHighlighter}
 }
 
+// Protected returns the object's protected methods (those of QSyntaxHighlighterBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSyntaxHighlighter: call it on that
+// class's wrapper.
+func (this *QSyntaxHighlighter) Protected() *QSyntaxHighlighterBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSyntaxHighlighter.Protected", "QSyntaxHighlighter")
+	return &QSyntaxHighlighterBase{this}
+}
+
 // QSyntaxHighlighterSuper calls the C++ base implementations of QSyntaxHighlighter's virtuals.
 type QSyntaxHighlighterSuper struct{ this *QSyntaxHighlighter }
 

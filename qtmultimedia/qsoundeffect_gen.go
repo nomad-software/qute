@@ -674,6 +674,16 @@ func (b *QSoundEffectBase) Super() *QSoundEffectSuper {
 	return &QSoundEffectSuper{this: b.QSoundEffect}
 }
 
+// Protected returns the object's protected methods (those of QSoundEffectBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSoundEffect: call it on that
+// class's wrapper.
+func (this *QSoundEffect) Protected() *QSoundEffectBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSoundEffect.Protected", "QSoundEffect")
+	return &QSoundEffectBase{this}
+}
+
 // QSoundEffectSuper calls the C++ base implementations of QSoundEffect's virtuals.
 type QSoundEffectSuper struct{ this *QSoundEffect }
 

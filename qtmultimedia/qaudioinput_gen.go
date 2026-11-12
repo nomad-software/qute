@@ -382,6 +382,16 @@ type QAudioInputSubclass interface{ quteQAudioInputBase() *QAudioInputBase }
 // Super returns the C++ base implementations of QAudioInput's virtual methods.
 func (b *QAudioInputBase) Super() *QAudioInputSuper { return &QAudioInputSuper{this: b.QAudioInput} }
 
+// Protected returns the object's protected methods (those of QAudioInputBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAudioInput: call it on that
+// class's wrapper.
+func (this *QAudioInput) Protected() *QAudioInputBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAudioInput.Protected", "QAudioInput")
+	return &QAudioInputBase{this}
+}
+
 // QAudioInputSuper calls the C++ base implementations of QAudioInput's virtuals.
 type QAudioInputSuper struct{ this *QAudioInput }
 

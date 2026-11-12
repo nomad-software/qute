@@ -589,6 +589,16 @@ func (b *QGraphicsItemAnimationBase) Super() *QGraphicsItemAnimationSuper {
 	return &QGraphicsItemAnimationSuper{this: b.QGraphicsItemAnimation}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsItemAnimationBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsItemAnimation: call it on that
+// class's wrapper.
+func (this *QGraphicsItemAnimation) Protected() *QGraphicsItemAnimationBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsItemAnimation.Protected", "QGraphicsItemAnimation")
+	return &QGraphicsItemAnimationBase{this}
+}
+
 // QGraphicsItemAnimationSuper calls the C++ base implementations of QGraphicsItemAnimation's virtuals.
 type QGraphicsItemAnimationSuper struct{ this *QGraphicsItemAnimation }
 

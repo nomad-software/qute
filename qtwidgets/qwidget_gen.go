@@ -4532,6 +4532,16 @@ type QWidgetSubclass interface{ quteQWidgetBase() *QWidgetBase }
 // Super returns the C++ base implementations of QWidget's virtual methods.
 func (b *QWidgetBase) Super() *QWidgetSuper { return &QWidgetSuper{this: b.QWidget} }
 
+// Protected returns the object's protected methods (those of QWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWidget: call it on that
+// class's wrapper.
+func (this *QWidget) Protected() *QWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWidget.Protected", "QWidget")
+	return &QWidgetBase{this}
+}
+
 // QWidgetSuper calls the C++ base implementations of QWidget's virtuals.
 type QWidgetSuper struct{ this *QWidget }
 

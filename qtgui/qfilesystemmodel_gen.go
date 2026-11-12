@@ -1542,6 +1542,16 @@ func (b *QFileSystemModelBase) Super() *QFileSystemModelSuper {
 	return &QFileSystemModelSuper{this: b.QFileSystemModel}
 }
 
+// Protected returns the object's protected methods (those of QFileSystemModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFileSystemModel: call it on that
+// class's wrapper.
+func (this *QFileSystemModel) Protected() *QFileSystemModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFileSystemModel.Protected", "QFileSystemModel")
+	return &QFileSystemModelBase{this}
+}
+
 // QFileSystemModelSuper calls the C++ base implementations of QFileSystemModel's virtuals.
 type QFileSystemModelSuper struct{ this *QFileSystemModel }
 

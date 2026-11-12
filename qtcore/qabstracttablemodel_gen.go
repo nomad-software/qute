@@ -837,6 +837,16 @@ func (b *QAbstractTableModelBase) Super() *QAbstractTableModelSuper {
 	return &QAbstractTableModelSuper{this: b.QAbstractTableModel}
 }
 
+// Protected returns the object's protected methods (those of QAbstractTableModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAbstractTableModel: call it on that
+// class's wrapper.
+func (this *QAbstractTableModel) Protected() *QAbstractTableModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAbstractTableModel.Protected", "QAbstractTableModel")
+	return &QAbstractTableModelBase{this}
+}
+
 // QAbstractTableModelSuper calls the C++ base implementations of QAbstractTableModel's virtuals.
 type QAbstractTableModelSuper struct{ this *QAbstractTableModel }
 

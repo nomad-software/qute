@@ -1894,6 +1894,16 @@ func (b *QTextDocumentBase) Super() *QTextDocumentSuper {
 	return &QTextDocumentSuper{this: b.QTextDocument}
 }
 
+// Protected returns the object's protected methods (those of QTextDocumentBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTextDocument: call it on that
+// class's wrapper.
+func (this *QTextDocument) Protected() *QTextDocumentBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTextDocument.Protected", "QTextDocument")
+	return &QTextDocumentBase{this}
+}
+
 // QTextDocumentSuper calls the C++ base implementations of QTextDocument's virtuals.
 type QTextDocumentSuper struct{ this *QTextDocument }
 

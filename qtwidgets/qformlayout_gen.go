@@ -1328,6 +1328,16 @@ type QFormLayoutSubclass interface{ quteQFormLayoutBase() *QFormLayoutBase }
 // Super returns the C++ base implementations of QFormLayout's virtual methods.
 func (b *QFormLayoutBase) Super() *QFormLayoutSuper { return &QFormLayoutSuper{this: b.QFormLayout} }
 
+// Protected returns the object's protected methods (those of QFormLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFormLayout: call it on that
+// class's wrapper.
+func (this *QFormLayout) Protected() *QFormLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFormLayout.Protected", "QFormLayout")
+	return &QFormLayoutBase{this}
+}
+
 // QFormLayoutSuper calls the C++ base implementations of QFormLayout's virtuals.
 type QFormLayoutSuper struct{ this *QFormLayout }
 

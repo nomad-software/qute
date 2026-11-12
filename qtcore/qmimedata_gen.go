@@ -524,6 +524,16 @@ type QMimeDataSubclass interface{ quteQMimeDataBase() *QMimeDataBase }
 // Super returns the C++ base implementations of QMimeData's virtual methods.
 func (b *QMimeDataBase) Super() *QMimeDataSuper { return &QMimeDataSuper{this: b.QMimeData} }
 
+// Protected returns the object's protected methods (those of QMimeDataBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMimeData: call it on that
+// class's wrapper.
+func (this *QMimeData) Protected() *QMimeDataBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMimeData.Protected", "QMimeData")
+	return &QMimeDataBase{this}
+}
+
 // QMimeDataSuper calls the C++ base implementations of QMimeData's virtuals.
 type QMimeDataSuper struct{ this *QMimeData }
 

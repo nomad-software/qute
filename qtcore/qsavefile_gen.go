@@ -529,6 +529,16 @@ type QSaveFileSubclass interface{ quteQSaveFileBase() *QSaveFileBase }
 // Super returns the C++ base implementations of QSaveFile's virtual methods.
 func (b *QSaveFileBase) Super() *QSaveFileSuper { return &QSaveFileSuper{this: b.QSaveFile} }
 
+// Protected returns the object's protected methods (those of QSaveFileBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSaveFile: call it on that
+// class's wrapper.
+func (this *QSaveFile) Protected() *QSaveFileBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSaveFile.Protected", "QSaveFile")
+	return &QSaveFileBase{this}
+}
+
 // QSaveFileSuper calls the C++ base implementations of QSaveFile's virtuals.
 type QSaveFileSuper struct{ this *QSaveFile }
 

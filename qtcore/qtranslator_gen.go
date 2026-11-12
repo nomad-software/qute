@@ -400,6 +400,16 @@ type QTranslatorSubclass interface{ quteQTranslatorBase() *QTranslatorBase }
 // Super returns the C++ base implementations of QTranslator's virtual methods.
 func (b *QTranslatorBase) Super() *QTranslatorSuper { return &QTranslatorSuper{this: b.QTranslator} }
 
+// Protected returns the object's protected methods (those of QTranslatorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTranslator: call it on that
+// class's wrapper.
+func (this *QTranslator) Protected() *QTranslatorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTranslator.Protected", "QTranslator")
+	return &QTranslatorBase{this}
+}
+
 // QTranslatorSuper calls the C++ base implementations of QTranslator's virtuals.
 type QTranslatorSuper struct{ this *QTranslator }
 

@@ -776,6 +776,16 @@ func (b *QStackedLayoutBase) Super() *QStackedLayoutSuper {
 	return &QStackedLayoutSuper{this: b.QStackedLayout}
 }
 
+// Protected returns the object's protected methods (those of QStackedLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QStackedLayout: call it on that
+// class's wrapper.
+func (this *QStackedLayout) Protected() *QStackedLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QStackedLayout.Protected", "QStackedLayout")
+	return &QStackedLayoutBase{this}
+}
+
 // QStackedLayoutSuper calls the C++ base implementations of QStackedLayout's virtuals.
 type QStackedLayoutSuper struct{ this *QStackedLayout }
 

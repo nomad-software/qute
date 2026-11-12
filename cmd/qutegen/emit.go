@@ -1937,6 +1937,17 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	b.p("type %sSubclass interface{ %sBase() *%sBase }\n", cls, lower, cls)
 	b.p("// Super returns the C++ base implementations of %s's virtual methods.", cls)
 	b.p("func (b *%sBase) Super() *%sSuper { return &%sSuper{this: b.%s} }\n", cls, cls, cls, cls)
+	if len(c.Protected) > 0 {
+		b.p("// Protected returns the object's protected methods (those of %sBase, for", cls)
+		b.p("// a Go subclass) on an object made by a plain constructor, which is built as")
+		b.p("// qute's subclass too: tree.Protected().State(). It panics for an object Qt")
+		b.p("// created, and for one whose class is derived from %s: call it on that", cls)
+		b.p("// class's wrapper.")
+		b.p("func (this *%s) Protected() *%sBase {", cls, cls)
+		b.p("\trt.UseProtected(unsafe.Pointer(this), %q, %q)", cls+".Protected", cls)
+		b.p("\treturn &%sBase{this}", cls)
+		b.p("}\n")
+	}
 	b.p("// %sSuper calls the C++ base implementations of %s's virtuals.", cls, cls)
 	b.p("type %sSuper struct{ this *%s }\n", cls, cls)
 	for _, v := range c.Virtuals {

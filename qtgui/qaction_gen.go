@@ -1101,6 +1101,16 @@ type QActionSubclass interface{ quteQActionBase() *QActionBase }
 // Super returns the C++ base implementations of QAction's virtual methods.
 func (b *QActionBase) Super() *QActionSuper { return &QActionSuper{this: b.QAction} }
 
+// Protected returns the object's protected methods (those of QActionBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAction: call it on that
+// class's wrapper.
+func (this *QAction) Protected() *QActionBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAction.Protected", "QAction")
+	return &QActionBase{this}
+}
+
 // QActionSuper calls the C++ base implementations of QAction's virtuals.
 type QActionSuper struct{ this *QAction }
 

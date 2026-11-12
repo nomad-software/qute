@@ -893,6 +893,16 @@ func (b *QStringListModelBase) Super() *QStringListModelSuper {
 	return &QStringListModelSuper{this: b.QStringListModel}
 }
 
+// Protected returns the object's protected methods (those of QStringListModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QStringListModel: call it on that
+// class's wrapper.
+func (this *QStringListModel) Protected() *QStringListModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QStringListModel.Protected", "QStringListModel")
+	return &QStringListModelBase{this}
+}
+
 // QStringListModelSuper calls the C++ base implementations of QStringListModel's virtuals.
 type QStringListModelSuper struct{ this *QStringListModel }
 

@@ -1269,6 +1269,16 @@ type QMdiAreaSubclass interface{ quteQMdiAreaBase() *QMdiAreaBase }
 // Super returns the C++ base implementations of QMdiArea's virtual methods.
 func (b *QMdiAreaBase) Super() *QMdiAreaSuper { return &QMdiAreaSuper{this: b.QMdiArea} }
 
+// Protected returns the object's protected methods (those of QMdiAreaBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMdiArea: call it on that
+// class's wrapper.
+func (this *QMdiArea) Protected() *QMdiAreaBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMdiArea.Protected", "QMdiArea")
+	return &QMdiAreaBase{this}
+}
+
 // QMdiAreaSuper calls the C++ base implementations of QMdiArea's virtuals.
 type QMdiAreaSuper struct{ this *QMdiArea }
 

@@ -518,6 +518,16 @@ type QHBoxLayoutSubclass interface{ quteQHBoxLayoutBase() *QHBoxLayoutBase }
 // Super returns the C++ base implementations of QHBoxLayout's virtual methods.
 func (b *QHBoxLayoutBase) Super() *QHBoxLayoutSuper { return &QHBoxLayoutSuper{this: b.QHBoxLayout} }
 
+// Protected returns the object's protected methods (those of QHBoxLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QHBoxLayout: call it on that
+// class's wrapper.
+func (this *QHBoxLayout) Protected() *QHBoxLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QHBoxLayout.Protected", "QHBoxLayout")
+	return &QHBoxLayoutBase{this}
+}
+
 // QHBoxLayoutSuper calls the C++ base implementations of QHBoxLayout's virtuals.
 type QHBoxLayoutSuper struct{ this *QHBoxLayout }
 

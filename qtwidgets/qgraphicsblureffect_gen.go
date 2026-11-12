@@ -368,6 +368,16 @@ func (b *QGraphicsBlurEffectBase) Super() *QGraphicsBlurEffectSuper {
 	return &QGraphicsBlurEffectSuper{this: b.QGraphicsBlurEffect}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsBlurEffectBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsBlurEffect: call it on that
+// class's wrapper.
+func (this *QGraphicsBlurEffect) Protected() *QGraphicsBlurEffectBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsBlurEffect.Protected", "QGraphicsBlurEffect")
+	return &QGraphicsBlurEffectBase{this}
+}
+
 // QGraphicsBlurEffectSuper calls the C++ base implementations of QGraphicsBlurEffect's virtuals.
 type QGraphicsBlurEffectSuper struct{ this *QGraphicsBlurEffect }
 

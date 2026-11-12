@@ -1023,6 +1023,16 @@ func (b *QIdentityProxyModelBase) Super() *QIdentityProxyModelSuper {
 	return &QIdentityProxyModelSuper{this: b.QIdentityProxyModel}
 }
 
+// Protected returns the object's protected methods (those of QIdentityProxyModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QIdentityProxyModel: call it on that
+// class's wrapper.
+func (this *QIdentityProxyModel) Protected() *QIdentityProxyModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QIdentityProxyModel.Protected", "QIdentityProxyModel")
+	return &QIdentityProxyModelBase{this}
+}
+
 // QIdentityProxyModelSuper calls the C++ base implementations of QIdentityProxyModel's virtuals.
 type QIdentityProxyModelSuper struct{ this *QIdentityProxyModel }
 

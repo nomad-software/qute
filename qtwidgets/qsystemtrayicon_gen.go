@@ -503,6 +503,16 @@ func (b *QSystemTrayIconBase) Super() *QSystemTrayIconSuper {
 	return &QSystemTrayIconSuper{this: b.QSystemTrayIcon}
 }
 
+// Protected returns the object's protected methods (those of QSystemTrayIconBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSystemTrayIcon: call it on that
+// class's wrapper.
+func (this *QSystemTrayIcon) Protected() *QSystemTrayIconBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSystemTrayIcon.Protected", "QSystemTrayIcon")
+	return &QSystemTrayIconBase{this}
+}
+
 // QSystemTrayIconSuper calls the C++ base implementations of QSystemTrayIcon's virtuals.
 type QSystemTrayIconSuper struct{ this *QSystemTrayIcon }
 

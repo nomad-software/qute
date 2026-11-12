@@ -1047,6 +1047,16 @@ func (b *QMdiSubWindowBase) Super() *QMdiSubWindowSuper {
 	return &QMdiSubWindowSuper{this: b.QMdiSubWindow}
 }
 
+// Protected returns the object's protected methods (those of QMdiSubWindowBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMdiSubWindow: call it on that
+// class's wrapper.
+func (this *QMdiSubWindow) Protected() *QMdiSubWindowBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMdiSubWindow.Protected", "QMdiSubWindow")
+	return &QMdiSubWindowBase{this}
+}
+
 // QMdiSubWindowSuper calls the C++ base implementations of QMdiSubWindow's virtuals.
 type QMdiSubWindowSuper struct{ this *QMdiSubWindow }
 

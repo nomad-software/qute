@@ -575,6 +575,16 @@ func (b *QStyledItemDelegateBase) Super() *QStyledItemDelegateSuper {
 	return &QStyledItemDelegateSuper{this: b.QStyledItemDelegate}
 }
 
+// Protected returns the object's protected methods (those of QStyledItemDelegateBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QStyledItemDelegate: call it on that
+// class's wrapper.
+func (this *QStyledItemDelegate) Protected() *QStyledItemDelegateBase {
+	rt.UseProtected(unsafe.Pointer(this), "QStyledItemDelegate.Protected", "QStyledItemDelegate")
+	return &QStyledItemDelegateBase{this}
+}
+
 // QStyledItemDelegateSuper calls the C++ base implementations of QStyledItemDelegate's virtuals.
 type QStyledItemDelegateSuper struct{ this *QStyledItemDelegate }
 

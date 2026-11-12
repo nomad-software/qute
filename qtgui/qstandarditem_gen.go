@@ -1515,6 +1515,16 @@ func (b *QStandardItemBase) Super() *QStandardItemSuper {
 	return &QStandardItemSuper{this: b.QStandardItem}
 }
 
+// Protected returns the object's protected methods (those of QStandardItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QStandardItem: call it on that
+// class's wrapper.
+func (this *QStandardItem) Protected() *QStandardItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QStandardItem.Protected", "QStandardItem")
+	return &QStandardItemBase{this}
+}
+
 // QStandardItemSuper calls the C++ base implementations of QStandardItem's virtuals.
 type QStandardItemSuper struct{ this *QStandardItem }
 

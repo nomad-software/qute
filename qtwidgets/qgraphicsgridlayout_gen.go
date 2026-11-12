@@ -819,6 +819,16 @@ func (b *QGraphicsGridLayoutBase) Super() *QGraphicsGridLayoutSuper {
 	return &QGraphicsGridLayoutSuper{this: b.QGraphicsGridLayout}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsGridLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsGridLayout: call it on that
+// class's wrapper.
+func (this *QGraphicsGridLayout) Protected() *QGraphicsGridLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsGridLayout.Protected", "QGraphicsGridLayout")
+	return &QGraphicsGridLayoutBase{this}
+}
+
 // QGraphicsGridLayoutSuper calls the C++ base implementations of QGraphicsGridLayout's virtuals.
 type QGraphicsGridLayoutSuper struct{ this *QGraphicsGridLayout }
 

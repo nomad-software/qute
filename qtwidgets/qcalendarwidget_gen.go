@@ -1393,6 +1393,16 @@ func (b *QCalendarWidgetBase) Super() *QCalendarWidgetSuper {
 	return &QCalendarWidgetSuper{this: b.QCalendarWidget}
 }
 
+// Protected returns the object's protected methods (those of QCalendarWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QCalendarWidget: call it on that
+// class's wrapper.
+func (this *QCalendarWidget) Protected() *QCalendarWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QCalendarWidget.Protected", "QCalendarWidget")
+	return &QCalendarWidgetBase{this}
+}
+
 // QCalendarWidgetSuper calls the C++ base implementations of QCalendarWidget's virtuals.
 type QCalendarWidgetSuper struct{ this *QCalendarWidget }
 

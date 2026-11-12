@@ -1330,6 +1330,16 @@ type QToolBarSubclass interface{ quteQToolBarBase() *QToolBarBase }
 // Super returns the C++ base implementations of QToolBar's virtual methods.
 func (b *QToolBarBase) Super() *QToolBarSuper { return &QToolBarSuper{this: b.QToolBar} }
 
+// Protected returns the object's protected methods (those of QToolBarBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QToolBar: call it on that
+// class's wrapper.
+func (this *QToolBar) Protected() *QToolBarBase {
+	rt.UseProtected(unsafe.Pointer(this), "QToolBar.Protected", "QToolBar")
+	return &QToolBarBase{this}
+}
+
 // QToolBarSuper calls the C++ base implementations of QToolBar's virtuals.
 type QToolBarSuper struct{ this *QToolBar }
 

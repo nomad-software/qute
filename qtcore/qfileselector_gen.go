@@ -257,6 +257,16 @@ func (b *QFileSelectorBase) Super() *QFileSelectorSuper {
 	return &QFileSelectorSuper{this: b.QFileSelector}
 }
 
+// Protected returns the object's protected methods (those of QFileSelectorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFileSelector: call it on that
+// class's wrapper.
+func (this *QFileSelector) Protected() *QFileSelectorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFileSelector.Protected", "QFileSelector")
+	return &QFileSelectorBase{this}
+}
+
 // QFileSelectorSuper calls the C++ base implementations of QFileSelector's virtuals.
 type QFileSelectorSuper struct{ this *QFileSelector }
 

@@ -348,6 +348,16 @@ type QVideoSinkSubclass interface{ quteQVideoSinkBase() *QVideoSinkBase }
 // Super returns the C++ base implementations of QVideoSink's virtual methods.
 func (b *QVideoSinkBase) Super() *QVideoSinkSuper { return &QVideoSinkSuper{this: b.QVideoSink} }
 
+// Protected returns the object's protected methods (those of QVideoSinkBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QVideoSink: call it on that
+// class's wrapper.
+func (this *QVideoSink) Protected() *QVideoSinkBase {
+	rt.UseProtected(unsafe.Pointer(this), "QVideoSink.Protected", "QVideoSink")
+	return &QVideoSinkBase{this}
+}
+
 // QVideoSinkSuper calls the C++ base implementations of QVideoSink's virtuals.
 type QVideoSinkSuper struct{ this *QVideoSink }
 

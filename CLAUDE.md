@@ -495,7 +495,12 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   alternative. Each dispatch table entry's `Call` tries the func type first
   (`Fits` checks it when set). Costs: a shim object carries an id and a bit
   per virtual, and a binary keeps the dispatch tables of the classes it
-  constructs (`examples/hello` stripped: +9%).
+  constructs (`examples/hello` stripped: +9%). For the same reason a plain
+  object reaches its class's protected methods: `x.Protected()` returns the
+  Base type over it (generated for a class with protected methods), after
+  `rt.UseProtected` checks the object was built as exactly that class's shim,
+  since the shim's C functions `static_cast` to it (an object Qt created, or
+  a derived object through a base wrapper, panics).
 
 ```go
 type Canvas struct{ qtwidgets.QWidgetBase }
@@ -735,7 +740,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   painter), `qtgui/newclasses_test.go` also a document's layout (its size
   signal, hit tests, drawing); `override_test.go` covers per-object
   overrides (events, results, a plain item, pure virtuals, objects Qt made, a
-  Go type's own method, handler rules, collection); `subclass_test.go` drives a Go icon engine and a Go gesture
+  Go type's own method, handler rules, collection) and `Protected()` on plain
+  objects; `subclass_test.go` drives a Go icon engine and a Go gesture
   recognizer. `bench_test.go` measures the reparenting walk
   (linear in the subtree). `run_test.go` covers `t.Fatal` inside `Run` (in a
   child process), `PostSync` handler panics and the stack of its own, the off-thread checks (Qt calls

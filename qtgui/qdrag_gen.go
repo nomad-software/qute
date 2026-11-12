@@ -479,6 +479,16 @@ type QDragSubclass interface{ quteQDragBase() *QDragBase }
 // Super returns the C++ base implementations of QDrag's virtual methods.
 func (b *QDragBase) Super() *QDragSuper { return &QDragSuper{this: b.QDrag} }
 
+// Protected returns the object's protected methods (those of QDragBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDrag: call it on that
+// class's wrapper.
+func (this *QDrag) Protected() *QDragBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDrag.Protected", "QDrag")
+	return &QDragBase{this}
+}
+
 // QDragSuper calls the C++ base implementations of QDrag's virtuals.
 type QDragSuper struct{ this *QDrag }
 

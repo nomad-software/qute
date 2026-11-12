@@ -1078,6 +1078,16 @@ func (b *QProgressBarBase) Super() *QProgressBarSuper {
 	return &QProgressBarSuper{this: b.QProgressBar}
 }
 
+// Protected returns the object's protected methods (those of QProgressBarBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QProgressBar: call it on that
+// class's wrapper.
+func (this *QProgressBar) Protected() *QProgressBarBase {
+	rt.UseProtected(unsafe.Pointer(this), "QProgressBar.Protected", "QProgressBar")
+	return &QProgressBarBase{this}
+}
+
 // QProgressBarSuper calls the C++ base implementations of QProgressBar's virtuals.
 type QProgressBarSuper struct{ this *QProgressBar }
 

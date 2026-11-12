@@ -843,6 +843,16 @@ func (b *QGraphicsPathItemBase) Super() *QGraphicsPathItemSuper {
 	return &QGraphicsPathItemSuper{this: b.QGraphicsPathItem}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsPathItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsPathItem: call it on that
+// class's wrapper.
+func (this *QGraphicsPathItem) Protected() *QGraphicsPathItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsPathItem.Protected", "QGraphicsPathItem")
+	return &QGraphicsPathItemBase{this}
+}
+
 // QGraphicsPathItemSuper calls the C++ base implementations of QGraphicsPathItem's virtuals.
 type QGraphicsPathItemSuper struct{ this *QGraphicsPathItem }
 

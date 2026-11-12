@@ -955,6 +955,16 @@ type QGroupBoxSubclass interface{ quteQGroupBoxBase() *QGroupBoxBase }
 // Super returns the C++ base implementations of QGroupBox's virtual methods.
 func (b *QGroupBoxBase) Super() *QGroupBoxSuper { return &QGroupBoxSuper{this: b.QGroupBox} }
 
+// Protected returns the object's protected methods (those of QGroupBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGroupBox: call it on that
+// class's wrapper.
+func (this *QGroupBox) Protected() *QGroupBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGroupBox.Protected", "QGroupBox")
+	return &QGroupBoxBase{this}
+}
+
 // QGroupBoxSuper calls the C++ base implementations of QGroupBox's virtuals.
 type QGroupBoxSuper struct{ this *QGroupBox }
 

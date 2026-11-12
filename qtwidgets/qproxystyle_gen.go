@@ -808,6 +808,16 @@ type QProxyStyleSubclass interface{ quteQProxyStyleBase() *QProxyStyleBase }
 // Super returns the C++ base implementations of QProxyStyle's virtual methods.
 func (b *QProxyStyleBase) Super() *QProxyStyleSuper { return &QProxyStyleSuper{this: b.QProxyStyle} }
 
+// Protected returns the object's protected methods (those of QProxyStyleBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QProxyStyle: call it on that
+// class's wrapper.
+func (this *QProxyStyle) Protected() *QProxyStyleBase {
+	rt.UseProtected(unsafe.Pointer(this), "QProxyStyle.Protected", "QProxyStyle")
+	return &QProxyStyleBase{this}
+}
+
 // QProxyStyleSuper calls the C++ base implementations of QProxyStyle's virtuals.
 type QProxyStyleSuper struct{ this *QProxyStyle }
 

@@ -1162,6 +1162,16 @@ type QSpinBoxSubclass interface{ quteQSpinBoxBase() *QSpinBoxBase }
 // Super returns the C++ base implementations of QSpinBox's virtual methods.
 func (b *QSpinBoxBase) Super() *QSpinBoxSuper { return &QSpinBoxSuper{this: b.QSpinBox} }
 
+// Protected returns the object's protected methods (those of QSpinBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSpinBox: call it on that
+// class's wrapper.
+func (this *QSpinBox) Protected() *QSpinBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSpinBox.Protected", "QSpinBox")
+	return &QSpinBoxBase{this}
+}
+
 // QSpinBoxSuper calls the C++ base implementations of QSpinBox's virtuals.
 type QSpinBoxSuper struct{ this *QSpinBox }
 

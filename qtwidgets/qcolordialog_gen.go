@@ -1048,6 +1048,16 @@ func (b *QColorDialogBase) Super() *QColorDialogSuper {
 	return &QColorDialogSuper{this: b.QColorDialog}
 }
 
+// Protected returns the object's protected methods (those of QColorDialogBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QColorDialog: call it on that
+// class's wrapper.
+func (this *QColorDialog) Protected() *QColorDialogBase {
+	rt.UseProtected(unsafe.Pointer(this), "QColorDialog.Protected", "QColorDialog")
+	return &QColorDialogBase{this}
+}
+
 // QColorDialogSuper calls the C++ base implementations of QColorDialog's virtuals.
 type QColorDialogSuper struct{ this *QColorDialog }
 

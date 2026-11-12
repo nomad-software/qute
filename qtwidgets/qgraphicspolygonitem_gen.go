@@ -872,6 +872,16 @@ func (b *QGraphicsPolygonItemBase) Super() *QGraphicsPolygonItemSuper {
 	return &QGraphicsPolygonItemSuper{this: b.QGraphicsPolygonItem}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsPolygonItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsPolygonItem: call it on that
+// class's wrapper.
+func (this *QGraphicsPolygonItem) Protected() *QGraphicsPolygonItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsPolygonItem.Protected", "QGraphicsPolygonItem")
+	return &QGraphicsPolygonItemBase{this}
+}
+
 // QGraphicsPolygonItemSuper calls the C++ base implementations of QGraphicsPolygonItem's virtuals.
 type QGraphicsPolygonItemSuper struct{ this *QGraphicsPolygonItem }
 

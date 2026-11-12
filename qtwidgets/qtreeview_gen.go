@@ -2257,6 +2257,16 @@ type QTreeViewSubclass interface{ quteQTreeViewBase() *QTreeViewBase }
 // Super returns the C++ base implementations of QTreeView's virtual methods.
 func (b *QTreeViewBase) Super() *QTreeViewSuper { return &QTreeViewSuper{this: b.QTreeView} }
 
+// Protected returns the object's protected methods (those of QTreeViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTreeView: call it on that
+// class's wrapper.
+func (this *QTreeView) Protected() *QTreeViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTreeView.Protected", "QTreeView")
+	return &QTreeViewBase{this}
+}
+
 // QTreeViewSuper calls the C++ base implementations of QTreeView's virtuals.
 type QTreeViewSuper struct{ this *QTreeView }
 

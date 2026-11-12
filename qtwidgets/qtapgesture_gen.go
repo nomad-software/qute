@@ -226,6 +226,16 @@ type QTapGestureSubclass interface{ quteQTapGestureBase() *QTapGestureBase }
 // Super returns the C++ base implementations of QTapGesture's virtual methods.
 func (b *QTapGestureBase) Super() *QTapGestureSuper { return &QTapGestureSuper{this: b.QTapGesture} }
 
+// Protected returns the object's protected methods (those of QTapGestureBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTapGesture: call it on that
+// class's wrapper.
+func (this *QTapGesture) Protected() *QTapGestureBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTapGesture.Protected", "QTapGesture")
+	return &QTapGestureBase{this}
+}
+
 // QTapGestureSuper calls the C++ base implementations of QTapGesture's virtuals.
 type QTapGestureSuper struct{ this *QTapGesture }
 

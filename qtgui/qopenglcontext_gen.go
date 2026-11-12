@@ -581,6 +581,16 @@ func (b *QOpenGLContextBase) Super() *QOpenGLContextSuper {
 	return &QOpenGLContextSuper{this: b.QOpenGLContext}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLContextBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLContext: call it on that
+// class's wrapper.
+func (this *QOpenGLContext) Protected() *QOpenGLContextBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLContext.Protected", "QOpenGLContext")
+	return &QOpenGLContextBase{this}
+}
+
 // QOpenGLContextSuper calls the C++ base implementations of QOpenGLContext's virtuals.
 type QOpenGLContextSuper struct{ this *QOpenGLContext }
 

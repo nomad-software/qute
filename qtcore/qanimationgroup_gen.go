@@ -373,6 +373,16 @@ func (b *QAnimationGroupBase) Super() *QAnimationGroupSuper {
 	return &QAnimationGroupSuper{this: b.QAnimationGroup}
 }
 
+// Protected returns the object's protected methods (those of QAnimationGroupBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAnimationGroup: call it on that
+// class's wrapper.
+func (this *QAnimationGroup) Protected() *QAnimationGroupBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAnimationGroup.Protected", "QAnimationGroup")
+	return &QAnimationGroupBase{this}
+}
+
 // QAnimationGroupSuper calls the C++ base implementations of QAnimationGroup's virtuals.
 type QAnimationGroupSuper struct{ this *QAnimationGroup }
 

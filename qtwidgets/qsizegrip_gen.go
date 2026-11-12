@@ -734,6 +734,16 @@ type QSizeGripSubclass interface{ quteQSizeGripBase() *QSizeGripBase }
 // Super returns the C++ base implementations of QSizeGrip's virtual methods.
 func (b *QSizeGripBase) Super() *QSizeGripSuper { return &QSizeGripSuper{this: b.QSizeGrip} }
 
+// Protected returns the object's protected methods (those of QSizeGripBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSizeGrip: call it on that
+// class's wrapper.
+func (this *QSizeGrip) Protected() *QSizeGripBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSizeGrip.Protected", "QSizeGrip")
+	return &QSizeGripBase{this}
+}
+
 // QSizeGripSuper calls the C++ base implementations of QSizeGrip's virtuals.
 type QSizeGripSuper struct{ this *QSizeGrip }
 

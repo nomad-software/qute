@@ -605,6 +605,16 @@ type QBufferSubclass interface{ quteQBufferBase() *QBufferBase }
 // Super returns the C++ base implementations of QBuffer's virtual methods.
 func (b *QBufferBase) Super() *QBufferSuper { return &QBufferSuper{this: b.QBuffer} }
 
+// Protected returns the object's protected methods (those of QBufferBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QBuffer: call it on that
+// class's wrapper.
+func (this *QBuffer) Protected() *QBufferBase {
+	rt.UseProtected(unsafe.Pointer(this), "QBuffer.Protected", "QBuffer")
+	return &QBufferBase{this}
+}
+
 // QBufferSuper calls the C++ base implementations of QBuffer's virtuals.
 type QBufferSuper struct{ this *QBuffer }
 

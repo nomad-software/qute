@@ -328,6 +328,16 @@ func (b *QFileSystemWatcherBase) Super() *QFileSystemWatcherSuper {
 	return &QFileSystemWatcherSuper{this: b.QFileSystemWatcher}
 }
 
+// Protected returns the object's protected methods (those of QFileSystemWatcherBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFileSystemWatcher: call it on that
+// class's wrapper.
+func (this *QFileSystemWatcher) Protected() *QFileSystemWatcherBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFileSystemWatcher.Protected", "QFileSystemWatcher")
+	return &QFileSystemWatcherBase{this}
+}
+
 // QFileSystemWatcherSuper calls the C++ base implementations of QFileSystemWatcher's virtuals.
 type QFileSystemWatcherSuper struct{ this *QFileSystemWatcher }
 

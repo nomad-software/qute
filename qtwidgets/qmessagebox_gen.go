@@ -1575,6 +1575,16 @@ type QMessageBoxSubclass interface{ quteQMessageBoxBase() *QMessageBoxBase }
 // Super returns the C++ base implementations of QMessageBox's virtual methods.
 func (b *QMessageBoxBase) Super() *QMessageBoxSuper { return &QMessageBoxSuper{this: b.QMessageBox} }
 
+// Protected returns the object's protected methods (those of QMessageBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMessageBox: call it on that
+// class's wrapper.
+func (this *QMessageBox) Protected() *QMessageBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMessageBox.Protected", "QMessageBox")
+	return &QMessageBoxBase{this}
+}
+
 // QMessageBoxSuper calls the C++ base implementations of QMessageBox's virtuals.
 type QMessageBoxSuper struct{ this *QMessageBox }
 

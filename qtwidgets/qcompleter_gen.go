@@ -865,6 +865,16 @@ type QCompleterSubclass interface{ quteQCompleterBase() *QCompleterBase }
 // Super returns the C++ base implementations of QCompleter's virtual methods.
 func (b *QCompleterBase) Super() *QCompleterSuper { return &QCompleterSuper{this: b.QCompleter} }
 
+// Protected returns the object's protected methods (those of QCompleterBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QCompleter: call it on that
+// class's wrapper.
+func (this *QCompleter) Protected() *QCompleterBase {
+	rt.UseProtected(unsafe.Pointer(this), "QCompleter.Protected", "QCompleter")
+	return &QCompleterBase{this}
+}
+
 // QCompleterSuper calls the C++ base implementations of QCompleter's virtuals.
 type QCompleterSuper struct{ this *QCompleter }
 

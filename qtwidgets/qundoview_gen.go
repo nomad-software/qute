@@ -1630,6 +1630,16 @@ type QUndoViewSubclass interface{ quteQUndoViewBase() *QUndoViewBase }
 // Super returns the C++ base implementations of QUndoView's virtual methods.
 func (b *QUndoViewBase) Super() *QUndoViewSuper { return &QUndoViewSuper{this: b.QUndoView} }
 
+// Protected returns the object's protected methods (those of QUndoViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QUndoView: call it on that
+// class's wrapper.
+func (this *QUndoView) Protected() *QUndoViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QUndoView.Protected", "QUndoView")
+	return &QUndoViewBase{this}
+}
+
 // QUndoViewSuper calls the C++ base implementations of QUndoView's virtuals.
 type QUndoViewSuper struct{ this *QUndoView }
 

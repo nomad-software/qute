@@ -330,6 +330,16 @@ func (b *QWidgetActionBase) Super() *QWidgetActionSuper {
 	return &QWidgetActionSuper{this: b.QWidgetAction}
 }
 
+// Protected returns the object's protected methods (those of QWidgetActionBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWidgetAction: call it on that
+// class's wrapper.
+func (this *QWidgetAction) Protected() *QWidgetActionBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWidgetAction.Protected", "QWidgetAction")
+	return &QWidgetActionBase{this}
+}
+
 // QWidgetActionSuper calls the C++ base implementations of QWidgetAction's virtuals.
 type QWidgetActionSuper struct{ this *QWidgetAction }
 

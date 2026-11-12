@@ -245,3 +245,48 @@ func TestOverrideCollection(t *testing.T) {
 		}
 	})
 }
+
+// Protected methods of an object a plain constructor made, with no Go type:
+// the uses TriggerAPI had to subclass for (a view's state and drop
+// indicator, a text edit's viewport margins for a gutter).
+func TestProtectedOnPlainObject(t *testing.T) {
+	qutetest.Run(t, func() {
+		tree := qtwidgets.NewQTreeWidget(nil)
+		defer tree.Delete()
+		if got := tree.Protected().State(); got != qtwidgets.QAbstractItemViewNoState {
+			t.Errorf("State() = %v, want NoState", got)
+		}
+		if got := tree.Protected().DropIndicatorPosition(); got != qtwidgets.QAbstractItemViewOnItem {
+			t.Errorf("DropIndicatorPosition() = %v, want Qt's initial OnItem", got)
+		}
+		tree.Protected().SetState(qtwidgets.QAbstractItemViewEditingState) // reaches Qt and back
+		if got := tree.Protected().State(); got != qtwidgets.QAbstractItemViewEditingState {
+			t.Errorf("State() after SetState(EditingState) = %v", got)
+		}
+		tree.Protected().SetState(qtwidgets.QAbstractItemViewNoState)
+
+		edit := qtwidgets.NewQPlainTextEdit(nil)
+		defer edit.Delete()
+		edit.Resize(300, 200)
+		edit.Show()
+		before := edit.Viewport().Geometry()
+		edit.Protected().SetViewportMargins(qtcore.QMargins{Left: 40})
+		after := edit.Viewport().Geometry()
+		if after.X != before.X+40 {
+			t.Errorf("viewport x %d -> %d, want moved right by the 40-pixel margin", before.X, after.X)
+		}
+
+		// an object Qt created is not qute's subclass
+		c := qtwidgets.NewQComboBox(nil)
+		defer c.Delete()
+		msg := panicText(func() { c.View().Protected() })
+		if !strings.Contains(msg, "not made by a qute constructor") {
+			t.Errorf("Protected on a Qt-made view: panic %q", msg)
+		}
+		// a base-class wrapper of a derived object would cast to the wrong shim
+		msg = panicText(func() { tree.AsQAbstractItemView().Protected() })
+		if !strings.Contains(msg, "call Protected on its *QTreeWidget wrapper") {
+			t.Errorf("Protected through a base wrapper: panic %q", msg)
+		}
+	})
+}

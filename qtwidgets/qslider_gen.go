@@ -851,6 +851,16 @@ type QSliderSubclass interface{ quteQSliderBase() *QSliderBase }
 // Super returns the C++ base implementations of QSlider's virtual methods.
 func (b *QSliderBase) Super() *QSliderSuper { return &QSliderSuper{this: b.QSlider} }
 
+// Protected returns the object's protected methods (those of QSliderBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSlider: call it on that
+// class's wrapper.
+func (this *QSlider) Protected() *QSliderBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSlider.Protected", "QSlider")
+	return &QSliderBase{this}
+}
+
 // QSliderSuper calls the C++ base implementations of QSlider's virtuals.
 type QSliderSuper struct{ this *QSlider }
 

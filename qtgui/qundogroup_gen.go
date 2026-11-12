@@ -666,6 +666,16 @@ type QUndoGroupSubclass interface{ quteQUndoGroupBase() *QUndoGroupBase }
 // Super returns the C++ base implementations of QUndoGroup's virtual methods.
 func (b *QUndoGroupBase) Super() *QUndoGroupSuper { return &QUndoGroupSuper{this: b.QUndoGroup} }
 
+// Protected returns the object's protected methods (those of QUndoGroupBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QUndoGroup: call it on that
+// class's wrapper.
+func (this *QUndoGroup) Protected() *QUndoGroupBase {
+	rt.UseProtected(unsafe.Pointer(this), "QUndoGroup.Protected", "QUndoGroup")
+	return &QUndoGroupBase{this}
+}
+
 // QUndoGroupSuper calls the C++ base implementations of QUndoGroup's virtuals.
 type QUndoGroupSuper struct{ this *QUndoGroup }
 

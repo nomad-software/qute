@@ -756,6 +756,16 @@ type QUndoStackSubclass interface{ quteQUndoStackBase() *QUndoStackBase }
 // Super returns the C++ base implementations of QUndoStack's virtual methods.
 func (b *QUndoStackBase) Super() *QUndoStackSuper { return &QUndoStackSuper{this: b.QUndoStack} }
 
+// Protected returns the object's protected methods (those of QUndoStackBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QUndoStack: call it on that
+// class's wrapper.
+func (this *QUndoStack) Protected() *QUndoStackBase {
+	rt.UseProtected(unsafe.Pointer(this), "QUndoStack.Protected", "QUndoStack")
+	return &QUndoStackBase{this}
+}
+
 // QUndoStackSuper calls the C++ base implementations of QUndoStack's virtuals.
 type QUndoStackSuper struct{ this *QUndoStack }
 

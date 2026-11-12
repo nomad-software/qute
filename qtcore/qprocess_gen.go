@@ -1393,6 +1393,16 @@ type QProcessSubclass interface{ quteQProcessBase() *QProcessBase }
 // Super returns the C++ base implementations of QProcess's virtual methods.
 func (b *QProcessBase) Super() *QProcessSuper { return &QProcessSuper{this: b.QProcess} }
 
+// Protected returns the object's protected methods (those of QProcessBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QProcess: call it on that
+// class's wrapper.
+func (this *QProcess) Protected() *QProcessBase {
+	rt.UseProtected(unsafe.Pointer(this), "QProcess.Protected", "QProcess")
+	return &QProcessBase{this}
+}
+
 // QProcessSuper calls the C++ base implementations of QProcess's virtuals.
 type QProcessSuper struct{ this *QProcess }
 

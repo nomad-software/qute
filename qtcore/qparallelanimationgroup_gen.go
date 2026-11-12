@@ -268,6 +268,16 @@ func (b *QParallelAnimationGroupBase) Super() *QParallelAnimationGroupSuper {
 	return &QParallelAnimationGroupSuper{this: b.QParallelAnimationGroup}
 }
 
+// Protected returns the object's protected methods (those of QParallelAnimationGroupBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QParallelAnimationGroup: call it on that
+// class's wrapper.
+func (this *QParallelAnimationGroup) Protected() *QParallelAnimationGroupBase {
+	rt.UseProtected(unsafe.Pointer(this), "QParallelAnimationGroup.Protected", "QParallelAnimationGroup")
+	return &QParallelAnimationGroupBase{this}
+}
+
 // QParallelAnimationGroupSuper calls the C++ base implementations of QParallelAnimationGroup's virtuals.
 type QParallelAnimationGroupSuper struct{ this *QParallelAnimationGroup }
 

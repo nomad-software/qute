@@ -1097,6 +1097,16 @@ func (b *QMediaRecorderBase) Super() *QMediaRecorderSuper {
 	return &QMediaRecorderSuper{this: b.QMediaRecorder}
 }
 
+// Protected returns the object's protected methods (those of QMediaRecorderBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMediaRecorder: call it on that
+// class's wrapper.
+func (this *QMediaRecorder) Protected() *QMediaRecorderBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMediaRecorder.Protected", "QMediaRecorder")
+	return &QMediaRecorderBase{this}
+}
+
 // QMediaRecorderSuper calls the C++ base implementations of QMediaRecorder's virtuals.
 type QMediaRecorderSuper struct{ this *QMediaRecorder }
 

@@ -589,6 +589,16 @@ func (b *QTemporaryFileBase) Super() *QTemporaryFileSuper {
 	return &QTemporaryFileSuper{this: b.QTemporaryFile}
 }
 
+// Protected returns the object's protected methods (those of QTemporaryFileBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTemporaryFile: call it on that
+// class's wrapper.
+func (this *QTemporaryFile) Protected() *QTemporaryFileBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTemporaryFile.Protected", "QTemporaryFile")
+	return &QTemporaryFileBase{this}
+}
+
 // QTemporaryFileSuper calls the C++ base implementations of QTemporaryFile's virtuals.
 type QTemporaryFileSuper struct{ this *QTemporaryFile }
 

@@ -707,6 +707,16 @@ func (b *QGraphicsLayoutItemBase) Super() *QGraphicsLayoutItemSuper {
 	return &QGraphicsLayoutItemSuper{this: b.QGraphicsLayoutItem}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsLayoutItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsLayoutItem: call it on that
+// class's wrapper.
+func (this *QGraphicsLayoutItem) Protected() *QGraphicsLayoutItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsLayoutItem.Protected", "QGraphicsLayoutItem")
+	return &QGraphicsLayoutItemBase{this}
+}
+
 // QGraphicsLayoutItemSuper calls the C++ base implementations of QGraphicsLayoutItem's virtuals.
 type QGraphicsLayoutItemSuper struct{ this *QGraphicsLayoutItem }
 

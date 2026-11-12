@@ -245,6 +245,16 @@ func (b *QWebEngineUrlRequestInterceptorBase) Super() *QWebEngineUrlRequestInter
 	return &QWebEngineUrlRequestInterceptorSuper{this: b.QWebEngineUrlRequestInterceptor}
 }
 
+// Protected returns the object's protected methods (those of QWebEngineUrlRequestInterceptorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWebEngineUrlRequestInterceptor: call it on that
+// class's wrapper.
+func (this *QWebEngineUrlRequestInterceptor) Protected() *QWebEngineUrlRequestInterceptorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWebEngineUrlRequestInterceptor.Protected", "QWebEngineUrlRequestInterceptor")
+	return &QWebEngineUrlRequestInterceptorBase{this}
+}
+
 // QWebEngineUrlRequestInterceptorSuper calls the C++ base implementations of QWebEngineUrlRequestInterceptor's virtuals.
 type QWebEngineUrlRequestInterceptorSuper struct {
 	this *QWebEngineUrlRequestInterceptor

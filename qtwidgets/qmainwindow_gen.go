@@ -1704,6 +1704,16 @@ type QMainWindowSubclass interface{ quteQMainWindowBase() *QMainWindowBase }
 // Super returns the C++ base implementations of QMainWindow's virtual methods.
 func (b *QMainWindowBase) Super() *QMainWindowSuper { return &QMainWindowSuper{this: b.QMainWindow} }
 
+// Protected returns the object's protected methods (those of QMainWindowBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMainWindow: call it on that
+// class's wrapper.
+func (this *QMainWindow) Protected() *QMainWindowBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMainWindow.Protected", "QMainWindow")
+	return &QMainWindowBase{this}
+}
+
 // QMainWindowSuper calls the C++ base implementations of QMainWindow's virtuals.
 type QMainWindowSuper struct{ this *QMainWindow }
 

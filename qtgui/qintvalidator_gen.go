@@ -397,6 +397,16 @@ func (b *QIntValidatorBase) Super() *QIntValidatorSuper {
 	return &QIntValidatorSuper{this: b.QIntValidator}
 }
 
+// Protected returns the object's protected methods (those of QIntValidatorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QIntValidator: call it on that
+// class's wrapper.
+func (this *QIntValidator) Protected() *QIntValidatorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QIntValidator.Protected", "QIntValidator")
+	return &QIntValidatorBase{this}
+}
+
 // QIntValidatorSuper calls the C++ base implementations of QIntValidator's virtuals.
 type QIntValidatorSuper struct{ this *QIntValidator }
 

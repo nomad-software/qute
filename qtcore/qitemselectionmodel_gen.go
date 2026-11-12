@@ -922,6 +922,16 @@ func (b *QItemSelectionModelBase) Super() *QItemSelectionModelSuper {
 	return &QItemSelectionModelSuper{this: b.QItemSelectionModel}
 }
 
+// Protected returns the object's protected methods (those of QItemSelectionModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QItemSelectionModel: call it on that
+// class's wrapper.
+func (this *QItemSelectionModel) Protected() *QItemSelectionModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QItemSelectionModel.Protected", "QItemSelectionModel")
+	return &QItemSelectionModelBase{this}
+}
+
 // QItemSelectionModelSuper calls the C++ base implementations of QItemSelectionModel's virtuals.
 type QItemSelectionModelSuper struct{ this *QItemSelectionModel }
 

@@ -255,6 +255,16 @@ func (b *QObjectCleanupHandlerBase) Super() *QObjectCleanupHandlerSuper {
 	return &QObjectCleanupHandlerSuper{this: b.QObjectCleanupHandler}
 }
 
+// Protected returns the object's protected methods (those of QObjectCleanupHandlerBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QObjectCleanupHandler: call it on that
+// class's wrapper.
+func (this *QObjectCleanupHandler) Protected() *QObjectCleanupHandlerBase {
+	rt.UseProtected(unsafe.Pointer(this), "QObjectCleanupHandler.Protected", "QObjectCleanupHandler")
+	return &QObjectCleanupHandlerBase{this}
+}
+
 // QObjectCleanupHandlerSuper calls the C++ base implementations of QObjectCleanupHandler's virtuals.
 type QObjectCleanupHandlerSuper struct{ this *QObjectCleanupHandler }
 

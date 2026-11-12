@@ -1668,6 +1668,16 @@ func (b *QWebEngineViewBase) Super() *QWebEngineViewSuper {
 	return &QWebEngineViewSuper{this: b.QWebEngineView}
 }
 
+// Protected returns the object's protected methods (those of QWebEngineViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWebEngineView: call it on that
+// class's wrapper.
+func (this *QWebEngineView) Protected() *QWebEngineViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWebEngineView.Protected", "QWebEngineView")
+	return &QWebEngineViewBase{this}
+}
+
 // QWebEngineViewSuper calls the C++ base implementations of QWebEngineView's virtuals.
 type QWebEngineViewSuper struct{ this *QWebEngineView }
 

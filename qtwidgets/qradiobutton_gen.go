@@ -819,6 +819,16 @@ func (b *QRadioButtonBase) Super() *QRadioButtonSuper {
 	return &QRadioButtonSuper{this: b.QRadioButton}
 }
 
+// Protected returns the object's protected methods (those of QRadioButtonBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QRadioButton: call it on that
+// class's wrapper.
+func (this *QRadioButton) Protected() *QRadioButtonBase {
+	rt.UseProtected(unsafe.Pointer(this), "QRadioButton.Protected", "QRadioButton")
+	return &QRadioButtonBase{this}
+}
+
 // QRadioButtonSuper calls the C++ base implementations of QRadioButton's virtuals.
 type QRadioButtonSuper struct{ this *QRadioButton }
 

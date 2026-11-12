@@ -1138,6 +1138,16 @@ func (b *QOpenGLWidgetBase) Super() *QOpenGLWidgetSuper {
 	return &QOpenGLWidgetSuper{this: b.QOpenGLWidget}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLWidget: call it on that
+// class's wrapper.
+func (this *QOpenGLWidget) Protected() *QOpenGLWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLWidget.Protected", "QOpenGLWidget")
+	return &QOpenGLWidgetBase{this}
+}
+
 // QOpenGLWidgetSuper calls the C++ base implementations of QOpenGLWidget's virtuals.
 type QOpenGLWidgetSuper struct{ this *QOpenGLWidget }
 

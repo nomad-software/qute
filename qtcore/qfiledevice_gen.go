@@ -833,6 +833,16 @@ type QFileDeviceSubclass interface{ quteQFileDeviceBase() *QFileDeviceBase }
 // Super returns the C++ base implementations of QFileDevice's virtual methods.
 func (b *QFileDeviceBase) Super() *QFileDeviceSuper { return &QFileDeviceSuper{this: b.QFileDevice} }
 
+// Protected returns the object's protected methods (those of QFileDeviceBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFileDevice: call it on that
+// class's wrapper.
+func (this *QFileDevice) Protected() *QFileDeviceBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFileDevice.Protected", "QFileDevice")
+	return &QFileDeviceBase{this}
+}
+
 // QFileDeviceSuper calls the C++ base implementations of QFileDevice's virtuals.
 type QFileDeviceSuper struct{ this *QFileDevice }
 

@@ -242,6 +242,16 @@ func (b *QWebEngineUrlSchemeHandlerBase) Super() *QWebEngineUrlSchemeHandlerSupe
 	return &QWebEngineUrlSchemeHandlerSuper{this: b.QWebEngineUrlSchemeHandler}
 }
 
+// Protected returns the object's protected methods (those of QWebEngineUrlSchemeHandlerBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWebEngineUrlSchemeHandler: call it on that
+// class's wrapper.
+func (this *QWebEngineUrlSchemeHandler) Protected() *QWebEngineUrlSchemeHandlerBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWebEngineUrlSchemeHandler.Protected", "QWebEngineUrlSchemeHandler")
+	return &QWebEngineUrlSchemeHandlerBase{this}
+}
+
 // QWebEngineUrlSchemeHandlerSuper calls the C++ base implementations of QWebEngineUrlSchemeHandler's virtuals.
 type QWebEngineUrlSchemeHandlerSuper struct{ this *QWebEngineUrlSchemeHandler }
 

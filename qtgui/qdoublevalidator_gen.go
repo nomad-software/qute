@@ -510,6 +510,16 @@ func (b *QDoubleValidatorBase) Super() *QDoubleValidatorSuper {
 	return &QDoubleValidatorSuper{this: b.QDoubleValidator}
 }
 
+// Protected returns the object's protected methods (those of QDoubleValidatorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDoubleValidator: call it on that
+// class's wrapper.
+func (this *QDoubleValidator) Protected() *QDoubleValidatorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDoubleValidator.Protected", "QDoubleValidator")
+	return &QDoubleValidatorBase{this}
+}
+
 // QDoubleValidatorSuper calls the C++ base implementations of QDoubleValidator's virtuals.
 type QDoubleValidatorSuper struct{ this *QDoubleValidator }
 

@@ -1626,6 +1626,16 @@ type QColumnViewSubclass interface{ quteQColumnViewBase() *QColumnViewBase }
 // Super returns the C++ base implementations of QColumnView's virtual methods.
 func (b *QColumnViewBase) Super() *QColumnViewSuper { return &QColumnViewSuper{this: b.QColumnView} }
 
+// Protected returns the object's protected methods (those of QColumnViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QColumnView: call it on that
+// class's wrapper.
+func (this *QColumnView) Protected() *QColumnViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QColumnView.Protected", "QColumnView")
+	return &QColumnViewBase{this}
+}
+
 // QColumnViewSuper calls the C++ base implementations of QColumnView's virtuals.
 type QColumnViewSuper struct{ this *QColumnView }
 

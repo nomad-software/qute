@@ -451,6 +451,16 @@ func (b *QGraphicsAnchorLayoutBase) Super() *QGraphicsAnchorLayoutSuper {
 	return &QGraphicsAnchorLayoutSuper{this: b.QGraphicsAnchorLayout}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsAnchorLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsAnchorLayout: call it on that
+// class's wrapper.
+func (this *QGraphicsAnchorLayout) Protected() *QGraphicsAnchorLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsAnchorLayout.Protected", "QGraphicsAnchorLayout")
+	return &QGraphicsAnchorLayoutBase{this}
+}
+
 // QGraphicsAnchorLayoutSuper calls the C++ base implementations of QGraphicsAnchorLayout's virtuals.
 type QGraphicsAnchorLayoutSuper struct{ this *QGraphicsAnchorLayout }
 

@@ -795,6 +795,16 @@ type QFocusFrameSubclass interface{ quteQFocusFrameBase() *QFocusFrameBase }
 // Super returns the C++ base implementations of QFocusFrame's virtual methods.
 func (b *QFocusFrameBase) Super() *QFocusFrameSuper { return &QFocusFrameSuper{this: b.QFocusFrame} }
 
+// Protected returns the object's protected methods (those of QFocusFrameBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFocusFrame: call it on that
+// class's wrapper.
+func (this *QFocusFrame) Protected() *QFocusFrameBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFocusFrame.Protected", "QFocusFrame")
+	return &QFocusFrameBase{this}
+}
+
 // QFocusFrameSuper calls the C++ base implementations of QFocusFrame's virtuals.
 type QFocusFrameSuper struct{ this *QFocusFrame }
 

@@ -2030,6 +2030,16 @@ type QComboBoxSubclass interface{ quteQComboBoxBase() *QComboBoxBase }
 // Super returns the C++ base implementations of QComboBox's virtual methods.
 func (b *QComboBoxBase) Super() *QComboBoxSuper { return &QComboBoxSuper{this: b.QComboBox} }
 
+// Protected returns the object's protected methods (those of QComboBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QComboBox: call it on that
+// class's wrapper.
+func (this *QComboBox) Protected() *QComboBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QComboBox.Protected", "QComboBox")
+	return &QComboBoxBase{this}
+}
+
 // QComboBoxSuper calls the C++ base implementations of QComboBox's virtuals.
 type QComboBoxSuper struct{ this *QComboBox }
 

@@ -1143,6 +1143,16 @@ type QMenuBarSubclass interface{ quteQMenuBarBase() *QMenuBarBase }
 // Super returns the C++ base implementations of QMenuBar's virtual methods.
 func (b *QMenuBarBase) Super() *QMenuBarSuper { return &QMenuBarSuper{this: b.QMenuBar} }
 
+// Protected returns the object's protected methods (those of QMenuBarBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMenuBar: call it on that
+// class's wrapper.
+func (this *QMenuBar) Protected() *QMenuBarBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMenuBar.Protected", "QMenuBar")
+	return &QMenuBarBase{this}
+}
+
 // QMenuBarSuper calls the C++ base implementations of QMenuBar's virtuals.
 type QMenuBarSuper struct{ this *QMenuBar }
 

@@ -1583,6 +1583,16 @@ type QWizardSubclass interface{ quteQWizardBase() *QWizardBase }
 // Super returns the C++ base implementations of QWizard's virtual methods.
 func (b *QWizardBase) Super() *QWizardSuper { return &QWizardSuper{this: b.QWizard} }
 
+// Protected returns the object's protected methods (those of QWizardBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QWizard: call it on that
+// class's wrapper.
+func (this *QWizard) Protected() *QWizardBase {
+	rt.UseProtected(unsafe.Pointer(this), "QWizard.Protected", "QWizard")
+	return &QWizardBase{this}
+}
+
 // QWizardSuper calls the C++ base implementations of QWizard's virtuals.
 type QWizardSuper struct{ this *QWizard }
 

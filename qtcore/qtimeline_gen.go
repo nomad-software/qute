@@ -598,6 +598,16 @@ type QTimeLineSubclass interface{ quteQTimeLineBase() *QTimeLineBase }
 // Super returns the C++ base implementations of QTimeLine's virtual methods.
 func (b *QTimeLineBase) Super() *QTimeLineSuper { return &QTimeLineSuper{this: b.QTimeLine} }
 
+// Protected returns the object's protected methods (those of QTimeLineBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTimeLine: call it on that
+// class's wrapper.
+func (this *QTimeLine) Protected() *QTimeLineBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTimeLine.Protected", "QTimeLine")
+	return &QTimeLineBase{this}
+}
+
 // QTimeLineSuper calls the C++ base implementations of QTimeLine's virtuals.
 type QTimeLineSuper struct{ this *QTimeLine }
 

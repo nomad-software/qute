@@ -1492,6 +1492,16 @@ func (b *QMediaPlayerBase) Super() *QMediaPlayerSuper {
 	return &QMediaPlayerSuper{this: b.QMediaPlayer}
 }
 
+// Protected returns the object's protected methods (those of QMediaPlayerBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMediaPlayer: call it on that
+// class's wrapper.
+func (this *QMediaPlayer) Protected() *QMediaPlayerBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMediaPlayer.Protected", "QMediaPlayer")
+	return &QMediaPlayerBase{this}
+}
+
 // QMediaPlayerSuper calls the C++ base implementations of QMediaPlayer's virtuals.
 type QMediaPlayerSuper struct{ this *QMediaPlayer }
 

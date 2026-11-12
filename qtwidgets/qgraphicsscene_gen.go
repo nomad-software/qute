@@ -2267,6 +2267,16 @@ func (b *QGraphicsSceneBase) Super() *QGraphicsSceneSuper {
 	return &QGraphicsSceneSuper{this: b.QGraphicsScene}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsSceneBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsScene: call it on that
+// class's wrapper.
+func (this *QGraphicsScene) Protected() *QGraphicsSceneBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsScene.Protected", "QGraphicsScene")
+	return &QGraphicsSceneBase{this}
+}
+
 // QGraphicsSceneSuper calls the C++ base implementations of QGraphicsScene's virtuals.
 type QGraphicsSceneSuper struct{ this *QGraphicsScene }
 

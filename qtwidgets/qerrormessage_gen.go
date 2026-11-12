@@ -826,6 +826,16 @@ func (b *QErrorMessageBase) Super() *QErrorMessageSuper {
 	return &QErrorMessageSuper{this: b.QErrorMessage}
 }
 
+// Protected returns the object's protected methods (those of QErrorMessageBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QErrorMessage: call it on that
+// class's wrapper.
+func (this *QErrorMessage) Protected() *QErrorMessageBase {
+	rt.UseProtected(unsafe.Pointer(this), "QErrorMessage.Protected", "QErrorMessage")
+	return &QErrorMessageBase{this}
+}
+
 // QErrorMessageSuper calls the C++ base implementations of QErrorMessage's virtuals.
 type QErrorMessageSuper struct{ this *QErrorMessage }
 

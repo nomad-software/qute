@@ -439,7 +439,12 @@ Overrides are found through embedding, so a type that embeds your `Canvas`
 inherits its `PaintEvent`.
 
 The Base type also carries the class's protected methods (`SetFormat` on a
-syntax highlighter, `SetState` on a view). `GoValue()` finds your Go value
+syntax highlighter, `SetState` on a view). An object made by a plain
+constructor reaches them too, through `Protected()`:
+`tree.Protected().DropIndicatorPosition()`,
+`edit.Protected().SetViewportMargins(m)`. It panics for an object Qt created,
+and when called through a base class's wrapper (call it on the object's own
+class). `GoValue()` finds your Go value
 behind a pointer Qt hands back: `view.ItemDelegate().GoValue().(*MyDelegate)`,
 or the Go state you stored on a text block with `QTextBlock.SetUserData`.
 `COVERAGE.md` lists the classes Go can't subclass (singletons only Qt

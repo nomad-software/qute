@@ -1157,6 +1157,16 @@ func (b *QDialogButtonBoxBase) Super() *QDialogButtonBoxSuper {
 	return &QDialogButtonBoxSuper{this: b.QDialogButtonBox}
 }
 
+// Protected returns the object's protected methods (those of QDialogButtonBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDialogButtonBox: call it on that
+// class's wrapper.
+func (this *QDialogButtonBox) Protected() *QDialogButtonBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDialogButtonBox.Protected", "QDialogButtonBox")
+	return &QDialogButtonBoxBase{this}
+}
+
 // QDialogButtonBoxSuper calls the C++ base implementations of QDialogButtonBox's virtuals.
 type QDialogButtonBoxSuper struct{ this *QDialogButtonBox }
 

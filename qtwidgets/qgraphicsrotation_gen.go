@@ -387,6 +387,16 @@ func (b *QGraphicsRotationBase) Super() *QGraphicsRotationSuper {
 	return &QGraphicsRotationSuper{this: b.QGraphicsRotation}
 }
 
+// Protected returns the object's protected methods (those of QGraphicsRotationBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QGraphicsRotation: call it on that
+// class's wrapper.
+func (this *QGraphicsRotation) Protected() *QGraphicsRotationBase {
+	rt.UseProtected(unsafe.Pointer(this), "QGraphicsRotation.Protected", "QGraphicsRotation")
+	return &QGraphicsRotationBase{this}
+}
+
 // QGraphicsRotationSuper calls the C++ base implementations of QGraphicsRotation's virtuals.
 type QGraphicsRotationSuper struct{ this *QGraphicsRotation }
 

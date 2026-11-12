@@ -348,6 +348,16 @@ func (b *QRegularExpressionValidatorBase) Super() *QRegularExpressionValidatorSu
 	return &QRegularExpressionValidatorSuper{this: b.QRegularExpressionValidator}
 }
 
+// Protected returns the object's protected methods (those of QRegularExpressionValidatorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QRegularExpressionValidator: call it on that
+// class's wrapper.
+func (this *QRegularExpressionValidator) Protected() *QRegularExpressionValidatorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QRegularExpressionValidator.Protected", "QRegularExpressionValidator")
+	return &QRegularExpressionValidatorBase{this}
+}
+
 // QRegularExpressionValidatorSuper calls the C++ base implementations of QRegularExpressionValidator's virtuals.
 type QRegularExpressionValidatorSuper struct{ this *QRegularExpressionValidator }
 

@@ -779,6 +779,16 @@ type QObjectSubclass interface{ quteQObjectBase() *QObjectBase }
 // Super returns the C++ base implementations of QObject's virtual methods.
 func (b *QObjectBase) Super() *QObjectSuper { return &QObjectSuper{this: b.QObject} }
 
+// Protected returns the object's protected methods (those of QObjectBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QObject: call it on that
+// class's wrapper.
+func (this *QObject) Protected() *QObjectBase {
+	rt.UseProtected(unsafe.Pointer(this), "QObject.Protected", "QObject")
+	return &QObjectBase{this}
+}
+
 // QObjectSuper calls the C++ base implementations of QObject's virtuals.
 type QObjectSuper struct{ this *QObject }
 

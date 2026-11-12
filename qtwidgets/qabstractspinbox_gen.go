@@ -1328,6 +1328,16 @@ func (b *QAbstractSpinBoxBase) Super() *QAbstractSpinBoxSuper {
 	return &QAbstractSpinBoxSuper{this: b.QAbstractSpinBox}
 }
 
+// Protected returns the object's protected methods (those of QAbstractSpinBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QAbstractSpinBox: call it on that
+// class's wrapper.
+func (this *QAbstractSpinBox) Protected() *QAbstractSpinBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QAbstractSpinBox.Protected", "QAbstractSpinBox")
+	return &QAbstractSpinBoxBase{this}
+}
+
 // QAbstractSpinBoxSuper calls the C++ base implementations of QAbstractSpinBox's virtuals.
 type QAbstractSpinBoxSuper struct{ this *QAbstractSpinBox }
 

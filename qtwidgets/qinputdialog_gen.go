@@ -1646,6 +1646,16 @@ func (b *QInputDialogBase) Super() *QInputDialogSuper {
 	return &QInputDialogSuper{this: b.QInputDialog}
 }
 
+// Protected returns the object's protected methods (those of QInputDialogBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QInputDialog: call it on that
+// class's wrapper.
+func (this *QInputDialog) Protected() *QInputDialogBase {
+	rt.UseProtected(unsafe.Pointer(this), "QInputDialog.Protected", "QInputDialog")
+	return &QInputDialogBase{this}
+}
+
 // QInputDialogSuper calls the C++ base implementations of QInputDialog's virtuals.
 type QInputDialogSuper struct{ this *QInputDialog }
 

@@ -967,6 +967,16 @@ type QScrollAreaSubclass interface{ quteQScrollAreaBase() *QScrollAreaBase }
 // Super returns the C++ base implementations of QScrollArea's virtual methods.
 func (b *QScrollAreaBase) Super() *QScrollAreaSuper { return &QScrollAreaSuper{this: b.QScrollArea} }
 
+// Protected returns the object's protected methods (those of QScrollAreaBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QScrollArea: call it on that
+// class's wrapper.
+func (this *QScrollArea) Protected() *QScrollAreaBase {
+	rt.UseProtected(unsafe.Pointer(this), "QScrollArea.Protected", "QScrollArea")
+	return &QScrollAreaBase{this}
+}
+
 // QScrollAreaSuper calls the C++ base implementations of QScrollArea's virtuals.
 type QScrollAreaSuper struct{ this *QScrollArea }
 

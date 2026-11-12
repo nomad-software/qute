@@ -610,6 +610,16 @@ func (b *QDataWidgetMapperBase) Super() *QDataWidgetMapperSuper {
 	return &QDataWidgetMapperSuper{this: b.QDataWidgetMapper}
 }
 
+// Protected returns the object's protected methods (those of QDataWidgetMapperBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDataWidgetMapper: call it on that
+// class's wrapper.
+func (this *QDataWidgetMapper) Protected() *QDataWidgetMapperBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDataWidgetMapper.Protected", "QDataWidgetMapper")
+	return &QDataWidgetMapperBase{this}
+}
+
 // QDataWidgetMapperSuper calls the C++ base implementations of QDataWidgetMapper's virtuals.
 type QDataWidgetMapperSuper struct{ this *QDataWidgetMapper }
 

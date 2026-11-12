@@ -962,6 +962,16 @@ func (b *QFontComboBoxBase) Super() *QFontComboBoxSuper {
 	return &QFontComboBoxSuper{this: b.QFontComboBox}
 }
 
+// Protected returns the object's protected methods (those of QFontComboBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFontComboBox: call it on that
+// class's wrapper.
+func (this *QFontComboBox) Protected() *QFontComboBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFontComboBox.Protected", "QFontComboBox")
+	return &QFontComboBoxBase{this}
+}
+
 // QFontComboBoxSuper calls the C++ base implementations of QFontComboBox's virtuals.
 type QFontComboBoxSuper struct{ this *QFontComboBox }
 

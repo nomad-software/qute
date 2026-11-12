@@ -684,6 +684,16 @@ type QSettingsSubclass interface{ quteQSettingsBase() *QSettingsBase }
 // Super returns the C++ base implementations of QSettings's virtual methods.
 func (b *QSettingsBase) Super() *QSettingsSuper { return &QSettingsSuper{this: b.QSettings} }
 
+// Protected returns the object's protected methods (those of QSettingsBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSettings: call it on that
+// class's wrapper.
+func (this *QSettings) Protected() *QSettingsBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSettings.Protected", "QSettings")
+	return &QSettingsBase{this}
+}
+
 // QSettingsSuper calls the C++ base implementations of QSettings's virtuals.
 type QSettingsSuper struct{ this *QSettings }
 

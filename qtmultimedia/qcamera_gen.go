@@ -1667,6 +1667,16 @@ type QCameraSubclass interface{ quteQCameraBase() *QCameraBase }
 // Super returns the C++ base implementations of QCamera's virtual methods.
 func (b *QCameraBase) Super() *QCameraSuper { return &QCameraSuper{this: b.QCamera} }
 
+// Protected returns the object's protected methods (those of QCameraBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QCamera: call it on that
+// class's wrapper.
+func (this *QCamera) Protected() *QCameraBase {
+	rt.UseProtected(unsafe.Pointer(this), "QCamera.Protected", "QCamera")
+	return &QCameraBase{this}
+}
+
 // QCameraSuper calls the C++ base implementations of QCamera's virtuals.
 type QCameraSuper struct{ this *QCamera }
 

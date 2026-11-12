@@ -906,6 +906,16 @@ type QCheckBoxSubclass interface{ quteQCheckBoxBase() *QCheckBoxBase }
 // Super returns the C++ base implementations of QCheckBox's virtual methods.
 func (b *QCheckBoxBase) Super() *QCheckBoxSuper { return &QCheckBoxSuper{this: b.QCheckBox} }
 
+// Protected returns the object's protected methods (those of QCheckBoxBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QCheckBox: call it on that
+// class's wrapper.
+func (this *QCheckBox) Protected() *QCheckBoxBase {
+	rt.UseProtected(unsafe.Pointer(this), "QCheckBox.Protected", "QCheckBox")
+	return &QCheckBoxBase{this}
+}
+
 // QCheckBoxSuper calls the C++ base implementations of QCheckBox's virtuals.
 type QCheckBoxSuper struct{ this *QCheckBox }
 

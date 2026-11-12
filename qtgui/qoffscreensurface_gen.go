@@ -455,6 +455,16 @@ func (b *QOffscreenSurfaceBase) Super() *QOffscreenSurfaceSuper {
 	return &QOffscreenSurfaceSuper{this: b.QOffscreenSurface}
 }
 
+// Protected returns the object's protected methods (those of QOffscreenSurfaceBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOffscreenSurface: call it on that
+// class's wrapper.
+func (this *QOffscreenSurface) Protected() *QOffscreenSurfaceBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOffscreenSurface.Protected", "QOffscreenSurface")
+	return &QOffscreenSurfaceBase{this}
+}
+
 // QOffscreenSurfaceSuper calls the C++ base implementations of QOffscreenSurface's virtuals.
 type QOffscreenSurfaceSuper struct{ this *QOffscreenSurface }
 

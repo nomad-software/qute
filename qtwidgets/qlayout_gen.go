@@ -1503,6 +1503,16 @@ type QLayoutSubclass interface{ quteQLayoutBase() *QLayoutBase }
 // Super returns the C++ base implementations of QLayout's virtual methods.
 func (b *QLayoutBase) Super() *QLayoutSuper { return &QLayoutSuper{this: b.QLayout} }
 
+// Protected returns the object's protected methods (those of QLayoutBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QLayout: call it on that
+// class's wrapper.
+func (this *QLayout) Protected() *QLayoutBase {
+	rt.UseProtected(unsafe.Pointer(this), "QLayout.Protected", "QLayout")
+	return &QLayoutBase{this}
+}
+
 // QLayoutSuper calls the C++ base implementations of QLayout's virtuals.
 type QLayoutSuper struct{ this *QLayout }
 

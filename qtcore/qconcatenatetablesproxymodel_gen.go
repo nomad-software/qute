@@ -994,6 +994,16 @@ func (b *QConcatenateTablesProxyModelBase) Super() *QConcatenateTablesProxyModel
 	return &QConcatenateTablesProxyModelSuper{this: b.QConcatenateTablesProxyModel}
 }
 
+// Protected returns the object's protected methods (those of QConcatenateTablesProxyModelBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QConcatenateTablesProxyModel: call it on that
+// class's wrapper.
+func (this *QConcatenateTablesProxyModel) Protected() *QConcatenateTablesProxyModelBase {
+	rt.UseProtected(unsafe.Pointer(this), "QConcatenateTablesProxyModel.Protected", "QConcatenateTablesProxyModel")
+	return &QConcatenateTablesProxyModelBase{this}
+}
+
 // QConcatenateTablesProxyModelSuper calls the C++ base implementations of QConcatenateTablesProxyModel's virtuals.
 type QConcatenateTablesProxyModelSuper struct{ this *QConcatenateTablesProxyModel }
 

@@ -1138,6 +1138,16 @@ func (b *QOpenGLShaderProgramBase) Super() *QOpenGLShaderProgramSuper {
 	return &QOpenGLShaderProgramSuper{this: b.QOpenGLShaderProgram}
 }
 
+// Protected returns the object's protected methods (those of QOpenGLShaderProgramBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QOpenGLShaderProgram: call it on that
+// class's wrapper.
+func (this *QOpenGLShaderProgram) Protected() *QOpenGLShaderProgramBase {
+	rt.UseProtected(unsafe.Pointer(this), "QOpenGLShaderProgram.Protected", "QOpenGLShaderProgram")
+	return &QOpenGLShaderProgramBase{this}
+}
+
 // QOpenGLShaderProgramSuper calls the C++ base implementations of QOpenGLShaderProgram's virtuals.
 type QOpenGLShaderProgramSuper struct{ this *QOpenGLShaderProgram }
 

@@ -946,6 +946,16 @@ type QDateEditSubclass interface{ quteQDateEditBase() *QDateEditBase }
 // Super returns the C++ base implementations of QDateEdit's virtual methods.
 func (b *QDateEditBase) Super() *QDateEditSuper { return &QDateEditSuper{this: b.QDateEdit} }
 
+// Protected returns the object's protected methods (those of QDateEditBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDateEdit: call it on that
+// class's wrapper.
+func (this *QDateEdit) Protected() *QDateEditBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDateEdit.Protected", "QDateEdit")
+	return &QDateEditBase{this}
+}
+
 // QDateEditSuper calls the C++ base implementations of QDateEdit's virtuals.
 type QDateEditSuper struct{ this *QDateEdit }
 

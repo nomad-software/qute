@@ -1425,6 +1425,16 @@ func (b *QTextBrowserBase) Super() *QTextBrowserSuper {
 	return &QTextBrowserSuper{this: b.QTextBrowser}
 }
 
+// Protected returns the object's protected methods (those of QTextBrowserBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTextBrowser: call it on that
+// class's wrapper.
+func (this *QTextBrowser) Protected() *QTextBrowserBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTextBrowser.Protected", "QTextBrowser")
+	return &QTextBrowserBase{this}
+}
+
 // QTextBrowserSuper calls the C++ base implementations of QTextBrowser's virtuals.
 type QTextBrowserSuper struct{ this *QTextBrowser }
 

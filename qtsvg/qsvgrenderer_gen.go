@@ -681,6 +681,16 @@ func (b *QSvgRendererBase) Super() *QSvgRendererSuper {
 	return &QSvgRendererSuper{this: b.QSvgRenderer}
 }
 
+// Protected returns the object's protected methods (those of QSvgRendererBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSvgRenderer: call it on that
+// class's wrapper.
+func (this *QSvgRenderer) Protected() *QSvgRendererBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSvgRenderer.Protected", "QSvgRenderer")
+	return &QSvgRendererBase{this}
+}
+
 // QSvgRendererSuper calls the C++ base implementations of QSvgRenderer's virtuals.
 type QSvgRendererSuper struct{ this *QSvgRenderer }
 

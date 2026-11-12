@@ -844,6 +844,16 @@ func (b *QVideoWidgetBase) Super() *QVideoWidgetSuper {
 	return &QVideoWidgetSuper{this: b.QVideoWidget}
 }
 
+// Protected returns the object's protected methods (those of QVideoWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QVideoWidget: call it on that
+// class's wrapper.
+func (this *QVideoWidget) Protected() *QVideoWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QVideoWidget.Protected", "QVideoWidget")
+	return &QVideoWidgetBase{this}
+}
+
 // QVideoWidgetSuper calls the C++ base implementations of QVideoWidget's virtuals.
 type QVideoWidgetSuper struct{ this *QVideoWidget }
 

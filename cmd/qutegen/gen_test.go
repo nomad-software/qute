@@ -1459,3 +1459,25 @@ func TestOverrideSetterOwners(t *testing.T) {
 		}
 	}
 }
+
+// A class Go subclasses gets Protected(), its Base's protected methods on a
+// plain object, checked by rt.UseProtected; one with no protected methods
+// does not.
+func TestProtectedAccessor(t *testing.T) {
+	g := gen(t)
+	src := string(g.emitClass(class(t, "QTreeWidget")))
+	for _, want := range []string{
+		"func (this *QTreeWidget) Protected() *QTreeWidgetBase {",
+		`rt.UseProtected(unsafe.Pointer(this), "QTreeWidget.Protected", "QTreeWidget")`,
+		"func (b *QTreeWidgetBase) State() QAbstractItemViewState {",
+	} {
+		if !strings.Contains(src, want) {
+			t.Errorf("QTreeWidget lacks %q", want)
+		}
+	}
+	for _, c := range g.classes {
+		if c.overridable() && len(c.Protected) == 0 && strings.Contains(string(g.emitClass(c)), ") Protected() *") {
+			t.Errorf("%s has Protected() but no protected methods", c.Name)
+		}
+	}
+}

@@ -2107,6 +2107,16 @@ func (b *QPlainTextEditBase) Super() *QPlainTextEditSuper {
 	return &QPlainTextEditSuper{this: b.QPlainTextEdit}
 }
 
+// Protected returns the object's protected methods (those of QPlainTextEditBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QPlainTextEdit: call it on that
+// class's wrapper.
+func (this *QPlainTextEdit) Protected() *QPlainTextEditBase {
+	rt.UseProtected(unsafe.Pointer(this), "QPlainTextEdit.Protected", "QPlainTextEdit")
+	return &QPlainTextEditBase{this}
+}
+
 // QPlainTextEditSuper calls the C++ base implementations of QPlainTextEdit's virtuals.
 type QPlainTextEditSuper struct{ this *QPlainTextEdit }
 

@@ -251,6 +251,16 @@ func (b *QTapAndHoldGestureBase) Super() *QTapAndHoldGestureSuper {
 	return &QTapAndHoldGestureSuper{this: b.QTapAndHoldGesture}
 }
 
+// Protected returns the object's protected methods (those of QTapAndHoldGestureBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTapAndHoldGesture: call it on that
+// class's wrapper.
+func (this *QTapAndHoldGesture) Protected() *QTapAndHoldGestureBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTapAndHoldGesture.Protected", "QTapAndHoldGesture")
+	return &QTapAndHoldGestureBase{this}
+}
+
 // QTapAndHoldGestureSuper calls the C++ base implementations of QTapAndHoldGesture's virtuals.
 type QTapAndHoldGestureSuper struct{ this *QTapAndHoldGesture }
 

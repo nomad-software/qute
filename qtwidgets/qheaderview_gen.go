@@ -2618,6 +2618,16 @@ type QHeaderViewSubclass interface{ quteQHeaderViewBase() *QHeaderViewBase }
 // Super returns the C++ base implementations of QHeaderView's virtual methods.
 func (b *QHeaderViewBase) Super() *QHeaderViewSuper { return &QHeaderViewSuper{this: b.QHeaderView} }
 
+// Protected returns the object's protected methods (those of QHeaderViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QHeaderView: call it on that
+// class's wrapper.
+func (this *QHeaderView) Protected() *QHeaderViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QHeaderView.Protected", "QHeaderView")
+	return &QHeaderViewBase{this}
+}
+
 // QHeaderViewSuper calls the C++ base implementations of QHeaderView's virtuals.
 type QHeaderViewSuper struct{ this *QHeaderView }
 

@@ -1837,6 +1837,16 @@ type QListViewSubclass interface{ quteQListViewBase() *QListViewBase }
 // Super returns the C++ base implementations of QListView's virtual methods.
 func (b *QListViewBase) Super() *QListViewSuper { return &QListViewSuper{this: b.QListView} }
 
+// Protected returns the object's protected methods (those of QListViewBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QListView: call it on that
+// class's wrapper.
+func (this *QListView) Protected() *QListViewBase {
+	rt.UseProtected(unsafe.Pointer(this), "QListView.Protected", "QListView")
+	return &QListViewBase{this}
+}
+
 // QListViewSuper calls the C++ base implementations of QListView's virtuals.
 type QListViewSuper struct{ this *QListView }
 

@@ -405,6 +405,16 @@ type QTimerSubclass interface{ quteQTimerBase() *QTimerBase }
 // Super returns the C++ base implementations of QTimer's virtual methods.
 func (b *QTimerBase) Super() *QTimerSuper { return &QTimerSuper{this: b.QTimer} }
 
+// Protected returns the object's protected methods (those of QTimerBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTimer: call it on that
+// class's wrapper.
+func (this *QTimer) Protected() *QTimerBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTimer.Protected", "QTimer")
+	return &QTimerBase{this}
+}
+
 // QTimerSuper calls the C++ base implementations of QTimer's virtuals.
 type QTimerSuper struct{ this *QTimer }
 

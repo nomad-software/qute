@@ -828,6 +828,16 @@ type QMovieSubclass interface{ quteQMovieBase() *QMovieBase }
 // Super returns the C++ base implementations of QMovie's virtual methods.
 func (b *QMovieBase) Super() *QMovieSuper { return &QMovieSuper{this: b.QMovie} }
 
+// Protected returns the object's protected methods (those of QMovieBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QMovie: call it on that
+// class's wrapper.
+func (this *QMovie) Protected() *QMovieBase {
+	rt.UseProtected(unsafe.Pointer(this), "QMovie.Protected", "QMovie")
+	return &QMovieBase{this}
+}
+
 // QMovieSuper calls the C++ base implementations of QMovie's virtuals.
 type QMovieSuper struct{ this *QMovie }
 

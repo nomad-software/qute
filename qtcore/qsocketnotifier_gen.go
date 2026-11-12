@@ -305,6 +305,16 @@ func (b *QSocketNotifierBase) Super() *QSocketNotifierSuper {
 	return &QSocketNotifierSuper{this: b.QSocketNotifier}
 }
 
+// Protected returns the object's protected methods (those of QSocketNotifierBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSocketNotifier: call it on that
+// class's wrapper.
+func (this *QSocketNotifier) Protected() *QSocketNotifierBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSocketNotifier.Protected", "QSocketNotifier")
+	return &QSocketNotifierBase{this}
+}
+
 // QSocketNotifierSuper calls the C++ base implementations of QSocketNotifier's virtuals.
 type QSocketNotifierSuper struct{ this *QSocketNotifier }
 

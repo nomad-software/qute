@@ -820,6 +820,16 @@ type QSvgWidgetSubclass interface{ quteQSvgWidgetBase() *QSvgWidgetBase }
 // Super returns the C++ base implementations of QSvgWidget's virtual methods.
 func (b *QSvgWidgetBase) Super() *QSvgWidgetSuper { return &QSvgWidgetSuper{this: b.QSvgWidget} }
 
+// Protected returns the object's protected methods (those of QSvgWidgetBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSvgWidget: call it on that
+// class's wrapper.
+func (this *QSvgWidget) Protected() *QSvgWidgetBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSvgWidget.Protected", "QSvgWidget")
+	return &QSvgWidgetBase{this}
+}
+
 // QSvgWidgetSuper calls the C++ base implementations of QSvgWidget's virtuals.
 type QSvgWidgetSuper struct{ this *QSvgWidget }
 

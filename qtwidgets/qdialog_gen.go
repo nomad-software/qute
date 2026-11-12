@@ -1074,6 +1074,16 @@ type QDialogSubclass interface{ quteQDialogBase() *QDialogBase }
 // Super returns the C++ base implementations of QDialog's virtual methods.
 func (b *QDialogBase) Super() *QDialogSuper { return &QDialogSuper{this: b.QDialog} }
 
+// Protected returns the object's protected methods (those of QDialogBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QDialog: call it on that
+// class's wrapper.
+func (this *QDialog) Protected() *QDialogBase {
+	rt.UseProtected(unsafe.Pointer(this), "QDialog.Protected", "QDialog")
+	return &QDialogBase{this}
+}
+
 // QDialogSuper calls the C++ base implementations of QDialog's virtuals.
 type QDialogSuper struct{ this *QDialog }
 

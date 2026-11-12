@@ -432,6 +432,16 @@ func (b *QSignalMapperBase) Super() *QSignalMapperSuper {
 	return &QSignalMapperSuper{this: b.QSignalMapper}
 }
 
+// Protected returns the object's protected methods (those of QSignalMapperBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QSignalMapper: call it on that
+// class's wrapper.
+func (this *QSignalMapper) Protected() *QSignalMapperBase {
+	rt.UseProtected(unsafe.Pointer(this), "QSignalMapper.Protected", "QSignalMapper")
+	return &QSignalMapperBase{this}
+}
+
 // QSignalMapperSuper calls the C++ base implementations of QSignalMapper's virtuals.
 type QSignalMapperSuper struct{ this *QSignalMapper }
 

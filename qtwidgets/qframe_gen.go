@@ -938,6 +938,16 @@ type QFrameSubclass interface{ quteQFrameBase() *QFrameBase }
 // Super returns the C++ base implementations of QFrame's virtual methods.
 func (b *QFrameBase) Super() *QFrameSuper { return &QFrameSuper{this: b.QFrame} }
 
+// Protected returns the object's protected methods (those of QFrameBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QFrame: call it on that
+// class's wrapper.
+func (this *QFrame) Protected() *QFrameBase {
+	rt.UseProtected(unsafe.Pointer(this), "QFrame.Protected", "QFrame")
+	return &QFrameBase{this}
+}
+
 // QFrameSuper calls the C++ base implementations of QFrame's virtuals.
 type QFrameSuper struct{ this *QFrame }
 

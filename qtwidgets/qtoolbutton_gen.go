@@ -1000,6 +1000,16 @@ type QToolButtonSubclass interface{ quteQToolButtonBase() *QToolButtonBase }
 // Super returns the C++ base implementations of QToolButton's virtual methods.
 func (b *QToolButtonBase) Super() *QToolButtonSuper { return &QToolButtonSuper{this: b.QToolButton} }
 
+// Protected returns the object's protected methods (those of QToolButtonBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QToolButton: call it on that
+// class's wrapper.
+func (this *QToolButton) Protected() *QToolButtonBase {
+	rt.UseProtected(unsafe.Pointer(this), "QToolButton.Protected", "QToolButton")
+	return &QToolButtonBase{this}
+}
+
 // QToolButtonSuper calls the C++ base implementations of QToolButton's virtuals.
 type QToolButtonSuper struct{ this *QToolButton }
 

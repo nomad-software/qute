@@ -342,6 +342,16 @@ type QValidatorSubclass interface{ quteQValidatorBase() *QValidatorBase }
 // Super returns the C++ base implementations of QValidator's virtual methods.
 func (b *QValidatorBase) Super() *QValidatorSuper { return &QValidatorSuper{this: b.QValidator} }
 
+// Protected returns the object's protected methods (those of QValidatorBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QValidator: call it on that
+// class's wrapper.
+func (this *QValidator) Protected() *QValidatorBase {
+	rt.UseProtected(unsafe.Pointer(this), "QValidator.Protected", "QValidator")
+	return &QValidatorBase{this}
+}
+
 // QValidatorSuper calls the C++ base implementations of QValidator's virtuals.
 type QValidatorSuper struct{ this *QValidator }
 

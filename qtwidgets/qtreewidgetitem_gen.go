@@ -1395,6 +1395,16 @@ func (b *QTreeWidgetItemBase) Super() *QTreeWidgetItemSuper {
 	return &QTreeWidgetItemSuper{this: b.QTreeWidgetItem}
 }
 
+// Protected returns the object's protected methods (those of QTreeWidgetItemBase, for
+// a Go subclass) on an object made by a plain constructor, which is built as
+// qute's subclass too: tree.Protected().State(). It panics for an object Qt
+// created, and for one whose class is derived from QTreeWidgetItem: call it on that
+// class's wrapper.
+func (this *QTreeWidgetItem) Protected() *QTreeWidgetItemBase {
+	rt.UseProtected(unsafe.Pointer(this), "QTreeWidgetItem.Protected", "QTreeWidgetItem")
+	return &QTreeWidgetItemBase{this}
+}
+
 // QTreeWidgetItemSuper calls the C++ base implementations of QTreeWidgetItem's virtuals.
 type QTreeWidgetItemSuper struct{ this *QTreeWidgetItem }
 
