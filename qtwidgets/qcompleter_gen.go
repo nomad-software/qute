@@ -67,7 +67,7 @@ func NewQCompleter(parent qtcore.QObjectLike) *QCompleter {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -96,7 +96,7 @@ func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QCompleter](h, p)
 }
@@ -121,7 +121,7 @@ func NewQCompleterWithCompletions(completions []string, parent qtcore.QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -678,19 +678,34 @@ var qCompleterVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex) string, *qtcore.QModelIndex) string)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				PathFromIndex(*qtcore.QModelIndex) string
-			}).PathFromIndex(index)
+			var r = *new(string)
+			if f, ok := v.(func(func(*qtcore.QModelIndex) string, *qtcore.QModelIndex) string); ok {
+				r = f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).PathFromIndex, index)
+			} else {
+				r = v.(interface {
+					PathFromIndex(*qtcore.QModelIndex) string
+				}).PathFromIndex(index)
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "SplitPath", Has: func(v any) bool { _, ok := v.(interface{ SplitPath(string) []string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string) []string, string) []string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			path := quteStr(*(*C.qute_str)(a[0]))
-			r := v.(interface{ SplitPath(string) []string }).SplitPath(path)
+			var r = *new([]string)
+			if f, ok := v.(func(func(string) []string, string) []string); ok {
+				r = f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).SplitPath, path)
+			} else {
+				r = v.(interface{ SplitPath(string) []string }).SplitPath(path)
+			}
 			*(*C.qute_list)(ret) = quteCStrList(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -699,67 +714,138 @@ var qCompleterVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			o := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eArgP := *(*unsafe.Pointer)(a[1])
 			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(o, eArg)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).EventFilter, o, eArg)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(o, eArg)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QCompleterSuper{this: rt.View[QCompleter](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qCompleterShimInit sets a QCompleter shim object's dispatch id and override mask.
+func qCompleterShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QCompleter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverridePathFromIndex makes f this object's QCompleter::pathFromIndex: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PathFromIndex, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QCompleter) OverridePathFromIndex(f func(super func(index *qtcore.QModelIndex) string, index *qtcore.QModelIndex) string) {
+	rt.Override(unsafe.Pointer(this), "QCompleter.OverridePathFromIndex", "PathFromIndex", f)
+}
+
+// OverrideSplitPath makes f this object's QCompleter::splitPath: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SplitPath, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QCompleter) OverrideSplitPath(f func(super func(path string) []string, path string) []string) {
+	rt.Override(unsafe.Pointer(this), "QCompleter.OverrideSplitPath", "SplitPath", f)
 }
 
 // QCompleterBase is embedded in Go types that subclass QCompleter:
@@ -912,7 +998,7 @@ func NewQCompleterWith(v QCompleterSubclass, parent qtcore.QObjectLike) *QComple
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
 	mask := rt.Mask(v, qCompleterVTable)
@@ -950,7 +1036,7 @@ func NewQCompleterWithModelWith(v QCompleterSubclass, model qtcore.QAbstractItem
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	rt.KeepArg(h, "model", modelH, false)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
@@ -984,7 +1070,7 @@ func NewQCompleterWithCompletionsWith(v QCompleterSubclass, completions []string
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
+	h := rt.WrapNewShim[QCompleter](p, "QCompleter", mode, qCompleterVTable, qCompleterShimInit)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
 	mask := rt.Mask(v, qCompleterVTable)

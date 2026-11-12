@@ -1089,11 +1089,11 @@ const char *qute_qtsvgwidgets_check_layout(void) {
 // ---- QGraphicsSvgItem
 void * qute_QGraphicsSvgItem_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QGraphicsSvgItem *>(new QGraphicsSvgItem(static_cast<QGraphicsItem *>(a0)));
+	return static_cast<QGraphicsSvgItem *>(new qute_QGraphicsSvgItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsSvgItem_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QGraphicsSvgItem *>(new QGraphicsSvgItem(QString::fromUtf8(a0, a0_len), static_cast<QGraphicsItem *>(a1)));
+	return static_cast<QGraphicsSvgItem *>(new qute_QGraphicsSvgItem(QString::fromUtf8(a0, a0_len), static_cast<QGraphicsItem *>(a1)));
 }
 void * qute_QGraphicsSvgItem_new_shim(void * a0) {
 	qute_gui_only();
@@ -1351,11 +1351,11 @@ void qute_QGraphicsSvgItem_paint_1(void *self, void * a0, void * a1, void * a2) 
 // ---- QSvgWidget
 void * qute_QSvgWidget_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSvgWidget *>(new QSvgWidget(static_cast<QWidget *>(a0)));
+	return static_cast<QSvgWidget *>(new qute_QSvgWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QSvgWidget_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QSvgWidget *>(new QSvgWidget(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
+	return static_cast<QSvgWidget *>(new qute_QSvgWidget(QString::fromUtf8(a0, a0_len), static_cast<QWidget *>(a1)));
 }
 void * qute_QSvgWidget_new_shim(void * a0) {
 	qute_gui_only();

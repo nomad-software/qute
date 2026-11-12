@@ -95,11 +95,16 @@ func (this *QTextBlockUserData) Unkeep() {
 func NewQTextBlockUserData() *QTextBlockUserData {
 	rt.CheckThread("NewQTextBlockUserData")
 	p := C.qute_QTextBlockUserData_new()
-	h := rt.WrapNew[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned)
+	h := rt.WrapNewShim[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned, qTextBlockUserDataVTable, qTextBlockUserDataShimInit)
 	return rt.View[QTextBlockUserData](h, p)
 }
 
 var qTextBlockUserDataVTable = []rt.Virtual{}
+
+// qTextBlockUserDataShimInit sets a QTextBlockUserData shim object's dispatch id and override mask.
+func qTextBlockUserDataShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QTextBlockUserData_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
 
 // QTextBlockUserDataBase is embedded in Go types that subclass QTextBlockUserData:
 //
@@ -136,7 +141,7 @@ func NewQTextBlockUserDataWith(v QTextBlockUserDataSubclass) *QTextBlockUserData
 		panic("NewQTextBlockUserDataWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTextBlockUserData_new_shim()
-	h := rt.WrapNew[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned)
+	h := rt.WrapNewShim[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned, qTextBlockUserDataVTable, qTextBlockUserDataShimInit)
 	base.QTextBlockUserData = rt.View[QTextBlockUserData](h, p)
 	id := h.SetSelf(v, qTextBlockUserDataVTable)
 	mask := rt.Mask(v, qTextBlockUserDataVTable)

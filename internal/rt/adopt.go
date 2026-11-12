@@ -2,6 +2,7 @@ package rt
 
 import (
 	"sync"
+	"sync/atomic"
 	"unsafe"
 )
 
@@ -25,6 +26,9 @@ type adoption struct {
 var (
 	adoptMu   sync.Mutex
 	adoptions = map[unsafe.Pointer][]adoption{} // container -> parentless children it took
+	// adoptN is len(adoptions), so the death of an object (every one runs
+	// orphaned) skips the lock while nothing is adopted, the usual case
+	adoptN atomic.Int64
 )
 
 // TransferTo applies a transfer-to-cpp rule for an argument that container
@@ -40,6 +44,9 @@ func TransferTo(container, h *Handle) {
 		return
 	}
 	adoptMu.Lock()
+	if _, ok := adoptions[container.ptr]; !ok {
+		adoptN.Add(1)
+	}
 	adoptions[container.ptr] = append(adoptions[container.ptr], adoption{child: h.ptr, serial: h.serial, class: h.class})
 	adoptMu.Unlock()
 }
@@ -47,9 +54,15 @@ func TransferTo(container, h *Handle) {
 // orphaned runs when the container at key is destroyed: what it took and
 // left without a parent is Go's again.
 func orphaned(key unsafe.Pointer) {
+	if adoptN.Load() == 0 {
+		return
+	}
 	adoptMu.Lock()
-	list := adoptions[key]
-	delete(adoptions, key)
+	list, ok := adoptions[key]
+	if ok {
+		delete(adoptions, key)
+		adoptN.Add(-1)
+	}
 	adoptMu.Unlock()
 	for _, a := range list {
 		regMu.Lock()

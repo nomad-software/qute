@@ -31,10 +31,11 @@ type finding struct {
 
 // vet runs the qute static checks:
 //
-//	owned-leak      an Owned object with signal connections, or a parentless
-//	                Go subclass, is never deleted, parented or shown (its
-//	                connections or Go value pin it forever)
-//	delete-handler  Delete() of a QObject inside a signal or event handler (use
+//	owned-leak      an Owned object with signal connections or per-object
+//	                overrides, or a parentless Go subclass, is never deleted,
+//	                parented or shown (its connections, overrides or Go value
+//	                pin it forever)
+//	delete-handler  Delete() of a QObject inside a signal, event or override handler (use
 //	                DeleteLater)
 //	gui-goroutine   Qt calls inside a goroutine (use qute.Post)
 //	scoped-escape   an event or painter argument stored past its callback
@@ -195,7 +196,15 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 	})
 }
 
-// handlerBodies yields closures passed to On* methods and bodies of methods
+// isOverrideSetter reports whether a generated method name is a per-object
+// override setter (OverrideKeyPressEvent), whose function is a handler and,
+// like a connection, Go state of the object.
+func isOverrideSetter(name string) bool {
+	return len(name) > len("Override") && strings.HasPrefix(name, "Override") &&
+		name[len("Override")] >= 'A' && name[len("Override")] <= 'Z'
+}
+
+// handlerBodies yields closures passed to On* and Override* methods and bodies of methods
 // that override a virtual on a type embedding a generated *Base. An override
 // is told by its name (an event handler) or by a parameter Qt hands over for
 // the call only: Paint(painter, option, widget) of a graphics item or a
@@ -205,7 +214,7 @@ func (v *vetter) handlerBodies(f *ast.File, visit func(body *ast.BlockStmt, para
 	ast.Inspect(f, func(n ast.Node) bool {
 		switch x := n.(type) {
 		case *ast.CallExpr:
-			if fn, name := v.qtMethod(x); fn != nil && strings.HasPrefix(name, "On") {
+			if fn, name := v.qtMethod(x); fn != nil && (strings.HasPrefix(name, "On") || isOverrideSetter(name)) {
 				for _, a := range x.Args {
 					if lit, ok := a.(*ast.FuncLit); ok {
 						visit(lit.Body, lit.Type.Params, name+" handler")
@@ -493,6 +502,8 @@ func (v *vetter) checkLeaks(f *ast.File) {
 							switch name := sel.Sel.Name; {
 							case strings.HasPrefix(name, "On"):
 								c.conns++
+							case isOverrideSetter(name) && !(len(x.Args) == 1 && isNilIdent(x.Args[0])):
+								c.conns++ // the function is the object's Go state, as a closure
 							case name == "Delete" || name == "DeleteLater" || name == "SetParent" || name == "Keep" ||
 								strings.HasPrefix(name, "Show"):
 								// a shown window is taken to live as long as the
@@ -546,17 +557,17 @@ func (v *vetter) checkLeaks(f *ast.File) {
 			case c.subclass:
 				v.report(c.id, "owned-leak", "%s is a parentless Go subclass, which stays pinned while it lives, but it is never deleted, parented or shown; call %s.Delete() when done or give it a parent", c.id.Name, c.id.Name)
 			case c.conns > 0:
-				v.report(c.id, "owned-leak", "%s is Owned and has signal connections, which pin it, but it is never deleted, parented or shown; call %s.Delete() when done or give it a parent", c.id.Name, c.id.Name)
+				v.report(c.id, "owned-leak", "%s is Owned and has signal connections or overrides, which pin it, but it is never deleted, parented or shown; call %s.Delete() when done or give it a parent", c.id.Name, c.id.Name)
 			}
 		}
 		return true
 	})
 }
 
-// objectOf returns the variable an expression hands on: x, &x, (x), or one
-// of x's embedded fields, which is x seen as one of its classes (a Go
-// subclass's wrapper, return s.QSplitter, d.list = l.QTreeWidget). Nil for
-// anything else.
+// objectOf returns the variable an expression hands on: x, &x, (x), one of
+// x's embedded fields or an As<Class>() upcast of x, which are x seen as one
+// of its classes (a Go subclass's wrapper, return s.QSplitter, d.list =
+// l.QTreeWidget, return s.AsQStyle()). Nil for anything else.
 func (v *vetter) objectOf(e ast.Expr) types.Object {
 	for {
 		switch x := e.(type) {
@@ -576,12 +587,25 @@ func (v *vetter) objectOf(e ast.Expr) types.Object {
 				return nil
 			}
 			e = x.X
+		case *ast.CallExpr:
+			// a generated upcast takes no arguments and returns the object
+			fn, name := v.qtMethod(x)
+			if fn == nil || len(x.Args) != 0 || !isUpcast(name) {
+				return nil
+			}
+			e = x.Fun.(*ast.SelectorExpr).X
 		case *ast.Ident:
 			return v.pkg.TypesInfo.Uses[x]
 		default:
 			return nil
 		}
 	}
+}
+
+// isUpcast reports whether a generated method name is an As<Class> upcast
+// (AsQStyle, AsQPaintDevice), not a method that merely starts with "As".
+func isUpcast(name string) bool {
+	return len(name) > 3 && strings.HasPrefix(name, "AsQ") && name[3] >= 'A' && name[3] <= 'Z'
 }
 
 // newOwned reports whether call is a generated constructor that makes an
@@ -611,4 +635,9 @@ func (v *vetter) newOwned(call *ast.CallExpr) (subclass, owned bool) {
 		}
 	}
 	return subclass, true
+}
+
+func isNilIdent(e ast.Expr) bool {
+	id, ok := e.(*ast.Ident)
+	return ok && id.Name == "nil"
 }

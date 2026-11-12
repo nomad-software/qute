@@ -44,7 +44,7 @@ func QFileIconProviderFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QFileIcon
 func NewQFileIconProvider() *QFileIconProvider {
 	rt.CheckThread("NewQFileIconProvider")
 	p := C.qute_QFileIconProvider_new()
-	h := rt.WrapNew[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned)
+	h := rt.WrapNewShim[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned, qFileIconProviderVTable, qFileIconProviderShimInit)
 	return rt.View[QFileIconProvider](h, p)
 }
 
@@ -55,12 +55,21 @@ var qFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon, qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			typeArg := qtgui.QAbstractFileIconProviderIconType(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Icon(qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon
-			}).Icon(typeArg)
+			var r = *new(*qtgui.QIcon)
+			if f, ok := v.(func(func(qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon, qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon); ok {
+				r = f((&QFileIconProviderSuper{this: rt.View[QFileIconProvider](h, h.Ptr())}).Icon, typeArg)
+			} else {
+				r = v.(interface {
+					Icon(qtgui.QAbstractFileIconProviderIconType) *qtgui.QIcon
+				}).Icon(typeArg)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QFileIconProvider.Icon")
 		}},
 	{Name: "IconFileInfo", Has: func(v any) bool {
@@ -69,12 +78,21 @@ var qFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QFileInfo) *qtgui.QIcon, *qtcore.QFileInfo) *qtgui.QIcon)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			info := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				IconFileInfo(*qtcore.QFileInfo) *qtgui.QIcon
-			}).IconFileInfo(info)
+			var r = *new(*qtgui.QIcon)
+			if f, ok := v.(func(func(*qtcore.QFileInfo) *qtgui.QIcon, *qtcore.QFileInfo) *qtgui.QIcon); ok {
+				r = f((&QFileIconProviderSuper{this: rt.View[QFileIconProvider](h, h.Ptr())}).IconFileInfo, info)
+			} else {
+				r = v.(interface {
+					IconFileInfo(*qtcore.QFileInfo) *qtgui.QIcon
+				}).IconFileInfo(info)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QFileIconProvider.IconFileInfo")
 		}},
 	{Name: "Type", Has: func(v any) bool {
@@ -83,12 +101,21 @@ var qFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QFileInfo) string, *qtcore.QFileInfo) string)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			fileInfo := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				Type(*qtcore.QFileInfo) string
-			}).Type(fileInfo)
+			var r = *new(string)
+			if f, ok := v.(func(func(*qtcore.QFileInfo) string, *qtcore.QFileInfo) string); ok {
+				r = f((&QFileIconProviderSuper{this: rt.View[QFileIconProvider](h, h.Ptr())}).Type, fileInfo)
+			} else {
+				r = v.(interface {
+					Type(*qtcore.QFileInfo) string
+				}).Type(fileInfo)
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "SetOptions", Has: func(v any) bool {
@@ -97,12 +124,20 @@ var qFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QAbstractFileIconProviderOptions), qtgui.QAbstractFileIconProviderOptions))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			options := qtgui.QAbstractFileIconProviderOptions(*(*C.int64_t)(a[0]))
-			v.(interface {
-				SetOptions(qtgui.QAbstractFileIconProviderOptions)
-			}).SetOptions(options)
+			if f, ok := v.(func(func(qtgui.QAbstractFileIconProviderOptions), qtgui.QAbstractFileIconProviderOptions)); ok {
+				f((&QFileIconProviderSuper{this: rt.View[QFileIconProvider](h, h.Ptr())}).SetOptions, options)
+			} else {
+				v.(interface {
+					SetOptions(qtgui.QAbstractFileIconProviderOptions)
+				}).SetOptions(options)
+			}
 		}},
 	{Name: "Options", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -110,13 +145,27 @@ var qFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func() qtgui.QAbstractFileIconProviderOptions) qtgui.QAbstractFileIconProviderOptions)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface {
-				Options() qtgui.QAbstractFileIconProviderOptions
-			}).Options()
+			var r = *new(qtgui.QAbstractFileIconProviderOptions)
+			if f, ok := v.(func(func() qtgui.QAbstractFileIconProviderOptions) qtgui.QAbstractFileIconProviderOptions); ok {
+				r = f((&QFileIconProviderSuper{this: rt.View[QFileIconProvider](h, h.Ptr())}).Options)
+			} else {
+				r = v.(interface {
+					Options() qtgui.QAbstractFileIconProviderOptions
+				}).Options()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
+}
+
+// qFileIconProviderShimInit sets a QFileIconProvider shim object's dispatch id and override mask.
+func qFileIconProviderShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QFileIconProvider_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QFileIconProviderBase is embedded in Go types that subclass QFileIconProvider:
@@ -193,7 +242,7 @@ func NewQFileIconProviderWith(v QFileIconProviderSubclass) *QFileIconProvider {
 		panic("NewQFileIconProviderWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QFileIconProvider_new_shim()
-	h := rt.WrapNew[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned)
+	h := rt.WrapNewShim[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned, qFileIconProviderVTable, qFileIconProviderShimInit)
 	base.QFileIconProvider = rt.View[QFileIconProvider](h, p)
 	id := h.SetSelf(v, qFileIconProviderVTable)
 	mask := rt.Mask(v, qFileIconProviderVTable)

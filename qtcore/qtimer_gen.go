@@ -67,7 +67,7 @@ func NewQTimer(parent QObjectLike) *QTimer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTimer](p, "QTimer", mode)
+	h := rt.WrapNewShim[QTimer](p, "QTimer", mode, qTimerVTable, qTimerShimInit)
 	return rt.View[QTimer](h, p)
 }
 
@@ -285,65 +285,107 @@ func (this *QTimer) OnTimeout(f func()) Connection {
 
 var qTimerVTable = []rt.Virtual{
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			timerEventP := *(*unsafe.Pointer)(a[0])
 			timerEventH := rt.WrapClass(timerEventP, "QTimerEvent", rt.NewScoped)
 			defer timerEventH.Expire()
 			timerEvent := rt.View[QTimerEvent](timerEventH, timerEventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(timerEvent)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).TimerEvent, timerEvent)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(timerEvent)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QTimerSuper{this: rt.View[QTimer](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qTimerShimInit sets a QTimer shim object's dispatch id and override mask.
+func qTimerShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QTimer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QTimerBase is embedded in Go types that subclass QTimer:
@@ -479,7 +521,7 @@ func NewQTimerWith(v QTimerSubclass, parent QObjectLike) *QTimer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTimer](p, "QTimer", mode)
+	h := rt.WrapNewShim[QTimer](p, "QTimer", mode, qTimerVTable, qTimerShimInit)
 	base.QTimer = rt.View[QTimer](h, p)
 	id := h.SetSelf(v, qTimerVTable)
 	mask := rt.Mask(v, qTimerVTable)

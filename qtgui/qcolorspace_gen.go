@@ -645,6 +645,20 @@ func (this *QColorSpace) WithTransferFunctionFull(transferFunction QColorSpaceTr
 	return rt.View[QColorSpace](rt.WrapClass(r, "QColorSpace", rt.TakeOwned), r)
 }
 
+// ToQVariant wraps the conversion QColorSpace::operator QVariant().
+//
+//	C++: QColorSpace::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcolorspace.html#operator-QVariant
+func (this *QColorSpace) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QColorSpace.ToQVariant")
+	r := C.qute_QColorSpace_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QColorSpaceFromIccProfile wraps QColorSpace::fromIccProfile.
 //
 //	C++: QColorSpace QColorSpace::fromIccProfile(const QByteArray & iccProfile)

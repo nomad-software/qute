@@ -76,6 +76,33 @@ func SubclassAliased() *qtwidgets.QWidget {
 	return w
 }
 
+// An As<Class>() upcast hands the object on like an embedded field
+// (a helper returning a style that its caller gives QApplication).
+func SubclassUpcastReturned() *qtwidgets.QWidget {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	return c.AsQWidget()
+}
+
+func SubclassUpcastStored(h *holder) {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	h.w = c.AsQWidget()
+}
+
+func SubclassUpcastInLiteral() holder {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	return holder{w: c.AsQWidget()}
+}
+
+// Calling a method that returns something else does not hand it on.
+func SubclassUpcastNotReturned() string {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil) // want owned-leak
+	return c.AsQWidget().ObjectName()
+}
+
 // A field that is not the object does not hand it on.
 type labelled struct {
 	qtwidgets.QWidgetBase
@@ -177,5 +204,28 @@ var painters []*qtgui.QPainter
 func PaintImage(img *qtgui.QImage) {
 	qtgui.PaintOn(img, func(p *qtgui.QPainter) {
 		painters = append(painters, p) // want scoped-escape
+	})
+}
+
+var lastKey *qtgui.QKeyEvent
+
+// A per-object override pins its object like a connection.
+func OverrideLeak() {
+	w := qtwidgets.NewQWidget(nil) // want owned-leak
+	w.OverrideKeyPressEvent(func(super func(*qtgui.QKeyEvent), e *qtgui.QKeyEvent) { super(e) })
+}
+
+// Removing it is not a reason to report.
+func OverrideRemoved() {
+	w := qtwidgets.NewQWidget(nil)
+	w.OverrideKeyPressEvent(nil)
+}
+
+// The function is a handler: its event is scoped and Delete() is refused.
+func OverrideHandler(parent *qtwidgets.QWidget) {
+	b := qtwidgets.NewQPushButtonWithText("x", parent)
+	b.OverrideKeyPressEvent(func(super func(*qtgui.QKeyEvent), e *qtgui.QKeyEvent) {
+		lastKey = e // want scoped-escape
+		b.Delete()  // want delete-handler
 	})
 }

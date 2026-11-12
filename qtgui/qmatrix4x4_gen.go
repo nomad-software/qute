@@ -717,3 +717,17 @@ func (this *QMatrix4x4) RotateAngleFloat32Full(angle float32, x float32, y float
 	C.qute_QMatrix4x4_rotate_3(self, C.float(angle), C.float(x), C.float(y), C.float(z))
 	runtime.KeepAlive(this)
 }
+
+// ToQVariant wraps the conversion QMatrix4x4::operator QVariant().
+//
+//	C++: QMatrix4x4::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qmatrix4x4.html#operator-QVariant
+func (this *QMatrix4x4) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QMatrix4x4.ToQVariant")
+	r := C.qute_QMatrix4x4_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

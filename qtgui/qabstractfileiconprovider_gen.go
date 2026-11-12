@@ -100,7 +100,7 @@ func (this *QAbstractFileIconProvider) Unkeep() {
 func NewQAbstractFileIconProvider() *QAbstractFileIconProvider {
 	rt.CheckThread("NewQAbstractFileIconProvider")
 	p := C.qute_QAbstractFileIconProvider_new()
-	h := rt.WrapNew[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned)
+	h := rt.WrapNewShim[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned, qAbstractFileIconProviderVTable, qAbstractFileIconProviderShimInit)
 	return rt.View[QAbstractFileIconProvider](h, p)
 }
 
@@ -176,12 +176,21 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractFileIconProviderIconType) *QIcon, QAbstractFileIconProviderIconType) *QIcon)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			iconType := QAbstractFileIconProviderIconType(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Icon(QAbstractFileIconProviderIconType) *QIcon
-			}).Icon(iconType)
+			var r = *new(*QIcon)
+			if f, ok := v.(func(func(QAbstractFileIconProviderIconType) *QIcon, QAbstractFileIconProviderIconType) *QIcon); ok {
+				r = f((&QAbstractFileIconProviderSuper{this: rt.View[QAbstractFileIconProvider](h, h.Ptr())}).Icon, iconType)
+			} else {
+				r = v.(interface {
+					Icon(QAbstractFileIconProviderIconType) *QIcon
+				}).Icon(iconType)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractFileIconProvider.Icon")
 		}},
 	{Name: "IconFileInfo", Has: func(v any) bool {
@@ -190,12 +199,21 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QFileInfo) *QIcon, *qtcore.QFileInfo) *QIcon)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			fileInfo := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				IconFileInfo(*qtcore.QFileInfo) *QIcon
-			}).IconFileInfo(fileInfo)
+			var r = *new(*QIcon)
+			if f, ok := v.(func(func(*qtcore.QFileInfo) *QIcon, *qtcore.QFileInfo) *QIcon); ok {
+				r = f((&QAbstractFileIconProviderSuper{this: rt.View[QAbstractFileIconProvider](h, h.Ptr())}).IconFileInfo, fileInfo)
+			} else {
+				r = v.(interface {
+					IconFileInfo(*qtcore.QFileInfo) *QIcon
+				}).IconFileInfo(fileInfo)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractFileIconProvider.IconFileInfo")
 		}},
 	{Name: "Type", Has: func(v any) bool {
@@ -204,12 +222,21 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QFileInfo) string, *qtcore.QFileInfo) string)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			fileInfo := rt.View[qtcore.QFileInfo](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFileInfo", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				Type(*qtcore.QFileInfo) string
-			}).Type(fileInfo)
+			var r = *new(string)
+			if f, ok := v.(func(func(*qtcore.QFileInfo) string, *qtcore.QFileInfo) string); ok {
+				r = f((&QAbstractFileIconProviderSuper{this: rt.View[QAbstractFileIconProvider](h, h.Ptr())}).Type, fileInfo)
+			} else {
+				r = v.(interface {
+					Type(*qtcore.QFileInfo) string
+				}).Type(fileInfo)
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "SetOptions", Has: func(v any) bool {
@@ -218,12 +245,20 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractFileIconProviderOptions), QAbstractFileIconProviderOptions))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			options := QAbstractFileIconProviderOptions(*(*C.int64_t)(a[0]))
-			v.(interface {
-				SetOptions(QAbstractFileIconProviderOptions)
-			}).SetOptions(options)
+			if f, ok := v.(func(func(QAbstractFileIconProviderOptions), QAbstractFileIconProviderOptions)); ok {
+				f((&QAbstractFileIconProviderSuper{this: rt.View[QAbstractFileIconProvider](h, h.Ptr())}).SetOptions, options)
+			} else {
+				v.(interface {
+					SetOptions(QAbstractFileIconProviderOptions)
+				}).SetOptions(options)
+			}
 		}},
 	{Name: "Options", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -231,13 +266,92 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func() QAbstractFileIconProviderOptions) QAbstractFileIconProviderOptions)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface {
-				Options() QAbstractFileIconProviderOptions
-			}).Options()
+			var r = *new(QAbstractFileIconProviderOptions)
+			if f, ok := v.(func(func() QAbstractFileIconProviderOptions) QAbstractFileIconProviderOptions); ok {
+				r = f((&QAbstractFileIconProviderSuper{this: rt.View[QAbstractFileIconProvider](h, h.Ptr())}).Options)
+			} else {
+				r = v.(interface {
+					Options() QAbstractFileIconProviderOptions
+				}).Options()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
+}
+
+// qAbstractFileIconProviderShimInit sets a QAbstractFileIconProvider shim object's dispatch id and override mask.
+func qAbstractFileIconProviderShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QAbstractFileIconProvider_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideIcon makes f this object's QAbstractFileIconProvider::icon: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Icon, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractFileIconProvider) OverrideIcon(f func(super func(iconType QAbstractFileIconProviderIconType) *QIcon, iconType QAbstractFileIconProviderIconType) *QIcon) {
+	rt.Override(unsafe.Pointer(this), "QAbstractFileIconProvider.OverrideIcon", "Icon", f)
+}
+
+// OverrideIconFileInfo makes f this object's QAbstractFileIconProvider::icon: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IconFileInfo, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractFileIconProvider) OverrideIconFileInfo(f func(super func(fileInfo *qtcore.QFileInfo) *QIcon, fileInfo *qtcore.QFileInfo) *QIcon) {
+	rt.Override(unsafe.Pointer(this), "QAbstractFileIconProvider.OverrideIconFileInfo", "IconFileInfo", f)
+}
+
+// OverrideType makes f this object's QAbstractFileIconProvider::type: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Type, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractFileIconProvider) OverrideType(f func(super func(fileInfo *qtcore.QFileInfo) string, fileInfo *qtcore.QFileInfo) string) {
+	rt.Override(unsafe.Pointer(this), "QAbstractFileIconProvider.OverrideType", "Type", f)
+}
+
+// OverrideSetOptions makes f this object's QAbstractFileIconProvider::setOptions: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetOptions, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractFileIconProvider) OverrideSetOptions(f func(super func(options QAbstractFileIconProviderOptions), options QAbstractFileIconProviderOptions)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractFileIconProvider.OverrideSetOptions", "SetOptions", f)
+}
+
+// OverrideOptions makes f this object's QAbstractFileIconProvider::options: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Options, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractFileIconProvider) OverrideOptions(f func(super func() QAbstractFileIconProviderOptions) QAbstractFileIconProviderOptions) {
+	rt.Override(unsafe.Pointer(this), "QAbstractFileIconProvider.OverrideOptions", "Options", f)
 }
 
 // QAbstractFileIconProviderBase is embedded in Go types that subclass QAbstractFileIconProvider:
@@ -318,7 +432,7 @@ func NewQAbstractFileIconProviderWith(v QAbstractFileIconProviderSubclass) *QAbs
 		panic("NewQAbstractFileIconProviderWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QAbstractFileIconProvider_new_shim()
-	h := rt.WrapNew[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned)
+	h := rt.WrapNewShim[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned, qAbstractFileIconProviderVTable, qAbstractFileIconProviderShimInit)
 	base.QAbstractFileIconProvider = rt.View[QAbstractFileIconProvider](h, p)
 	id := h.SetSelf(v, qAbstractFileIconProviderVTable)
 	mask := rt.Mask(v, qAbstractFileIconProviderVTable)

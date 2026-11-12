@@ -68,6 +68,7 @@ type Handle struct {
 	kind    Kind
 	inline  bool      // an inline value: its bytes are in Go memory (inline.go)
 	scoped  bool      // a scoped argument: Dead when its callback returns (keepMu)
+	shim    bool      // built as qute's shim subclass, so Go may override its virtuals (Override)
 	note    deathCode // why it died, when the reason is a common one (h.mu)
 	state   atomic.Uint32
 	pins    atomic.Int32
@@ -115,13 +116,35 @@ type handleExt struct {
 	holder   *Handle              // the root handle holding this one
 	anchored map[*Handle]struct{} // handles this root holds
 
-	// self is the Go value that overrides virtuals, vtable its generated
-	// dispatch table (set once by SetSelf, before Qt can dispatch)
-	self   any
-	vtable []Virtual
+	// sub is what a shim object dispatches its virtuals to: a Go subclass
+	// value or per-object overrides (nil for every other object, which
+	// keeps this extension small)
+	sub *subState
 
 	created string // call site of creation (debug builds)
 	died    string // call site of death (debug builds)
+}
+
+// subState is how a shim object's virtuals reach Go (guarded by Handle.mu
+// for writes; Dispatch reads it on the GUI thread, where it is written).
+type subState struct {
+	// self is the Go value that overrides virtuals, vtable the generated
+	// dispatch table (set once by SetSelf, before Qt can dispatch, or by
+	// the first Override)
+	self   any
+	vtable []Virtual
+	// overrides are per-object functions for virtuals, by vtable index
+	// (Override); a virtual the Go value defines cannot also be set here
+	overrides []any
+}
+
+// subLocked returns the handle's subState, making it (h.mu held).
+func (h *Handle) subLocked() *subState {
+	e := h.x()
+	if e.sub == nil {
+		e.sub = &subState{}
+	}
+	return e.sub
 }
 
 // memBytesNow is the external memory counted for the handle (memory.go),
@@ -182,6 +205,9 @@ func (h *Handle) State() State {
 // Class is the C++ class name the handle was created with.
 func (h *Handle) Class() string { return h.class }
 
+// Ptr returns the C++ object's address (the registry key).
+func (h *Handle) Ptr() unsafe.Pointer { return h.ptr }
+
 // Alive reports whether the C++ object still exists: it is not Dead, and no
 // object it depends on (the model of an index, the layout of an item) is.
 func (h *Handle) Alive() bool {
@@ -204,6 +230,18 @@ func Lookup(key unsafe.Pointer) *Handle {
 		return e.w.Value()
 	}
 	return nil
+}
+
+// lookupKnown returns the live handle registered for key, and whether key
+// has a registry entry at all: an entry whose handle was collected stays
+// until the object's death notice, so the object still reports its death.
+func lookupKnown(key unsafe.Pointer) (*Handle, bool) {
+	regMu.Lock()
+	defer regMu.Unlock()
+	if e, ok := registry[key]; ok {
+		return e.w.Value(), true
+	}
+	return nil, false
 }
 
 // WrapMode says what to do with the state of an already-wrapped object.
@@ -571,8 +609,8 @@ func (h *Handle) SetVisiblePin(visible bool) {
 // dispatches with.
 func (h *Handle) SetSelf(self any, vt []Virtual) uintptr {
 	h.mu.Lock()
-	h.x().self = self
-	h.x().vtable = vt
+	sub := h.subLocked()
+	sub.self, sub.vtable = self, vt
 	h.x().selfSlot = newSlot(h)
 	id := h.x().selfSlot
 	h.mu.Unlock()
@@ -594,8 +632,8 @@ func (h *Handle) GoValue() any {
 	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if e := h.ext.Load(); e != nil {
-		return e.self
+	if e := h.ext.Load(); e != nil && e.sub != nil {
+		return e.sub.self
 	}
 	return nil
 }
@@ -605,8 +643,8 @@ func (h *Handle) GoValue() any {
 func (h *Handle) Subclass() (any, []Virtual) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if e := h.ext.Load(); e != nil {
-		return e.self, e.vtable
+	if e := h.ext.Load(); e != nil && e.sub != nil {
+		return e.sub.self, e.sub.vtable
 	}
 	return nil, nil
 }
@@ -888,13 +926,19 @@ type classInfo struct {
 	parentedDelete string
 	// inline, when set, is the size of an inline value class (inline.go)
 	inline int
+	// vtable and shimInit, when set, are the dispatch table of the class's
+	// shim subclass and the function that sets a shim object's id and
+	// override mask: every constructor of the class builds the shim, so Go
+	// can override virtuals per object (RegisterShim, Override)
+	vtable   []Virtual
+	shimInit func(p unsafe.Pointer, id uintptr, mask *uint64)
 }
 
 var classes sync.Map // name -> classInfo
 
 // RegisterClass records how a generated class is tracked and freed.
 func RegisterClass(name string, kind Kind, deleter func(unsafe.Pointer)) {
-	classes.Store(name, classInfo{kind: kind, deleter: deleter})
+	storeClass(name, classInfo{kind: kind, deleter: deleter})
 }
 
 // RegisterBaseOfQObject records that the plain class name is a base of some
@@ -905,6 +949,13 @@ func RegisterClass(name string, kind Kind, deleter func(unsafe.Pointer)) {
 // of getting a second handle that never learns the object died.
 func RegisterBaseOfQObject(name string, toObject func(unsafe.Pointer) unsafe.Pointer) {
 	updateClass(name, func(ci *classInfo) { ci.toObject = toObject })
+}
+
+// RegisterShim records the dispatch table of class's shim subclass, and
+// init, which sets a shim object's dispatch id and override mask, for
+// Override. WrapNewShim calls it on the class's first construction.
+func RegisterShim(class string, vt []Virtual, init func(p unsafe.Pointer, id uintptr, mask *uint64)) {
+	updateClass(class, func(ci *classInfo) { ci.vtable, ci.shimInit = vt, init })
 }
 
 // RegisterParentedDelete says that a Parented object of class may not be
@@ -925,13 +976,9 @@ func parentedDeleteHint(class string) string {
 // updateClass changes the record of a class RegisterClass already made. It
 // runs from the generated init functions, which register a class first.
 func updateClass(name string, f func(*classInfo)) {
-	v, ok := classes.Load(name)
-	if !ok {
+	if !changeClass(name, f) {
 		panic("qute: class " + name + " is updated before RegisterClass")
 	}
-	ci := v.(classInfo)
-	f(&ci)
-	classes.Store(name, ci)
 }
 
 // WrapClass is Wrap for a registered class.
@@ -939,11 +986,10 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	if p == nil {
 		return nil
 	}
-	v, ok := classes.Load(class)
+	ci, ok := classOf(class)
 	if !ok {
 		panic("qute: class " + class + " is not registered")
 	}
-	ci := v.(classInfo)
 	kind := ci.kind
 	if ci.inline > 0 {
 		switch mode {
@@ -980,12 +1026,18 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 		// the handler returns must not kill the caller's handle.
 		//
 		// Only objects built by our shim constructors report their death, so
-		// only those may be registered. Others get a fresh plain handle.
-		if h := Lookup(p); h != nil {
+		// only those may be registered. Others get a fresh plain handle. One
+		// whose registry entry outlived its collected Go handle is still a
+		// shim that will report its death: it gets a new registered handle
+		// (wrap), never a plain one, which would outlive the object.
+		h, known := lookupKnown(p)
+		if h != nil {
 			h.retake(mode)
 			return h
 		}
-		kind = KindPlain
+		if !known {
+			kind = KindPlain
+		}
 	}
 	return Wrap(p, class, kind, mode, ci.deleter)
 }
@@ -997,11 +1049,10 @@ func WrapNew[T any](p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	if p == nil {
 		return nil
 	}
-	v, ok := classes.Load(class)
+	ci, ok := classOf(class)
 	if !ok {
 		panic("qute: class " + class + " is not registered")
 	}
-	ci := v.(classInfo)
 	if ci.inline > 0 || (mode != NewOwned && mode != NewParented) {
 		return WrapClass(p, class, mode)
 	}
@@ -1017,12 +1068,30 @@ func WrapNew[T any](p unsafe.Pointer, class string, mode WrapMode) *Handle {
 
 // wrapNew wraps an object a constructor just made, in fresh when it is not
 // nil and the handle is new (WrapNew), and counts the memory of an Owned one.
-func wrapNew(p unsafe.Pointer, class string, ci classInfo, mode WrapMode, fresh *Handle) *Handle {
+func wrapNew(p unsafe.Pointer, class string, ci *classInfo, mode WrapMode, fresh *Handle) *Handle {
 	if mode == NewParented {
 		return wrap(p, class, ci.kind, TakeParented, ci.deleter, fresh)
 	}
 	h := wrap(p, class, ci.kind, TakeOwned, ci.deleter, fresh)
 	trackNew(h, ci)
+	return h
+}
+
+// WrapNewShim is WrapNew for a constructor that built the class's shim
+// subclass: the object takes per-object overrides (Override). vt and init
+// are the class's dispatch table and shim initialiser; the first such
+// constructor registers them (RegisterShim). Passing them here, rather than
+// registering every class at init, lets the linker drop the dispatch tables
+// of the classes a program never constructs.
+func WrapNewShim[T any](p unsafe.Pointer, class string, mode WrapMode, vt []Virtual, init func(p unsafe.Pointer, id uintptr, mask *uint64)) *Handle {
+	if p == nil {
+		return nil
+	}
+	if ci, ok := classOf(class); !ok || ci.shimInit == nil {
+		RegisterShim(class, vt, init)
+	}
+	h := WrapNew[T](p, class, mode)
+	h.shim = true // a new handle, not yet shared
 	return h
 }
 

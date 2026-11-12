@@ -331,3 +331,17 @@ func (this *QBrush) IsOpaque() bool {
 	runtime.KeepAlive(this)
 	return bool(r)
 }
+
+// ToQVariant wraps the conversion QBrush::operator QVariant().
+//
+//	C++: QBrush::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbrush.html#operator-QVariant
+func (this *QBrush) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QBrush.ToQVariant")
+	r := C.qute_QBrush_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

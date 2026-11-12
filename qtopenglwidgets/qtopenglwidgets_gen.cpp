@@ -617,11 +617,11 @@ const char *qute_qtopenglwidgets_check_layout(void) {
 // ---- QOpenGLWidget
 void * qute_QOpenGLWidget_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QOpenGLWidget *>(new QOpenGLWidget(static_cast<QWidget *>(a0)));
+	return static_cast<QOpenGLWidget *>(new qute_QOpenGLWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QOpenGLWidget_new_1(void * a0, int64_t a1) {
 	qute_gui_only();
-	return static_cast<QOpenGLWidget *>(new QOpenGLWidget(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
+	return static_cast<QOpenGLWidget *>(new qute_QOpenGLWidget(static_cast<QWidget *>(a0), QFlags<Qt::WindowType>::fromInt(static_cast<QFlags<Qt::WindowType>::Int>(a1))));
 }
 void * qute_QOpenGLWidget_new_shim(void * a0) {
 	qute_gui_only();

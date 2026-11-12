@@ -137,3 +137,17 @@ func (this *QTextLength) RawValue() float64 {
 	runtime.KeepAlive(this)
 	return float64(r)
 }
+
+// ToQVariant wraps the conversion QTextLength::operator QVariant().
+//
+//	C++: QTextLength::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextlength.html#operator-QVariant
+func (this *QTextLength) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QTextLength.ToQVariant")
+	r := C.qute_QTextLength_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

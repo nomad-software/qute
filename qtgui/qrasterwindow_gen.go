@@ -67,7 +67,7 @@ func NewQRasterWindow(parent QWindowLike) *QRasterWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QRasterWindow](p, "QRasterWindow", mode)
+	h := rt.WrapNewShim[QRasterWindow](p, "QRasterWindow", mode, qRasterWindowVTable, qRasterWindowShimInit)
 	return rt.View[QRasterWindow](h, p)
 }
 
@@ -78,209 +78,338 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QPaintDevicePaintDeviceMetric) int, QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metric := QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(QPaintDevicePaintDeviceMetric) int
-			}).Metric(metric)
+			var r = *new(int)
+			if f, ok := v.(func(func(QPaintDevicePaintDeviceMetric) int, QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).Metric, metric)
+			} else {
+				r = v.(interface {
+					Metric(QPaintDevicePaintDeviceMetric) int
+				}).Metric(metric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QResizeEvent), *QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QResizeEvent](eventH, eventP)
-			v.(interface{ ResizeEvent(*QResizeEvent) }).ResizeEvent(event)
+			if f, ok := v.(func(func(*QResizeEvent), *QResizeEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).ResizeEvent, event)
+			} else {
+				v.(interface{ ResizeEvent(*QResizeEvent) }).ResizeEvent(event)
+			}
 		}},
 	{Name: "ExposeEvent", Has: func(v any) bool { _, ok := v.(interface{ ExposeEvent(*QExposeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QExposeEvent), *QExposeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			exposeEventP := *(*unsafe.Pointer)(a[0])
 			exposeEventH := rt.WrapClass(exposeEventP, "QExposeEvent", rt.NewScoped)
 			defer exposeEventH.Expire()
 			exposeEvent := rt.View[QExposeEvent](exposeEventH, exposeEventP)
-			v.(interface{ ExposeEvent(*QExposeEvent) }).ExposeEvent(exposeEvent)
+			if f, ok := v.(func(func(*QExposeEvent), *QExposeEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).ExposeEvent, exposeEvent)
+			} else {
+				v.(interface{ ExposeEvent(*QExposeEvent) }).ExposeEvent(exposeEvent)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QPaintEvent), *QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QPaintEvent](eventH, eventP)
-			v.(interface{ PaintEvent(*QPaintEvent) }).PaintEvent(event)
+			if f, ok := v.(func(func(*QPaintEvent), *QPaintEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).PaintEvent, event)
+			} else {
+				v.(interface{ PaintEvent(*QPaintEvent) }).PaintEvent(event)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SurfaceType", Has: func(v any) bool { _, ok := v.(interface{ SurfaceType() QSurfaceSurfaceType }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() QSurfaceSurfaceType) QSurfaceSurfaceType); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SurfaceType() QSurfaceSurfaceType }).SurfaceType()
+			var r = *new(QSurfaceSurfaceType)
+			if f, ok := v.(func(func() QSurfaceSurfaceType) QSurfaceSurfaceType); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).SurfaceType)
+			} else {
+				r = v.(interface{ SurfaceType() QSurfaceSurfaceType }).SurfaceType()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Format", Has: func(v any) bool { _, ok := v.(interface{ Format() *QSurfaceFormat }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QSurfaceFormat) *QSurfaceFormat); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Format() *QSurfaceFormat }).Format()
+			var r = *new(*QSurfaceFormat)
+			if f, ok := v.(func(func() *QSurfaceFormat) *QSurfaceFormat); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).Format)
+			} else {
+				r = v.(interface{ Format() *QSurfaceFormat }).Format()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QRasterWindow.Format")
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Size() qtcore.QSize }).Size()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).Size)
+			} else {
+				r = v.(interface{ Size() qtcore.QSize }).Size()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "FocusObject", Has: func(v any) bool { _, ok := v.(interface{ FocusObject() *qtcore.QObject }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ FocusObject() *qtcore.QObject }).FocusObject()
+			var r = *new(*qtcore.QObject)
+			if f, ok := v.(func(func() *qtcore.QObject) *qtcore.QObject); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).FocusObject)
+			} else {
+				r = v.(interface{ FocusObject() *qtcore.QObject }).FocusObject()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QRasterWindow.FocusObject")
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMoveEvent), *QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			moveEventP := *(*unsafe.Pointer)(a[0])
 			moveEventH := rt.WrapClass(moveEventP, "QMoveEvent", rt.NewScoped)
 			defer moveEventH.Expire()
 			moveEvent := rt.View[QMoveEvent](moveEventH, moveEventP)
-			v.(interface{ MoveEvent(*QMoveEvent) }).MoveEvent(moveEvent)
+			if f, ok := v.(func(func(*QMoveEvent), *QMoveEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).MoveEvent, moveEvent)
+			} else {
+				v.(interface{ MoveEvent(*QMoveEvent) }).MoveEvent(moveEvent)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
 			focusEventH := rt.WrapClass(focusEventP, "QFocusEvent", rt.NewScoped)
 			defer focusEventH.Expire()
 			focusEvent := rt.View[QFocusEvent](focusEventH, focusEventP)
-			v.(interface{ FocusInEvent(*QFocusEvent) }).FocusInEvent(focusEvent)
+			if f, ok := v.(func(func(*QFocusEvent), *QFocusEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).FocusInEvent, focusEvent)
+			} else {
+				v.(interface{ FocusInEvent(*QFocusEvent) }).FocusInEvent(focusEvent)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
 			focusEventH := rt.WrapClass(focusEventP, "QFocusEvent", rt.NewScoped)
 			defer focusEventH.Expire()
 			focusEvent := rt.View[QFocusEvent](focusEventH, focusEventP)
-			v.(interface{ FocusOutEvent(*QFocusEvent) }).FocusOutEvent(focusEvent)
+			if f, ok := v.(func(func(*QFocusEvent), *QFocusEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).FocusOutEvent, focusEvent)
+			} else {
+				v.(interface{ FocusOutEvent(*QFocusEvent) }).FocusOutEvent(focusEvent)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QShowEvent), *QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
 			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
 			defer showEventH.Expire()
 			showEvent := rt.View[QShowEvent](showEventH, showEventP)
-			v.(interface{ ShowEvent(*QShowEvent) }).ShowEvent(showEvent)
+			if f, ok := v.(func(func(*QShowEvent), *QShowEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).ShowEvent, showEvent)
+			} else {
+				v.(interface{ ShowEvent(*QShowEvent) }).ShowEvent(showEvent)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QHideEvent), *QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			hideEventP := *(*unsafe.Pointer)(a[0])
 			hideEventH := rt.WrapClass(hideEventP, "QHideEvent", rt.NewScoped)
 			defer hideEventH.Expire()
 			hideEvent := rt.View[QHideEvent](hideEventH, hideEventP)
-			v.(interface{ HideEvent(*QHideEvent) }).HideEvent(hideEvent)
+			if f, ok := v.(func(func(*QHideEvent), *QHideEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).HideEvent, hideEvent)
+			} else {
+				v.(interface{ HideEvent(*QHideEvent) }).HideEvent(hideEvent)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QCloseEvent), *QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
 			closeEventH := rt.WrapClass(closeEventP, "QCloseEvent", rt.NewScoped)
 			defer closeEventH.Expire()
 			closeEvent := rt.View[QCloseEvent](closeEventH, closeEventP)
-			v.(interface{ CloseEvent(*QCloseEvent) }).CloseEvent(closeEvent)
+			if f, ok := v.(func(func(*QCloseEvent), *QCloseEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).CloseEvent, closeEvent)
+			} else {
+				v.(interface{ CloseEvent(*QCloseEvent) }).CloseEvent(closeEvent)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
 			keyEventH := rt.WrapClass(keyEventP, "QKeyEvent", rt.NewScoped)
 			defer keyEventH.Expire()
 			keyEvent := rt.View[QKeyEvent](keyEventH, keyEventP)
-			v.(interface{ KeyPressEvent(*QKeyEvent) }).KeyPressEvent(keyEvent)
+			if f, ok := v.(func(func(*QKeyEvent), *QKeyEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).KeyPressEvent, keyEvent)
+			} else {
+				v.(interface{ KeyPressEvent(*QKeyEvent) }).KeyPressEvent(keyEvent)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
 			keyEventH := rt.WrapClass(keyEventP, "QKeyEvent", rt.NewScoped)
 			defer keyEventH.Expire()
 			keyEvent := rt.View[QKeyEvent](keyEventH, keyEventP)
-			v.(interface{ KeyReleaseEvent(*QKeyEvent) }).KeyReleaseEvent(keyEvent)
+			if f, ok := v.(func(func(*QKeyEvent), *QKeyEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).KeyReleaseEvent, keyEvent)
+			} else {
+				v.(interface{ KeyReleaseEvent(*QKeyEvent) }).KeyReleaseEvent(keyEvent)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MousePressEvent(*QMouseEvent) }).MousePressEvent(mouseEvent)
+			if f, ok := v.(func(func(*QMouseEvent), *QMouseEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).MousePressEvent, mouseEvent)
+			} else {
+				v.(interface{ MousePressEvent(*QMouseEvent) }).MousePressEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseReleaseEvent(*QMouseEvent) }).MouseReleaseEvent(mouseEvent)
+			if f, ok := v.(func(func(*QMouseEvent), *QMouseEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).MouseReleaseEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseReleaseEvent(*QMouseEvent) }).MouseReleaseEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseDoubleClickEvent(*QMouseEvent) }).MouseDoubleClickEvent(mouseEvent)
+			if f, ok := v.(func(func(*QMouseEvent), *QMouseEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).MouseDoubleClickEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*QMouseEvent) }).MouseDoubleClickEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseMoveEvent(*QMouseEvent) }).MouseMoveEvent(mouseEvent)
+			if f, ok := v.(func(func(*QMouseEvent), *QMouseEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).MouseMoveEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseMoveEvent(*QMouseEvent) }).MouseMoveEvent(mouseEvent)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWheelEvent), *QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
 			wheelEventH := rt.WrapClass(wheelEventP, "QWheelEvent", rt.NewScoped)
 			defer wheelEventH.Expire()
 			wheelEvent := rt.View[QWheelEvent](wheelEventH, wheelEventP)
-			v.(interface{ WheelEvent(*QWheelEvent) }).WheelEvent(wheelEvent)
+			if f, ok := v.(func(func(*QWheelEvent), *QWheelEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).WheelEvent, wheelEvent)
+			} else {
+				v.(interface{ WheelEvent(*QWheelEvent) }).WheelEvent(wheelEvent)
+			}
 		}},
 	{Name: "TouchEvent", Has: func(v any) bool { _, ok := v.(interface{ TouchEvent(*QTouchEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTouchEvent), *QTouchEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			touchEventP := *(*unsafe.Pointer)(a[0])
 			touchEventH := rt.WrapClass(touchEventP, "QTouchEvent", rt.NewScoped)
 			defer touchEventH.Expire()
 			touchEvent := rt.View[QTouchEvent](touchEventH, touchEventP)
-			v.(interface{ TouchEvent(*QTouchEvent) }).TouchEvent(touchEvent)
+			if f, ok := v.(func(func(*QTouchEvent), *QTouchEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).TouchEvent, touchEvent)
+			} else {
+				v.(interface{ TouchEvent(*QTouchEvent) }).TouchEvent(touchEvent)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTabletEvent), *QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			tabletEventP := *(*unsafe.Pointer)(a[0])
 			tabletEventH := rt.WrapClass(tabletEventP, "QTabletEvent", rt.NewScoped)
 			defer tabletEventH.Expire()
 			tabletEvent := rt.View[QTabletEvent](tabletEventH, tabletEventP)
-			v.(interface{ TabletEvent(*QTabletEvent) }).TabletEvent(tabletEvent)
+			if f, ok := v.(func(func(*QTabletEvent), *QTabletEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).TabletEvent, tabletEvent)
+			} else {
+				v.(interface{ TabletEvent(*QTabletEvent) }).TabletEvent(tabletEvent)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -288,13 +417,22 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -306,57 +444,109 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QRasterWindowSuper{this: rt.View[QRasterWindow](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qRasterWindowShimInit sets a QRasterWindow shim object's dispatch id and override mask.
+func qRasterWindowShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QRasterWindow_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideMetric makes f this object's QRasterWindow::metric: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Metric, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QRasterWindow) OverrideMetric(f func(super func(metric QPaintDevicePaintDeviceMetric) int, metric QPaintDevicePaintDeviceMetric) int) {
+	rt.Override(unsafe.Pointer(this), "QRasterWindow.OverrideMetric", "Metric", f)
 }
 
 // QRasterWindowBase is embedded in Go types that subclass QRasterWindow:
@@ -779,7 +969,7 @@ func NewQRasterWindowWith(v QRasterWindowSubclass, parent QWindowLike) *QRasterW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QRasterWindow](p, "QRasterWindow", mode)
+	h := rt.WrapNewShim[QRasterWindow](p, "QRasterWindow", mode, qRasterWindowVTable, qRasterWindowShimInit)
 	base.QRasterWindow = rt.View[QRasterWindow](h, p)
 	id := h.SetSelf(v, qRasterWindowVTable)
 	mask := rt.Mask(v, qRasterWindowVTable)

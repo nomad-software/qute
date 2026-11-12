@@ -42,7 +42,7 @@ func QSvgGeneratorFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSvgGenerator
 func NewQSvgGenerator() *QSvgGenerator {
 	rt.CheckThread("NewQSvgGenerator")
 	p := C.qute_QSvgGenerator_new()
-	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNewShim[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned, qSvgGeneratorVTable, qSvgGeneratorShimInit)
 	return rt.View[QSvgGenerator](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQSvgGenerator() *QSvgGenerator {
 func NewQSvgGeneratorWithSvgVersion(version QSvgGeneratorSvgVersion) *QSvgGenerator {
 	rt.CheckThread("NewQSvgGeneratorWithSvgVersion")
 	p := C.qute_QSvgGenerator_new_1(C.int64_t(version))
-	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNewShim[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned, qSvgGeneratorVTable, qSvgGeneratorShimInit)
 	return rt.View[QSvgGenerator](h, p)
 }
 
@@ -274,14 +274,41 @@ var qSvgGeneratorVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(metric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QSvgGeneratorSuper{this: rt.View[QSvgGenerator](h, h.Ptr())}).Metric, metric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(metric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
+}
+
+// qSvgGeneratorShimInit sets a QSvgGenerator shim object's dispatch id and override mask.
+func qSvgGeneratorShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QSvgGenerator_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideMetric makes f this object's QSvgGenerator::metric: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Metric, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QSvgGenerator) OverrideMetric(f func(super func(metric qtgui.QPaintDevicePaintDeviceMetric) int, metric qtgui.QPaintDevicePaintDeviceMetric) int) {
+	rt.Override(unsafe.Pointer(this), "QSvgGenerator.OverrideMetric", "Metric", f)
 }
 
 // QSvgGeneratorBase is embedded in Go types that subclass QSvgGenerator:
@@ -334,7 +361,7 @@ func NewQSvgGeneratorWith(v QSvgGeneratorSubclass) *QSvgGenerator {
 		panic("NewQSvgGeneratorWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSvgGenerator_new_shim()
-	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNewShim[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned, qSvgGeneratorVTable, qSvgGeneratorShimInit)
 	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
 	id := h.SetSelf(v, qSvgGeneratorVTable)
 	mask := rt.Mask(v, qSvgGeneratorVTable)
@@ -357,7 +384,7 @@ func NewQSvgGeneratorWithSvgVersionWith(v QSvgGeneratorSubclass, version QSvgGen
 		panic("NewQSvgGeneratorWithSvgVersionWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSvgGenerator_new_shim_1(C.int64_t(version))
-	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNewShim[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned, qSvgGeneratorVTable, qSvgGeneratorShimInit)
 	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
 	id := h.SetSelf(v, qSvgGeneratorVTable)
 	mask := rt.Mask(v, qSvgGeneratorVTable)

@@ -693,6 +693,20 @@ func (this *QTransform) RotateRadiansFull(aArg float64, axis qtcore.Axis) *QTran
 	return this
 }
 
+// ToQVariant wraps the conversion QTransform::operator QVariant().
+//
+//	C++: QTransform::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtransform.html#operator-QVariant
+func (this *QTransform) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QTransform.ToQVariant")
+	r := C.qute_QTransform_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QTransformSquareToQuad wraps QTransform::squareToQuad.
 //
 //	C++: bool QTransform::squareToQuad(const QPolygonF & square, QTransform & result)

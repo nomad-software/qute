@@ -191,12 +191,21 @@ var qGestureRecognizerVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject) *QGesture, *qtcore.QObject) *QGesture)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			target := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				Create(*qtcore.QObject) *QGesture
-			}).Create(target)
+			var r = *new(*QGesture)
+			if f, ok := v.(func(func(*qtcore.QObject) *QGesture, *qtcore.QObject) *QGesture); ok {
+				r = f((&QGestureRecognizerSuper{this: rt.View[QGestureRecognizer](h, h.Ptr())}).Create, target)
+			} else {
+				r = v.(interface {
+					Create(*qtcore.QObject) *QGesture
+				}).Create(target)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGestureRecognizer.Create")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
@@ -208,7 +217,11 @@ var qGestureRecognizerVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult, *QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			state := rt.View[QGesture](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGesture", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
@@ -216,17 +229,71 @@ var qGestureRecognizerVTable = []rt.Virtual{
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				Recognize(*QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult
-			}).Recognize(state, watched, event)
+			var r = *new(QGestureRecognizerResult)
+			if f, ok := v.(func(func(*QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult, *QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult); ok {
+				r = f(nil, state, watched, event)
+			} else {
+				r = v.(interface {
+					Recognize(*QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult
+				}).Recognize(state, watched, event)
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset(*QGesture) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QGesture), *QGesture)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			state := rt.View[QGesture](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGesture", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ Reset(*QGesture) }).Reset(state)
+			if f, ok := v.(func(func(*QGesture), *QGesture)); ok {
+				f((&QGestureRecognizerSuper{this: rt.View[QGestureRecognizer](h, h.Ptr())}).Reset, state)
+			} else {
+				v.(interface{ Reset(*QGesture) }).Reset(state)
+			}
 		}},
+}
+
+// qGestureRecognizerShimInit sets a QGestureRecognizer shim object's dispatch id and override mask.
+func qGestureRecognizerShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGestureRecognizer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideCreate makes f this object's QGestureRecognizer::create: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Create, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGestureRecognizer) OverrideCreate(f func(super func(target *qtcore.QObject) *QGesture, target *qtcore.QObject) *QGesture) {
+	rt.Override(unsafe.Pointer(this), "QGestureRecognizer.OverrideCreate", "Create", f)
+}
+
+// OverrideRecognize makes f this object's QGestureRecognizer::recognize: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Recognize, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGestureRecognizer) OverrideRecognize(f func(super func(state *QGesture, watched *qtcore.QObject, event *qtcore.QEvent) QGestureRecognizerResult, state *QGesture, watched *qtcore.QObject, event *qtcore.QEvent) QGestureRecognizerResult) {
+	rt.Override(unsafe.Pointer(this), "QGestureRecognizer.OverrideRecognize", "Recognize", f)
+}
+
+// OverrideReset makes f this object's QGestureRecognizer::reset: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Reset, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGestureRecognizer) OverrideReset(f func(super func(state *QGesture), state *QGesture)) {
+	rt.Override(unsafe.Pointer(this), "QGestureRecognizer.OverrideReset", "Reset", f)
 }
 
 // QGestureRecognizerBase is embedded in Go types that subclass QGestureRecognizer:
@@ -289,7 +356,7 @@ func NewQGestureRecognizerWith(v QGestureRecognizerSubclass) *QGestureRecognizer
 		panic("NewQGestureRecognizerWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QGestureRecognizer_new_shim()
-	h := rt.WrapNew[QGestureRecognizer](p, "QGestureRecognizer", rt.NewOwned)
+	h := rt.WrapNewShim[QGestureRecognizer](p, "QGestureRecognizer", rt.NewOwned, qGestureRecognizerVTable, qGestureRecognizerShimInit)
 	base.QGestureRecognizer = rt.View[QGestureRecognizer](h, p)
 	id := h.SetSelf(v, qGestureRecognizerVTable)
 	mask := rt.Mask(v, qGestureRecognizerVTable)

@@ -33,6 +33,7 @@ classes:
   QIntValidator: {}
   QDoubleValidator: {}
   QTextDocument: {}
+  QAbstractTextDocumentLayout: { no-construct: true }
   QInputEvent: { kind: event }
   QPointerEvent: { kind: event }
   QSinglePointEvent: { kind: event }
@@ -138,6 +139,8 @@ classes:
         cpp: $self->firstCursorPosition().document()
   "QTextOption::Tab": { kind: value }
   "QColorSpace::PrimaryPoints": { kind: value }
+  "QAbstractTextDocumentLayout::PaintContext": { kind: value }
+  "QAbstractTextDocumentLayout::Selection": { kind: value }
   QRgba64: { kind: value }
   QImageIOHandler: { enums-only: true }
   QOpenGLContext: {}

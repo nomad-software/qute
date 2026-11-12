@@ -668,3 +668,17 @@ func (this *QPalette) SetResolveMask(maskArg uint64) {
 	C.qute_QPalette_setResolveMask(self, C.ulonglong(maskArg))
 	runtime.KeepAlive(this)
 }
+
+// ToQVariant wraps the conversion QPalette::operator QVariant().
+//
+//	C++: QPalette::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpalette.html#operator-QVariant
+func (this *QPalette) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QPalette.ToQVariant")
+	r := C.qute_QPalette_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

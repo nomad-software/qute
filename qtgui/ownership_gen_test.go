@@ -22,6 +22,30 @@ func TestLayout(t *testing.T) {
 	}
 }
 
+// void QAbstractTextDocumentLayout::setPaintDevice(QPaintDevice * device) (test from the overlay)
+func TestOwnership_QAbstractTextDocumentLayout_SetPaintDevice(t *testing.T) {
+	qutetest.Run(t, func() {
+		doc := qtgui.NewQTextDocumentWithText("hello", nil)
+		lay := doc.DocumentLayout()
+		img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 10, Height: 10}, qtgui.QImageFormat_ARGB32)
+		lay.SetPaintDevice(img)
+		if !rt.KeepsArg(unsafe.Pointer(lay), unsafe.Pointer(img)) {
+			t.Error("device: not kept by the layout")
+		}
+		if lay.PaintDevice() == nil {
+			t.Error("PaintDevice: nil after SetPaintDevice")
+		}
+		lay.SetPaintDevice(nil)
+		if rt.KeepsArg(unsafe.Pointer(lay), unsafe.Pointer(img)) {
+			t.Error("device: still kept after SetPaintDevice(nil)")
+		}
+		doc.Delete()
+		if lay.Alive() {
+			t.Error("layout alive after its document was deleted")
+		}
+	})
+}
+
 // QAction::QAction(QObject * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQAction(t *testing.T) {
 	qutetest.Run(t, func() {

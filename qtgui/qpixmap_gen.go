@@ -704,6 +704,20 @@ func (this *QPixmap) ScrollFull(dx int, dy int, rect qtcore.QRect, exposed *QReg
 	runtime.KeepAlive(exposed)
 }
 
+// ToQVariant wraps the conversion QPixmap::operator QVariant().
+//
+//	C++: QPixmap::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpixmap.html#operator-QVariant
+func (this *QPixmap) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QPixmap.ToQVariant")
+	r := C.qute_QPixmap_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QPixmapDefaultDepth wraps QPixmap::defaultDepth.
 //
 //	C++: int QPixmap::defaultDepth()

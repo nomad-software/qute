@@ -116,7 +116,6 @@ var deliberateBases = map[string]string{
 	"_IO_FILE":                    "C FILE*; use the QFile name or file-descriptor overloads",
 	"QModelRoleDataSpan":          "a batching optimisation of data(); use Data",
 	"QAbstractUndoItem":           "custom undo items need C++ subclassing",
-	"QAbstractTextDocumentLayout": "custom text layouts need C++ subclassing",
 	"QPermission":                 "a templated API",
 	"QLatin1String":               "use the string overload",
 	"QFunctionPointer":            "C function pointer",

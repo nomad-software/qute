@@ -260,3 +260,52 @@ func TestDefaultedOutParameters(t *testing.T) {
 		}
 	})
 }
+
+// Classes with Qt's operator QVariant() get ToQVariant, and NewQVariantOf
+// accepts any of them (a QTextFormat for an input method's preedit colour).
+func TestConversionsToVariant(t *testing.T) {
+	qutetest.Run(t, func() {
+		cf := qtgui.NewQTextCharFormat()
+		cf.SetForeground(qtgui.NewQBrushWithColor(qtgui.RGB(255, 0, 0)))
+		for name, v := range map[string]interface{ ToQVariant() *qtcore.QVariant }{
+			"QTextFormat": cf.AsQTextFormat(),
+			"QTextLength": qtgui.NewQTextLengthWithType(qtgui.QTextLengthFixedLength, 3),
+			"QMatrix4x4":  qtgui.NewQMatrix4x4(),
+			"QVector2D":   qtgui.NewQVector2D(),
+			"QSizePolicy": qtwidgets.NewQSizePolicy(),
+		} {
+			if got := v.ToQVariant().TypeName(); got != name {
+				t.Errorf("%s.ToQVariant().TypeName() = %q", name, got)
+			}
+			if got := qtgui.NewQVariantOf(v).TypeName(); got != name {
+				t.Errorf("qtgui.NewQVariantOf(%s).TypeName() = %q", name, got)
+			}
+			if got := qtcore.NewQVariantOf(v).TypeName(); got != name {
+				t.Errorf("qtcore.NewQVariantOf(%s).TypeName() = %q", name, got)
+			}
+		}
+		var none *qtgui.QTextFormat
+		if qtcore.NewQVariantOf(none).IsValid() {
+			t.Error("a nil *QTextFormat gave a valid variant")
+		}
+
+		// the preedit text an input method shows, coloured by its format
+		e := qtwidgets.NewQLineEdit(nil)
+		defer e.Delete()
+		e.Resize(200, 40)
+		e.SetFont(qtgui.NewQFontWithFamily("Monospace"))
+		attr := qtgui.NewQInputMethodEventAttributeWithValue(qtgui.QInputMethodEventTextFormat, 0, 8, cf.ToQVariant())
+		ev := qtgui.NewQInputMethodEventWithPreeditText("WWWWWWWW", []*qtgui.QInputMethodEventAttribute{attr})
+		qtcore.QCoreApplicationSendEvent(e, ev)
+		img := qute.Screenshot(e)
+		red := 0
+		for i := 0; i < len(img.Pix); i += 4 {
+			if r, g, b := img.Pix[i], img.Pix[i+1], img.Pix[i+2]; r > 150 && g < 80 && b < 80 {
+				red++
+			}
+		}
+		if red == 0 {
+			t.Error("the preedit text was not drawn in its format's red")
+		}
+	})
+}

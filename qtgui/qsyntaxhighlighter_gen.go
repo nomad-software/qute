@@ -107,19 +107,30 @@ func (this *QSyntaxHighlighter) RehighlightBlock(block *QTextBlock) {
 
 var qSyntaxHighlighterVTable = []rt.Virtual{
 	{Name: "HighlightBlock", Has: func(v any) bool { _, ok := v.(interface{ HighlightBlock(string) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string), string)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			text := quteStr(*(*C.qute_str)(a[0]))
-			v.(interface{ HighlightBlock(string) }).HighlightBlock(text)
+			if f, ok := v.(func(func(string), string)); ok {
+				f(nil, text)
+			} else {
+				v.(interface{ HighlightBlock(string) }).HighlightBlock(text)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -128,57 +139,109 @@ var qSyntaxHighlighterVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QSyntaxHighlighterSuper{this: rt.View[QSyntaxHighlighter](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qSyntaxHighlighterShimInit sets a QSyntaxHighlighter shim object's dispatch id and override mask.
+func qSyntaxHighlighterShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QSyntaxHighlighter_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideHighlightBlock makes f this object's QSyntaxHighlighter::highlightBlock: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HighlightBlock, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QSyntaxHighlighter) OverrideHighlightBlock(f func(super func(text string), text string)) {
+	rt.Override(unsafe.Pointer(this), "QSyntaxHighlighter.OverrideHighlightBlock", "HighlightBlock", f)
 }
 
 // QSyntaxHighlighterBase is embedded in Go types that subclass QSyntaxHighlighter:
@@ -412,7 +475,7 @@ func NewQSyntaxHighlighterWith(v QSyntaxHighlighterSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QSyntaxHighlighter](p, "QSyntaxHighlighter", mode)
+	h := rt.WrapNewShim[QSyntaxHighlighter](p, "QSyntaxHighlighter", mode, qSyntaxHighlighterVTable, qSyntaxHighlighterShimInit)
 	base.QSyntaxHighlighter = rt.View[QSyntaxHighlighter](h, p)
 	id := h.SetSelf(v, qSyntaxHighlighterVTable)
 	mask := rt.Mask(v, qSyntaxHighlighterVTable)

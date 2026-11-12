@@ -110,7 +110,7 @@ func NewQListWidgetItem(listview QListWidgetLike) *QListWidgetItem {
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQListWidgetItemWithText(text string, listview QListWidgetLike) *QListWid
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -161,7 +161,7 @@ func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWi
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -186,7 +186,7 @@ func NewQListWidgetItemFull(listview QListWidgetLike, typeArg int) *QListWidgetI
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -211,7 +211,7 @@ func NewQListWidgetItemWithTextFull(text string, listview QListWidgetLike, typeA
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -237,7 +237,7 @@ func NewQListWidgetItemWithIconFull(icon *qtgui.QIcon, text string, listview QLi
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -675,46 +675,143 @@ func (this *QListWidgetItem) Type() int {
 
 var qListWidgetItemVTable = []rt.Virtual{
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QListWidgetItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QListWidgetItem) *QListWidgetItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Clone() *QListWidgetItem }).Clone()
+			var r = *new(*QListWidgetItem)
+			if f, ok := v.(func(func() *QListWidgetItem) *QListWidgetItem); ok {
+				r = f((&QListWidgetItemSuper{this: rt.View[QListWidgetItem](h, h.Ptr())}).Clone)
+			} else {
+				r = v.(interface{ Clone() *QListWidgetItem }).Clone()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QListWidgetItem.Clone")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
 			}
 		}},
 	{Name: "Data", Has: func(v any) bool { _, ok := v.(interface{ Data(int) *qtcore.QVariant }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			role := int(*(*C.int)(a[0]))
-			r := v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); ok {
+				r = f((&QListWidgetItemSuper{this: rt.View[QListWidgetItem](h, h.Ptr())}).Data, role)
+			} else {
+				r = v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QListWidgetItem.Data")
 		}},
 	{Name: "SetData", Has: func(v any) bool { _, ok := v.(interface{ SetData(int, *qtcore.QVariant) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, *qtcore.QVariant), int, *qtcore.QVariant)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			role := int(*(*C.int)(a[0]))
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			v.(interface{ SetData(int, *qtcore.QVariant) }).SetData(role, value)
+			if f, ok := v.(func(func(int, *qtcore.QVariant), int, *qtcore.QVariant)); ok {
+				f((&QListWidgetItemSuper{this: rt.View[QListWidgetItem](h, h.Ptr())}).SetData, role, value)
+			} else {
+				v.(interface{ SetData(int, *qtcore.QVariant) }).SetData(role, value)
+			}
 		}},
 	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
 			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
 			defer inH.Expire()
 			in := rt.View[qtcore.QDataStream](inH, inP)
-			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QListWidgetItemSuper{this: rt.View[QListWidgetItem](h, h.Ptr())}).Read, in)
+			} else {
+				v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			}
 		}},
 	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])
 			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
 			defer outH.Expire()
 			out := rt.View[qtcore.QDataStream](outH, outP)
-			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QListWidgetItemSuper{this: rt.View[QListWidgetItem](h, h.Ptr())}).Write, out)
+			} else {
+				v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			}
 		}},
+}
+
+// qListWidgetItemShimInit sets a QListWidgetItem shim object's dispatch id and override mask.
+func qListWidgetItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QListWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideClone makes f this object's QListWidgetItem::clone: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Clone, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QListWidgetItem) OverrideClone(f func(super func() *QListWidgetItem) *QListWidgetItem) {
+	rt.Override(unsafe.Pointer(this), "QListWidgetItem.OverrideClone", "Clone", f)
+}
+
+// OverrideData makes f this object's QListWidgetItem::data: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Data, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QListWidgetItem) OverrideData(f func(super func(role int) *qtcore.QVariant, role int) *qtcore.QVariant) {
+	rt.Override(unsafe.Pointer(this), "QListWidgetItem.OverrideData", "Data", f)
+}
+
+// OverrideSetData makes f this object's QListWidgetItem::setData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QListWidgetItem) OverrideSetData(f func(super func(role int, value *qtcore.QVariant), role int, value *qtcore.QVariant)) {
+	rt.Override(unsafe.Pointer(this), "QListWidgetItem.OverrideSetData", "SetData", f)
+}
+
+// OverrideRead makes f this object's QListWidgetItem::read: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Read, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QListWidgetItem) OverrideRead(f func(super func(in *qtcore.QDataStream), in *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QListWidgetItem.OverrideRead", "Read", f)
+}
+
+// OverrideWrite makes f this object's QListWidgetItem::write: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Write, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QListWidgetItem) OverrideWrite(f func(super func(out *qtcore.QDataStream), out *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QListWidgetItem.OverrideWrite", "Write", f)
 }
 
 // QListWidgetItemBase is embedded in Go types that subclass QListWidgetItem:
@@ -807,7 +904,7 @@ func NewQListWidgetItemWith(v QListWidgetItemSubclass, listview QListWidgetLike)
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)
@@ -839,7 +936,7 @@ func NewQListWidgetItemWithTextWith(v QListWidgetItemSubclass, text string, list
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)
@@ -872,7 +969,7 @@ func NewQListWidgetItemWithIconWith(v QListWidgetItemSubclass, icon *qtgui.QIcon
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
+	h := rt.WrapNewShim[QListWidgetItem](p, "QListWidgetItem", mode, qListWidgetItemVTable, qListWidgetItemShimInit)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)

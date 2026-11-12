@@ -70,7 +70,7 @@ func NewQConcatenateTablesProxyModel(parent QObjectLike) *QConcatenateTablesProx
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode)
+	h := rt.WrapNewShim[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode, qConcatenateTablesProxyModelVTable, qConcatenateTablesProxyModelShimInit)
 	return rt.View[QConcatenateTablesProxyModel](h, p)
 }
 
@@ -171,13 +171,22 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, int) *QVariant, *QModelIndex, int) *QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
-			r := v.(interface {
-				Data(*QModelIndex, int) *QVariant
-			}).Data(index, role)
+			var r = *new(*QVariant)
+			if f, ok := v.(func(func(*QModelIndex, int) *QVariant, *QModelIndex, int) *QVariant); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Data, index, role)
+			} else {
+				r = v.(interface {
+					Data(*QModelIndex, int) *QVariant
+				}).Data(index, role)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QConcatenateTablesProxyModel.Data")
 		}},
 	{Name: "SetData", Has: func(v any) bool {
@@ -186,14 +195,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, *QVariant, int) bool, *QModelIndex, *QVariant, int) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			role := int(*(*C.int)(a[2]))
-			r := v.(interface {
-				SetData(*QModelIndex, *QVariant, int) bool
-			}).SetData(index, value, role)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex, *QVariant, int) bool, *QModelIndex, *QVariant, int) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).SetData, index, value, role)
+			} else {
+				r = v.(interface {
+					SetData(*QModelIndex, *QVariant, int) bool
+				}).SetData(index, value, role)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ItemData", Has: func(v any) bool {
@@ -202,12 +220,21 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex) map[int]*QVariant, *QModelIndex) map[int]*QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			proxyIndex := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				ItemData(*QModelIndex) map[int]*QVariant
-			}).ItemData(proxyIndex)
+			var r = *new(map[int]*QVariant)
+			if f, ok := v.(func(func(*QModelIndex) map[int]*QVariant, *QModelIndex) map[int]*QVariant); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ItemData, proxyIndex)
+			} else {
+				r = v.(interface {
+					ItemData(*QModelIndex) map[int]*QVariant
+				}).ItemData(proxyIndex)
+			}
 			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e *QVariant) unsafe.Pointer {
 				return rt.UseArg(unsafe.Pointer(e), "QConcatenateTablesProxyModel.ItemData")
 			})
@@ -218,22 +245,37 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, map[int]*QVariant) bool, *QModelIndex, map[int]*QVariant) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			roles := quteMap(*(*C.qute_map)(a[1]), func(k C.int) int { return int(k) }, func(v unsafe.Pointer) *QVariant {
 				return rt.View[QVariant](rt.WrapClass(v, "QVariant", rt.TakeOwned), v)
 			})
-			r := v.(interface {
-				SetItemData(*QModelIndex, map[int]*QVariant) bool
-			}).SetItemData(index, roles)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex, map[int]*QVariant) bool, *QModelIndex, map[int]*QVariant) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).SetItemData, index, roles)
+			} else {
+				r = v.(interface {
+					SetItemData(*QModelIndex, map[int]*QVariant) bool
+				}).SetItemData(index, roles)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Flags", Has: func(v any) bool { _, ok := v.(interface{ Flags(*QModelIndex) ItemFlags }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) ItemFlags, *QModelIndex) ItemFlags); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
+			var r = *new(ItemFlags)
+			if f, ok := v.(func(func(*QModelIndex) ItemFlags, *QModelIndex) ItemFlags); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Flags, index)
+			} else {
+				r = v.(interface{ Flags(*QModelIndex) ItemFlags }).Flags(index)
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Index", Has: func(v any) bool {
@@ -242,14 +284,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) *QModelIndex, int, int, *QModelIndex) *QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
 			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				Index(int, int, *QModelIndex) *QModelIndex
-			}).Index(row, column, parent)
+			var r = *new(*QModelIndex)
+			if f, ok := v.(func(func(int, int, *QModelIndex) *QModelIndex, int, int, *QModelIndex) *QModelIndex); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Index, row, column, parent)
+			} else {
+				r = v.(interface {
+					Index(int, int, *QModelIndex) *QModelIndex
+				}).Index(row, column, parent)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QConcatenateTablesProxyModel.Index")
 		}},
 	{Name: "Parent", Has: func(v any) bool {
@@ -258,19 +309,34 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex) *QModelIndex, *QModelIndex) *QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				Parent(*QModelIndex) *QModelIndex
-			}).Parent(index)
+			var r = *new(*QModelIndex)
+			if f, ok := v.(func(func(*QModelIndex) *QModelIndex, *QModelIndex) *QModelIndex); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Parent, index)
+			} else {
+				r = v.(interface {
+					Parent(*QModelIndex) *QModelIndex
+				}).Parent(index)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QConcatenateTablesProxyModel.Parent")
 		}},
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*QModelIndex) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) int, *QModelIndex) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
+			var r = *new(int)
+			if f, ok := v.(func(func(*QModelIndex) int, *QModelIndex) int); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).RowCount, parent)
+			} else {
+				r = v.(interface{ RowCount(*QModelIndex) int }).RowCount(parent)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HeaderData", Has: func(v any) bool {
@@ -279,27 +345,48 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, Orientations, int) *QVariant, int, Orientations, int) *QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			section := int(*(*C.int)(a[0]))
 			orientation := Orientations(*(*C.int64_t)(a[1]))
 			role := int(*(*C.int)(a[2]))
-			r := v.(interface {
-				HeaderData(int, Orientations, int) *QVariant
-			}).HeaderData(section, orientation, role)
+			var r = *new(*QVariant)
+			if f, ok := v.(func(func(int, Orientations, int) *QVariant, int, Orientations, int) *QVariant); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).HeaderData, section, orientation, role)
+			} else {
+				r = v.(interface {
+					HeaderData(int, Orientations, int) *QVariant
+				}).HeaderData(section, orientation, role)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QConcatenateTablesProxyModel.HeaderData")
 		}},
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*QModelIndex) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) int, *QModelIndex) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ ColumnCount(*QModelIndex) int }).ColumnCount(parent)
+			var r = *new(int)
+			if f, ok := v.(func(func(*QModelIndex) int, *QModelIndex) int); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ColumnCount, parent)
+			} else {
+				r = v.(interface{ ColumnCount(*QModelIndex) int }).ColumnCount(parent)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "MimeTypes", Has: func(v any) bool { _, ok := v.(interface{ MimeTypes() []string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MimeTypes() []string }).MimeTypes()
+			var r = *new([]string)
+			if f, ok := v.(func(func() []string) []string); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).MimeTypes)
+			} else {
+				r = v.(interface{ MimeTypes() []string }).MimeTypes()
+			}
 			*(*C.qute_list)(ret) = quteCStrList(r)
 		}},
 	{Name: "MimeData", Has: func(v any) bool {
@@ -308,12 +395,21 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]*QModelIndex) *QMimeData, []*QModelIndex) *QMimeData)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			indexes := quteList(*(*C.qute_list)(a[0]), func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
-			r := v.(interface {
-				MimeData([]*QModelIndex) *QMimeData
-			}).MimeData(indexes)
+			var r = *new(*QMimeData)
+			if f, ok := v.(func(func([]*QModelIndex) *QMimeData, []*QModelIndex) *QMimeData); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).MimeData, indexes)
+			} else {
+				r = v.(interface {
+					MimeData([]*QModelIndex) *QMimeData
+				}).MimeData(indexes)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QConcatenateTablesProxyModel.MimeData")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
@@ -325,16 +421,25 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QMimeData, DropActions, int, int, *QModelIndex) bool, *QMimeData, DropActions, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			data := rt.View[QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
 			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
-			r := v.(interface {
-				CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
-			}).CanDropMimeData(data, action, row, column, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QMimeData, DropActions, int, int, *QModelIndex) bool, *QMimeData, DropActions, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).CanDropMimeData, data, action, row, column, parent)
+			} else {
+				r = v.(interface {
+					CanDropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+				}).CanDropMimeData(data, action, row, column, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "DropMimeData", Has: func(v any) bool {
@@ -343,29 +448,50 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QMimeData, DropActions, int, int, *QModelIndex) bool, *QMimeData, DropActions, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			data := rt.View[QMimeData](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMimeData", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			action := DropActions(*(*C.int64_t)(a[1]))
 			row := int(*(*C.int)(a[2]))
 			column := int(*(*C.int)(a[3]))
 			parent := rt.InlineArgView[QModelIndex](a[4], "QModelIndex")
-			r := v.(interface {
-				DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
-			}).DropMimeData(data, action, row, column, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QMimeData, DropActions, int, int, *QModelIndex) bool, *QMimeData, DropActions, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).DropMimeData, data, action, row, column, parent)
+			} else {
+				r = v.(interface {
+					DropMimeData(*QMimeData, DropActions, int, int, *QModelIndex) bool
+				}).DropMimeData(data, action, row, column, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Span", Has: func(v any) bool { _, ok := v.(interface{ Span(*QModelIndex) QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) QSize, *QModelIndex) QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ Span(*QModelIndex) QSize }).Span(index)
+			var r = *new(QSize)
+			if f, ok := v.(func(func(*QModelIndex) QSize, *QModelIndex) QSize); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Span, index)
+			} else {
+				r = v.(interface{ Span(*QModelIndex) QSize }).Span(index)
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "RoleNames", Has: func(v any) bool { _, ok := v.(interface{ RoleNames() map[int][]byte }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() map[int][]byte) map[int][]byte); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ RoleNames() map[int][]byte }).RoleNames()
+			var r = *new(map[int][]byte)
+			if f, ok := v.(func(func() map[int][]byte) map[int][]byte); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).RoleNames)
+			} else {
+				r = v.(interface{ RoleNames() map[int][]byte }).RoleNames()
+			}
 			*(*C.qute_map)(ret) = quteCMap(r, func(k int) C.int { return C.int(k) }, func(e []byte) C.qute_str { return quteCBytes(e) })
 		}},
 	{Name: "Sibling", Has: func(v any) bool {
@@ -374,21 +500,36 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) *QModelIndex, int, int, *QModelIndex) *QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			column := int(*(*C.int)(a[1]))
 			idx := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				Sibling(int, int, *QModelIndex) *QModelIndex
-			}).Sibling(row, column, idx)
+			var r = *new(*QModelIndex)
+			if f, ok := v.(func(func(int, int, *QModelIndex) *QModelIndex, int, int, *QModelIndex) *QModelIndex); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Sibling, row, column, idx)
+			} else {
+				r = v.(interface {
+					Sibling(int, int, *QModelIndex) *QModelIndex
+				}).Sibling(row, column, idx)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QConcatenateTablesProxyModel.Sibling")
 		}},
 	{Name: "HasChildren", Has: func(v any) bool { _, ok := v.(interface{ HasChildren(*QModelIndex) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) bool, *QModelIndex) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ HasChildren(*QModelIndex) bool }).HasChildren(parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex) bool, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).HasChildren, parent)
+			} else {
+				r = v.(interface{ HasChildren(*QModelIndex) bool }).HasChildren(parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SetHeaderData", Has: func(v any) bool {
@@ -397,34 +538,61 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, Orientations, *QVariant, int) bool, int, Orientations, *QVariant, int) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			section := int(*(*C.int)(a[0]))
 			orientation := Orientations(*(*C.int64_t)(a[1]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			role := int(*(*C.int)(a[3]))
-			r := v.(interface {
-				SetHeaderData(int, Orientations, *QVariant, int) bool
-			}).SetHeaderData(section, orientation, value, role)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int, Orientations, *QVariant, int) bool, int, Orientations, *QVariant, int) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).SetHeaderData, section, orientation, value, role)
+			} else {
+				r = v.(interface {
+					SetHeaderData(int, Orientations, *QVariant, int) bool
+				}).SetHeaderData(section, orientation, value, role)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ClearItemData", Has: func(v any) bool { _, ok := v.(interface{ ClearItemData(*QModelIndex) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) bool, *QModelIndex) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex) bool, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ClearItemData, index)
+			} else {
+				r = v.(interface{ ClearItemData(*QModelIndex) bool }).ClearItemData(index)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SupportedDropActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDropActions() DropActions }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() DropActions) DropActions); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SupportedDropActions() DropActions }).SupportedDropActions()
+			var r = *new(DropActions)
+			if f, ok := v.(func(func() DropActions) DropActions); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).SupportedDropActions)
+			} else {
+				r = v.(interface{ SupportedDropActions() DropActions }).SupportedDropActions()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "SupportedDragActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDragActions() DropActions }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() DropActions) DropActions); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SupportedDragActions() DropActions }).SupportedDragActions()
+			var r = *new(DropActions)
+			if f, ok := v.(func(func() DropActions) DropActions); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).SupportedDragActions)
+			} else {
+				r = v.(interface{ SupportedDragActions() DropActions }).SupportedDragActions()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "InsertRows", Has: func(v any) bool {
@@ -433,14 +601,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
 			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				InsertRows(int, int, *QModelIndex) bool
-			}).InsertRows(row, count, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).InsertRows, row, count, parent)
+			} else {
+				r = v.(interface {
+					InsertRows(int, int, *QModelIndex) bool
+				}).InsertRows(row, count, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "InsertColumns", Has: func(v any) bool {
@@ -449,14 +626,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
 			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				InsertColumns(int, int, *QModelIndex) bool
-			}).InsertColumns(column, count, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).InsertColumns, column, count, parent)
+			} else {
+				r = v.(interface {
+					InsertColumns(int, int, *QModelIndex) bool
+				}).InsertColumns(column, count, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "RemoveRows", Has: func(v any) bool {
@@ -465,14 +651,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			row := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
 			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				RemoveRows(int, int, *QModelIndex) bool
-			}).RemoveRows(row, count, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).RemoveRows, row, count, parent)
+			} else {
+				r = v.(interface {
+					RemoveRows(int, int, *QModelIndex) bool
+				}).RemoveRows(row, count, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "RemoveColumns", Has: func(v any) bool {
@@ -481,14 +676,23 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			count := int(*(*C.int)(a[1]))
 			parent := rt.InlineArgView[QModelIndex](a[2], "QModelIndex")
-			r := v.(interface {
-				RemoveColumns(int, int, *QModelIndex) bool
-			}).RemoveColumns(column, count, parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int, int, *QModelIndex) bool, int, int, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).RemoveColumns, column, count, parent)
+			} else {
+				r = v.(interface {
+					RemoveColumns(int, int, *QModelIndex) bool
+				}).RemoveColumns(column, count, parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MoveRows", Has: func(v any) bool {
@@ -497,16 +701,25 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, int, int, *QModelIndex, int) bool, *QModelIndex, int, int, *QModelIndex, int) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceRow := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
 			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
-			r := v.(interface {
-				MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
-			}).MoveRows(sourceParent, sourceRow, count, destinationParent, destinationChild)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex, int, int, *QModelIndex, int) bool, *QModelIndex, int, int, *QModelIndex, int) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).MoveRows, sourceParent, sourceRow, count, destinationParent, destinationChild)
+			} else {
+				r = v.(interface {
+					MoveRows(*QModelIndex, int, int, *QModelIndex, int) bool
+				}).MoveRows(sourceParent, sourceRow, count, destinationParent, destinationChild)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MoveColumns", Has: func(v any) bool {
@@ -515,37 +728,62 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, int, int, *QModelIndex, int) bool, *QModelIndex, int, int, *QModelIndex, int) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			sourceParent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			sourceColumn := int(*(*C.int)(a[1]))
 			count := int(*(*C.int)(a[2]))
 			destinationParent := rt.InlineArgView[QModelIndex](a[3], "QModelIndex")
 			destinationChild := int(*(*C.int)(a[4]))
-			r := v.(interface {
-				MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
-			}).MoveColumns(sourceParent, sourceColumn, count, destinationParent, destinationChild)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex, int, int, *QModelIndex, int) bool, *QModelIndex, int, int, *QModelIndex, int) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).MoveColumns, sourceParent, sourceColumn, count, destinationParent, destinationChild)
+			} else {
+				r = v.(interface {
+					MoveColumns(*QModelIndex, int, int, *QModelIndex, int) bool
+				}).MoveColumns(sourceParent, sourceColumn, count, destinationParent, destinationChild)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*QModelIndex) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex), *QModelIndex)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
+			if f, ok := v.(func(func(*QModelIndex), *QModelIndex)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).FetchMore, parent)
+			} else {
+				v.(interface{ FetchMore(*QModelIndex) }).FetchMore(parent)
+			}
 		}},
 	{Name: "CanFetchMore", Has: func(v any) bool { _, ok := v.(interface{ CanFetchMore(*QModelIndex) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QModelIndex) bool, *QModelIndex) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QModelIndex) bool, *QModelIndex) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).CanFetchMore, parent)
+			} else {
+				r = v.(interface{ CanFetchMore(*QModelIndex) bool }).CanFetchMore(parent)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Sort", Has: func(v any) bool { _, ok := v.(interface{ Sort(int, SortOrder) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, SortOrder), int, SortOrder)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			column := int(*(*C.int)(a[0]))
 			order := SortOrder(*(*C.int64_t)(a[1]))
-			v.(interface{ Sort(int, SortOrder) }).Sort(column, order)
+			if f, ok := v.(func(func(int, SortOrder), int, SortOrder)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Sort, column, order)
+			} else {
+				v.(interface{ Sort(int, SortOrder) }).Sort(column, order)
+			}
 		}},
 	{Name: "Buddy", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -553,12 +791,21 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex) *QModelIndex, *QModelIndex) *QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				Buddy(*QModelIndex) *QModelIndex
-			}).Buddy(index)
+			var r = *new(*QModelIndex)
+			if f, ok := v.(func(func(*QModelIndex) *QModelIndex, *QModelIndex) *QModelIndex); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Buddy, index)
+			} else {
+				r = v.(interface {
+					Buddy(*QModelIndex) *QModelIndex
+				}).Buddy(index)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QConcatenateTablesProxyModel.Buddy")
 		}},
 	{Name: "Match", Has: func(v any) bool {
@@ -567,94 +814,161 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex, *QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			start := rt.InlineArgView[QModelIndex](a[0], "QModelIndex")
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
 			hits := int(*(*C.int)(a[3]))
 			flags := MatchFlags(*(*C.int64_t)(a[4]))
-			r := v.(interface {
-				Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
-			}).Match(start, role, value, hits, flags)
+			var r = *new([]*QModelIndex)
+			if f, ok := v.(func(func(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex, *QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Match, start, role, value, hits, flags)
+			} else {
+				r = v.(interface {
+					Match(*QModelIndex, int, *QVariant, int, MatchFlags) []*QModelIndex
+				}).Match(start, role, value, hits, flags)
+			}
 			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QConcatenateTablesProxyModel.Match", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "Submit", Has: func(v any) bool { _, ok := v.(interface{ Submit() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Submit() bool }).Submit()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Submit)
+			} else {
+				r = v.(interface{ Submit() bool }).Submit()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Revert", Has: func(v any) bool { _, ok := v.(interface{ Revert() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Revert() }).Revert()
+			if f, ok := v.(func(func())); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Revert)
+			} else {
+				v.(interface{ Revert() }).Revert()
+			}
 		}},
 	{Name: "ResetInternalData", Has: func(v any) bool { _, ok := v.(interface{ ResetInternalData() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ ResetInternalData() }).ResetInternalData()
+			if f, ok := v.(func(func())); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ResetInternalData)
+			} else {
+				v.(interface{ ResetInternalData() }).ResetInternalData()
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QConcatenateTablesProxyModelSuper{this: rt.View[QConcatenateTablesProxyModel](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qConcatenateTablesProxyModelShimInit sets a QConcatenateTablesProxyModel shim object's dispatch id and override mask.
+func qConcatenateTablesProxyModelShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QConcatenateTablesProxyModel_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QConcatenateTablesProxyModelBase is embedded in Go types that subclass QConcatenateTablesProxyModel:
@@ -1332,7 +1646,7 @@ func NewQConcatenateTablesProxyModelWith(v QConcatenateTablesProxyModelSubclass,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode)
+	h := rt.WrapNewShim[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode, qConcatenateTablesProxyModelVTable, qConcatenateTablesProxyModelShimInit)
 	base.QConcatenateTablesProxyModel = rt.View[QConcatenateTablesProxyModel](h, p)
 	id := h.SetSelf(v, qConcatenateTablesProxyModelVTable)
 	mask := rt.Mask(v, qConcatenateTablesProxyModelVTable)

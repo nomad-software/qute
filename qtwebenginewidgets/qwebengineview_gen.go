@@ -70,7 +70,7 @@ func NewQWebEngineView(parent qtwidgets.QWidgetLike) *QWebEngineView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	return rt.View[QWebEngineView](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQWebEngineViewWithProfile(profile qtwebenginecore.QWebEngineProfileLike,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	rt.KeepArg(h, "profile", profileH, true)
 	return rt.View[QWebEngineView](h, p)
 }
@@ -133,7 +133,7 @@ func NewQWebEngineViewWithPage(page qtwebenginecore.QWebEnginePageLike, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	rt.KeepArg(h, "page", pageH, false)
 	return rt.View[QWebEngineView](h, p)
 }
@@ -970,9 +970,15 @@ func (this *QWebEngineView) OnPrintFinished(f func(success bool)) qtcore.Connect
 
 var qWebEngineViewVTable = []rt.Virtual{
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "CreateWindow", Has: func(v any) bool {
@@ -981,12 +987,21 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView, qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			typeArg := qtwebenginecore.QWebEnginePageWebWindowType(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				CreateWindow(qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView
-			}).CreateWindow(typeArg)
+			var r = *new(*QWebEngineView)
+			if f, ok := v.(func(func(qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView, qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).CreateWindow, typeArg)
+			} else {
+				r = v.(interface {
+					CreateWindow(qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView
+				}).CreateWindow(typeArg)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWebEngineView.CreateWindow")
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
@@ -995,257 +1010,409 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			contextMenuEventP := *(*unsafe.Pointer)(a[0])
 			contextMenuEventH := rt.WrapClass(contextMenuEventP, "QContextMenuEvent", rt.NewScoped)
 			defer contextMenuEventH.Expire()
 			contextMenuEvent := rt.View[qtgui.QContextMenuEvent](contextMenuEventH, contextMenuEventP)
-			v.(interface {
-				ContextMenuEvent(*qtgui.QContextMenuEvent)
-			}).ContextMenuEvent(contextMenuEvent)
+			if f, ok := v.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ContextMenuEvent, contextMenuEvent)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtgui.QContextMenuEvent)
+				}).ContextMenuEvent(contextMenuEvent)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
 			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
 			defer showEventH.Expire()
 			showEvent := rt.View[qtgui.QShowEvent](showEventH, showEventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ShowEvent, showEvent)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			hideEventP := *(*unsafe.Pointer)(a[0])
 			hideEventH := rt.WrapClass(hideEventP, "QHideEvent", rt.NewScoped)
 			defer hideEventH.Expire()
 			hideEvent := rt.View[qtgui.QHideEvent](hideEventH, hideEventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(hideEvent)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).HideEvent, hideEvent)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(hideEvent)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
 			closeEventH := rt.WrapClass(closeEventP, "QCloseEvent", rt.NewScoped)
 			defer closeEventH.Expire()
 			closeEvent := rt.View[qtgui.QCloseEvent](closeEventH, closeEventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).CloseEvent, closeEvent)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QDragEnterEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtgui.QDragEnterEvent](eArgH, eArgP)
-			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(eArg)
+			if f, ok := v.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).DragEnterEvent, eArg)
+			} else {
+				v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(eArg)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QDragLeaveEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtgui.QDragLeaveEvent](eArgH, eArgP)
-			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(eArg)
+			if f, ok := v.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).DragLeaveEvent, eArg)
+			} else {
+				v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(eArg)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QDragMoveEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtgui.QDragMoveEvent](eArgH, eArgP)
-			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(eArg)
+			if f, ok := v.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).DragMoveEvent, eArg)
+			} else {
+				v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(eArg)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QDropEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtgui.QDropEvent](eArgH, eArgP)
-			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(eArg)
+			if f, ok := v.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).DropEvent, eArg)
+			} else {
+				v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(eArg)
+			}
 		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
-			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			if f, ok := v.(func(func(bool), bool)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).SetVisible, visible)
+			} else {
+				v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			}
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MinimumSizeHint)
+			} else {
+				r = v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QWheelEvent](eventH, eventP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
-			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).EnterEvent, event)
+			} else {
+				v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).LeaveEvent, event)
+			} else {
+				v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).PaintEvent, event)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).MoveEvent, event)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ResizeEvent, event)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).TabletEvent, event)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
-			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			if f, ok := v.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ActionEvent, event)
+			} else {
+				v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1253,26 +1420,40 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
 			}
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ChangeEvent, event)
+			} else {
+				v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			}
 		}},
 	{Name: "Metric", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1280,12 +1461,21 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(paintDeviceMetric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).Metric, paintDeviceMetric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(paintDeviceMetric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
@@ -1294,15 +1484,23 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodEventP := *(*unsafe.Pointer)(a[0])
 			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
 			defer inputMethodEventH.Expire()
 			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(inputMethodEvent)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).InputMethodEvent, inputMethodEvent)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(inputMethodEvent)
+			}
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1310,19 +1508,34 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(inputMethodQuery)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).InputMethodQuery, inputMethodQuery)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(inputMethodQuery)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWebEngineView.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -1331,57 +1544,109 @@ var qWebEngineViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QWebEngineViewSuper{this: rt.View[QWebEngineView](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qWebEngineViewShimInit sets a QWebEngineView shim object's dispatch id and override mask.
+func qWebEngineViewShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QWebEngineView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideCreateWindow makes f this object's QWebEngineView::createWindow: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CreateWindow, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEngineView) OverrideCreateWindow(f func(super func(typeArg qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView, typeArg qtwebenginecore.QWebEnginePageWebWindowType) *QWebEngineView) {
+	rt.Override(unsafe.Pointer(this), "QWebEngineView.OverrideCreateWindow", "CreateWindow", f)
 }
 
 // QWebEngineViewBase is embedded in Go types that subclass QWebEngineView:
@@ -1962,7 +2227,7 @@ func NewQWebEngineViewWith(v QWebEngineViewSubclass, parent qtwidgets.QWidgetLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)
 	mask := rt.Mask(v, qWebEngineViewVTable)
@@ -2000,7 +2265,7 @@ func NewQWebEngineViewWithProfileWith(v QWebEngineViewSubclass, profile qtwebeng
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	rt.KeepArg(h, "profile", profileH, true)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)
@@ -2039,7 +2304,7 @@ func NewQWebEngineViewWithPageWith(v QWebEngineViewSubclass, page qtwebenginecor
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
+	h := rt.WrapNewShim[QWebEngineView](p, "QWebEngineView", mode, qWebEngineViewVTable, qWebEngineViewShimInit)
 	rt.KeepArg(h, "page", pageH, false)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)

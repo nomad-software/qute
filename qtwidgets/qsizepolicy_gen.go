@@ -338,3 +338,17 @@ func (this *QSizePolicy) Transposed() *QSizePolicy {
 	runtime.KeepAlive(this)
 	return rt.View[QSizePolicy](rt.WrapClass(r, "QSizePolicy", rt.TakeOwned), r)
 }
+
+// ToQVariant wraps the conversion QSizePolicy::operator QVariant().
+//
+//	C++: QSizePolicy::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsizepolicy.html#operator-QVariant
+func (this *QSizePolicy) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QSizePolicy.ToQVariant")
+	r := C.qute_QSizePolicy_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

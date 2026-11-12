@@ -99,7 +99,7 @@ func (this *QTreeWidgetItem) Unkeep() {
 func NewQTreeWidgetItem() *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItem")
 	p := C.qute_QTreeWidgetItem_new()
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQTreeWidgetItemWithStrings(strings []string) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemWithStrings")
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -139,7 +139,7 @@ func NewQTreeWidgetItemIn(treeview QTreeWidgetLike) *QTreeWidgetItem {
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -165,7 +165,7 @@ func NewQTreeWidgetItemInWithStrings(treeview QTreeWidgetLike, strings []string)
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -195,7 +195,7 @@ func NewQTreeWidgetItemInAfter(treeview QTreeWidgetLike, after QTreeWidgetItemLi
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -220,7 +220,7 @@ func NewQTreeWidgetItemUnder(parent QTreeWidgetItemLike) *QTreeWidgetItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -246,7 +246,7 @@ func NewQTreeWidgetItemUnderWithStrings(parent QTreeWidgetItemLike, strings []st
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -276,7 +276,7 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -290,7 +290,7 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 func NewQTreeWidgetItemFull(typeArg int) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemFull")
 	p := C.qute_QTreeWidgetItem_new_8(C.int(typeArg))
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -305,7 +305,7 @@ func NewQTreeWidgetItemWithStringsFull(strings []string, typeArg int) *QTreeWidg
 	rt.CheckThread("NewQTreeWidgetItemWithStringsFull")
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_9((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), C.int(typeArg))
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -330,7 +330,7 @@ func NewQTreeWidgetItemInFull(treeview QTreeWidgetLike, typeArg int) *QTreeWidge
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -356,7 +356,7 @@ func NewQTreeWidgetItemInWithStringsFull(treeview QTreeWidgetLike, strings []str
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -386,7 +386,7 @@ func NewQTreeWidgetItemInAfterFull(treeview QTreeWidgetLike, after QTreeWidgetIt
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -411,7 +411,7 @@ func NewQTreeWidgetItemUnderFull(parent QTreeWidgetItemLike, typeArg int) *QTree
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -437,7 +437,7 @@ func NewQTreeWidgetItemUnderWithStringsFull(parent QTreeWidgetItemLike, strings 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -467,7 +467,7 @@ func NewQTreeWidgetItemUnderAfterFull(parent QTreeWidgetItemLike, after QTreeWid
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -1215,9 +1215,15 @@ func (this *QTreeWidgetItem) SortChildren(column int, order qtcore.SortOrder) {
 
 var qTreeWidgetItemVTable = []rt.Virtual{
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QTreeWidgetItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QTreeWidgetItem) *QTreeWidgetItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Clone() *QTreeWidgetItem }).Clone()
+			var r = *new(*QTreeWidgetItem)
+			if f, ok := v.(func(func() *QTreeWidgetItem) *QTreeWidgetItem); ok {
+				r = f((&QTreeWidgetItemSuper{this: rt.View[QTreeWidgetItem](h, h.Ptr())}).Clone)
+			} else {
+				r = v.(interface{ Clone() *QTreeWidgetItem }).Clone()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidgetItem.Clone")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
@@ -1229,13 +1235,22 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int) *qtcore.QVariant, int, int) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			column := int(*(*C.int)(a[0]))
 			role := int(*(*C.int)(a[1]))
-			r := v.(interface {
-				Data(int, int) *qtcore.QVariant
-			}).Data(column, role)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(int, int) *qtcore.QVariant, int, int) *qtcore.QVariant); ok {
+				r = f((&QTreeWidgetItemSuper{this: rt.View[QTreeWidgetItem](h, h.Ptr())}).Data, column, role)
+			} else {
+				r = v.(interface {
+					Data(int, int) *qtcore.QVariant
+				}).Data(column, role)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidgetItem.Data")
 		}},
 	{Name: "SetData", Has: func(v any) bool {
@@ -1244,33 +1259,121 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, int, *qtcore.QVariant), int, int, *qtcore.QVariant))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			column := int(*(*C.int)(a[0]))
 			role := int(*(*C.int)(a[1]))
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
-			v.(interface {
-				SetData(int, int, *qtcore.QVariant)
-			}).SetData(column, role, value)
+			if f, ok := v.(func(func(int, int, *qtcore.QVariant), int, int, *qtcore.QVariant)); ok {
+				f((&QTreeWidgetItemSuper{this: rt.View[QTreeWidgetItem](h, h.Ptr())}).SetData, column, role, value)
+			} else {
+				v.(interface {
+					SetData(int, int, *qtcore.QVariant)
+				}).SetData(column, role, value)
+			}
 		}},
 	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
 			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
 			defer inH.Expire()
 			in := rt.View[qtcore.QDataStream](inH, inP)
-			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QTreeWidgetItemSuper{this: rt.View[QTreeWidgetItem](h, h.Ptr())}).Read, in)
+			} else {
+				v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			}
 		}},
 	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])
 			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
 			defer outH.Expire()
 			out := rt.View[qtcore.QDataStream](outH, outP)
-			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QTreeWidgetItemSuper{this: rt.View[QTreeWidgetItem](h, h.Ptr())}).Write, out)
+			} else {
+				v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			}
 		}},
+}
+
+// qTreeWidgetItemShimInit sets a QTreeWidgetItem shim object's dispatch id and override mask.
+func qTreeWidgetItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QTreeWidgetItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideClone makes f this object's QTreeWidgetItem::clone: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Clone, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTreeWidgetItem) OverrideClone(f func(super func() *QTreeWidgetItem) *QTreeWidgetItem) {
+	rt.Override(unsafe.Pointer(this), "QTreeWidgetItem.OverrideClone", "Clone", f)
+}
+
+// OverrideData makes f this object's QTreeWidgetItem::data: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Data, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTreeWidgetItem) OverrideData(f func(super func(column int, role int) *qtcore.QVariant, column int, role int) *qtcore.QVariant) {
+	rt.Override(unsafe.Pointer(this), "QTreeWidgetItem.OverrideData", "Data", f)
+}
+
+// OverrideSetData makes f this object's QTreeWidgetItem::setData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTreeWidgetItem) OverrideSetData(f func(super func(column int, role int, value *qtcore.QVariant), column int, role int, value *qtcore.QVariant)) {
+	rt.Override(unsafe.Pointer(this), "QTreeWidgetItem.OverrideSetData", "SetData", f)
+}
+
+// OverrideRead makes f this object's QTreeWidgetItem::read: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Read, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTreeWidgetItem) OverrideRead(f func(super func(in *qtcore.QDataStream), in *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QTreeWidgetItem.OverrideRead", "Read", f)
+}
+
+// OverrideWrite makes f this object's QTreeWidgetItem::write: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Write, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTreeWidgetItem) OverrideWrite(f func(super func(out *qtcore.QDataStream), out *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QTreeWidgetItem.OverrideWrite", "Write", f)
 }
 
 // QTreeWidgetItemBase is embedded in Go types that subclass QTreeWidgetItem:
@@ -1362,7 +1465,7 @@ func NewQTreeWidgetItemWith(v QTreeWidgetItemSubclass) *QTreeWidgetItem {
 		panic("NewQTreeWidgetItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTreeWidgetItem_new_shim()
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1386,7 +1489,7 @@ func NewQTreeWidgetItemWithStringsWith(v QTreeWidgetItemSubclass, strings []stri
 	}
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1418,7 +1521,7 @@ func NewQTreeWidgetItemInWith(v QTreeWidgetItemSubclass, treeview QTreeWidgetLik
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1451,7 +1554,7 @@ func NewQTreeWidgetItemInWithStringsWith(v QTreeWidgetItemSubclass, treeview QTr
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1488,7 +1591,7 @@ func NewQTreeWidgetItemInAfterWith(v QTreeWidgetItemSubclass, treeview QTreeWidg
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1520,7 +1623,7 @@ func NewQTreeWidgetItemUnderWith(v QTreeWidgetItemSubclass, parent QTreeWidgetIt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1553,7 +1656,7 @@ func NewQTreeWidgetItemUnderWithStringsWith(v QTreeWidgetItemSubclass, parent QT
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1590,7 +1693,7 @@ func NewQTreeWidgetItemUnderAfterWith(v QTreeWidgetItemSubclass, parent QTreeWid
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
+	h := rt.WrapNewShim[QTreeWidgetItem](p, "QTreeWidgetItem", mode, qTreeWidgetItemVTable, qTreeWidgetItemShimInit)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)

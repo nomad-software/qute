@@ -99,7 +99,7 @@ func (this *QXmlStreamEntityResolver) Unkeep() {
 func NewQXmlStreamEntityResolver() *QXmlStreamEntityResolver {
 	rt.CheckThread("NewQXmlStreamEntityResolver")
 	p := C.qute_QXmlStreamEntityResolver_new()
-	h := rt.WrapNew[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned)
+	h := rt.WrapNewShim[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned, qXmlStreamEntityResolverVTable, qXmlStreamEntityResolverShimInit)
 	return rt.View[QXmlStreamEntityResolver](h, p)
 }
 
@@ -129,12 +129,36 @@ func (this *QXmlStreamEntityResolver) ResolveUndeclaredEntity(name string) strin
 
 var qXmlStreamEntityResolverVTable = []rt.Virtual{
 	{Name: "ResolveUndeclaredEntity", Has: func(v any) bool { _, ok := v.(interface{ ResolveUndeclaredEntity(string) string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string) string, string) string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			name := quteStr(*(*C.qute_str)(a[0]))
-			r := v.(interface{ ResolveUndeclaredEntity(string) string }).ResolveUndeclaredEntity(name)
+			var r = *new(string)
+			if f, ok := v.(func(func(string) string, string) string); ok {
+				r = f((&QXmlStreamEntityResolverSuper{this: rt.View[QXmlStreamEntityResolver](h, h.Ptr())}).ResolveUndeclaredEntity, name)
+			} else {
+				r = v.(interface{ ResolveUndeclaredEntity(string) string }).ResolveUndeclaredEntity(name)
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
+}
+
+// qXmlStreamEntityResolverShimInit sets a QXmlStreamEntityResolver shim object's dispatch id and override mask.
+func qXmlStreamEntityResolverShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QXmlStreamEntityResolver_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideResolveUndeclaredEntity makes f this object's QXmlStreamEntityResolver::resolveUndeclaredEntity: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ResolveUndeclaredEntity, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QXmlStreamEntityResolver) OverrideResolveUndeclaredEntity(f func(super func(name string) string, name string) string) {
+	rt.Override(unsafe.Pointer(this), "QXmlStreamEntityResolver.OverrideResolveUndeclaredEntity", "ResolveUndeclaredEntity", f)
 }
 
 // QXmlStreamEntityResolverBase is embedded in Go types that subclass QXmlStreamEntityResolver:
@@ -182,7 +206,7 @@ func NewQXmlStreamEntityResolverWith(v QXmlStreamEntityResolverSubclass) *QXmlSt
 		panic("NewQXmlStreamEntityResolverWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QXmlStreamEntityResolver_new_shim()
-	h := rt.WrapNew[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned)
+	h := rt.WrapNewShim[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned, qXmlStreamEntityResolverVTable, qXmlStreamEntityResolverShimInit)
 	base.QXmlStreamEntityResolver = rt.View[QXmlStreamEntityResolver](h, p)
 	id := h.SetSelf(v, qXmlStreamEntityResolverVTable)
 	mask := rt.Mask(v, qXmlStreamEntityResolverVTable)

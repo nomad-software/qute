@@ -961,6 +961,20 @@ func (this *QFont) SetStyleHintFull(styleHint QFontStyleHint, styleStrategy QFon
 	runtime.KeepAlive(this)
 }
 
+// ToQVariant wraps the conversion QFont::operator QVariant().
+//
+//	C++: QFont::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qfont.html#operator-QVariant
+func (this *QFont) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QFont.ToQVariant")
+	r := C.qute_QFont_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QFontSubstitute wraps QFont::substitute.
 //
 //	C++: QString QFont::substitute(const QString &)

@@ -299,7 +299,11 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QPainter, qtcore.QRect, QIconMode, QIconState), *QPainter, qtcore.QRect, QIconMode, QIconState))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
@@ -308,9 +312,13 @@ var qIconEngineVTable = []rt.Virtual{
 			rect := goQRect(*(*C.qute_rect)(a[1]))
 			mode := QIconMode(*(*C.int64_t)(a[2]))
 			state := QIconState(*(*C.int64_t)(a[3]))
-			v.(interface {
-				Paint(*QPainter, qtcore.QRect, QIconMode, QIconState)
-			}).Paint(painter, rect, mode, state)
+			if f, ok := v.(func(func(*QPainter, qtcore.QRect, QIconMode, QIconState), *QPainter, qtcore.QRect, QIconMode, QIconState)); ok {
+				f(nil, painter, rect, mode, state)
+			} else {
+				v.(interface {
+					Paint(*QPainter, qtcore.QRect, QIconMode, QIconState)
+				}).Paint(painter, rect, mode, state)
+			}
 		}},
 	{Name: "ActualSize", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -318,14 +326,23 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState) qtcore.QSize, qtcore.QSize, QIconMode, QIconState) qtcore.QSize)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			size := goQSize(*(*C.qute_size)(a[0]))
 			mode := QIconMode(*(*C.int64_t)(a[1]))
 			state := QIconState(*(*C.int64_t)(a[2]))
-			r := v.(interface {
-				ActualSize(qtcore.QSize, QIconMode, QIconState) qtcore.QSize
-			}).ActualSize(size, mode, state)
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func(qtcore.QSize, QIconMode, QIconState) qtcore.QSize, qtcore.QSize, QIconMode, QIconState) qtcore.QSize); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).ActualSize, size, mode, state)
+			} else {
+				r = v.(interface {
+					ActualSize(qtcore.QSize, QIconMode, QIconState) qtcore.QSize
+				}).ActualSize(size, mode, state)
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "Pixmap", Has: func(v any) bool {
@@ -334,14 +351,23 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState) *QPixmap, qtcore.QSize, QIconMode, QIconState) *QPixmap)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			size := goQSize(*(*C.qute_size)(a[0]))
 			mode := QIconMode(*(*C.int64_t)(a[1]))
 			state := QIconState(*(*C.int64_t)(a[2]))
-			r := v.(interface {
-				Pixmap(qtcore.QSize, QIconMode, QIconState) *QPixmap
-			}).Pixmap(size, mode, state)
+			var r = *new(*QPixmap)
+			if f, ok := v.(func(func(qtcore.QSize, QIconMode, QIconState) *QPixmap, qtcore.QSize, QIconMode, QIconState) *QPixmap); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).Pixmap, size, mode, state)
+			} else {
+				r = v.(interface {
+					Pixmap(qtcore.QSize, QIconMode, QIconState) *QPixmap
+				}).Pixmap(size, mode, state)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIconEngine.Pixmap")
 		}},
 	{Name: "AddPixmap", Has: func(v any) bool {
@@ -350,14 +376,22 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QPixmap, QIconMode, QIconState), *QPixmap, QIconMode, QIconState))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			pixmap := rt.View[QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			mode := QIconMode(*(*C.int64_t)(a[1]))
 			state := QIconState(*(*C.int64_t)(a[2]))
-			v.(interface {
-				AddPixmap(*QPixmap, QIconMode, QIconState)
-			}).AddPixmap(pixmap, mode, state)
+			if f, ok := v.(func(func(*QPixmap, QIconMode, QIconState), *QPixmap, QIconMode, QIconState)); ok {
+				f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).AddPixmap, pixmap, mode, state)
+			} else {
+				v.(interface {
+					AddPixmap(*QPixmap, QIconMode, QIconState)
+				}).AddPixmap(pixmap, mode, state)
+			}
 		}},
 	{Name: "AddFile", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -365,26 +399,46 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(string, qtcore.QSize, QIconMode, QIconState), string, qtcore.QSize, QIconMode, QIconState))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			fileName := quteStr(*(*C.qute_str)(a[0]))
 			size := goQSize(*(*C.qute_size)(a[1]))
 			mode := QIconMode(*(*C.int64_t)(a[2]))
 			state := QIconState(*(*C.int64_t)(a[3]))
-			v.(interface {
-				AddFile(string, qtcore.QSize, QIconMode, QIconState)
-			}).AddFile(fileName, size, mode, state)
+			if f, ok := v.(func(func(string, qtcore.QSize, QIconMode, QIconState), string, qtcore.QSize, QIconMode, QIconState)); ok {
+				f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).AddFile, fileName, size, mode, state)
+			} else {
+				v.(interface {
+					AddFile(string, qtcore.QSize, QIconMode, QIconState)
+				}).AddFile(fileName, size, mode, state)
+			}
 		}},
 	{Name: "Key", Has: func(v any) bool { _, ok := v.(interface{ Key() string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() string) string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Key() string }).Key()
+			var r = *new(string)
+			if f, ok := v.(func(func() string) string); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).Key)
+			} else {
+				r = v.(interface{ Key() string }).Key()
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QIconEngine }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QIconEngine) *QIconEngine); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Clone() *QIconEngine }).Clone()
+			var r = *new(*QIconEngine)
+			if f, ok := v.(func(func() *QIconEngine) *QIconEngine); ok {
+				r = f(nil)
+			} else {
+				r = v.(interface{ Clone() *QIconEngine }).Clone()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIconEngine.Clone")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
@@ -396,15 +450,24 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
 			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
 			defer inH.Expire()
 			in := rt.View[qtcore.QDataStream](inH, inP)
-			r := v.(interface {
-				Read(*qtcore.QDataStream) bool
-			}).Read(in)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).Read, in)
+			} else {
+				r = v.(interface {
+					Read(*qtcore.QDataStream) bool
+				}).Read(in)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Write", Has: func(v any) bool {
@@ -413,15 +476,24 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])
 			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
 			defer outH.Expire()
 			out := rt.View[qtcore.QDataStream](outH, outP)
-			r := v.(interface {
-				Write(*qtcore.QDataStream) bool
-			}).Write(out)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).Write, out)
+			} else {
+				r = v.(interface {
+					Write(*qtcore.QDataStream) bool
+				}).Write(out)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "AvailableSizes", Has: func(v any) bool {
@@ -430,13 +502,22 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QIconMode, QIconState) []qtcore.QSize, QIconMode, QIconState) []qtcore.QSize)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			mode := QIconMode(*(*C.int64_t)(a[0]))
 			state := QIconState(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				AvailableSizes(QIconMode, QIconState) []qtcore.QSize
-			}).AvailableSizes(mode, state)
+			var r = *new([]qtcore.QSize)
+			if f, ok := v.(func(func(QIconMode, QIconState) []qtcore.QSize, QIconMode, QIconState) []qtcore.QSize); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).AvailableSizes, mode, state)
+			} else {
+				r = v.(interface {
+					AvailableSizes(QIconMode, QIconState) []qtcore.QSize
+				}).AvailableSizes(mode, state)
+			}
 			*(*C.qute_list)(ret) = quteCList(len(r), func(d []C.qute_size) {
 				for i, e := range r {
 					d[i] = cQSize(e)
@@ -444,15 +525,27 @@ var qIconEngineVTable = []rt.Virtual{
 			})
 		}},
 	{Name: "IconName", Has: func(v any) bool { _, ok := v.(interface{ IconName() string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() string) string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IconName() string }).IconName()
+			var r = *new(string)
+			if f, ok := v.(func(func() string) string); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).IconName)
+			} else {
+				r = v.(interface{ IconName() string }).IconName()
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "IsNull", Has: func(v any) bool { _, ok := v.(interface{ IsNull() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsNull() bool }).IsNull()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).IsNull)
+			} else {
+				r = v.(interface{ IsNull() bool }).IsNull()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ScaledPixmap", Has: func(v any) bool {
@@ -461,24 +554,225 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState, float64) *QPixmap, qtcore.QSize, QIconMode, QIconState, float64) *QPixmap)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			size := goQSize(*(*C.qute_size)(a[0]))
 			mode := QIconMode(*(*C.int64_t)(a[1]))
 			state := QIconState(*(*C.int64_t)(a[2]))
 			scale := float64(*(*C.double)(a[3]))
-			r := v.(interface {
-				ScaledPixmap(qtcore.QSize, QIconMode, QIconState, float64) *QPixmap
-			}).ScaledPixmap(size, mode, state, scale)
+			var r = *new(*QPixmap)
+			if f, ok := v.(func(func(qtcore.QSize, QIconMode, QIconState, float64) *QPixmap, qtcore.QSize, QIconMode, QIconState, float64) *QPixmap); ok {
+				r = f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).ScaledPixmap, size, mode, state, scale)
+			} else {
+				r = v.(interface {
+					ScaledPixmap(qtcore.QSize, QIconMode, QIconState, float64) *QPixmap
+				}).ScaledPixmap(size, mode, state, scale)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIconEngine.ScaledPixmap")
 		}},
 	{Name: "Virtual_hook", Has: func(v any) bool { _, ok := v.(interface{ Virtual_hook(int, unsafe.Pointer) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, unsafe.Pointer), int, unsafe.Pointer)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			idArg := int(*(*C.int)(a[0]))
 			data := *(*unsafe.Pointer)(a[1])
-			v.(interface{ Virtual_hook(int, unsafe.Pointer) }).Virtual_hook(idArg, data)
+			if f, ok := v.(func(func(int, unsafe.Pointer), int, unsafe.Pointer)); ok {
+				f((&QIconEngineSuper{this: rt.View[QIconEngine](h, h.Ptr())}).Virtual_hook, idArg, data)
+			} else {
+				v.(interface{ Virtual_hook(int, unsafe.Pointer) }).Virtual_hook(idArg, data)
+			}
 		}},
+}
+
+// qIconEngineShimInit sets a QIconEngine shim object's dispatch id and override mask.
+func qIconEngineShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QIconEngine_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverridePaint makes f this object's QIconEngine::paint: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Paint, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverridePaint(f func(super func(painter *QPainter, rect qtcore.QRect, mode QIconMode, state QIconState), painter *QPainter, rect qtcore.QRect, mode QIconMode, state QIconState)) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverridePaint", "Paint", f)
+}
+
+// OverrideActualSize makes f this object's QIconEngine::actualSize: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ActualSize, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideActualSize(f func(super func(size qtcore.QSize, mode QIconMode, state QIconState) qtcore.QSize, size qtcore.QSize, mode QIconMode, state QIconState) qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideActualSize", "ActualSize", f)
+}
+
+// OverridePixmap makes f this object's QIconEngine::pixmap: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Pixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverridePixmap(f func(super func(size qtcore.QSize, mode QIconMode, state QIconState) *QPixmap, size qtcore.QSize, mode QIconMode, state QIconState) *QPixmap) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverridePixmap", "Pixmap", f)
+}
+
+// OverrideAddPixmap makes f this object's QIconEngine::addPixmap: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AddPixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideAddPixmap(f func(super func(pixmap *QPixmap, mode QIconMode, state QIconState), pixmap *QPixmap, mode QIconMode, state QIconState)) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideAddPixmap", "AddPixmap", f)
+}
+
+// OverrideAddFile makes f this object's QIconEngine::addFile: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AddFile, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideAddFile(f func(super func(fileName string, size qtcore.QSize, mode QIconMode, state QIconState), fileName string, size qtcore.QSize, mode QIconMode, state QIconState)) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideAddFile", "AddFile", f)
+}
+
+// OverrideKey makes f this object's QIconEngine::key: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Key, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideKey(f func(super func() string) string) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideKey", "Key", f)
+}
+
+// OverrideClone makes f this object's QIconEngine::clone: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Clone, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideClone(f func(super func() *QIconEngine) *QIconEngine) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideClone", "Clone", f)
+}
+
+// OverrideRead makes f this object's QIconEngine::read: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Read, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideRead(f func(super func(in *qtcore.QDataStream) bool, in *qtcore.QDataStream) bool) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideRead", "Read", f)
+}
+
+// OverrideWrite makes f this object's QIconEngine::write: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Write, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideWrite(f func(super func(out *qtcore.QDataStream) bool, out *qtcore.QDataStream) bool) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideWrite", "Write", f)
+}
+
+// OverrideAvailableSizes makes f this object's QIconEngine::availableSizes: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AvailableSizes, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideAvailableSizes(f func(super func(mode QIconMode, state QIconState) []qtcore.QSize, mode QIconMode, state QIconState) []qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideAvailableSizes", "AvailableSizes", f)
+}
+
+// OverrideIconName makes f this object's QIconEngine::iconName: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IconName, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideIconName(f func(super func() string) string) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideIconName", "IconName", f)
+}
+
+// OverrideIsNull makes f this object's QIconEngine::isNull: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IsNull, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideIsNull(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideIsNull", "IsNull", f)
+}
+
+// OverrideScaledPixmap makes f this object's QIconEngine::scaledPixmap: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ScaledPixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideScaledPixmap(f func(super func(size qtcore.QSize, mode QIconMode, state QIconState, scale float64) *QPixmap, size qtcore.QSize, mode QIconMode, state QIconState, scale float64) *QPixmap) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideScaledPixmap", "ScaledPixmap", f)
+}
+
+// OverrideVirtual_hook makes f this object's QIconEngine::virtual_hook: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Virtual_hook, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QIconEngine) OverrideVirtual_hook(f func(super func(idArg int, data unsafe.Pointer), idArg int, data unsafe.Pointer)) {
+	rt.Override(unsafe.Pointer(this), "QIconEngine.OverrideVirtual_hook", "Virtual_hook", f)
 }
 
 // QIconEngineBase is embedded in Go types that subclass QIconEngine:
@@ -617,7 +911,7 @@ func NewQIconEngineWith(v QIconEngineSubclass) *QIconEngine {
 	}
 	rt.RequireOverride(v, qIconEngineVTable, "NewQIconEngineWith", "Clone", "it clones the engine when a copy of its icon is changed, and uses the result unchecked")
 	p := C.qute_QIconEngine_new_shim()
-	h := rt.WrapNew[QIconEngine](p, "QIconEngine", rt.NewOwned)
+	h := rt.WrapNewShim[QIconEngine](p, "QIconEngine", rt.NewOwned, qIconEngineVTable, qIconEngineShimInit)
 	base.QIconEngine = rt.View[QIconEngine](h, p)
 	id := h.SetSelf(v, qIconEngineVTable)
 	mask := rt.Mask(v, qIconEngineVTable)

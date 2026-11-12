@@ -68,7 +68,7 @@ func NewQDial(parent QWidgetLike) *QDial {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QDial](p, "QDial", mode)
+	h := rt.WrapNewShim[QDial](p, "QDial", mode, qDialVTable, qDialShimInit)
 	return rt.View[QDial](h, p)
 }
 
@@ -155,71 +155,114 @@ func (this *QDial) SetWrapping(on bool) {
 
 var qDialVTable = []rt.Virtual{
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MinimumSizeHint)
+			} else {
+				r = v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(eArg)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).Event, eArg)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(eArg)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			reP := *(*unsafe.Pointer)(a[0])
 			reH := rt.WrapClass(reP, "QResizeEvent", rt.NewScoped)
 			defer reH.Expire()
 			re := rt.View[qtgui.QResizeEvent](reH, reP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(re)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ResizeEvent, re)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(re)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			peP := *(*unsafe.Pointer)(a[0])
 			peH := rt.WrapClass(peP, "QPaintEvent", rt.NewScoped)
 			defer peH.Expire()
 			pe := rt.View[qtgui.QPaintEvent](peH, peP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(pe)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).PaintEvent, pe)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(pe)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			meP := *(*unsafe.Pointer)(a[0])
 			meH := rt.WrapClass(meP, "QMouseEvent", rt.NewScoped)
 			defer meH.Expire()
 			me := rt.View[qtgui.QMouseEvent](meH, meP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(me)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MousePressEvent, me)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(me)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			meP := *(*unsafe.Pointer)(a[0])
 			meH := rt.WrapClass(meP, "QMouseEvent", rt.NewScoped)
 			defer meH.Expire()
 			me := rt.View[qtgui.QMouseEvent](meH, meP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(me)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MouseReleaseEvent, me)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(me)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			meP := *(*unsafe.Pointer)(a[0])
 			meH := rt.WrapClass(meP, "QMouseEvent", rt.NewScoped)
 			defer meH.Expire()
 			me := rt.View[qtgui.QMouseEvent](meH, meP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(me)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MouseMoveEvent, me)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(me)
+			}
 		}},
 	{Name: "SliderChange", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -227,148 +270,238 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractSliderSliderChange), QAbstractSliderSliderChange))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			change := QAbstractSliderSliderChange(*(*C.int64_t)(a[0]))
-			v.(interface {
-				SliderChange(QAbstractSliderSliderChange)
-			}).SliderChange(change)
+			if f, ok := v.(func(func(QAbstractSliderSliderChange), QAbstractSliderSliderChange)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).SliderChange, change)
+			} else {
+				v.(interface {
+					SliderChange(QAbstractSliderSliderChange)
+				}).SliderChange(change)
+			}
 		}},
 	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionSlider) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionSlider), *QStyleOptionSlider)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
 			optionH := rt.WrapClass(optionP, "QStyleOptionSlider", rt.NewScoped)
 			defer optionH.Expire()
 			option := rt.View[QStyleOptionSlider](optionH, optionP)
-			v.(interface{ InitStyleOption(*QStyleOptionSlider) }).InitStyleOption(option)
+			if f, ok := v.(func(func(*QStyleOptionSlider), *QStyleOptionSlider)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).InitStyleOption, option)
+			} else {
+				v.(interface{ InitStyleOption(*QStyleOptionSlider) }).InitStyleOption(option)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			evP := *(*unsafe.Pointer)(a[0])
 			evH := rt.WrapClass(evP, "QKeyEvent", rt.NewScoped)
 			defer evH.Expire()
 			ev := rt.View[qtgui.QKeyEvent](evH, evP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(ev)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).KeyPressEvent, ev)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(ev)
+			}
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			timerEventP := *(*unsafe.Pointer)(a[0])
 			timerEventH := rt.WrapClass(timerEventP, "QTimerEvent", rt.NewScoped)
 			defer timerEventH.Expire()
 			timerEvent := rt.View[qtcore.QTimerEvent](timerEventH, timerEventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(timerEvent)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).TimerEvent, timerEvent)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(timerEvent)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QWheelEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtgui.QWheelEvent](eArgH, eArgP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(eArg)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).WheelEvent, eArg)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(eArg)
+			}
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
-			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(eArg)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ChangeEvent, eArg)
+			} else {
+				v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(eArg)
+			}
 		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
-			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			if f, ok := v.(func(func(bool), bool)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).SetVisible, visible)
+			} else {
+				v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			}
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
-			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).EnterEvent, event)
+			} else {
+				v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).LeaveEvent, event)
+			} else {
+				v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).MoveEvent, event)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).CloseEvent, event)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			}
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -376,87 +509,135 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QContextMenuEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QContextMenuEvent](eventH, eventP)
-			v.(interface {
-				ContextMenuEvent(*qtgui.QContextMenuEvent)
-			}).ContextMenuEvent(event)
+			if f, ok := v.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ContextMenuEvent, event)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtgui.QContextMenuEvent)
+				}).ContextMenuEvent(event)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).TabletEvent, event)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
-			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			if f, ok := v.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ActionEvent, event)
+			} else {
+				v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
-			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
-			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
-			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
-			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QShowEvent](eventH, eventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ShowEvent, event)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).HideEvent, event)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -464,13 +645,22 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -482,12 +672,21 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(paintDeviceMetric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).Metric, paintDeviceMetric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(paintDeviceMetric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
@@ -496,15 +695,23 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodEventP := *(*unsafe.Pointer)(a[0])
 			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
 			defer inputMethodEventH.Expire()
 			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(inputMethodEvent)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).InputMethodEvent, inputMethodEvent)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(inputMethodEvent)
+			}
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -512,19 +719,34 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(inputMethodQuery)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).InputMethodQuery, inputMethodQuery)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(inputMethodQuery)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QDial.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -533,48 +755,95 @@ var qDialVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QDialSuper{this: rt.View[QDial](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qDialShimInit sets a QDial shim object's dispatch id and override mask.
+func qDialShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QDial_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideInitStyleOption makes f this object's QDial::initStyleOption: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines InitStyleOption, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QDial) OverrideInitStyleOption(f func(super func(option *QStyleOptionSlider), option *QStyleOptionSlider)) {
+	rt.Override(unsafe.Pointer(this), "QDial.OverrideInitStyleOption", "InitStyleOption", f)
 }
 
 // QDialBase is embedded in Go types that subclass QDial:
@@ -1177,7 +1446,7 @@ func NewQDialWith(v QDialSubclass, parent QWidgetLike) *QDial {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QDial](p, "QDial", mode)
+	h := rt.WrapNewShim[QDial](p, "QDial", mode, qDialVTable, qDialShimInit)
 	base.QDial = rt.View[QDial](h, p)
 	id := h.SetSelf(v, qDialVTable)
 	mask := rt.Mask(v, qDialVTable)

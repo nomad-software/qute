@@ -413,3 +413,17 @@ func (this *QPen) SetCosmetic(cosmetic bool) {
 	C.qute_QPen_setCosmetic(self, C.bool(cosmetic))
 	runtime.KeepAlive(this)
 }
+
+// ToQVariant wraps the conversion QPen::operator QVariant().
+//
+//	C++: QPen::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qpen.html#operator-QVariant
+func (this *QPen) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QPen.ToQVariant")
+	r := C.qute_QPen_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

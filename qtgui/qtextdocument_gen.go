@@ -67,7 +67,7 @@ func NewQTextDocument(parent qtcore.QObjectLike) *QTextDocument {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
+	h := rt.WrapNewShim[QTextDocument](p, "QTextDocument", mode, qTextDocumentVTable, qTextDocumentShimInit)
 	return rt.View[QTextDocument](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQTextDocumentWithText(text string, parent qtcore.QObjectLike) *QTextDocu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
+	h := rt.WrapNewShim[QTextDocument](p, "QTextDocument", mode, qTextDocumentVTable, qTextDocumentShimInit)
 	return rt.View[QTextDocument](h, p)
 }
 
@@ -214,6 +214,20 @@ func (this *QTextDocument) Revision() int {
 	r := C.qute_QTextDocument_revision(self)
 	runtime.KeepAlive(this)
 	return int(r)
+}
+
+// DocumentLayout wraps QTextDocument::documentLayout.
+//
+//	C++: QAbstractTextDocumentLayout * QTextDocument::documentLayout() const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextdocument.html#documentLayout
+func (this *QTextDocument) DocumentLayout() *QAbstractTextDocumentLayout {
+	self := rt.Use(unsafe.Pointer(this), "QTextDocument.DocumentLayout")
+	r := C.qute_QTextDocument_documentLayout(self)
+	runtime.KeepAlive(this)
+	return rt.View[QAbstractTextDocumentLayout](rt.WrapClass(r, "QAbstractTextDocumentLayout", rt.KeepOrBorrow), r)
 }
 
 // SetMetaInformation wraps QTextDocument::setMetaInformation.
@@ -1649,9 +1663,14 @@ func (this *QTextDocument) OnDocumentLayoutChanged(f func()) qtcore.Connection {
 
 var qTextDocumentVTable = []rt.Virtual{
 	{Name: "Clear", Has: func(v any) bool { _, ok := v.(interface{ Clear() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Clear() }).Clear()
+			if f, ok := v.(func(func())); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).Clear)
+			} else {
+				v.(interface{ Clear() }).Clear()
+			}
 		}},
 	{Name: "CreateObject", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1659,12 +1678,21 @@ var qTextDocumentVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QTextFormat) *QTextObject, *QTextFormat) *QTextObject)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			fArg := rt.View[QTextFormat](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QTextFormat", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				CreateObject(*QTextFormat) *QTextObject
-			}).CreateObject(fArg)
+			var r = *new(*QTextObject)
+			if f, ok := v.(func(func(*QTextFormat) *QTextObject, *QTextFormat) *QTextObject); ok {
+				r = f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).CreateObject, fArg)
+			} else {
+				r = v.(interface {
+					CreateObject(*QTextFormat) *QTextObject
+				}).CreateObject(fArg)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.CreateObject")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
@@ -1676,23 +1704,38 @@ var qTextDocumentVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int, *qtcore.QUrl) *qtcore.QVariant, int, *qtcore.QUrl) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			typeArg := int(*(*C.int)(a[0]))
 			name := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			r := v.(interface {
-				LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
-			}).LoadResource(typeArg, name)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(int, *qtcore.QUrl) *qtcore.QVariant, int, *qtcore.QUrl) *qtcore.QVariant); ok {
+				r = f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).LoadResource, typeArg, name)
+			} else {
+				r = v.(interface {
+					LoadResource(int, *qtcore.QUrl) *qtcore.QVariant
+				}).LoadResource(typeArg, name)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTextDocument.LoadResource")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -1701,57 +1744,135 @@ var qTextDocumentVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QTextDocumentSuper{this: rt.View[QTextDocument](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qTextDocumentShimInit sets a QTextDocument shim object's dispatch id and override mask.
+func qTextDocumentShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QTextDocument_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideClear makes f this object's QTextDocument::clear: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Clear, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTextDocument) OverrideClear(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QTextDocument.OverrideClear", "Clear", f)
+}
+
+// OverrideCreateObject makes f this object's QTextDocument::createObject: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CreateObject, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTextDocument) OverrideCreateObject(f func(super func(fArg *QTextFormat) *QTextObject, fArg *QTextFormat) *QTextObject) {
+	rt.Override(unsafe.Pointer(this), "QTextDocument.OverrideCreateObject", "CreateObject", f)
+}
+
+// OverrideLoadResource makes f this object's QTextDocument::loadResource: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines LoadResource, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QTextDocument) OverrideLoadResource(f func(super func(typeArg int, name *qtcore.QUrl) *qtcore.QVariant, typeArg int, name *qtcore.QUrl) *qtcore.QVariant) {
+	rt.Override(unsafe.Pointer(this), "QTextDocument.OverrideLoadResource", "LoadResource", f)
 }
 
 // QTextDocumentBase is embedded in Go types that subclass QTextDocument:
@@ -1914,7 +2035,7 @@ func NewQTextDocumentWith(v QTextDocumentSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
+	h := rt.WrapNewShim[QTextDocument](p, "QTextDocument", mode, qTextDocumentVTable, qTextDocumentShimInit)
 	base.QTextDocument = rt.View[QTextDocument](h, p)
 	id := h.SetSelf(v, qTextDocumentVTable)
 	mask := rt.Mask(v, qTextDocumentVTable)
@@ -1946,7 +2067,7 @@ func NewQTextDocumentWithTextWith(v QTextDocumentSubclass, text string, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
+	h := rt.WrapNewShim[QTextDocument](p, "QTextDocument", mode, qTextDocumentVTable, qTextDocumentShimInit)
 	base.QTextDocument = rt.View[QTextDocument](h, p)
 	id := h.SetSelf(v, qTextDocumentVTable)
 	mask := rt.Mask(v, qTextDocumentVTable)

@@ -440,7 +440,7 @@ func TestOverrideResultTransferredToCpp(t *testing.T) {
 		self, vtable := h.Subclass()
 		for _, vt := range vtable {
 			if vt.Name == "CreatePopupMenu" {
-				vt.Call(self, nil, unsafe.Pointer(&ret)) // as the shim does for Qt
+				vt.Call(self, h, nil, unsafe.Pointer(&ret)) // as the shim does for Qt
 			}
 		}
 		if ret == nil {
@@ -703,5 +703,41 @@ func TestSignalMapperKeepsMappedObject(t *testing.T) {
 		}
 		m.Delete()
 		s.Delete()
+	})
+}
+
+// A tree item Go built reports its death from its shim's destructor. After
+// its Go handle is collected while the tree keeps the item, Qt can hand the
+// item to Go again (a method result, a signal argument): the new handle must
+// still learn of the item's death. It used to be an untracked plain handle,
+// alive after tree.Clear() deleted the item, so a call on it read freed
+// memory.
+func TestNotifyObjectRewrappedAfterCollection(t *testing.T) {
+	var tree *qtwidgets.QTreeWidget
+	qutetest.Run(t, func() {
+		tree = qtwidgets.NewQTreeWidget(nil)
+		for range 3 {
+			tree.AddTopLevelItem(qtwidgets.NewQTreeWidgetItemWithStrings([]string{"x"}))
+		}
+	})
+	qutetest.CollectGarbage() // the items' Go handles go; the tree keeps the items
+	qutetest.Run(t, func() {
+		defer tree.Delete()
+		got := tree.TopLevelItem(0)
+		var fromSignal *qtwidgets.QTreeWidgetItem
+		tree.OnItemChanged(func(it *qtwidgets.QTreeWidgetItem, _ int) { fromSignal = it })
+		tree.TopLevelItem(1).SetText(0, "y")
+		if fromSignal == nil {
+			t.Fatal("itemChanged did not run")
+		}
+		tree.Clear()
+		for name, it := range map[string]*qtwidgets.QTreeWidgetItem{"TopLevelItem": got, "signal": fromSignal} {
+			if it.Alive() {
+				t.Errorf("an item from %s is still alive after tree.Clear() deleted it", name)
+			}
+			if msg := panicText(func() { _ = it.Text(0) }); msg == "" {
+				t.Errorf("Text on a deleted item from %s did not panic", name)
+			}
+		}
 	})
 }

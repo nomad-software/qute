@@ -70,7 +70,9 @@ exact version if you use it.
   methods and functions. Any class with virtuals can be subclassed from Go
   (about 240: widgets, views, delegates, validators, layouts, item models,
   graphics items, styles, syntax highlighters, undo commands, icon engines,
-  gesture recognizers, wizard pages, `QOpenGLWidget`, web URL scheme handlers); `COVERAGE.md` lists the few Qt doesn't allow and why. A method with C++ default arguments has a short form and
+  gesture recognizers, wizard pages, `QOpenGLWidget`, web URL scheme handlers); `COVERAGE.md` lists the few Qt doesn't allow and why.
+  Any object qute builds can also have one virtual replaced in place
+  (`edit.OverrideKeyPressEvent(func(super, e) {...})`), miqt-style. A method with C++ default arguments has a short form and
   a `Full` form that takes them all (`Index(row, col)` and
   `IndexFull(row, col, parent)`).
 - **Checked, not hoped.** Every ownership rule lives in a small YAML file
@@ -333,13 +335,17 @@ happened and the fix.
   `*QPushButton`, your own subclass). Pass untyped `nil`, not a typed nil.
 - `QString`, `QByteArray` and `QStringList` are `string`, `[]byte` and
   `[]string`. `QPoint`, `QSize`, `QRect`, `QMargins` and `QColor` are plain
-  Go structs. `QImage`, `QFont`, `QIcon`, `QVariant` and other value classes
+  Go structs; `QColor` has Qt's colour arithmetic in Go (`Lighter`, `Darker`,
+  `Hsv`, `Hsl`, `Lightness`, `AlphaF`, `ColorFromHsl`...), giving the colours
+  Qt gives. `QImage`, `QFont`, `QIcon`, `QVariant` and other value classes
   are Owned handles that GC frees; a `QModelIndex` is kept in Go memory, so
   the index Qt hands a model's overrides for every row costs no C++ copy or
   cleanup. `qtcore.NewQVariantOf(v)` and
   `(*QVariant).Value()` convert to and from Go values; `qtgui.NewQVariantOf`
   and `qtgui.VariantValue` also take and return colours, icons, fonts, brushes,
-  pixmaps, images and the other GUI values, for item model roles.
+  pixmaps, images and the other GUI values, for item model roles. A class with
+  Qt's `operator QVariant()` has `ToQVariant()` (`format.ToQVariant()` for a
+  `QTextFormat`), and `NewQVariantOf` takes it too.
 - Calls whose Qt result signals failure return `error`, e.g.
   `img.Load(path)`.
 - Out-parameters become results: `l, t, r, b := layout.GetContentsMargins()`.
@@ -390,13 +396,32 @@ profile, parent)` makes a Go page in a profile of your own). Abstract classes (`
 `QValidator`, `QSyntaxHighlighter`) are built only that way, and a pure
 virtual you don't define returns its zero value (the one exception is
 `QIconEngine.Clone`, which Qt needs: the constructor panics without it).
-Overrides only reach objects built this way: a widget made with plain
-`New<Class>` (or by Qt, like a dialog's buttons) can't gain them later, so
-build the Go type with `New…With` from the start, or watch an existing object
-with an event filter (a Go `QObject` that overrides `EventFilter`, passed to
-`InstallEventFilter`). An override has the same
-Go signature as the method's binding, so in-out parameters are a parameter
-plus a result:
+To change one virtual of one object, with no Go type, set it on the object.
+Every object a qute constructor makes takes per-object overrides,
+`Override<Virtual>(func(super, args...) results)`, where `super` runs the C++
+implementation (it is nil for a pure virtual):
+
+```go
+edit := qtwidgets.NewQLineEdit(nil)
+edit.OverrideKeyPressEvent(func(super func(*qtgui.QKeyEvent), e *qtgui.QKeyEvent) {
+	if e.Key() == int(qtcore.Key_Escape) {
+		edit.Clear()
+		return
+	}
+	super(e)
+})
+edit.OverrideKeyPressEvent(nil) // back to QLineEdit's own
+```
+
+The function is the object's Go state, like a signal handler's closure: a
+parentless object with an override must be `Delete()`d. A virtual the
+object's Go type (`New…With`) already defines can't also be set this way.
+Objects Qt creates (a dialog's buttons, a combo box's view) are not qute's
+subclass, and the setter panics for them: watch those with an event filter (a
+Go `QObject` that overrides `EventFilter`, or a `QObject` with
+`OverrideEventFilter`, passed to `InstallEventFilter`). A virtual Go does not
+override costs Qt a test of one bit. An override has the same Go signature as
+the method's binding, so in-out parameters are a parameter plus a result:
 
 ```go
 type upper struct{ qtgui.QValidatorBase }
@@ -423,7 +448,9 @@ creates, `QIODevice`) and the few virtuals Go can't override, with reasons.
 All Qt calls happen on the GUI thread (the main goroutine inside
 `qute.Main`); a call from another goroutine panics. From other goroutines use
 `qute.Post(f)` or `qute.PostSync(f)`. A panic in a handler that `f` triggers
-is re-raised by `PostSync` with the handler's stack.
+is re-raised by `PostSync` with the handler's stack (`*qute.CallbackPanic`), and a
+panic in `f` itself, off the GUI thread, with the stack where it happened
+(`*qute.PostSyncPanic`).
 
 In tests, `t.Fatal` and `t.Skip` work inside `qutetest.Run` and end the test
 as usual. A test may close or delete its windows: under `qutetest.TestMain`
@@ -472,8 +499,8 @@ a triangle with a shader program, a vertex buffer and a VAO.
 
 - `qute new app <dir> [module]` writes `main.go`, a window, a behaviour test
   and a screenshot test.
-- `qute vet ./...` reports Owned objects with connections, and parentless Go
-  subclasses, that are never deleted or parented, `Delete()` of a QObject
+- `qute vet ./...` reports Owned objects with connections or per-object
+  overrides, and parentless Go subclasses, that are never deleted or parented, `Delete()` of a QObject
   inside handlers and overrides (a painter, image or other non-QObject made
   in a handler is deleted there), Qt calls (including `qute.Screenshot` and the `qutetest`
   input helpers) from goroutines, and event, painter and style-option

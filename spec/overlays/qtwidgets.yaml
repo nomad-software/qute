@@ -189,7 +189,6 @@ QTextEdit:
 QPlainTextEdit:
   inputMethodQuery(Qt::InputMethodQuery, QVariant): { name: InputMethodQueryWithArgument }
   createMimeDataFromSelection: { return: transfer-to-go }
-  getPaintContext: { skip: "on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound" }
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true }
   document: { return: borrowed }

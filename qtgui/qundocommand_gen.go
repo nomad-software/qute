@@ -107,7 +107,7 @@ func NewQUndoCommand(parent QUndoCommandLike) *QUndoCommand {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
+	h := rt.WrapNewShim[QUndoCommand](p, "QUndoCommand", mode, qUndoCommandVTable, qUndoCommandShimInit)
 	return rt.View[QUndoCommand](h, p)
 }
 
@@ -130,7 +130,7 @@ func NewQUndoCommandWithText(text string, parent QUndoCommandLike) *QUndoCommand
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
+	h := rt.WrapNewShim[QUndoCommand](p, "QUndoCommand", mode, qUndoCommandVTable, qUndoCommandShimInit)
 	return rt.View[QUndoCommand](h, p)
 }
 
@@ -271,28 +271,107 @@ func (this *QUndoCommand) Child(index int) *QUndoCommand {
 
 var qUndoCommandVTable = []rt.Virtual{
 	{Name: "Undo", Has: func(v any) bool { _, ok := v.(interface{ Undo() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Undo() }).Undo()
+			if f, ok := v.(func(func())); ok {
+				f((&QUndoCommandSuper{this: rt.View[QUndoCommand](h, h.Ptr())}).Undo)
+			} else {
+				v.(interface{ Undo() }).Undo()
+			}
 		}},
 	{Name: "Redo", Has: func(v any) bool { _, ok := v.(interface{ Redo() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Redo() }).Redo()
+			if f, ok := v.(func(func())); ok {
+				f((&QUndoCommandSuper{this: rt.View[QUndoCommand](h, h.Ptr())}).Redo)
+			} else {
+				v.(interface{ Redo() }).Redo()
+			}
 		}},
 	{Name: "Id", Has: func(v any) bool { _, ok := v.(interface{ Id() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Id() int }).Id()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QUndoCommandSuper{this: rt.View[QUndoCommand](h, h.Ptr())}).Id)
+			} else {
+				r = v.(interface{ Id() int }).Id()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "MergeWith", Has: func(v any) bool { _, ok := v.(interface{ MergeWith(*QUndoCommand) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QUndoCommand) bool, *QUndoCommand) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			other := rt.View[QUndoCommand](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUndoCommand", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface{ MergeWith(*QUndoCommand) bool }).MergeWith(other)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QUndoCommand) bool, *QUndoCommand) bool); ok {
+				r = f((&QUndoCommandSuper{this: rt.View[QUndoCommand](h, h.Ptr())}).MergeWith, other)
+			} else {
+				r = v.(interface{ MergeWith(*QUndoCommand) bool }).MergeWith(other)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+}
+
+// qUndoCommandShimInit sets a QUndoCommand shim object's dispatch id and override mask.
+func qUndoCommandShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QUndoCommand_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideUndo makes f this object's QUndoCommand::undo: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Undo, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QUndoCommand) OverrideUndo(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QUndoCommand.OverrideUndo", "Undo", f)
+}
+
+// OverrideRedo makes f this object's QUndoCommand::redo: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Redo, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QUndoCommand) OverrideRedo(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QUndoCommand.OverrideRedo", "Redo", f)
+}
+
+// OverrideId makes f this object's QUndoCommand::id: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Id, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QUndoCommand) OverrideId(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QUndoCommand.OverrideId", "Id", f)
+}
+
+// OverrideMergeWith makes f this object's QUndoCommand::mergeWith: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MergeWith, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QUndoCommand) OverrideMergeWith(f func(super func(other *QUndoCommand) bool, other *QUndoCommand) bool) {
+	rt.Override(unsafe.Pointer(this), "QUndoCommand.OverrideMergeWith", "MergeWith", f)
 }
 
 // QUndoCommandBase is embedded in Go types that subclass QUndoCommand:
@@ -372,7 +451,7 @@ func NewQUndoCommandWith(v QUndoCommandSubclass, parent QUndoCommandLike) *QUndo
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
+	h := rt.WrapNewShim[QUndoCommand](p, "QUndoCommand", mode, qUndoCommandVTable, qUndoCommandShimInit)
 	base.QUndoCommand = rt.View[QUndoCommand](h, p)
 	id := h.SetSelf(v, qUndoCommandVTable)
 	mask := rt.Mask(v, qUndoCommandVTable)
@@ -404,7 +483,7 @@ func NewQUndoCommandWithTextWith(v QUndoCommandSubclass, text string, parent QUn
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
+	h := rt.WrapNewShim[QUndoCommand](p, "QUndoCommand", mode, qUndoCommandVTable, qUndoCommandShimInit)
 	base.QUndoCommand = rt.View[QUndoCommand](h, p)
 	id := h.SetSelf(v, qUndoCommandVTable)
 	mask := rt.Mask(v, qUndoCommandVTable)

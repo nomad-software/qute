@@ -271,3 +271,46 @@ func BenchmarkTreeRows(b *testing.B) {
 		}
 	})
 }
+
+// A tree widget signal hands its item to the Go handler, which must wrap it
+// even when it returns at once. Items whose Go handles are still held wrap to
+// the same handle; items Go dropped (built and handed to the tree, their
+// handles collected) are wrapped afresh. Each iteration changes every row
+// through the model, so Qt emits itemChanged for each.
+func BenchmarkTreeItemSignal(b *testing.B) {
+	for _, held := range []bool{true, false} {
+		name := map[bool]string{true: "held", false: "dropped"}[held]
+		b.Run(name, func(b *testing.B) {
+			qutetest.Run(b, func() {
+				tree := qtwidgets.NewQTreeWidget(nil)
+				defer tree.Delete()
+				var items []*qtwidgets.QTreeWidgetItem
+				for range 400 {
+					it := qtwidgets.NewQTreeWidgetItemWithStrings([]string{"a"})
+					tree.AddTopLevelItem(it)
+					if held {
+						items = append(items, it)
+					}
+				}
+				n := 0
+				tree.OnItemChanged(func(*qtwidgets.QTreeWidgetItem, int) { n++ })
+				m := tree.Model()
+				vs := []*qtcore.QVariant{qtcore.NewQVariantOf("b"), qtcore.NewQVariantOf("c")}
+				runtime.GC()
+				b.ReportAllocs()
+				i := 0
+				for b.Loop() {
+					v := vs[i%2] // a changed value, so Qt emits
+					i++
+					for r := range 400 {
+						m.SetData(m.Index(r, 0), v)
+					}
+				}
+				if n == 0 {
+					b.Fatal("itemChanged was not emitted")
+				}
+				runtime.KeepAlive(items)
+			})
+		})
+	}
+}

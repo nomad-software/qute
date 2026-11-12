@@ -1016,7 +1016,7 @@ void qute_QOpenGLBuffer_release_1(int64_t a0) {
 // ---- QOpenGLDebugLogger
 void * qute_QOpenGLDebugLogger_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QOpenGLDebugLogger *>(new QOpenGLDebugLogger(static_cast<QObject *>(a0)));
+	return static_cast<QOpenGLDebugLogger *>(new qute_QOpenGLDebugLogger(static_cast<QObject *>(a0)));
 }
 void * qute_QOpenGLDebugLogger_new_shim(void * a0) {
 	qute_gui_only();
@@ -1570,7 +1570,7 @@ bool qute_QOpenGLPixelTransferOptions_isSwapBytesEnabled(void *self) {
 // ---- QOpenGLShader
 void * qute_QOpenGLShader_new(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QOpenGLShader *>(new QOpenGLShader(QFlags<QOpenGLShader::ShaderTypeBit>::fromInt(static_cast<QFlags<QOpenGLShader::ShaderTypeBit>::Int>(a0)), static_cast<QObject *>(a1)));
+	return static_cast<QOpenGLShader *>(new qute_QOpenGLShader(QFlags<QOpenGLShader::ShaderTypeBit>::fromInt(static_cast<QFlags<QOpenGLShader::ShaderTypeBit>::Int>(a0)), static_cast<QObject *>(a1)));
 }
 void * qute_QOpenGLShader_new_shim(int64_t a0, void * a1) {
 	qute_gui_only();
@@ -1660,7 +1660,7 @@ bool qute_QOpenGLShader_hasOpenGLShaders_1(int64_t a0, void * a1) {
 // ---- QOpenGLShaderProgram
 void * qute_QOpenGLShaderProgram_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QOpenGLShaderProgram *>(new QOpenGLShaderProgram(static_cast<QObject *>(a0)));
+	return static_cast<QOpenGLShaderProgram *>(new qute_QOpenGLShaderProgram(static_cast<QObject *>(a0)));
 }
 void * qute_QOpenGLShaderProgram_new_shim(void * a0) {
 	qute_gui_only();
@@ -2488,7 +2488,7 @@ void * qute_QOpenGLTextureBlitter_targetTransform(qute_rectf a0, qute_rect a1) {
 // ---- QOpenGLVertexArrayObject
 void * qute_QOpenGLVertexArrayObject_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QOpenGLVertexArrayObject *>(new QOpenGLVertexArrayObject(static_cast<QObject *>(a0)));
+	return static_cast<QOpenGLVertexArrayObject *>(new qute_QOpenGLVertexArrayObject(static_cast<QObject *>(a0)));
 }
 void * qute_QOpenGLVertexArrayObject_new_shim(void * a0) {
 	qute_gui_only();
@@ -2562,11 +2562,11 @@ void qute_QOpenGLVertexArrayObject_release(void *self) {
 // ---- QOpenGLWindow
 void * qute_QOpenGLWindow_new(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QOpenGLWindow *>(new QOpenGLWindow(static_cast<QOpenGLWindow::UpdateBehavior>(a0), static_cast<QWindow *>(a1)));
+	return static_cast<QOpenGLWindow *>(new qute_QOpenGLWindow(static_cast<QOpenGLWindow::UpdateBehavior>(a0), static_cast<QWindow *>(a1)));
 }
 void * qute_QOpenGLWindow_new_1(void * a0, int64_t a1, void * a2) {
 	qute_gui_only();
-	return static_cast<QOpenGLWindow *>(new QOpenGLWindow(static_cast<QOpenGLContext *>(a0), static_cast<QOpenGLWindow::UpdateBehavior>(a1), static_cast<QWindow *>(a2)));
+	return static_cast<QOpenGLWindow *>(new qute_QOpenGLWindow(static_cast<QOpenGLContext *>(a0), static_cast<QOpenGLWindow::UpdateBehavior>(a1), static_cast<QWindow *>(a2)));
 }
 void * qute_QOpenGLWindow_new_shim(int64_t a0, void * a1) {
 	qute_gui_only();

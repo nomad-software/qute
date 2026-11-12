@@ -1791,11 +1791,11 @@ long long qute_QAudioBuffer_startTime(void *self) {
 // ---- QAudioBufferInput
 void * qute_QAudioBufferInput_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QAudioBufferInput *>(new QAudioBufferInput(static_cast<QObject *>(a0)));
+	return static_cast<QAudioBufferInput *>(new qute_QAudioBufferInput(static_cast<QObject *>(a0)));
 }
 void * qute_QAudioBufferInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioBufferInput *>(new QAudioBufferInput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioBufferInput *>(new qute_QAudioBufferInput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioBufferInput_new_shim(void * a0) {
 	qute_gui_only();
@@ -1871,11 +1871,11 @@ void * qute_QAudioBufferInput_readyToSendAudioBuffer(void *self, uintptr_t id) {
 // ---- QAudioBufferOutput
 void * qute_QAudioBufferOutput_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QAudioBufferOutput *>(new QAudioBufferOutput(static_cast<QObject *>(a0)));
+	return static_cast<QAudioBufferOutput *>(new qute_QAudioBufferOutput(static_cast<QObject *>(a0)));
 }
 void * qute_QAudioBufferOutput_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioBufferOutput *>(new QAudioBufferOutput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioBufferOutput *>(new qute_QAudioBufferOutput((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioBufferOutput_new_shim(void * a0) {
 	qute_gui_only();
@@ -1943,7 +1943,7 @@ void * qute_QAudioBufferOutput_audioBufferReceived(void *self, uintptr_t id) {
 // ---- QAudioDecoder
 void * qute_QAudioDecoder_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QAudioDecoder *>(new QAudioDecoder(static_cast<QObject *>(a0)));
+	return static_cast<QAudioDecoder *>(new qute_QAudioDecoder(static_cast<QObject *>(a0)));
 }
 void * qute_QAudioDecoder_new_shim(void * a0) {
 	qute_gui_only();
@@ -2299,11 +2299,11 @@ int64_t qute_QAudioFormat_defaultChannelConfigForChannelCount(int a0) {
 // ---- QAudioInput
 void * qute_QAudioInput_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QAudioInput *>(new QAudioInput(static_cast<QObject *>(a0)));
+	return static_cast<QAudioInput *>(new qute_QAudioInput(static_cast<QObject *>(a0)));
 }
 void * qute_QAudioInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioInput *>(new QAudioInput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioInput *>(new qute_QAudioInput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioInput_new_shim(void * a0) {
 	qute_gui_only();
@@ -2411,11 +2411,11 @@ void * qute_QAudioInput_mutedChanged(void *self, uintptr_t id) {
 // ---- QAudioOutput
 void * qute_QAudioOutput_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QAudioOutput *>(new QAudioOutput(static_cast<QObject *>(a0)));
+	return static_cast<QAudioOutput *>(new qute_QAudioOutput(static_cast<QObject *>(a0)));
 }
 void * qute_QAudioOutput_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioOutput *>(new QAudioOutput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioOutput *>(new qute_QAudioOutput((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioOutput_new_shim(void * a0) {
 	qute_gui_only();
@@ -2523,11 +2523,11 @@ void * qute_QAudioOutput_mutedChanged(void *self, uintptr_t id) {
 // ---- QAudioSink
 void * qute_QAudioSink_new(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioSink *>(new QAudioSink((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioSink *>(new qute_QAudioSink((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioSink_new_1(void * a0, void * a1, void * a2) {
 	qute_gui_only();
-	return static_cast<QAudioSink *>(new QAudioSink((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
+	return static_cast<QAudioSink *>(new qute_QAudioSink((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
 }
 void * qute_QAudioSink_new_shim(void * a0, void * a1) {
 	qute_gui_only();
@@ -2679,11 +2679,11 @@ void * qute_QAudioSink_stateChanged(void *self, uintptr_t id) {
 // ---- QAudioSource
 void * qute_QAudioSource_new(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QAudioSource *>(new QAudioSource((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
+	return static_cast<QAudioSource *>(new qute_QAudioSource((a0 ? *static_cast<QAudioFormat *>(a0) : QAudioFormat()), static_cast<QObject *>(a1)));
 }
 void * qute_QAudioSource_new_1(void * a0, void * a1, void * a2) {
 	qute_gui_only();
-	return static_cast<QAudioSource *>(new QAudioSource((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
+	return static_cast<QAudioSource *>(new qute_QAudioSource((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), (a1 ? *static_cast<QAudioFormat *>(a1) : QAudioFormat()), static_cast<QObject *>(a2)));
 }
 void * qute_QAudioSource_new_shim(void * a0, void * a1) {
 	qute_gui_only();
@@ -2835,15 +2835,15 @@ void * qute_QAudioSource_stateChanged(void *self, uintptr_t id) {
 // ---- QCamera
 void * qute_QCamera_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QCamera *>(new QCamera(static_cast<QObject *>(a0)));
+	return static_cast<QCamera *>(new qute_QCamera(static_cast<QObject *>(a0)));
 }
 void * qute_QCamera_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QCamera *>(new QCamera((a0 ? *static_cast<QCameraDevice *>(a0) : QCameraDevice()), static_cast<QObject *>(a1)));
+	return static_cast<QCamera *>(new qute_QCamera((a0 ? *static_cast<QCameraDevice *>(a0) : QCameraDevice()), static_cast<QObject *>(a1)));
 }
 void * qute_QCamera_new_2(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QCamera *>(new QCamera(static_cast<QCameraDevice::Position>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QCamera *>(new qute_QCamera(static_cast<QCameraDevice::Position>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QCamera_new_shim(void * a0) {
 	qute_gui_only();
@@ -3495,7 +3495,7 @@ qute_str qute_QCapturableWindow_description(void *self) {
 // ---- QImageCapture
 void * qute_QImageCapture_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QImageCapture *>(new QImageCapture(static_cast<QObject *>(a0)));
+	return static_cast<QImageCapture *>(new qute_QImageCapture(static_cast<QObject *>(a0)));
 }
 void * qute_QImageCapture_new_shim(void * a0) {
 	qute_gui_only();
@@ -3745,7 +3745,7 @@ void * qute_QImageCapture_imageSaved(void *self, uintptr_t id) {
 // ---- QMediaCaptureSession
 void * qute_QMediaCaptureSession_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QMediaCaptureSession *>(new QMediaCaptureSession(static_cast<QObject *>(a0)));
+	return static_cast<QMediaCaptureSession *>(new qute_QMediaCaptureSession(static_cast<QObject *>(a0)));
 }
 void * qute_QMediaCaptureSession_new_shim(void * a0) {
 	qute_gui_only();
@@ -4001,7 +4001,7 @@ void * qute_QMediaCaptureSession_audioOutputChanged(void *self, uintptr_t id) {
 // ---- QMediaDevices
 void * qute_QMediaDevices_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QMediaDevices *>(new QMediaDevices(static_cast<QObject *>(a0)));
+	return static_cast<QMediaDevices *>(new qute_QMediaDevices(static_cast<QObject *>(a0)));
 }
 void * qute_QMediaDevices_new_shim(void * a0) {
 	qute_gui_only();
@@ -4233,7 +4233,7 @@ qute_str qute_QMediaMetaData_metaDataKeyToString(int64_t a0) {
 // ---- QMediaPlayer
 void * qute_QMediaPlayer_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QMediaPlayer *>(new QMediaPlayer(static_cast<QObject *>(a0)));
+	return static_cast<QMediaPlayer *>(new qute_QMediaPlayer(static_cast<QObject *>(a0)));
 }
 void * qute_QMediaPlayer_new_shim(void * a0) {
 	qute_gui_only();
@@ -4703,7 +4703,7 @@ void * qute_QMediaPlayer_playbackOptionsChanged(void *self, uintptr_t id) {
 // ---- QMediaRecorder
 void * qute_QMediaRecorder_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QMediaRecorder *>(new QMediaRecorder(static_cast<QObject *>(a0)));
+	return static_cast<QMediaRecorder *>(new qute_QMediaRecorder(static_cast<QObject *>(a0)));
 }
 void * qute_QMediaRecorder_new_shim(void * a0) {
 	qute_gui_only();
@@ -5215,7 +5215,7 @@ void qute_QPlaybackOptions_resetProbeSize(void *self) {
 // ---- QScreenCapture
 void * qute_QScreenCapture_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QScreenCapture *>(new QScreenCapture(static_cast<QObject *>(a0)));
+	return static_cast<QScreenCapture *>(new qute_QScreenCapture(static_cast<QObject *>(a0)));
 }
 void * qute_QScreenCapture_new_shim(void * a0) {
 	qute_gui_only();
@@ -5351,11 +5351,11 @@ void * qute_QScreenCapture_maximumFrameRateChanged(void *self, uintptr_t id) {
 // ---- QSoundEffect
 void * qute_QSoundEffect_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSoundEffect *>(new QSoundEffect(static_cast<QObject *>(a0)));
+	return static_cast<QSoundEffect *>(new qute_QSoundEffect(static_cast<QObject *>(a0)));
 }
 void * qute_QSoundEffect_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QSoundEffect *>(new QSoundEffect((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
+	return static_cast<QSoundEffect *>(new qute_QSoundEffect((a0 ? *static_cast<QAudioDevice *>(a0) : QAudioDevice()), static_cast<QObject *>(a1)));
 }
 void * qute_QSoundEffect_new_shim(void * a0) {
 	qute_gui_only();
@@ -5887,11 +5887,11 @@ qute_str qute_QVideoFrameFormat_pixelFormatToString(int64_t a0) {
 // ---- QVideoFrameInput
 void * qute_QVideoFrameInput_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QVideoFrameInput *>(new QVideoFrameInput(static_cast<QObject *>(a0)));
+	return static_cast<QVideoFrameInput *>(new qute_QVideoFrameInput(static_cast<QObject *>(a0)));
 }
 void * qute_QVideoFrameInput_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QVideoFrameInput *>(new QVideoFrameInput((a0 ? *static_cast<QVideoFrameFormat *>(a0) : QVideoFrameFormat()), static_cast<QObject *>(a1)));
+	return static_cast<QVideoFrameInput *>(new qute_QVideoFrameInput((a0 ? *static_cast<QVideoFrameFormat *>(a0) : QVideoFrameFormat()), static_cast<QObject *>(a1)));
 }
 void * qute_QVideoFrameInput_new_shim(void * a0) {
 	qute_gui_only();
@@ -5967,7 +5967,7 @@ void * qute_QVideoFrameInput_readyToSendVideoFrame(void *self, uintptr_t id) {
 // ---- QVideoSink
 void * qute_QVideoSink_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QVideoSink *>(new QVideoSink(static_cast<QObject *>(a0)));
+	return static_cast<QVideoSink *>(new qute_QVideoSink(static_cast<QObject *>(a0)));
 }
 void * qute_QVideoSink_new_shim(void * a0) {
 	qute_gui_only();
@@ -6067,7 +6067,7 @@ void * qute_QVideoSink_videoSizeChanged(void *self, uintptr_t id) {
 // ---- QWindowCapture
 void * qute_QWindowCapture_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QWindowCapture *>(new QWindowCapture(static_cast<QObject *>(a0)));
+	return static_cast<QWindowCapture *>(new qute_QWindowCapture(static_cast<QObject *>(a0)));
 }
 void * qute_QWindowCapture_new_shim(void * a0) {
 	qute_gui_only();

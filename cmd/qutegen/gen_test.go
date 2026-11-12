@@ -766,13 +766,42 @@ func TestReportListsWhatIRLeavesOut(t *testing.T) {
 	}
 	s := string(b)
 	for _, want := range []string{"## Not in the IR: operators, conversions and member templates",
-		"| Operators, conversions and member templates not in the IR |", "`operator QVariant()`"} {
+		"| Operators, conversions and member templates not in the IR |", "`operator=(const QIcon &)`"} {
 		if !strings.Contains(s, want) {
 			t.Errorf("report lacks %q", want)
 		}
 	}
+	if strings.Contains(s, "conversions: `operator QVariant()`") {
+		t.Error("the report lists operator QVariant() as left out, but it is bound as ToQVariant")
+	}
 	if n := len(class(t, "QIcon").IR.Dropped); n == 0 {
 		t.Error("the IR records nothing dropped for QIcon")
+	}
+}
+
+// A class's operator QVariant(), which irgen drops with the other
+// conversions, is bound as ToQVariant: a copy into an Owned QVariant.
+func TestVariantConversionBound(t *testing.T) {
+	g := gen(t)
+	for _, n := range []string{"QTextFormat", "QTextLength", "QFont", "QSizePolicy", "QMatrix4x4"} {
+		var found *Method
+		for _, mm := range g.classes[n].Methods {
+			if mm.GoName == "ToQVariant" {
+				found = mm
+			}
+		}
+		if found == nil {
+			t.Errorf("%s has no ToQVariant", n)
+			continue
+		}
+		if found.Ret == nil || found.Ret.k != kValue || found.Overlay == nil || found.Overlay.Cpp != "QVariant(*$self)" {
+			t.Errorf("%s.ToQVariant is not a copy into a QVariant: %+v", n, found)
+		}
+	}
+	for _, mm := range g.classes["QTextCharFormat"].Methods {
+		if mm.GoName == "ToQVariant" {
+			t.Error("QTextCharFormat declares its own ToQVariant; it should inherit QTextFormat's")
+		}
 	}
 }
 
@@ -990,9 +1019,9 @@ func TestShimConstructors(t *testing.T) {
 // honoured and a rule there gets a generated test (on a Go subclass).
 func TestProtectedOverlays(t *testing.T) {
 	g := gen(t)
-	for _, p := range class(t, "QPlainTextEdit").Protected {
-		if p.IR.Name == "getPaintContext" {
-			t.Error("QPlainTextEdit.GetPaintContext is bound, but its overlay skips it")
+	for _, p := range class(t, "QItemDelegate").Protected {
+		if p.IR.Name == "doLayout" {
+			t.Error("QItemDelegate.DoLayout is bound, but its overlay skips it")
 		}
 	}
 	var add *Method
@@ -1367,4 +1396,66 @@ func TestFunctionPointerResult(t *testing.T) {
 		t.Errorf("getProcAddress is %s, want GetProcAddress returning unsafe.Pointer", mm.GoName)
 	}
 	notBound(t, "QEasingCurve", "setCustomType(")
+}
+
+// Every constructor of a class Go can subclass builds the shim, so any
+// object a plain constructor makes takes per-object overrides (OverrideX).
+func TestPlainConstructorsBuildShim(t *testing.T) {
+	g := gen(t)
+	n := 0
+	for _, c := range g.classes {
+		if !c.Opts.Subclass || !c.Shim || len(c.SubCtors) == 0 {
+			continue
+		}
+		bodies := map[string]string{}
+		for _, f := range g.classCFuncs(c) {
+			bodies[f.decl] = f.body
+		}
+		for _, mm := range c.Ctors {
+			for decl, body := range bodies {
+				if strings.Contains(decl, " "+mm.CName+"(") && !strings.Contains(body, "qute_"+c.Name) {
+					t.Errorf("%s: %s builds %s, not the shim qute_%s", c.Name, mm.GoName, body, c.Name)
+				}
+			}
+			n++
+		}
+	}
+	if n < 300 {
+		t.Errorf("checked only %d constructors", n)
+	}
+}
+
+// OverrideX is declared once, on the class where Go first sees the virtual
+// along the primary base chain, and promoted from there; a class that
+// reaches the virtual only through a secondary base declares its own.
+func TestOverrideSetterOwners(t *testing.T) {
+	g := gen(t)
+	owns := func(cls, virt string) bool {
+		c := class(t, cls)
+		for _, v := range c.Virtuals {
+			if v.GoName == virt {
+				return c.ownsOverrideSetter(g, v)
+			}
+		}
+		t.Fatalf("%s has no virtual %s", cls, virt)
+		return false
+	}
+	for _, tc := range []struct {
+		cls, virt string
+		want      bool
+	}{
+		{"QWidget", "KeyPressEvent", true},
+		{"QPushButton", "KeyPressEvent", false},
+		{"QLineEdit", "SizeHint", false},
+		{"QAbstractButton", "HitButton", true},
+		{"QObject", "Event", true},
+		{"QWidget", "Event", false},
+		{"QGraphicsItem", "KeyPressEvent", true},
+		{"QGraphicsObject", "KeyPressEvent", true}, // QGraphicsItem is its secondary base
+		{"QGraphicsRectItem", "KeyPressEvent", false},
+	} {
+		if got := owns(tc.cls, tc.virt); got != tc.want {
+			t.Errorf("%s declares Override%s: %v, want %v", tc.cls, tc.virt, got, tc.want)
+		}
+	}
 }

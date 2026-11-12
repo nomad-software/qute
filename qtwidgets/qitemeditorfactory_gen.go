@@ -96,7 +96,7 @@ func (this *QItemEditorFactory) Unkeep() {
 func NewQItemEditorFactory() *QItemEditorFactory {
 	rt.CheckThread("NewQItemEditorFactory")
 	p := C.qute_QItemEditorFactory_new()
-	h := rt.WrapNew[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned)
+	h := rt.WrapNewShim[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned, qItemEditorFactoryVTable, qItemEditorFactoryShimInit)
 	return rt.View[QItemEditorFactory](h, p)
 }
 
@@ -171,23 +171,66 @@ func QItemEditorFactorySetDefaultFactory(factory QItemEditorFactoryLike) {
 
 var qItemEditorFactoryVTable = []rt.Virtual{
 	{Name: "CreateEditor", Has: func(v any) bool { _, ok := v.(interface{ CreateEditor(int, *QWidget) *QWidget }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, *QWidget) *QWidget, int, *QWidget) *QWidget); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			userType := int(*(*C.int)(a[0]))
 			parent := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
-			r := v.(interface{ CreateEditor(int, *QWidget) *QWidget }).CreateEditor(userType, parent)
+			var r = *new(*QWidget)
+			if f, ok := v.(func(func(int, *QWidget) *QWidget, int, *QWidget) *QWidget); ok {
+				r = f((&QItemEditorFactorySuper{this: rt.View[QItemEditorFactory](h, h.Ptr())}).CreateEditor, userType, parent)
+			} else {
+				r = v.(interface{ CreateEditor(int, *QWidget) *QWidget }).CreateEditor(userType, parent)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QItemEditorFactory.CreateEditor")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
 			}
 		}},
 	{Name: "ValuePropertyName", Has: func(v any) bool { _, ok := v.(interface{ ValuePropertyName(int) []byte }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) []byte, int) []byte); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			userType := int(*(*C.int)(a[0]))
-			r := v.(interface{ ValuePropertyName(int) []byte }).ValuePropertyName(userType)
+			var r = *new([]byte)
+			if f, ok := v.(func(func(int) []byte, int) []byte); ok {
+				r = f((&QItemEditorFactorySuper{this: rt.View[QItemEditorFactory](h, h.Ptr())}).ValuePropertyName, userType)
+			} else {
+				r = v.(interface{ ValuePropertyName(int) []byte }).ValuePropertyName(userType)
+			}
 			*(*C.qute_str)(ret) = quteCBytes(r)
 		}},
+}
+
+// qItemEditorFactoryShimInit sets a QItemEditorFactory shim object's dispatch id and override mask.
+func qItemEditorFactoryShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QItemEditorFactory_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideCreateEditor makes f this object's QItemEditorFactory::createEditor: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CreateEditor, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QItemEditorFactory) OverrideCreateEditor(f func(super func(userType int, parent *QWidget) *QWidget, userType int, parent *QWidget) *QWidget) {
+	rt.Override(unsafe.Pointer(this), "QItemEditorFactory.OverrideCreateEditor", "CreateEditor", f)
+}
+
+// OverrideValuePropertyName makes f this object's QItemEditorFactory::valuePropertyName: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ValuePropertyName, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QItemEditorFactory) OverrideValuePropertyName(f func(super func(userType int) []byte, userType int) []byte) {
+	rt.Override(unsafe.Pointer(this), "QItemEditorFactory.OverrideValuePropertyName", "ValuePropertyName", f)
 }
 
 // QItemEditorFactoryBase is embedded in Go types that subclass QItemEditorFactory:
@@ -246,7 +289,7 @@ func NewQItemEditorFactoryWith(v QItemEditorFactorySubclass) *QItemEditorFactory
 		panic("NewQItemEditorFactoryWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QItemEditorFactory_new_shim()
-	h := rt.WrapNew[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned)
+	h := rt.WrapNewShim[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned, qItemEditorFactoryVTable, qItemEditorFactoryShimInit)
 	base.QItemEditorFactory = rt.View[QItemEditorFactory](h, p)
 	id := h.SetSelf(v, qItemEditorFactoryVTable)
 	mask := rt.Mask(v, qItemEditorFactoryVTable)

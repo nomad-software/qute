@@ -201,8 +201,12 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	cls, cpp := c.Name, c.Cpp
 	self := fmt.Sprintf("static_cast<%s *>(self)", cpp)
 	ctorClass := cpp
-	if c.Shim && c.Kind != KindObject {
-		ctorClass = "qute_" + cls // notify-dtor shims always construct the shim
+	if c.Shim && (c.Kind != KindObject || c.Opts.Subclass) {
+		// notify-dtor shims always construct the shim, and so does a class
+		// Go can subclass, so that any object Go makes takes per-object
+		// overrides (OverrideX); a virtual not overridden costs one test of
+		// the shim's mask
+		ctorClass = "qute_" + cls
 	}
 	for _, mm := range c.Ctors {
 		pre, args, _ := g.cppCall(mm.Params)
@@ -1334,7 +1338,9 @@ func (g *Gen) docLines(c *Class, mm *Method, b *buf, what string) {
 		b.p("//\n// Arguments with C++ defaults are left at them; %s takes every argument.", mm.FullName)
 	}
 	anchor := mm.IR.Name
-	if mm.IR.Kind == "ctor" {
+	if mm.Field == "conv" {
+		anchor = "operator-QVariant"
+	} else if mm.IR.Kind == "ctor" {
 		anchor = mm.Class.Name
 	}
 	b.p("//\n// Qt docs: %s", docURL(mm.Owner, anchor))
@@ -1529,7 +1535,12 @@ func (g *Gen) emitCtor(c *Class, mm *Method, b *buf) {
 		b.p("\tmode := rt.NewOwned\n\tif %s != nil {\n\t\tmode = rt.NewParented\n\t}", parentPtr)
 		mode = "mode"
 	}
-	b.p("\th := rt.WrapNew[%s](p, %q, %s)", c.Name, c.Name, mode)
+	if c.overridable() {
+		// a shim object: it takes per-object overrides (OverrideX)
+		b.p("\th := rt.WrapNewShim[%s](p, %q, %s, %s, %s)", c.Name, c.Name, mode, c.vtableVar(), c.shimInitFunc())
+	} else {
+		b.p("\th := rt.WrapNew[%s](p, %q, %s)", c.Name, c.Name, mode)
+	}
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}
@@ -1574,6 +1585,8 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 	}
 	if mm.Emit {
 		g.docLines(c, mm, b, "emitting the "+mm.IR.Name+" signal")
+	} else if mm.Field == "conv" {
+		g.docLines(c, mm, b, "the conversion "+c.Cpp+"::"+variantConversionName)
 	} else if mm.Field != "" {
 		g.docLines(c, mm, b, "the public field "+c.Cpp+"::"+mm.IR.Name)
 	} else {
@@ -1746,6 +1759,86 @@ func (g *Gen) virtualSig(c *Class, v *Method) string {
 	return fmt.Sprintf("%s(%s) %s", v.GoName, strings.Join(ps, ", "), g.virtualResults(c, v))
 }
 
+// overrideFuncType is the Go type of a per-object override of v (OverrideX):
+// func(super, args...) results, where super has the method's own signature.
+// With names, the parameters are named for documentation; the type is the
+// same either way.
+func (g *Gen) overrideFuncType(c *Class, v *Method, names bool) string {
+	m := c.Module
+	var ps []string
+	for _, p := range v.Params {
+		if !p.Out {
+			t := g.goType(p.T, m, false)
+			if names {
+				t = p.GoName + " " + t
+			}
+			ps = append(ps, t)
+		}
+	}
+	res := g.virtualResults(c, v)
+	super := strings.TrimSpace(fmt.Sprintf("func(%s) %s", strings.Join(ps, ", "), res))
+	if names {
+		super = "super " + super
+	}
+	return strings.TrimSpace(fmt.Sprintf("func(%s) %s", strings.Join(append([]string{super}, ps...), ", "), res))
+}
+
+// zeroResults is the zero value of each result of an override, for the
+// variables the dispatch table assigns them to.
+func (g *Gen) zeroResults(c *Class, v *Method) string {
+	var zs []string
+	add := func(t *conv) {
+		zs = append(zs, fmt.Sprintf("*new(%s)", g.goType(t, c.Module, false)))
+	}
+	if v.Ret.k != kVoid {
+		add(v.Ret)
+	}
+	for _, p := range v.Params {
+		if p.Out || p.InOut {
+			add(p.T)
+		}
+	}
+	return strings.Join(zs, ", ")
+}
+
+// emitOverrideSetters writes OverrideX for each virtual a class introduces
+// to Go: one no class on its primary base chain already has a setter for
+// with the same signature, so a setter is written once, where Go first sees
+// the virtual, and promoted to every class that embeds it. The setter finds
+// the virtual's index in the object's own class at run time (rt.Override).
+func (g *Gen) emitOverrideSetters(c *Class, b *buf) {
+	taken := map[string]bool{}
+	for x := c; x != nil; x = x.Base {
+		for _, mm := range append(append([]*Method{}, x.Methods...), x.Signals...) {
+			taken[mm.GoName] = true
+		}
+	}
+	for _, v := range c.Virtuals {
+		if !c.ownsOverrideSetter(g, v) {
+			continue
+		}
+		name := "Override" + v.GoName
+		if taken[name] {
+			g.report.warn("%s: %s is taken by a method; no per-object override setter", c.Name, name)
+			continue
+		}
+		ftype := g.overrideFuncType(c, v, true)
+		what := v.Owner.Cpp + "::" + v.IR.Name
+		b.p("// %s makes f this object's %s: Qt calls f instead of the C++", name, what)
+		b.p("// implementation, which f can call through super%s. A nil f restores the", map[bool]string{true: " (nil here: the virtual is pure)", false: ""}[v.IR.Pure])
+		b.p("// C++ implementation.")
+		b.p("//")
+		b.p("// It works on any object a qute constructor made, and panics on one Qt")
+		b.p("// created; use an event filter there. If the object's Go subclass type")
+		b.p("// defines %s, change that method instead. Like a signal's closure, f is", v.GoName)
+		b.p("// the object's Go state: a parentless object with an override must be")
+		b.p("// Delete()d.")
+		b.p("func (this *%s) %s(f %s) {", c.Name, name, ftype)
+		b.p("\trt.Override(unsafe.Pointer(this), %q, %q, f)", c.Name+"."+name, v.GoName)
+		b.p("}\n")
+	}
+}
+
 // virtualResults is the Go result list of an override (and of its Super).
 func (g *Gen) virtualResults(c *Class, v *Method) string {
 	var rs []string
@@ -1767,7 +1860,7 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	m := c.Module
 	cls := c.Name
 	lower := "qute" + cls
-	vt := strings.ToLower(cls[:1]) + cls[1:] + "VTable"
+	vt := c.vtableVar()
 	if len(c.SubCtors) == 0 {
 		return
 	}
@@ -1775,10 +1868,17 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 	b.p("var %s = []rt.Virtual{", vt)
 	for _, v := range c.Virtuals {
 		iface := fmt.Sprintf("interface{ %s }", g.virtualSig(c, v))
+		ftype := g.overrideFuncType(c, v, false)
 		b.p("\t{Name: %q, Has: func(v any) bool { _, ok := v.(%s); return ok },", v.GoName, iface)
-		b.p("\t\tCall: func(v any, args, ret unsafe.Pointer) {")
+		b.p("\t\tFits: func(f any) bool { _, ok := f.(%s); return ok },", ftype)
+		b.p("\t\tCall: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {")
 		names := g.unpackArgs(c, v, b, "\t\t\t")
+		super := "nil" // a pure virtual has no C++ implementation to call
+		if !v.IR.Pure {
+			super = fmt.Sprintf("(&%sSuper{this: rt.View[%s](h, h.Ptr())}).%s", cls, cls, v.GoName)
+		}
 		call := fmt.Sprintf("v.(%s).%s(%s)", iface, v.GoName, strings.Join(names, ", "))
+		fcall := fmt.Sprintf("f(%s)", strings.Join(append([]string{super}, names...), ", "))
 		if len(v.Params) == 0 {
 			b.p("\t\t\t_ = args")
 		}
@@ -1791,10 +1891,14 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 				results = append(results, fmt.Sprintf("o%d", i))
 			}
 		}
+		// a per-object override (OverrideX) is a func; a Go subclass's
+		// value has the method
 		if len(results) == 0 {
-			b.p("\t\t\t%s", call)
+			b.p("\t\t\tif f, ok := v.(%s); ok {\n\t\t\t\t%s\n\t\t\t} else {\n\t\t\t\t%s\n\t\t\t}", ftype, fcall, call)
 		} else {
-			b.p("\t\t\t%s := %s", strings.Join(results, ", "), call)
+			rs := strings.Join(results, ", ")
+			b.p("\t\t\tvar %s %s", rs, "= "+g.zeroResults(c, v))
+			b.p("\t\t\tif f, ok := v.(%s); ok {\n\t\t\t\t%s = %s\n\t\t\t} else {\n\t\t\t\t%s = %s\n\t\t\t}", ftype, rs, fcall, rs, call)
 		}
 		if inlineVal(v.Ret) {
 			b.p("\t\t\trt.CopyValueOut(ret, unsafe.Pointer(r), %q, %q)", v.Ret.cls.Name, cls+"."+v.GoName)
@@ -1816,6 +1920,11 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 		b.p("\t\t}},")
 	}
 	b.p("}\n")
+	b.p("// %s sets a %s shim object's dispatch id and override mask.", c.shimInitFunc(), cls)
+	b.p("func %s(p unsafe.Pointer, id uintptr, mask *uint64) {", c.shimInitFunc())
+	b.p("\tC.qute_%s_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))", cls)
+	b.p("}\n")
+	g.emitOverrideSetters(c, b)
 
 	b.p("// %sBase is embedded in Go types that subclass %s:", cls, cls)
 	b.p("//\n//\ttype My%s struct{ %s.%sBase }", strings.TrimPrefix(cls, "Q"), m.Pkg, cls)
@@ -1935,7 +2044,7 @@ func (g *Gen) emitSubCtor(c *Class, sc subCtor, vt, lower string, b *buf) {
 			mode = "mode"
 		}
 	}
-	b.p("\th := rt.WrapNew[%s](p, %q, %s)", cls, cls, mode)
+	b.p("\th := rt.WrapNewShim[%s](p, %q, %s, %s, %s)", cls, cls, mode, vt, c.shimInitFunc())
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}

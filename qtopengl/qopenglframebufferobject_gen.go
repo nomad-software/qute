@@ -103,7 +103,7 @@ func (this *QOpenGLFramebufferObject) Unkeep() {
 func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSize")
 	p := C.qute_QOpenGLFramebufferObject_new(cQSize(size))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -117,7 +117,7 @@ func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferO
 func NewQOpenGLFramebufferObjectWithSizeAttachment(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachment")
 	p := C.qute_QOpenGLFramebufferObject_new_1(cQSize(size), C.int64_t(attachment))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -130,7 +130,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat")
 	p := C.qute_QOpenGLFramebufferObject_new_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat"))
 	runtime.KeepAlive(format)
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -144,7 +144,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 func NewQOpenGLFramebufferObjectWithSizeFull(size qtcore.QSize, target uint) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeFull")
 	p := C.qute_QOpenGLFramebufferObject_new_3(cQSize(size), C.uint(target))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -158,7 +158,7 @@ func NewQOpenGLFramebufferObjectWithSizeFull(size qtcore.QSize, target uint) *QO
 func NewQOpenGLFramebufferObjectWithSizeAttachmentFull(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment, target uint, internalFormat uint) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachmentFull")
 	p := C.qute_QOpenGLFramebufferObject_new_4(cQSize(size), C.int64_t(attachment), C.uint(target), C.uint(internalFormat))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -590,6 +590,11 @@ func QOpenGLFramebufferObjectBlitFramebufferFull(target QOpenGLFramebufferObject
 
 var qOpenGLFramebufferObjectVTable = []rt.Virtual{}
 
+// qOpenGLFramebufferObjectShimInit sets a QOpenGLFramebufferObject shim object's dispatch id and override mask.
+func qOpenGLFramebufferObjectShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QOpenGLFramebufferObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
 // QOpenGLFramebufferObjectBase is embedded in Go types that subclass QOpenGLFramebufferObject:
 //
 //	type MyOpenGLFramebufferObject struct{ qtopengl.QOpenGLFramebufferObjectBase }
@@ -627,7 +632,7 @@ func NewQOpenGLFramebufferObjectWith(v QOpenGLFramebufferObjectSubclass, size qt
 		panic("NewQOpenGLFramebufferObjectWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim(cQSize(size))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
@@ -650,7 +655,7 @@ func NewQOpenGLFramebufferObjectWithSizeAttachmentWith(v QOpenGLFramebufferObjec
 		panic("NewQOpenGLFramebufferObjectWithSizeAttachmentWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim_1(cQSize(size), C.int64_t(attachment))
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
@@ -674,7 +679,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith(v QOpe
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith"))
 	runtime.KeepAlive(format)
-	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned, qOpenGLFramebufferObjectVTable, qOpenGLFramebufferObjectShimInit)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)

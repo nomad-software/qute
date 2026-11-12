@@ -122,7 +122,7 @@ func NewQObject(parent QObjectLike) *QObject {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QObject](p, "QObject", mode)
+	h := rt.WrapNewShim[QObject](p, "QObject", mode, qObjectVTable, qObjectShimInit)
 	return rt.View[QObject](h, p)
 }
 
@@ -568,65 +568,198 @@ func (this *QObject) OnObjectNameChanged(f func(objectName string)) Connection {
 
 var qObjectVTable = []rt.Virtual{
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QObjectSuper{this: rt.View[QObject](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qObjectShimInit sets a QObject shim object's dispatch id and override mask.
+func qObjectShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QObject_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideEvent makes f this object's QObject::event: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Event, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideEvent(f func(super func(event *QEvent) bool, event *QEvent) bool) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideEvent", "Event", f)
+}
+
+// OverrideEventFilter makes f this object's QObject::eventFilter: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines EventFilter, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideEventFilter(f func(super func(watched *QObject, event *QEvent) bool, watched *QObject, event *QEvent) bool) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideEventFilter", "EventFilter", f)
+}
+
+// OverrideTimerEvent makes f this object's QObject::timerEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines TimerEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideTimerEvent(f func(super func(event *QTimerEvent), event *QTimerEvent)) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideTimerEvent", "TimerEvent", f)
+}
+
+// OverrideChildEvent makes f this object's QObject::childEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ChildEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideChildEvent(f func(super func(event *QChildEvent), event *QChildEvent)) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideChildEvent", "ChildEvent", f)
+}
+
+// OverrideCustomEvent makes f this object's QObject::customEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CustomEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideCustomEvent(f func(super func(event *QEvent), event *QEvent)) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideCustomEvent", "CustomEvent", f)
+}
+
+// OverrideConnectNotify makes f this object's QObject::connectNotify: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ConnectNotify, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideConnectNotify(f func(super func(signal *QMetaMethod), signal *QMetaMethod)) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideConnectNotify", "ConnectNotify", f)
+}
+
+// OverrideDisconnectNotify makes f this object's QObject::disconnectNotify: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DisconnectNotify, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QObject) OverrideDisconnectNotify(f func(super func(signal *QMetaMethod), signal *QMetaMethod)) {
+	rt.Override(unsafe.Pointer(this), "QObject.OverrideDisconnectNotify", "DisconnectNotify", f)
 }
 
 // QObjectBase is embedded in Go types that subclass QObject:
@@ -762,7 +895,7 @@ func NewQObjectWith(v QObjectSubclass, parent QObjectLike) *QObject {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QObject](p, "QObject", mode)
+	h := rt.WrapNewShim[QObject](p, "QObject", mode, qObjectVTable, qObjectShimInit)
 	base.QObject = rt.View[QObject](h, p)
 	id := h.SetSelf(v, qObjectVTable)
 	mask := rt.Mask(v, qObjectVTable)

@@ -1089,7 +1089,7 @@ const char *qute_qtmultimediawidgets_check_layout(void) {
 // ---- QGraphicsVideoItem
 void * qute_QGraphicsVideoItem_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QGraphicsVideoItem *>(new QGraphicsVideoItem(static_cast<QGraphicsItem *>(a0)));
+	return static_cast<QGraphicsVideoItem *>(new qute_QGraphicsVideoItem(static_cast<QGraphicsItem *>(a0)));
 }
 void * qute_QGraphicsVideoItem_new_shim(void * a0) {
 	qute_gui_only();
@@ -1353,7 +1353,7 @@ void * qute_QGraphicsVideoItem_nativeSizeChanged(void *self, uintptr_t id) {
 // ---- QVideoWidget
 void * qute_QVideoWidget_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QVideoWidget *>(new QVideoWidget(static_cast<QWidget *>(a0)));
+	return static_cast<QVideoWidget *>(new qute_QVideoWidget(static_cast<QWidget *>(a0)));
 }
 void * qute_QVideoWidget_new_shim(void * a0) {
 	qute_gui_only();

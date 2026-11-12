@@ -61,77 +61,142 @@ func NewQWidgetItemV2WithWidget(widget QWidgetLike) *QWidgetItemV2 {
 	}
 	p := C.qute_QWidgetItemV2_new(widgetPtr)
 	runtime.KeepAlive(widget)
-	h := rt.WrapNew[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned)
+	h := rt.WrapNewShim[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned, qWidgetItemV2VTable, qWidgetItemV2ShimInit)
 	return rt.View[QWidgetItemV2](h, p)
 }
 
 var qWidgetItemV2VTable = []rt.Virtual{
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).MinimumSize)
+			} else {
+				r = v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).MaximumSize)
+			} else {
+				r = v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			width := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(width)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).HeightForWidth, width)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(width)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.Orientations) qtcore.Orientations); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			var r = *new(qtcore.Orientations)
+			if f, ok := v.(func(func() qtcore.Orientations) qtcore.Orientations); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).ExpandingDirections)
+			} else {
+				r = v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).IsEmpty)
+			} else {
+				r = v.(interface{ IsEmpty() bool }).IsEmpty()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRect), qtcore.QRect)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			geometry := goQRect(*(*C.qute_rect)(a[0]))
-			v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+			if f, ok := v.(func(func(qtcore.QRect), qtcore.QRect)); ok {
+				f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).SetGeometry, geometry)
+			} else {
+				v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+			}
 		}},
 	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRect) qtcore.QRect); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func() qtcore.QRect) qtcore.QRect); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).Geometry)
+			} else {
+				r = v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QWidget) *QWidget); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Widget() *QWidget }).Widget()
+			var r = *new(*QWidget)
+			if f, ok := v.(func(func() *QWidget) *QWidget); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).Widget)
+			} else {
+				r = v.(interface{ Widget() *QWidget }).Widget()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWidgetItemV2.Widget")
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).MinimumHeightForWidth, arg0)
+			} else {
+				r = v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ControlTypes", Has: func(v any) bool {
@@ -140,30 +205,58 @@ var qWidgetItemV2VTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface {
-				ControlTypes() QSizePolicyControlTypes
-			}).ControlTypes()
+			var r = *new(QSizePolicyControlTypes)
+			if f, ok := v.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).ControlTypes)
+			} else {
+				r = v.(interface {
+					ControlTypes() QSizePolicyControlTypes
+				}).ControlTypes()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Invalidate() }).Invalidate()
+			if f, ok := v.(func(func())); ok {
+				f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).Invalidate)
+			} else {
+				v.(interface{ Invalidate() }).Invalidate()
+			}
 		}},
 	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QLayout) *QLayout); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Layout() *QLayout }).Layout()
+			var r = *new(*QLayout)
+			if f, ok := v.(func(func() *QLayout) *QLayout); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).Layout)
+			} else {
+				r = v.(interface{ Layout() *QLayout }).Layout()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWidgetItemV2.Layout")
 		}},
 	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QSpacerItem) *QSpacerItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			var r = *new(*QSpacerItem)
+			if f, ok := v.(func(func() *QSpacerItem) *QSpacerItem); ok {
+				r = f((&QWidgetItemV2Super{this: rt.View[QWidgetItemV2](h, h.Ptr())}).SpacerItem)
+			} else {
+				r = v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWidgetItemV2.SpacerItem")
 		}},
+}
+
+// qWidgetItemV2ShimInit sets a QWidgetItemV2 shim object's dispatch id and override mask.
+func qWidgetItemV2ShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QWidgetItemV2_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QWidgetItemV2Base is embedded in Go types that subclass QWidgetItemV2:
@@ -322,7 +415,7 @@ func NewQWidgetItemV2With(v QWidgetItemV2Subclass, widget QWidgetLike) *QWidgetI
 	}
 	p := C.qute_QWidgetItemV2_new_shim(widgetPtr)
 	runtime.KeepAlive(widget)
-	h := rt.WrapNew[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned)
+	h := rt.WrapNewShim[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned, qWidgetItemV2VTable, qWidgetItemV2ShimInit)
 	base.QWidgetItemV2 = rt.View[QWidgetItemV2](h, p)
 	id := h.SetSelf(v, qWidgetItemV2VTable)
 	mask := rt.Mask(v, qWidgetItemV2VTable)

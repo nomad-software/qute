@@ -447,6 +447,20 @@ func (this *QVector3D) ToPointF() qtcore.QPointF {
 	return goQPointF(r)
 }
 
+// ToQVariant wraps the conversion QVector3D::operator QVariant().
+//
+//	C++: QVector3D::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qvector3d.html#operator-QVariant
+func (this *QVector3D) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QVector3D.ToQVariant")
+	r := C.qute_QVector3D_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QVector3DDotProduct wraps QVector3D::dotProduct.
 //
 //	C++: float QVector3D::dotProduct(QVector3D v1, QVector3D v2)

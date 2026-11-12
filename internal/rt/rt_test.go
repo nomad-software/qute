@@ -1220,3 +1220,66 @@ func TestWrapScoped(t *testing.T) {
 	}()
 	Use(unsafe.Pointer(w), "QPainter.End")
 }
+
+// A notifying object (a shim that reports its death) whose Go handle was
+// collected keeps its registry entry until it dies. Wrapping it again through
+// WrapClass must register a new handle that learns of the death, not hand
+// out an untracked plain one.
+func TestWrapClassNotifyAfterCollection(t *testing.T) {
+	RegisterClass("NotifyItem", KindNotify, func(unsafe.Pointer) {})
+	key := fakePtr(3)
+	first := Wrap(key, "NotifyItem", KindNotify, TakeParented, nil)
+	regMu.Lock()
+	e := registry[key]
+	e.w = weak.Pointer[Handle]{} // as if the first handle were collected
+	registry[key] = e
+	regMu.Unlock()
+	again := WrapClass(key, "NotifyItem", KeepOrBorrow)
+	if again == first || again.kind != KindNotify || Lookup(key) != again {
+		t.Fatalf("rewrapped: kind %v, registered %v; want a new registered KindNotify handle", again.kind, Lookup(key) == again)
+	}
+	Destroyed(key, "test")
+	if again.Alive() {
+		t.Error("the new handle did not learn of the object's death")
+	}
+	// an object never registered (Qt built it) is still a plain handle
+	if h := WrapClass(fakePtr(4), "NotifyItem", KeepOrBorrow); h.kind != KindPlain {
+		t.Errorf("unregistered object: kind %v, want KindPlain", h.kind)
+	}
+	runtime.KeepAlive(first)
+}
+
+// The class cache returns a class's current record: a change made after the
+// record was cached (a shim registered on first construction) is seen, and
+// a name with the same bytes at another address finds the same class.
+func TestClassCache(t *testing.T) {
+	RegisterClass("CachedItem", KindNotify, nil)
+	if ci, ok := classOf("CachedItem"); !ok || ci.kind != KindNotify || ci.shimInit != nil {
+		t.Fatalf("classOf = %+v, %v", ci, ok)
+	}
+	RegisterShim("CachedItem", nil, func(unsafe.Pointer, uintptr, *uint64) {})
+	if ci, _ := classOf("CachedItem"); ci.shimInit == nil {
+		t.Error("the cache kept the record from before RegisterShim")
+	}
+	built := string([]byte("Cached" + "Item")) // other memory, same name
+	if ci, ok := classOf(built); !ok || ci.shimInit == nil {
+		t.Error("a name built at run time did not find the class")
+	}
+	if _, ok := classOf(string([]byte("NoSuchClass"))); ok {
+		t.Error("an unregistered name was found")
+	}
+}
+
+func BenchmarkClassOf(b *testing.B) {
+	RegisterClass("BenchClass", KindNotify, nil)
+	for b.Loop() {
+		classOf("BenchClass")
+	}
+}
+
+func BenchmarkClassesSyncMap(b *testing.B) {
+	RegisterClass("BenchClass", KindNotify, nil)
+	for b.Loop() {
+		classes.Load("BenchClass")
+	}
+}

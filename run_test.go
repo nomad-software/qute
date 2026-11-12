@@ -1,6 +1,8 @@
 package qute_test
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -103,7 +105,7 @@ func TestPostSyncHandlerPanic(t *testing.T) {
 		})
 		return nil
 	}()
-	cp, ok := p.(*rt.CallbackPanic)
+	cp, ok := p.(*qute.CallbackPanic)
 	if !ok {
 		t.Fatalf("PostSync raised %T %v, want the handler's *CallbackPanic", p, p)
 	}
@@ -116,6 +118,46 @@ func TestPostSyncHandlerPanic(t *testing.T) {
 }
 
 func handlerThatPanics() { panic("handler boom") }
+
+// A panic of PostSync's own function, re-raised on another goroutine, keeps
+// the stack where it happened (the caller's stack only shows PostSync), and
+// errors.As still reaches an error value.
+func TestPostSyncPanicStack(t *testing.T) {
+	p := func() (p any) {
+		defer func() { p = recover() }()
+		qute.PostSync(func() { postedFuncThatPanics() })
+		return nil
+	}()
+	pp, ok := p.(*qute.PostSyncPanic)
+	if !ok {
+		t.Fatalf("PostSync raised %T %v, want a *qute.PostSyncPanic", p, p)
+	}
+	if !strings.Contains(pp.Stack, "postedFuncThatPanics") {
+		t.Errorf("stack does not name the panicking function:\n%s", pp.Stack)
+	}
+	var target *postErr
+	if !errors.As(pp, &target) || target.msg != "posted boom" {
+		t.Errorf("errors.As(%v) = %v, want the original *postErr", pp, target)
+	}
+	if !strings.Contains(fmt.Sprint(pp), "posted boom") {
+		t.Errorf("printed panic %q does not include its value", fmt.Sprint(pp))
+	}
+	// a nested PostSync on the GUI thread passes the panic on unwrapped
+	p = func() (p any) {
+		defer func() { p = recover() }()
+		qute.PostSync(func() { qute.PostSync(func() { panic("inner") }) })
+		return nil
+	}()
+	if pp, ok := p.(*qute.PostSyncPanic); !ok || pp.Value != "inner" {
+		t.Errorf("nested PostSync raised %#v, want a *PostSyncPanic of \"inner\"", p)
+	}
+}
+
+type postErr struct{ msg string }
+
+func (e *postErr) Error() string { return e.msg }
+
+func postedFuncThatPanics() { panic(&postErr{"posted boom"}) }
 
 // Qt calls from another goroutine panic in release builds too: generated
 // methods and the hand-written helpers alike.

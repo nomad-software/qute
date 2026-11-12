@@ -66,7 +66,7 @@ func NewQFile(parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QFile](p, "QFile", mode)
+	h := rt.WrapNewShim[QFile](p, "QFile", mode, qFileVTable, qFileShimInit)
 	return rt.View[QFile](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQFileWithName(name string, parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QFile](p, "QFile", mode)
+	h := rt.WrapNewShim[QFile](p, "QFile", mode, qFileVTable, qFileShimInit)
 	return rt.View[QFile](h, p)
 }
 
@@ -413,9 +413,15 @@ func QFileMoveToTrashFull(fileName string) (bool, string) {
 
 var qFileVTable = []rt.Virtual{
 	{Name: "FileName", Has: func(v any) bool { _, ok := v.(interface{ FileName() string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() string) string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ FileName() string }).FileName()
+			var r = *new(string)
+			if f, ok := v.(func(func() string) string); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).FileName)
+			} else {
+				r = v.(interface{ FileName() string }).FileName()
+			}
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "Open", Has: func(v any) bool {
@@ -424,31 +430,58 @@ var qFileVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QIODeviceBaseOpenMode) bool, QIODeviceBaseOpenMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			flags := QIODeviceBaseOpenMode(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Open(QIODeviceBaseOpenMode) bool
-			}).Open(flags)
+			var r = *new(bool)
+			if f, ok := v.(func(func(QIODeviceBaseOpenMode) bool, QIODeviceBaseOpenMode) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Open, flags)
+			} else {
+				r = v.(interface {
+					Open(QIODeviceBaseOpenMode) bool
+				}).Open(flags)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Size() int64 }).Size()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Size)
+			} else {
+				r = v.(interface{ Size() int64 }).Size()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Resize", Has: func(v any) bool { _, ok := v.(interface{ Resize(int64) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int64) bool, int64) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			sz := int64(*(*C.longlong)(a[0]))
-			r := v.(interface{ Resize(int64) bool }).Resize(sz)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int64) bool, int64) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Resize, sz)
+			} else {
+				r = v.(interface{ Resize(int64) bool }).Resize(sz)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Permissions", Has: func(v any) bool { _, ok := v.(interface{ Permissions() QFileDevicePermissions }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() QFileDevicePermissions) QFileDevicePermissions); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Permissions() QFileDevicePermissions }).Permissions()
+			var r = *new(QFileDevicePermissions)
+			if f, ok := v.(func(func() QFileDevicePermissions) QFileDevicePermissions); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Permissions)
+			} else {
+				r = v.(interface{ Permissions() QFileDevicePermissions }).Permissions()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "SetPermissions", Has: func(v any) bool {
@@ -457,157 +490,285 @@ var qFileVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QFileDevicePermissions) bool, QFileDevicePermissions) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			permissionSpec := QFileDevicePermissions(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				SetPermissions(QFileDevicePermissions) bool
-			}).SetPermissions(permissionSpec)
+			var r = *new(bool)
+			if f, ok := v.(func(func(QFileDevicePermissions) bool, QFileDevicePermissions) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).SetPermissions, permissionSpec)
+			} else {
+				r = v.(interface {
+					SetPermissions(QFileDevicePermissions) bool
+				}).SetPermissions(permissionSpec)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Close", Has: func(v any) bool { _, ok := v.(interface{ Close() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Close() }).Close()
+			if f, ok := v.(func(func())); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Close)
+			} else {
+				v.(interface{ Close() }).Close()
+			}
 		}},
 	{Name: "IsSequential", Has: func(v any) bool { _, ok := v.(interface{ IsSequential() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsSequential() bool }).IsSequential()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).IsSequential)
+			} else {
+				r = v.(interface{ IsSequential() bool }).IsSequential()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Pos", Has: func(v any) bool { _, ok := v.(interface{ Pos() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Pos() int64 }).Pos()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Pos)
+			} else {
+				r = v.(interface{ Pos() int64 }).Pos()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "SeekTo", Has: func(v any) bool { _, ok := v.(interface{ SeekTo(int64) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int64) bool, int64) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			offset := int64(*(*C.longlong)(a[0]))
-			r := v.(interface{ SeekTo(int64) bool }).SeekTo(offset)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int64) bool, int64) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).SeekTo, offset)
+			} else {
+				r = v.(interface{ SeekTo(int64) bool }).SeekTo(offset)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "AtEnd", Has: func(v any) bool { _, ok := v.(interface{ AtEnd() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ AtEnd() bool }).AtEnd()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).AtEnd)
+			} else {
+				r = v.(interface{ AtEnd() bool }).AtEnd()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WriteData", Has: func(v any) bool { _, ok := v.(interface{ WriteData(string, int64) int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string, int64) int64, string, int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			data := C.GoString(*(**C.char)(a[0]))
 			lenArg := int64(*(*C.longlong)(a[1]))
-			r := v.(interface{ WriteData(string, int64) int64 }).WriteData(data, lenArg)
+			var r = *new(int64)
+			if f, ok := v.(func(func(string, int64) int64, string, int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).WriteData, data, lenArg)
+			} else {
+				r = v.(interface{ WriteData(string, int64) int64 }).WriteData(data, lenArg)
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Reset() bool }).Reset()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Reset)
+			} else {
+				r = v.(interface{ Reset() bool }).Reset()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "BytesAvailable", Has: func(v any) bool { _, ok := v.(interface{ BytesAvailable() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BytesAvailable() int64 }).BytesAvailable()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).BytesAvailable)
+			} else {
+				r = v.(interface{ BytesAvailable() int64 }).BytesAvailable()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "BytesToWrite", Has: func(v any) bool { _, ok := v.(interface{ BytesToWrite() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BytesToWrite() int64 }).BytesToWrite()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).BytesToWrite)
+			} else {
+				r = v.(interface{ BytesToWrite() int64 }).BytesToWrite()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "CanReadLine", Has: func(v any) bool { _, ok := v.(interface{ CanReadLine() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ CanReadLine() bool }).CanReadLine()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).CanReadLine)
+			} else {
+				r = v.(interface{ CanReadLine() bool }).CanReadLine()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WaitForReadyRead", Has: func(v any) bool { _, ok := v.(interface{ WaitForReadyRead(int) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
-			r := v.(interface{ WaitForReadyRead(int) bool }).WaitForReadyRead(msecs)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int) bool, int) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).WaitForReadyRead, msecs)
+			} else {
+				r = v.(interface{ WaitForReadyRead(int) bool }).WaitForReadyRead(msecs)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WaitForBytesWritten", Has: func(v any) bool { _, ok := v.(interface{ WaitForBytesWritten(int) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
-			r := v.(interface{ WaitForBytesWritten(int) bool }).WaitForBytesWritten(msecs)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int) bool, int) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).WaitForBytesWritten, msecs)
+			} else {
+				r = v.(interface{ WaitForBytesWritten(int) bool }).WaitForBytesWritten(msecs)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SkipData", Has: func(v any) bool { _, ok := v.(interface{ SkipData(int64) int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int64) int64, int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			maxSize := int64(*(*C.longlong)(a[0]))
-			r := v.(interface{ SkipData(int64) int64 }).SkipData(maxSize)
+			var r = *new(int64)
+			if f, ok := v.(func(func(int64) int64, int64) int64); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).SkipData, maxSize)
+			} else {
+				r = v.(interface{ SkipData(int64) int64 }).SkipData(maxSize)
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QFileSuper{this: rt.View[QFile](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qFileShimInit sets a QFile shim object's dispatch id and override mask.
+func qFileShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QFile_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QFileBase is embedded in Go types that subclass QFile:
@@ -912,7 +1073,7 @@ func NewQFileWith(v QFileSubclass, parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QFile](p, "QFile", mode)
+	h := rt.WrapNewShim[QFile](p, "QFile", mode, qFileVTable, qFileShimInit)
 	base.QFile = rt.View[QFile](h, p)
 	id := h.SetSelf(v, qFileVTable)
 	mask := rt.Mask(v, qFileVTable)
@@ -944,7 +1105,7 @@ func NewQFileWithNameWith(v QFileSubclass, name string, parent QObjectLike) *QFi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QFile](p, "QFile", mode)
+	h := rt.WrapNewShim[QFile](p, "QFile", mode, qFileVTable, qFileShimInit)
 	base.QFile = rt.View[QFile](h, p)
 	id := h.SetSelf(v, qFileVTable)
 	mask := rt.Mask(v, qFileVTable)

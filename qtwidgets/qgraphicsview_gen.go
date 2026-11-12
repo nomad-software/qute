@@ -68,7 +68,7 @@ func NewQGraphicsView(parent QWidgetLike) *QGraphicsView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsView](p, "QGraphicsView", mode)
+	h := rt.WrapNewShim[QGraphicsView](p, "QGraphicsView", mode, qGraphicsViewVTable, qGraphicsViewShimInit)
 	return rt.View[QGraphicsView](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQGraphicsViewWithScene(scene QGraphicsSceneLike, parent QWidgetLike) *QG
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsView](p, "QGraphicsView", mode)
+	h := rt.WrapNewShim[QGraphicsView](p, "QGraphicsView", mode, qGraphicsViewVTable, qGraphicsViewShimInit)
 	rt.KeepArg(h, "scene", sceneH, false)
 	return rt.View[QGraphicsView](h, p)
 }
@@ -1186,9 +1186,15 @@ func (this *QGraphicsView) OnRubberBandChanged(f func(viewportRect qtcore.QRect,
 
 var qGraphicsViewVTable = []rt.Virtual{
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
@@ -1197,38 +1203,64 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(query)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).InputMethodQuery, query)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(query)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsView.InputMethodQuery")
 		}},
 	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ SetupViewport(*QWidget) }).SetupViewport(widget)
+			if f, ok := v.(func(func(*QWidget), *QWidget)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).SetupViewport, widget)
+			} else {
+				v.(interface{ SetupViewport(*QWidget) }).SetupViewport(widget)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ViewportEvent, event)
+			} else {
+				r = v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
@@ -1237,173 +1269,272 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QContextMenuEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QContextMenuEvent](eventH, eventP)
-			v.(interface {
-				ContextMenuEvent(*qtgui.QContextMenuEvent)
-			}).ContextMenuEvent(event)
+			if f, ok := v.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ContextMenuEvent, event)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtgui.QContextMenuEvent)
+				}).ContextMenuEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
-			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
-			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
-			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
-			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QWheelEvent](eventH, eventP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).PaintEvent, event)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ResizeEvent, event)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			}
 		}},
 	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			dx := int(*(*C.int)(a[0]))
 			dy := int(*(*C.int)(a[1]))
-			v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+			if f, ok := v.(func(func(int, int), int, int)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ScrollContentsBy, dx, dy)
+			} else {
+				v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QShowEvent](eventH, eventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ShowEvent, event)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			}
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1411,15 +1542,23 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(event)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).InputMethodEvent, event)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(event)
+			}
 		}},
 	{Name: "DrawBackground", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1427,16 +1566,24 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			rect := goQRectF(*(*C.qute_rectf)(a[1]))
-			v.(interface {
-				DrawBackground(*qtgui.QPainter, qtcore.QRectF)
-			}).DrawBackground(painter, rect)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DrawBackground, painter, rect)
+			} else {
+				v.(interface {
+					DrawBackground(*qtgui.QPainter, qtcore.QRectF)
+				}).DrawBackground(painter, rect)
+			}
 		}},
 	{Name: "DrawForeground", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1444,21 +1591,35 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			rect := goQRectF(*(*C.qute_rectf)(a[1]))
-			v.(interface {
-				DrawForeground(*qtgui.QPainter, qtcore.QRectF)
-			}).DrawForeground(painter, rect)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DrawForeground, painter, rect)
+			} else {
+				v.(interface {
+					DrawForeground(*qtgui.QPainter, qtcore.QRectF)
+				}).DrawForeground(painter, rect)
+			}
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MinimumSizeHint)
+			} else {
+				r = v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -1467,123 +1628,200 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(object, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).EventFilter, object, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(object, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ViewportSizeHint)
+			} else {
+				r = v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ChangeEvent, event)
+			} else {
+				v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			}
 		}},
 	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
 			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
 			defer optionH.Expire()
 			option := rt.View[QStyleOptionFrame](optionH, optionP)
-			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+			if f, ok := v.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).InitStyleOption, option)
+			} else {
+				v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+			}
 		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
-			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			if f, ok := v.(func(func(bool), bool)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).SetVisible, visible)
+			} else {
+				v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			}
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
-			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).EnterEvent, event)
+			} else {
+				v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).LeaveEvent, event)
+			} else {
+				v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).MoveEvent, event)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).CloseEvent, event)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).TabletEvent, event)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
-			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			if f, ok := v.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ActionEvent, event)
+			} else {
+				v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).HideEvent, event)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1591,13 +1829,22 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -1609,53 +1856,118 @@ var qGraphicsViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(paintDeviceMetric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).Metric, paintDeviceMetric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(paintDeviceMetric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsViewSuper{this: rt.View[QGraphicsView](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qGraphicsViewShimInit sets a QGraphicsView shim object's dispatch id and override mask.
+func qGraphicsViewShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideDrawBackground makes f this object's QGraphicsView::drawBackground: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawBackground, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsView) OverrideDrawBackground(f func(super func(painter *qtgui.QPainter, rect qtcore.QRectF), painter *qtgui.QPainter, rect qtcore.QRectF)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsView.OverrideDrawBackground", "DrawBackground", f)
+}
+
+// OverrideDrawForeground makes f this object's QGraphicsView::drawForeground: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawForeground, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsView) OverrideDrawForeground(f func(super func(painter *qtgui.QPainter, rect qtcore.QRectF), painter *qtgui.QPainter, rect qtcore.QRectF)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsView.OverrideDrawForeground", "DrawForeground", f)
 }
 
 // QGraphicsViewBase is embedded in Go types that subclass QGraphicsView:
@@ -2330,7 +2642,7 @@ func NewQGraphicsViewWith(v QGraphicsViewSubclass, parent QWidgetLike) *QGraphic
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsView](p, "QGraphicsView", mode)
+	h := rt.WrapNewShim[QGraphicsView](p, "QGraphicsView", mode, qGraphicsViewVTable, qGraphicsViewShimInit)
 	base.QGraphicsView = rt.View[QGraphicsView](h, p)
 	id := h.SetSelf(v, qGraphicsViewVTable)
 	mask := rt.Mask(v, qGraphicsViewVTable)
@@ -2368,7 +2680,7 @@ func NewQGraphicsViewWithSceneWith(v QGraphicsViewSubclass, scene QGraphicsScene
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsView](p, "QGraphicsView", mode)
+	h := rt.WrapNewShim[QGraphicsView](p, "QGraphicsView", mode, qGraphicsViewVTable, qGraphicsViewShimInit)
 	rt.KeepArg(h, "scene", sceneH, false)
 	base.QGraphicsView = rt.View[QGraphicsView](h, p)
 	id := h.SetSelf(v, qGraphicsViewVTable)

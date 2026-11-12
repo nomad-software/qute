@@ -55,7 +55,7 @@ func QMimeDataCast(o QObjectLike) *QMimeData {
 func NewQMimeData() *QMimeData {
 	rt.CheckThread("NewQMimeData")
 	p := C.qute_QMimeData_new()
-	h := rt.WrapNew[QMimeData](p, "QMimeData", rt.NewOwned)
+	h := rt.WrapNewShim[QMimeData](p, "QMimeData", rt.NewOwned, qMimeDataVTable, qMimeDataShimInit)
 	return rt.View[QMimeData](h, p)
 }
 
@@ -316,16 +316,28 @@ func (this *QMimeData) Clear() {
 
 var qMimeDataVTable = []rt.Virtual{
 	{Name: "HasFormat", Has: func(v any) bool { _, ok := v.(interface{ HasFormat(string) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string) bool, string) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mimetype := quteStr(*(*C.qute_str)(a[0]))
-			r := v.(interface{ HasFormat(string) bool }).HasFormat(mimetype)
+			var r = *new(bool)
+			if f, ok := v.(func(func(string) bool, string) bool); ok {
+				r = f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).HasFormat, mimetype)
+			} else {
+				r = v.(interface{ HasFormat(string) bool }).HasFormat(mimetype)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Formats", Has: func(v any) bool { _, ok := v.(interface{ Formats() []string }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Formats() []string }).Formats()
+			var r = *new([]string)
+			if f, ok := v.(func(func() []string) []string); ok {
+				r = f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).Formats)
+			} else {
+				r = v.(interface{ Formats() []string }).Formats()
+			}
 			*(*C.qute_list)(ret) = quteCStrList(r)
 		}},
 	{Name: "RetrieveData", Has: func(v any) bool {
@@ -334,75 +346,165 @@ var qMimeDataVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(string, *QMetaType) *QVariant, string, *QMetaType) *QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			mimetype := quteStr(*(*C.qute_str)(a[0]))
 			preferredType := rt.View[QMetaType](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QMetaType", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			r := v.(interface {
-				RetrieveData(string, *QMetaType) *QVariant
-			}).RetrieveData(mimetype, preferredType)
+			var r = *new(*QVariant)
+			if f, ok := v.(func(func(string, *QMetaType) *QVariant, string, *QMetaType) *QVariant); ok {
+				r = f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).RetrieveData, mimetype, preferredType)
+			} else {
+				r = v.(interface {
+					RetrieveData(string, *QMetaType) *QVariant
+				}).RetrieveData(mimetype, preferredType)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QMimeData.RetrieveData")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QMimeDataSuper{this: rt.View[QMimeData](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qMimeDataShimInit sets a QMimeData shim object's dispatch id and override mask.
+func qMimeDataShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QMimeData_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideHasFormat makes f this object's QMimeData::hasFormat: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HasFormat, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QMimeData) OverrideHasFormat(f func(super func(mimetype string) bool, mimetype string) bool) {
+	rt.Override(unsafe.Pointer(this), "QMimeData.OverrideHasFormat", "HasFormat", f)
+}
+
+// OverrideFormats makes f this object's QMimeData::formats: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Formats, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QMimeData) OverrideFormats(f func(super func() []string) []string) {
+	rt.Override(unsafe.Pointer(this), "QMimeData.OverrideFormats", "Formats", f)
+}
+
+// OverrideRetrieveData makes f this object's QMimeData::retrieveData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines RetrieveData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QMimeData) OverrideRetrieveData(f func(super func(mimetype string, preferredType *QMetaType) *QVariant, mimetype string, preferredType *QMetaType) *QVariant) {
+	rt.Override(unsafe.Pointer(this), "QMimeData.OverrideRetrieveData", "RetrieveData", f)
 }
 
 // QMimeDataBase is embedded in Go types that subclass QMimeData:
@@ -554,7 +656,7 @@ func NewQMimeDataWith(v QMimeDataSubclass) *QMimeData {
 		panic("NewQMimeDataWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QMimeData_new_shim()
-	h := rt.WrapNew[QMimeData](p, "QMimeData", rt.NewOwned)
+	h := rt.WrapNewShim[QMimeData](p, "QMimeData", rt.NewOwned, qMimeDataVTable, qMimeDataShimInit)
 	base.QMimeData = rt.View[QMimeData](h, p)
 	id := h.SetSelf(v, qMimeDataVTable)
 	mask := rt.Mask(v, qMimeDataVTable)

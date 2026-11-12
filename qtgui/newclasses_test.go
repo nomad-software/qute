@@ -442,3 +442,58 @@ func TestDesktopServices(t *testing.T) {
 		}
 	})
 }
+
+// A document's layout reports its size as text changes (a field that grows
+// with its text listens to documentSizeChanged), answers hit tests and
+// draws the document with a paint context.
+func TestDocumentLayout(t *testing.T) {
+	qutetest.Run(t, func() {
+		doc := qtgui.NewQTextDocument(nil)
+		defer doc.Delete()
+		lay := doc.DocumentLayout()
+		if lay == nil || lay.Ownership() != qtcore.Borrowed {
+			t.Fatalf("DocumentLayout() = %v, want a Borrowed layout", lay)
+		}
+		if lay.Document() != doc {
+			t.Error("the layout's Document() is not the document")
+		}
+		var sizes []qtcore.QSizeF
+		lay.OnDocumentSizeChanged(func(s qtcore.QSizeF) { sizes = append(sizes, s) })
+		doc.SetPlainText("one")
+		doc.SetPlainText("one\ntwo\nthree")
+		if len(sizes) == 0 {
+			t.Fatal("documentSizeChanged was not emitted")
+		}
+		if last := sizes[len(sizes)-1]; last != lay.DocumentSize() || last.Height <= 0 {
+			t.Errorf("last size %v, DocumentSize %v", last, lay.DocumentSize())
+		}
+		if len(sizes) > 1 && sizes[len(sizes)-1].Height <= sizes[0].Height {
+			t.Errorf("three lines are not taller than one: %v", sizes)
+		}
+		second := doc.FindBlockByNumber(1)
+		r := lay.BlockBoundingRect(second)
+		if r.Height <= 0 || r.Y <= 0 {
+			t.Errorf("BlockBoundingRect(second block) = %v", r)
+		}
+		if pos := lay.HitTest(qtcore.QPointF{X: r.X + 1, Y: r.Y + r.Height/2}, qtcore.FuzzyHit); pos != second.Position() {
+			t.Errorf("HitTest at the second block's start = %d, want %d", pos, second.Position())
+		}
+
+		img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 100, Height: 80}, qtgui.QImageFormat_ARGB32)
+		img.Fill(0xffffffff)
+		ctx := qtgui.NewQAbstractTextDocumentLayoutPaintContext()
+		ctx.SetCursorPosition(-1)
+		qtgui.PaintOn(img, func(p *qtgui.QPainter) { lay.Draw(p, ctx) })
+		dark := 0
+		for y := range 80 {
+			for x := range 100 {
+				if c := img.PixelColor(x, y); int(c.R)+int(c.G)+int(c.B) < 300 {
+					dark++
+				}
+			}
+		}
+		if dark == 0 {
+			t.Error("Draw painted no text")
+		}
+	})
+}

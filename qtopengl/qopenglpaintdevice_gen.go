@@ -42,7 +42,7 @@ func QOpenGLPaintDeviceFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QOpenGLP
 func NewQOpenGLPaintDevice() *QOpenGLPaintDevice {
 	rt.CheckThread("NewQOpenGLPaintDevice")
 	p := C.qute_QOpenGLPaintDevice_new()
-	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned, qOpenGLPaintDeviceVTable, qOpenGLPaintDeviceShimInit)
 	return rt.View[QOpenGLPaintDevice](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQOpenGLPaintDevice() *QOpenGLPaintDevice {
 func NewQOpenGLPaintDeviceWithSize(size qtcore.QSize) *QOpenGLPaintDevice {
 	rt.CheckThread("NewQOpenGLPaintDeviceWithSize")
 	p := C.qute_QOpenGLPaintDevice_new_1(cQSize(size))
-	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned, qOpenGLPaintDeviceVTable, qOpenGLPaintDeviceShimInit)
 	return rt.View[QOpenGLPaintDevice](h, p)
 }
 
@@ -188,9 +188,14 @@ func (this *QOpenGLPaintDevice) EnsureActiveTarget() {
 
 var qOpenGLPaintDeviceVTable = []rt.Virtual{
 	{Name: "EnsureActiveTarget", Has: func(v any) bool { _, ok := v.(interface{ EnsureActiveTarget() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ EnsureActiveTarget() }).EnsureActiveTarget()
+			if f, ok := v.(func(func())); ok {
+				f((&QOpenGLPaintDeviceSuper{this: rt.View[QOpenGLPaintDevice](h, h.Ptr())}).EnsureActiveTarget)
+			} else {
+				v.(interface{ EnsureActiveTarget() }).EnsureActiveTarget()
+			}
 		}},
 	{Name: "Metric", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -198,14 +203,54 @@ var qOpenGLPaintDeviceVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(metric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QOpenGLPaintDeviceSuper{this: rt.View[QOpenGLPaintDevice](h, h.Ptr())}).Metric, metric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(metric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
+}
+
+// qOpenGLPaintDeviceShimInit sets a QOpenGLPaintDevice shim object's dispatch id and override mask.
+func qOpenGLPaintDeviceShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QOpenGLPaintDevice_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideEnsureActiveTarget makes f this object's QOpenGLPaintDevice::ensureActiveTarget: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines EnsureActiveTarget, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLPaintDevice) OverrideEnsureActiveTarget(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLPaintDevice.OverrideEnsureActiveTarget", "EnsureActiveTarget", f)
+}
+
+// OverrideMetric makes f this object's QOpenGLPaintDevice::metric: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Metric, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLPaintDevice) OverrideMetric(f func(super func(metric qtgui.QPaintDevicePaintDeviceMetric) int, metric qtgui.QPaintDevicePaintDeviceMetric) int) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLPaintDevice.OverrideMetric", "Metric", f)
 }
 
 // QOpenGLPaintDeviceBase is embedded in Go types that subclass QOpenGLPaintDevice:
@@ -267,7 +312,7 @@ func NewQOpenGLPaintDeviceWith(v QOpenGLPaintDeviceSubclass) *QOpenGLPaintDevice
 		panic("NewQOpenGLPaintDeviceWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLPaintDevice_new_shim()
-	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned, qOpenGLPaintDeviceVTable, qOpenGLPaintDeviceShimInit)
 	base.QOpenGLPaintDevice = rt.View[QOpenGLPaintDevice](h, p)
 	id := h.SetSelf(v, qOpenGLPaintDeviceVTable)
 	mask := rt.Mask(v, qOpenGLPaintDeviceVTable)
@@ -290,7 +335,7 @@ func NewQOpenGLPaintDeviceWithSizeWith(v QOpenGLPaintDeviceSubclass, size qtcore
 		panic("NewQOpenGLPaintDeviceWithSizeWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLPaintDevice_new_shim_1(cQSize(size))
-	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNewShim[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned, qOpenGLPaintDeviceVTable, qOpenGLPaintDeviceShimInit)
 	base.QOpenGLPaintDevice = rt.View[QOpenGLPaintDevice](h, p)
 	id := h.SetSelf(v, qOpenGLPaintDeviceVTable)
 	mask := rt.Mask(v, qOpenGLPaintDeviceVTable)

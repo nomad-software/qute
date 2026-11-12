@@ -66,7 +66,7 @@ func NewQBuffer(parent QObjectLike) *QBuffer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QBuffer](p, "QBuffer", mode)
+	h := rt.WrapNewShim[QBuffer](p, "QBuffer", mode, qBufferVTable, qBufferShimInit)
 	return rt.View[QBuffer](h, p)
 }
 
@@ -100,163 +100,492 @@ var qBufferVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QIODeviceBaseOpenMode) bool, QIODeviceBaseOpenMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			openMode := QIODeviceBaseOpenMode(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Open(QIODeviceBaseOpenMode) bool
-			}).Open(openMode)
+			var r = *new(bool)
+			if f, ok := v.(func(func(QIODeviceBaseOpenMode) bool, QIODeviceBaseOpenMode) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Open, openMode)
+			} else {
+				r = v.(interface {
+					Open(QIODeviceBaseOpenMode) bool
+				}).Open(openMode)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Close", Has: func(v any) bool { _, ok := v.(interface{ Close() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Close() }).Close()
+			if f, ok := v.(func(func())); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Close)
+			} else {
+				v.(interface{ Close() }).Close()
+			}
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Size() int64 }).Size()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Size)
+			} else {
+				r = v.(interface{ Size() int64 }).Size()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Pos", Has: func(v any) bool { _, ok := v.(interface{ Pos() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Pos() int64 }).Pos()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Pos)
+			} else {
+				r = v.(interface{ Pos() int64 }).Pos()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "SeekTo", Has: func(v any) bool { _, ok := v.(interface{ SeekTo(int64) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int64) bool, int64) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			off := int64(*(*C.longlong)(a[0]))
-			r := v.(interface{ SeekTo(int64) bool }).SeekTo(off)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int64) bool, int64) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).SeekTo, off)
+			} else {
+				r = v.(interface{ SeekTo(int64) bool }).SeekTo(off)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "AtEnd", Has: func(v any) bool { _, ok := v.(interface{ AtEnd() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ AtEnd() bool }).AtEnd()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).AtEnd)
+			} else {
+				r = v.(interface{ AtEnd() bool }).AtEnd()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "CanReadLine", Has: func(v any) bool { _, ok := v.(interface{ CanReadLine() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ CanReadLine() bool }).CanReadLine()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).CanReadLine)
+			} else {
+				r = v.(interface{ CanReadLine() bool }).CanReadLine()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metaMethod := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(metaMethod)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).ConnectNotify, metaMethod)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(metaMethod)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metaMethod := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(metaMethod)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).DisconnectNotify, metaMethod)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(metaMethod)
+			}
 		}},
 	{Name: "WriteData", Has: func(v any) bool { _, ok := v.(interface{ WriteData(string, int64) int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string, int64) int64, string, int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			data := C.GoString(*(**C.char)(a[0]))
 			lenArg := int64(*(*C.longlong)(a[1]))
-			r := v.(interface{ WriteData(string, int64) int64 }).WriteData(data, lenArg)
+			var r = *new(int64)
+			if f, ok := v.(func(func(string, int64) int64, string, int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).WriteData, data, lenArg)
+			} else {
+				r = v.(interface{ WriteData(string, int64) int64 }).WriteData(data, lenArg)
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "IsSequential", Has: func(v any) bool { _, ok := v.(interface{ IsSequential() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsSequential() bool }).IsSequential()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).IsSequential)
+			} else {
+				r = v.(interface{ IsSequential() bool }).IsSequential()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Reset() bool }).Reset()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Reset)
+			} else {
+				r = v.(interface{ Reset() bool }).Reset()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "BytesAvailable", Has: func(v any) bool { _, ok := v.(interface{ BytesAvailable() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BytesAvailable() int64 }).BytesAvailable()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).BytesAvailable)
+			} else {
+				r = v.(interface{ BytesAvailable() int64 }).BytesAvailable()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "BytesToWrite", Has: func(v any) bool { _, ok := v.(interface{ BytesToWrite() int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BytesToWrite() int64 }).BytesToWrite()
+			var r = *new(int64)
+			if f, ok := v.(func(func() int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).BytesToWrite)
+			} else {
+				r = v.(interface{ BytesToWrite() int64 }).BytesToWrite()
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "WaitForReadyRead", Has: func(v any) bool { _, ok := v.(interface{ WaitForReadyRead(int) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
-			r := v.(interface{ WaitForReadyRead(int) bool }).WaitForReadyRead(msecs)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int) bool, int) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).WaitForReadyRead, msecs)
+			} else {
+				r = v.(interface{ WaitForReadyRead(int) bool }).WaitForReadyRead(msecs)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WaitForBytesWritten", Has: func(v any) bool { _, ok := v.(interface{ WaitForBytesWritten(int) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
-			r := v.(interface{ WaitForBytesWritten(int) bool }).WaitForBytesWritten(msecs)
+			var r = *new(bool)
+			if f, ok := v.(func(func(int) bool, int) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).WaitForBytesWritten, msecs)
+			} else {
+				r = v.(interface{ WaitForBytesWritten(int) bool }).WaitForBytesWritten(msecs)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SkipData", Has: func(v any) bool { _, ok := v.(interface{ SkipData(int64) int64 }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int64) int64, int64) int64); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			maxSize := int64(*(*C.longlong)(a[0]))
-			r := v.(interface{ SkipData(int64) int64 }).SkipData(maxSize)
+			var r = *new(int64)
+			if f, ok := v.(func(func(int64) int64, int64) int64); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).SkipData, maxSize)
+			} else {
+				r = v.(interface{ SkipData(int64) int64 }).SkipData(maxSize)
+			}
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QBufferSuper{this: rt.View[QBuffer](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
+}
+
+// qBufferShimInit sets a QBuffer shim object's dispatch id and override mask.
+func qBufferShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QBuffer_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideOpen makes f this object's QBuffer::open: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Open, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideOpen(f func(super func(openMode QIODeviceBaseOpenMode) bool, openMode QIODeviceBaseOpenMode) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideOpen", "Open", f)
+}
+
+// OverrideClose makes f this object's QBuffer::close: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Close, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideClose(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideClose", "Close", f)
+}
+
+// OverrideSize makes f this object's QBuffer::size: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Size, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideSize(f func(super func() int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideSize", "Size", f)
+}
+
+// OverridePos makes f this object's QBuffer::pos: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Pos, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverridePos(f func(super func() int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverridePos", "Pos", f)
+}
+
+// OverrideSeekTo makes f this object's QBuffer::seek: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SeekTo, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideSeekTo(f func(super func(off int64) bool, off int64) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideSeekTo", "SeekTo", f)
+}
+
+// OverrideAtEnd makes f this object's QBuffer::atEnd: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AtEnd, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideAtEnd(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideAtEnd", "AtEnd", f)
+}
+
+// OverrideCanReadLine makes f this object's QBuffer::canReadLine: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CanReadLine, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideCanReadLine(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideCanReadLine", "CanReadLine", f)
+}
+
+// OverrideWriteData makes f this object's QBuffer::writeData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines WriteData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideWriteData(f func(super func(data string, lenArg int64) int64, data string, lenArg int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideWriteData", "WriteData", f)
+}
+
+// OverrideIsSequential makes f this object's QIODevice::isSequential: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IsSequential, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideIsSequential(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideIsSequential", "IsSequential", f)
+}
+
+// OverrideReset makes f this object's QIODevice::reset: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Reset, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideReset(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideReset", "Reset", f)
+}
+
+// OverrideBytesAvailable makes f this object's QIODevice::bytesAvailable: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines BytesAvailable, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideBytesAvailable(f func(super func() int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideBytesAvailable", "BytesAvailable", f)
+}
+
+// OverrideBytesToWrite makes f this object's QIODevice::bytesToWrite: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines BytesToWrite, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideBytesToWrite(f func(super func() int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideBytesToWrite", "BytesToWrite", f)
+}
+
+// OverrideWaitForReadyRead makes f this object's QIODevice::waitForReadyRead: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines WaitForReadyRead, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideWaitForReadyRead(f func(super func(msecs int) bool, msecs int) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideWaitForReadyRead", "WaitForReadyRead", f)
+}
+
+// OverrideWaitForBytesWritten makes f this object's QIODevice::waitForBytesWritten: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines WaitForBytesWritten, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideWaitForBytesWritten(f func(super func(msecs int) bool, msecs int) bool) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideWaitForBytesWritten", "WaitForBytesWritten", f)
+}
+
+// OverrideSkipData makes f this object's QIODevice::skipData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SkipData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QBuffer) OverrideSkipData(f func(super func(maxSize int64) int64, maxSize int64) int64) {
+	rt.Override(unsafe.Pointer(this), "QBuffer.OverrideSkipData", "SkipData", f)
 }
 
 // QBufferBase is embedded in Go types that subclass QBuffer:
@@ -529,7 +858,7 @@ func NewQBufferWith(v QBufferSubclass, parent QObjectLike) *QBuffer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QBuffer](p, "QBuffer", mode)
+	h := rt.WrapNewShim[QBuffer](p, "QBuffer", mode, qBufferVTable, qBufferShimInit)
 	base.QBuffer = rt.View[QBuffer](h, p)
 	id := h.SetSelf(v, qBufferVTable)
 	mask := rt.Mask(v, qBufferVTable)

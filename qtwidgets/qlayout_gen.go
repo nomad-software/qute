@@ -746,99 +746,185 @@ func QLayoutClosestAcceptableSize(w QWidgetLike, sArg qtcore.QSize) qtcore.QSize
 
 var qLayoutVTable = []rt.Virtual{
 	{Name: "Spacing", Has: func(v any) bool { _, ok := v.(interface{ Spacing() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Spacing() int }).Spacing()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Spacing)
+			} else {
+				r = v.(interface{ Spacing() int }).Spacing()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "SetSpacing", Has: func(v any) bool { _, ok := v.(interface{ SetSpacing(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			spacing := int(*(*C.int)(a[0]))
-			v.(interface{ SetSpacing(int) }).SetSpacing(spacing)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).SetSpacing, spacing)
+			} else {
+				v.(interface{ SetSpacing(int) }).SetSpacing(spacing)
+			}
 		}},
 	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Invalidate() }).Invalidate()
+			if f, ok := v.(func(func())); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Invalidate)
+			} else {
+				v.(interface{ Invalidate() }).Invalidate()
+			}
 		}},
 	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRect) qtcore.QRect); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func() qtcore.QRect) qtcore.QRect); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Geometry)
+			} else {
+				r = v.(interface{ Geometry() qtcore.QRect }).Geometry()
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "AddItem", Has: func(v any) bool { _, ok := v.(interface{ AddItem(*QLayoutItem) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QLayoutItem), *QLayoutItem)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			layoutItem := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ AddItem(*QLayoutItem) }).AddItem(layoutItem)
+			if f, ok := v.(func(func(*QLayoutItem), *QLayoutItem)); ok {
+				f(nil, layoutItem)
+			} else {
+				v.(interface{ AddItem(*QLayoutItem) }).AddItem(layoutItem)
+			}
 		}},
 	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.Orientations) qtcore.Orientations); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			var r = *new(qtcore.Orientations)
+			if f, ok := v.(func(func() qtcore.Orientations) qtcore.Orientations); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).ExpandingDirections)
+			} else {
+				r = v.(interface{ ExpandingDirections() qtcore.Orientations }).ExpandingDirections()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).MinimumSize)
+			} else {
+				r = v.(interface{ MinimumSize() qtcore.QSize }).MinimumSize()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).MaximumSize)
+			} else {
+				r = v.(interface{ MaximumSize() qtcore.QSize }).MaximumSize()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRect), qtcore.QRect)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			geometry := goQRect(*(*C.qute_rect)(a[0]))
-			v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+			if f, ok := v.(func(func(qtcore.QRect), qtcore.QRect)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).SetGeometry, geometry)
+			} else {
+				v.(interface{ SetGeometry(qtcore.QRect) }).SetGeometry(geometry)
+			}
 		}},
 	{Name: "ItemAt", Has: func(v any) bool { _, ok := v.(interface{ ItemAt(int) *QLayoutItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) *QLayoutItem, int) *QLayoutItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := int(*(*C.int)(a[0]))
-			r := v.(interface{ ItemAt(int) *QLayoutItem }).ItemAt(index)
+			var r = *new(*QLayoutItem)
+			if f, ok := v.(func(func(int) *QLayoutItem, int) *QLayoutItem); ok {
+				r = f(nil, index)
+			} else {
+				r = v.(interface{ ItemAt(int) *QLayoutItem }).ItemAt(index)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.ItemAt")
 		}},
 	{Name: "TakeAt", Has: func(v any) bool { _, ok := v.(interface{ TakeAt(int) *QLayoutItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) *QLayoutItem, int) *QLayoutItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := int(*(*C.int)(a[0]))
-			r := v.(interface{ TakeAt(int) *QLayoutItem }).TakeAt(index)
+			var r = *new(*QLayoutItem)
+			if f, ok := v.(func(func(int) *QLayoutItem, int) *QLayoutItem); ok {
+				r = f(nil, index)
+			} else {
+				r = v.(interface{ TakeAt(int) *QLayoutItem }).TakeAt(index)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.TakeAt")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
 			}
 		}},
 	{Name: "IndexOf", Has: func(v any) bool { _, ok := v.(interface{ IndexOf(*QWidget) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget) int, *QWidget) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface{ IndexOf(*QWidget) int }).IndexOf(widget)
+			var r = *new(int)
+			if f, ok := v.(func(func(*QWidget) int, *QWidget) int); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).IndexOf, widget)
+			} else {
+				r = v.(interface{ IndexOf(*QWidget) int }).IndexOf(widget)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "IndexOfItem", Has: func(v any) bool { _, ok := v.(interface{ IndexOfItem(*QLayoutItem) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QLayoutItem) int, *QLayoutItem) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			layoutItem := rt.View[QLayoutItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QLayoutItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface{ IndexOfItem(*QLayoutItem) int }).IndexOfItem(layoutItem)
+			var r = *new(int)
+			if f, ok := v.(func(func(*QLayoutItem) int, *QLayoutItem) int); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).IndexOfItem, layoutItem)
+			} else {
+				r = v.(interface{ IndexOfItem(*QLayoutItem) int }).IndexOfItem(layoutItem)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Count() int }).Count()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f(nil)
+			} else {
+				r = v.(interface{ Count() int }).Count()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).IsEmpty)
+			} else {
+				r = v.(interface{ IsEmpty() bool }).IsEmpty()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ControlTypes", Has: func(v any) bool {
@@ -847,11 +933,17 @@ var qLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface {
-				ControlTypes() QSizePolicyControlTypes
-			}).ControlTypes()
+			var r = *new(QSizePolicyControlTypes)
+			if f, ok := v.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).ControlTypes)
+			} else {
+				r = v.(interface {
+					ControlTypes() QSizePolicyControlTypes
+				}).ControlTypes()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "ReplaceWidget", Has: func(v any) bool {
@@ -860,42 +952,68 @@ var qLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem, *QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			from := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			to := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[1]))
 			options := qtcore.FindChildOptions(*(*C.int64_t)(a[2]))
-			r := v.(interface {
-				ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
-			}).ReplaceWidget(from, to, options)
+			var r = *new(*QLayoutItem)
+			if f, ok := v.(func(func(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem, *QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).ReplaceWidget, from, to, options)
+			} else {
+				r = v.(interface {
+					ReplaceWidget(*QWidget, *QWidget, qtcore.FindChildOptions) *QLayoutItem
+				}).ReplaceWidget(from, to, options)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.ReplaceWidget")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
 			}
 		}},
 	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QLayout) *QLayout); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Layout() *QLayout }).Layout()
+			var r = *new(*QLayout)
+			if f, ok := v.(func(func() *QLayout) *QLayout); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Layout)
+			} else {
+				r = v.(interface{ Layout() *QLayout }).Layout()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.Layout")
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QChildEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtcore.QChildEvent](eArgH, eArgP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(eArg)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).ChildEvent, eArg)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(eArg)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -904,86 +1022,468 @@ var qLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f(nil)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).MinimumHeightForWidth, arg0)
+			} else {
+				r = v.(interface{ MinimumHeightForWidth(int) int }).MinimumHeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QWidget) *QWidget); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Widget() *QWidget }).Widget()
+			var r = *new(*QWidget)
+			if f, ok := v.(func(func() *QWidget) *QWidget); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).Widget)
+			} else {
+				r = v.(interface{ Widget() *QWidget }).Widget()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.Widget")
 		}},
 	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QSpacerItem) *QSpacerItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			var r = *new(*QSpacerItem)
+			if f, ok := v.(func(func() *QSpacerItem) *QSpacerItem); ok {
+				r = f((&QLayoutSuper{this: rt.View[QLayout](h, h.Ptr())}).SpacerItem)
+			} else {
+				r = v.(interface{ SpacerItem() *QSpacerItem }).SpacerItem()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayout.SpacerItem")
 		}},
+}
+
+// qLayoutShimInit sets a QLayout shim object's dispatch id and override mask.
+func qLayoutShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideSpacing makes f this object's QLayout::spacing: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Spacing, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideSpacing(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideSpacing", "Spacing", f)
+}
+
+// OverrideSetSpacing makes f this object's QLayout::setSpacing: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetSpacing, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideSetSpacing(f func(super func(spacing int), spacing int)) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideSetSpacing", "SetSpacing", f)
+}
+
+// OverrideInvalidate makes f this object's QLayout::invalidate: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Invalidate, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideInvalidate(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideInvalidate", "Invalidate", f)
+}
+
+// OverrideGeometry makes f this object's QLayout::geometry: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Geometry, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideGeometry(f func(super func() qtcore.QRect) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideGeometry", "Geometry", f)
+}
+
+// OverrideAddItem makes f this object's QLayout::addItem: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AddItem, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideAddItem(f func(super func(layoutItem *QLayoutItem), layoutItem *QLayoutItem)) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideAddItem", "AddItem", f)
+}
+
+// OverrideExpandingDirections makes f this object's QLayout::expandingDirections: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ExpandingDirections, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideExpandingDirections(f func(super func() qtcore.Orientations) qtcore.Orientations) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideExpandingDirections", "ExpandingDirections", f)
+}
+
+// OverrideMinimumSize makes f this object's QLayout::minimumSize: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MinimumSize, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideMinimumSize(f func(super func() qtcore.QSize) qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideMinimumSize", "MinimumSize", f)
+}
+
+// OverrideMaximumSize makes f this object's QLayout::maximumSize: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MaximumSize, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideMaximumSize(f func(super func() qtcore.QSize) qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideMaximumSize", "MaximumSize", f)
+}
+
+// OverrideSetGeometry makes f this object's QLayout::setGeometry: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetGeometry, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideSetGeometry(f func(super func(geometry qtcore.QRect), geometry qtcore.QRect)) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideSetGeometry", "SetGeometry", f)
+}
+
+// OverrideItemAt makes f this object's QLayout::itemAt: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ItemAt, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideItemAt(f func(super func(index int) *QLayoutItem, index int) *QLayoutItem) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideItemAt", "ItemAt", f)
+}
+
+// OverrideTakeAt makes f this object's QLayout::takeAt: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines TakeAt, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideTakeAt(f func(super func(index int) *QLayoutItem, index int) *QLayoutItem) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideTakeAt", "TakeAt", f)
+}
+
+// OverrideIndexOf makes f this object's QLayout::indexOf: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IndexOf, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideIndexOf(f func(super func(widget *QWidget) int, widget *QWidget) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideIndexOf", "IndexOf", f)
+}
+
+// OverrideIndexOfItem makes f this object's QLayout::indexOf: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IndexOfItem, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideIndexOfItem(f func(super func(layoutItem *QLayoutItem) int, layoutItem *QLayoutItem) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideIndexOfItem", "IndexOfItem", f)
+}
+
+// OverrideCount makes f this object's QLayout::count: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Count, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideCount(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideCount", "Count", f)
+}
+
+// OverrideIsEmpty makes f this object's QLayout::isEmpty: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IsEmpty, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideIsEmpty(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideIsEmpty", "IsEmpty", f)
+}
+
+// OverrideControlTypes makes f this object's QLayout::controlTypes: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ControlTypes, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideControlTypes(f func(super func() QSizePolicyControlTypes) QSizePolicyControlTypes) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideControlTypes", "ControlTypes", f)
+}
+
+// OverrideReplaceWidget makes f this object's QLayout::replaceWidget: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ReplaceWidget, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideReplaceWidget(f func(super func(from *QWidget, to *QWidget, options qtcore.FindChildOptions) *QLayoutItem, from *QWidget, to *QWidget, options qtcore.FindChildOptions) *QLayoutItem) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideReplaceWidget", "ReplaceWidget", f)
+}
+
+// OverrideLayout makes f this object's QLayout::layout: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Layout, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideLayout(f func(super func() *QLayout) *QLayout) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideLayout", "Layout", f)
+}
+
+// OverrideSizeHint makes f this object's QLayoutItem::sizeHint: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SizeHint, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideSizeHint(f func(super func() qtcore.QSize) qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideSizeHint", "SizeHint", f)
+}
+
+// OverrideHasHeightForWidth makes f this object's QLayoutItem::hasHeightForWidth: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HasHeightForWidth, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideHasHeightForWidth(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideHasHeightForWidth", "HasHeightForWidth", f)
+}
+
+// OverrideHeightForWidth makes f this object's QLayoutItem::heightForWidth: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HeightForWidth, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideHeightForWidth(f func(super func(arg0 int) int, arg0 int) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideHeightForWidth", "HeightForWidth", f)
+}
+
+// OverrideMinimumHeightForWidth makes f this object's QLayoutItem::minimumHeightForWidth: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MinimumHeightForWidth, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideMinimumHeightForWidth(f func(super func(arg0 int) int, arg0 int) int) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideMinimumHeightForWidth", "MinimumHeightForWidth", f)
+}
+
+// OverrideWidget makes f this object's QLayoutItem::widget: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Widget, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideWidget(f func(super func() *QWidget) *QWidget) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideWidget", "Widget", f)
+}
+
+// OverrideSpacerItem makes f this object's QLayoutItem::spacerItem: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SpacerItem, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QLayout) OverrideSpacerItem(f func(super func() *QSpacerItem) *QSpacerItem) {
+	rt.Override(unsafe.Pointer(this), "QLayout.OverrideSpacerItem", "SpacerItem", f)
 }
 
 // QLayoutBase is embedded in Go types that subclass QLayout:
@@ -1356,7 +1856,7 @@ func NewQLayoutWith(v QLayoutSubclass, parent QWidgetLike) *QLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QLayout](p, "QLayout", mode)
+	h := rt.WrapNewShim[QLayout](p, "QLayout", mode, qLayoutVTable, qLayoutShimInit)
 	base.QLayout = rt.View[QLayout](h, p)
 	id := h.SetSelf(v, qLayoutVTable)
 	mask := rt.Mask(v, qLayoutVTable)

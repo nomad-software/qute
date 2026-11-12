@@ -30,6 +30,50 @@ qute_str qute_QAbstractFileIconProvider_type(void *self, void * a0);
 void qute_QAbstractFileIconProvider_setOptions(void *self, int64_t a0);
 int64_t qute_QAbstractFileIconProvider_options(void *self);
 
+// QAbstractTextDocumentLayout
+void * qute_QAbstractTextDocumentLayout_cast(void *obj);
+void qute_QAbstractTextDocumentLayout_draw(void *self, void * a0, void * a1);
+int qute_QAbstractTextDocumentLayout_hitTest(void *self, qute_pointf a0, int64_t a1);
+qute_str qute_QAbstractTextDocumentLayout_anchorAt(void *self, qute_pointf a0);
+qute_str qute_QAbstractTextDocumentLayout_imageAt(void *self, qute_pointf a0);
+void * qute_QAbstractTextDocumentLayout_formatAt(void *self, qute_pointf a0);
+void * qute_QAbstractTextDocumentLayout_blockWithMarkerAt(void *self, qute_pointf a0);
+int qute_QAbstractTextDocumentLayout_pageCount(void *self);
+qute_sizef qute_QAbstractTextDocumentLayout_documentSize(void *self);
+qute_rectf qute_QAbstractTextDocumentLayout_frameBoundingRect(void *self, void * a0);
+qute_rectf qute_QAbstractTextDocumentLayout_blockBoundingRect(void *self, void * a0);
+void qute_QAbstractTextDocumentLayout_setPaintDevice(void *self, void * a0);
+void * qute_QAbstractTextDocumentLayout_paintDevice(void *self);
+void * qute_QAbstractTextDocumentLayout_document(void *self);
+void qute_QAbstractTextDocumentLayout_update_1(void *self);
+void qute_QAbstractTextDocumentLayout_updateBlock_1(void *self, void * a0);
+void qute_QAbstractTextDocumentLayout_documentSizeChanged_1(void *self, qute_sizef a0);
+void qute_QAbstractTextDocumentLayout_pageCountChanged_1(void *self, int a0);
+void * qute_QAbstractTextDocumentLayout_update(void *self, uintptr_t id);
+void * qute_QAbstractTextDocumentLayout_updateBlock(void *self, uintptr_t id);
+void * qute_QAbstractTextDocumentLayout_documentSizeChanged(void *self, uintptr_t id);
+void * qute_QAbstractTextDocumentLayout_pageCountChanged(void *self, uintptr_t id);
+
+// QAbstractTextDocumentLayoutPaintContext
+void * qute_QAbstractTextDocumentLayoutPaintContext_new(void);
+void qute_QAbstractTextDocumentLayoutPaintContext_delete(void *self);
+int qute_QAbstractTextDocumentLayoutPaintContext_get_cursorPosition(void *self);
+void qute_QAbstractTextDocumentLayoutPaintContext_set_cursorPosition(void *self, int a0);
+void * qute_QAbstractTextDocumentLayoutPaintContext_get_palette(void *self);
+void qute_QAbstractTextDocumentLayoutPaintContext_set_palette(void *self, void * a0);
+qute_rectf qute_QAbstractTextDocumentLayoutPaintContext_get_clip(void *self);
+void qute_QAbstractTextDocumentLayoutPaintContext_set_clip(void *self, qute_rectf a0);
+qute_list qute_QAbstractTextDocumentLayoutPaintContext_get_selections(void *self);
+void qute_QAbstractTextDocumentLayoutPaintContext_set_selections(void *self, const void *a0, ptrdiff_t a0_n);
+
+// QAbstractTextDocumentLayoutSelection
+void * qute_QAbstractTextDocumentLayoutSelection_new(void);
+void qute_QAbstractTextDocumentLayoutSelection_delete(void *self);
+void * qute_QAbstractTextDocumentLayoutSelection_get_cursor(void *self);
+void qute_QAbstractTextDocumentLayoutSelection_set_cursor(void *self, void * a0);
+void * qute_QAbstractTextDocumentLayoutSelection_get_format(void *self);
+void qute_QAbstractTextDocumentLayoutSelection_set_format(void *self, void * a0);
+
 // QAction
 void * qute_QAction_new(void * a0);
 void * qute_QAction_new_1(const char *a0, ptrdiff_t a0_len, void * a1);
@@ -172,6 +216,7 @@ void qute_QBitmap_delete(void *self);
 int64_t qute_QBitmap_memory(void *self);
 void qute_QBitmap_clear(void *self);
 void * qute_QBitmap_transformed(void *self, void * a0);
+void * qute_QBitmap_to_qvariant(void *self);
 void * qute_QBitmap_fromImage(void * a0);
 void * qute_QBitmap_fromData(qute_size a0, void * a1);
 void * qute_QBitmap_fromPixmap(void * a0);
@@ -200,6 +245,7 @@ qute_color qute_QBrush_color(void *self);
 void qute_QBrush_setColor(void *self, qute_color a0);
 void * qute_QBrush_gradient(void *self);
 bool qute_QBrush_isOpaque(void *self);
+void * qute_QBrush_to_qvariant(void *self);
 
 // QChildWindowEvent
 void * qute_QChildWindowEvent_new(int64_t a0, void * a1);
@@ -290,6 +336,7 @@ qute_str qute_QColorSpace_iccProfile(void *self);
 void * qute_QColorSpace_transformationToColorSpace(void *self, void * a0);
 void qute_QColorSpace_setTransferFunction_2(void *self, int64_t a0, float a1);
 void * qute_QColorSpace_withTransferFunction_2(void *self, int64_t a0, float a1);
+void * qute_QColorSpace_to_qvariant(void *self);
 void * qute_QColorSpace_fromIccProfile(const char *a0, ptrdiff_t a0_len);
 
 // QColorSpacePrimaryPoints
@@ -350,6 +397,7 @@ void * qute_QCursor_bitmap(void *self);
 void * qute_QCursor_mask(void *self);
 void * qute_QCursor_pixmap(void *self);
 qute_point qute_QCursor_hotSpot(void *self);
+void * qute_QCursor_to_qvariant(void *self);
 qute_point qute_QCursor_pos(void);
 qute_point qute_QCursor_pos_1(void * a0);
 void qute_QCursor_setPos(qute_point a0);
@@ -715,6 +763,7 @@ void * qute_QFont_resolve(void *self, void * a0);
 unsigned int qute_QFont_resolveMask(void *self);
 void qute_QFont_setResolveMask(void *self, unsigned int a0);
 void qute_QFont_setStyleHint_1(void *self, int64_t a0, int64_t a1);
+void * qute_QFont_to_qvariant(void *self);
 qute_str qute_QFont_substitute(const char *a0, ptrdiff_t a0_len);
 qute_list qute_QFont_substitutes(const char *a0, ptrdiff_t a0_len);
 qute_list qute_QFont_substitutions(void);
@@ -1045,6 +1094,7 @@ void qute_QIcon_paint_1(void *self, void * a0, qute_rect a1, int64_t a2, int64_t
 void qute_QIcon_addPixmap_1(void *self, void * a0, int64_t a1, int64_t a2);
 void qute_QIcon_addFile_1(void *self, const char *a0, ptrdiff_t a0_len, qute_size a1, int64_t a2, int64_t a3);
 qute_list qute_QIcon_availableSizes_1(void *self, int64_t a0, int64_t a1);
+void * qute_QIcon_to_qvariant(void *self);
 void * qute_QIcon_fromTheme(const char *a0, ptrdiff_t a0_len);
 void * qute_QIcon_fromTheme_1(const char *a0, ptrdiff_t a0_len, void * a1);
 bool qute_QIcon_hasThemeIcon(const char *a0, ptrdiff_t a0_len);
@@ -1218,6 +1268,7 @@ bool qute_QImage_loadFromData_1(void *self, const char *a0, ptrdiff_t a0_len, co
 bool qute_QImage_save_2(void *self, const char *a0, ptrdiff_t a0_len, const char * a1, int a2);
 bool qute_QImage_save_3(void *self, void * a0, const char * a1, int a2);
 qute_str qute_QImage_text_1(void *self, const char *a0, ptrdiff_t a0_len);
+void * qute_QImage_to_qvariant(void *self);
 void * qute_QImage_trueMatrix(void * a0, int a1, int a2);
 void * qute_QImage_fromData(const char *a0, ptrdiff_t a0_len);
 void * qute_QImage_toPixelFormat(int64_t a0);
@@ -1495,6 +1546,7 @@ bool qute_QKeySequence_isEmpty(void *self);
 qute_str qute_QKeySequence_toString(void *self);
 int64_t qute_QKeySequence_matches(void *self, void * a0);
 qute_str qute_QKeySequence_toString_1(void *self, int64_t a0);
+void * qute_QKeySequence_to_qvariant(void *self);
 void * qute_QKeySequence_fromString(const char *a0, ptrdiff_t a0_len);
 qute_list qute_QKeySequence_listFromString(const char *a0, ptrdiff_t a0_len);
 qute_str qute_QKeySequence_listToString(const void *a0, ptrdiff_t a0_n);
@@ -1568,6 +1620,7 @@ void qute_QMatrix4x4_projectedRotate_1(void *self, float a0, float a1, float a2,
 int64_t qute_QMatrix4x4_flags(void *self);
 void * qute_QMatrix4x4_inverted_1(void *self, bool *a0_out);
 void qute_QMatrix4x4_rotate_3(void *self, float a0, float a1, float a2, float a3);
+void * qute_QMatrix4x4_to_qvariant(void *self);
 
 // QMouseEvent
 void * qute_QMouseEvent_new(int64_t a0, qute_pointf a1, qute_pointf a2, int64_t a3, int64_t a4, int64_t a5);
@@ -2487,6 +2540,7 @@ long long qute_QPalette_cacheKey(void *self);
 void * qute_QPalette_resolve(void *self, void * a0);
 unsigned long long qute_QPalette_resolveMask(void *self);
 void qute_QPalette_setResolveMask(void *self, unsigned long long a0);
+void * qute_QPalette_to_qvariant(void *self);
 
 // QPdfWriter
 void * qute_QPdfWriter_new(const char *a0, ptrdiff_t a0_len);
@@ -2556,6 +2610,7 @@ int64_t qute_QPen_joinStyle(void *self);
 void qute_QPen_setJoinStyle(void *self, int64_t a0);
 bool qute_QPen_isCosmetic(void *self);
 void qute_QPen_setCosmetic(void *self, bool a0);
+void * qute_QPen_to_qvariant(void *self);
 
 // QPicture
 void * qute_QPicture_new(void);
@@ -2649,6 +2704,7 @@ bool qute_QPixmap_save_3(void *self, void * a0, const char * a1, int a2);
 bool qute_QPixmap_convertFromImage_1(void *self, void * a0, int64_t a1);
 void * qute_QPixmap_copy_1(void *self, qute_rect a0);
 void qute_QPixmap_scroll_1(void *self, int a0, int a1, qute_rect a2, void * a3);
+void * qute_QPixmap_to_qvariant(void *self);
 int qute_QPixmap_defaultDepth(void);
 void * qute_QPixmap_trueMatrix(void * a0, int a1, int a2);
 void * qute_QPixmap_fromImage(void * a0);
@@ -2764,6 +2820,7 @@ void * qute_QQuaternion_toVector4D(void *self);
 void qute_QQuaternion_getAxisAndAngle(void *self, float *a0_out, float *a1_out, float *a2_out, float *a3_out);
 void * qute_QQuaternion_toEulerAngles(void *self);
 void qute_QQuaternion_getEulerAngles(void *self, float *a0_out, float *a1_out, float *a2_out);
+void * qute_QQuaternion_to_qvariant(void *self);
 float qute_QQuaternion_dotProduct(void * a0, void * a1);
 void * qute_QQuaternion_fromAxisAndAngle(void * a0, float a1);
 void * qute_QQuaternion_fromAxisAndAngle_1(float a0, float a1, float a2, float a3);
@@ -2859,6 +2916,7 @@ qute_rect qute_QRegion_boundingRect(void *self);
 void qute_QRegion_setRects(void *self, const void *a0, ptrdiff_t a0_n);
 qute_list qute_QRegion_rects(void *self);
 int qute_QRegion_rectCount(void *self);
+void * qute_QRegion_to_qvariant(void *self);
 
 // QRegularExpressionValidator
 void * qute_QRegularExpressionValidator_new(void * a0);
@@ -3738,6 +3796,7 @@ bool qute_QTextDocument_isRedoAvailable(void *self);
 int qute_QTextDocument_availableUndoSteps(void *self);
 int qute_QTextDocument_availableRedoSteps(void *self);
 int qute_QTextDocument_revision(void *self);
+void * qute_QTextDocument_documentLayout(void *self);
 void qute_QTextDocument_setMetaInformation(void *self, int64_t a0, const char *a1, ptrdiff_t a1_len);
 qute_str qute_QTextDocument_metaInformation(void *self, int64_t a0);
 qute_str qute_QTextDocument_toHtml(void *self);
@@ -3929,6 +3988,7 @@ void qute_QTextFormat_clearBackground(void *self);
 void qute_QTextFormat_setForeground(void *self, void * a0);
 void * qute_QTextFormat_foreground(void *self);
 void qute_QTextFormat_clearForeground(void *self);
+void * qute_QTextFormat_to_qvariant(void *self);
 
 // QTextFrame
 void * qute_QTextFrame_new(void * a0);
@@ -4015,6 +4075,7 @@ void qute_QTextLength_delete(void *self);
 int64_t qute_QTextLength_type(void *self);
 double qute_QTextLength_value(void *self, double a0);
 double qute_QTextLength_rawValue(void *self);
+void * qute_QTextLength_to_qvariant(void *self);
 
 // QTextList
 void * qute_QTextList_cast(void *obj);
@@ -4243,6 +4304,7 @@ qute_rectf qute_QTransform_mapRect_1(void *self, qute_rectf a0);
 void * qute_QTransform_inverted_1(void *self, bool *a0_out);
 void qute_QTransform_rotate_2(void *self, double a0, int64_t a1);
 void qute_QTransform_rotateRadians_2(void *self, double a0, int64_t a1);
+void * qute_QTransform_to_qvariant(void *self);
 bool qute_QTransform_squareToQuad(const void *a0, ptrdiff_t a0_n, void * *a1_out);
 bool qute_QTransform_quadToSquare(const void *a0, ptrdiff_t a0_n, void * *a1_out);
 bool qute_QTransform_quadToQuad(const void *a0, ptrdiff_t a0_n, const void *a1, ptrdiff_t a1_n, void * *a2_out);
@@ -4413,6 +4475,7 @@ void * qute_QVector2D_toVector3D(void *self);
 void * qute_QVector2D_toVector4D(void *self);
 qute_point qute_QVector2D_toPoint(void *self);
 qute_pointf qute_QVector2D_toPointF(void *self);
+void * qute_QVector2D_to_qvariant(void *self);
 float qute_QVector2D_dotProduct(void * a0, void * a1);
 
 // QVector3D
@@ -4446,6 +4509,7 @@ void * qute_QVector3D_toVector2D(void *self);
 void * qute_QVector3D_toVector4D(void *self);
 qute_point qute_QVector3D_toPoint(void *self);
 qute_pointf qute_QVector3D_toPointF(void *self);
+void * qute_QVector3D_to_qvariant(void *self);
 float qute_QVector3D_dotProduct(void * a0, void * a1);
 void * qute_QVector3D_crossProduct(void * a0, void * a1);
 void * qute_QVector3D_normal(void * a0, void * a1);
@@ -4481,6 +4545,7 @@ void * qute_QVector4D_toVector3D(void *self);
 void * qute_QVector4D_toVector3DAffine(void *self);
 qute_point qute_QVector4D_toPoint(void *self);
 qute_pointf qute_QVector4D_toPointF(void *self);
+void * qute_QVector4D_to_qvariant(void *self);
 float qute_QVector4D_dotProduct(void * a0, void * a1);
 
 // QWhatsThisClickedEvent

@@ -846,28 +846,48 @@ func QStyleSliderValueFromPositionFull(min int, max int, pos int, space int, ups
 
 var qStyleVTable = []rt.Virtual{
 	{Name: "Polish", Has: func(v any) bool { _, ok := v.(interface{ Polish(*QWidget) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ Polish(*QWidget) }).Polish(widget)
+			if f, ok := v.(func(func(*QWidget), *QWidget)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).Polish, widget)
+			} else {
+				v.(interface{ Polish(*QWidget) }).Polish(widget)
+			}
 		}},
 	{Name: "Unpolish", Has: func(v any) bool { _, ok := v.(interface{ Unpolish(*QWidget) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ Unpolish(*QWidget) }).Unpolish(widget)
+			if f, ok := v.(func(func(*QWidget), *QWidget)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).Unpolish, widget)
+			} else {
+				v.(interface{ Unpolish(*QWidget) }).Unpolish(widget)
+			}
 		}},
 	{Name: "PolishApplication", Has: func(v any) bool { _, ok := v.(interface{ PolishApplication(*QApplication) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			application := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ PolishApplication(*QApplication) }).PolishApplication(application)
+			if f, ok := v.(func(func(*QApplication), *QApplication)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).PolishApplication, application)
+			} else {
+				v.(interface{ PolishApplication(*QApplication) }).PolishApplication(application)
+			}
 		}},
 	{Name: "UnpolishApplication", Has: func(v any) bool { _, ok := v.(interface{ UnpolishApplication(*QApplication) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			application := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ UnpolishApplication(*QApplication) }).UnpolishApplication(application)
+			if f, ok := v.(func(func(*QApplication), *QApplication)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).UnpolishApplication, application)
+			} else {
+				v.(interface{ UnpolishApplication(*QApplication) }).UnpolishApplication(application)
+			}
 		}},
 	{Name: "ItemTextRect", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -875,16 +895,25 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect, *qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			fm := rt.View[qtgui.QFontMetrics](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QFontMetrics", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			rArg := goQRect(*(*C.qute_rect)(a[1]))
 			flags := int(*(*C.int)(a[2]))
 			enabled := bool(*(*C.bool)(a[3]))
 			text := quteStr(*(*C.qute_str)(a[4]))
-			r := v.(interface {
-				ItemTextRect(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect
-			}).ItemTextRect(fm, rArg, flags, enabled, text)
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect, *qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect); ok {
+				r = f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).ItemTextRect, fm, rArg, flags, enabled, text)
+			} else {
+				r = v.(interface {
+					ItemTextRect(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect
+				}).ItemTextRect(fm, rArg, flags, enabled, text)
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "ItemPixmapRect", Has: func(v any) bool {
@@ -893,14 +922,23 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect, qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			rArg := goQRect(*(*C.qute_rect)(a[0]))
 			flags := int(*(*C.int)(a[1]))
 			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[2]))
-			r := v.(interface {
-				ItemPixmapRect(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect
-			}).ItemPixmapRect(rArg, flags, pixmap)
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect, qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect); ok {
+				r = f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).ItemPixmapRect, rArg, flags, pixmap)
+			} else {
+				r = v.(interface {
+					ItemPixmapRect(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect
+				}).ItemPixmapRect(rArg, flags, pixmap)
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "DrawItemText", Has: func(v any) bool {
@@ -909,7 +947,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 7)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
@@ -921,9 +963,13 @@ var qStyleVTable = []rt.Virtual{
 			enabled := bool(*(*C.bool)(a[4]))
 			text := quteStr(*(*C.qute_str)(a[5]))
 			textRole := qtgui.QPaletteColorRole(*(*C.int64_t)(a[6]))
-			v.(interface {
-				DrawItemText(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole)
-			}).DrawItemText(painter, rect, flags, pal, enabled, text, textRole)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).DrawItemText, painter, rect, flags, pal, enabled, text, textRole)
+			} else {
+				v.(interface {
+					DrawItemText(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole)
+				}).DrawItemText(painter, rect, flags, pal, enabled, text, textRole)
+			}
 		}},
 	{Name: "DrawItemPixmap", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -931,7 +977,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
@@ -940,14 +990,24 @@ var qStyleVTable = []rt.Virtual{
 			rect := goQRect(*(*C.qute_rect)(a[1]))
 			alignment := int(*(*C.int)(a[2]))
 			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[3]))
-			v.(interface {
-				DrawItemPixmap(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap)
-			}).DrawItemPixmap(painter, rect, alignment, pixmap)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).DrawItemPixmap, painter, rect, alignment, pixmap)
+			} else {
+				v.(interface {
+					DrawItemPixmap(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap)
+				}).DrawItemPixmap(painter, rect, alignment, pixmap)
+			}
 		}},
 	{Name: "StandardPalette", Has: func(v any) bool { _, ok := v.(interface{ StandardPalette() *qtgui.QPalette }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPalette) *qtgui.QPalette); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ StandardPalette() *qtgui.QPalette }).StandardPalette()
+			var r = *new(*qtgui.QPalette)
+			if f, ok := v.(func(func() *qtgui.QPalette) *qtgui.QPalette); ok {
+				r = f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).StandardPalette)
+			} else {
+				r = v.(interface{ StandardPalette() *qtgui.QPalette }).StandardPalette()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardPalette")
 		}},
 	{Name: "DrawPrimitive", Has: func(v any) bool {
@@ -956,7 +1016,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			pe := QStylePrimitiveElement(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -968,9 +1032,13 @@ var qStyleVTable = []rt.Virtual{
 			defer pArgH.Expire()
 			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
 			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			v.(interface {
-				DrawPrimitive(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget)
-			}).DrawPrimitive(pe, opt, pArg, w)
+			if f, ok := v.(func(func(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget)); ok {
+				f(nil, pe, opt, pArg, w)
+			} else {
+				v.(interface {
+					DrawPrimitive(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+				}).DrawPrimitive(pe, opt, pArg, w)
+			}
 		}},
 	{Name: "DrawControl", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -978,7 +1046,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			element := QStyleControlElement(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -990,9 +1062,13 @@ var qStyleVTable = []rt.Virtual{
 			defer pArgH.Expire()
 			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
 			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			v.(interface {
-				DrawControl(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget)
-			}).DrawControl(element, opt, pArg, w)
+			if f, ok := v.(func(func(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget)); ok {
+				f(nil, element, opt, pArg, w)
+			} else {
+				v.(interface {
+					DrawControl(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget)
+				}).DrawControl(element, opt, pArg, w)
+			}
 		}},
 	{Name: "SubElementRect", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1000,7 +1076,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect, QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			subElement := QStyleSubElement(*(*C.int64_t)(a[0]))
 			optionP := *(*unsafe.Pointer)(a[1])
@@ -1008,9 +1088,14 @@ var qStyleVTable = []rt.Virtual{
 			defer optionH.Expire()
 			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			r := v.(interface {
-				SubElementRect(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect
-			}).SubElementRect(subElement, option, widget)
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect, QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect); ok {
+				r = f(nil, subElement, option, widget)
+			} else {
+				r = v.(interface {
+					SubElementRect(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect
+				}).SubElementRect(subElement, option, widget)
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "DrawComplexControl", Has: func(v any) bool {
@@ -1019,7 +1104,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget), QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1031,9 +1120,13 @@ var qStyleVTable = []rt.Virtual{
 			defer pArgH.Expire()
 			pArg := rt.View[qtgui.QPainter](pArgH, pArgP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			v.(interface {
-				DrawComplexControl(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget)
-			}).DrawComplexControl(cc, opt, pArg, widget)
+			if f, ok := v.(func(func(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget), QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget)); ok {
+				f(nil, cc, opt, pArg, widget)
+			} else {
+				v.(interface {
+					DrawComplexControl(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget)
+				}).DrawComplexControl(cc, opt, pArg, widget)
+			}
 		}},
 	{Name: "HitTestComplexControl", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1041,7 +1134,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls, QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1050,9 +1147,14 @@ var qStyleVTable = []rt.Virtual{
 			opt := rt.View[QStyleOptionComplex](optH, optP)
 			pt := goQPoint(*(*C.qute_point)(a[2]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			r := v.(interface {
-				HitTestComplexControl(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls
-			}).HitTestComplexControl(cc, opt, pt, widget)
+			var r = *new(QStyleSubControls)
+			if f, ok := v.(func(func(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls, QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls); ok {
+				r = f(nil, cc, opt, pt, widget)
+			} else {
+				r = v.(interface {
+					HitTestComplexControl(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls
+				}).HitTestComplexControl(cc, opt, pt, widget)
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "SubControlRect", Has: func(v any) bool {
@@ -1061,7 +1163,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect, QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			cc := QStyleComplexControl(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1070,9 +1176,14 @@ var qStyleVTable = []rt.Virtual{
 			opt := rt.View[QStyleOptionComplex](optH, optP)
 			sc := QStyleSubControls(*(*C.int64_t)(a[2]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			r := v.(interface {
-				SubControlRect(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect
-			}).SubControlRect(cc, opt, sc, widget)
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect, QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect); ok {
+				r = f(nil, cc, opt, sc, widget)
+			} else {
+				r = v.(interface {
+					SubControlRect(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect
+				}).SubControlRect(cc, opt, sc, widget)
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "PixelMetric", Has: func(v any) bool {
@@ -1081,7 +1192,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStylePixelMetric, *QStyleOption, *QWidget) int, QStylePixelMetric, *QStyleOption, *QWidget) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			metric := QStylePixelMetric(*(*C.int64_t)(a[0]))
 			optionP := *(*unsafe.Pointer)(a[1])
@@ -1089,9 +1204,14 @@ var qStyleVTable = []rt.Virtual{
 			defer optionH.Expire()
 			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			r := v.(interface {
-				PixelMetric(QStylePixelMetric, *QStyleOption, *QWidget) int
-			}).PixelMetric(metric, option, widget)
+			var r = *new(int)
+			if f, ok := v.(func(func(QStylePixelMetric, *QStyleOption, *QWidget) int, QStylePixelMetric, *QStyleOption, *QWidget) int); ok {
+				r = f(nil, metric, option, widget)
+			} else {
+				r = v.(interface {
+					PixelMetric(QStylePixelMetric, *QStyleOption, *QWidget) int
+				}).PixelMetric(metric, option, widget)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "SizeFromContents", Has: func(v any) bool {
@@ -1100,7 +1220,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize, QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			ct := QStyleContentsType(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1109,9 +1233,14 @@ var qStyleVTable = []rt.Virtual{
 			opt := rt.View[QStyleOption](optH, optP)
 			contentsSize := goQSize(*(*C.qute_size)(a[2]))
 			w := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[3]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[3]))
-			r := v.(interface {
-				SizeFromContents(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize
-			}).SizeFromContents(ct, opt, contentsSize, w)
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize, QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize); ok {
+				r = f(nil, ct, opt, contentsSize, w)
+			} else {
+				r = v.(interface {
+					SizeFromContents(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize
+				}).SizeFromContents(ct, opt, contentsSize, w)
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "StyleHint", Has: func(v any) bool {
@@ -1120,7 +1249,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int, QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			stylehint := QStyleStyleHint(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1132,9 +1265,14 @@ var qStyleVTable = []rt.Virtual{
 			returnDataH := rt.WrapClass(returnDataP, "QStyleHintReturn", rt.NewScoped)
 			defer returnDataH.Expire()
 			returnData := rt.View[QStyleHintReturn](returnDataH, returnDataP)
-			r := v.(interface {
-				StyleHint(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int
-			}).StyleHint(stylehint, opt, widget, returnData)
+			var r = *new(int)
+			if f, ok := v.(func(func(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int, QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int); ok {
+				r = f(nil, stylehint, opt, widget, returnData)
+			} else {
+				r = v.(interface {
+					StyleHint(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int
+				}).StyleHint(stylehint, opt, widget, returnData)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "StandardPixmap", Has: func(v any) bool {
@@ -1143,7 +1281,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			standardPixmap := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
 			optP := *(*unsafe.Pointer)(a[1])
@@ -1151,9 +1293,14 @@ var qStyleVTable = []rt.Virtual{
 			defer optH.Expire()
 			opt := rt.View[QStyleOption](optH, optP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			r := v.(interface {
-				StandardPixmap(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap
-			}).StandardPixmap(standardPixmap, opt, widget)
+			var r = *new(*qtgui.QPixmap)
+			if f, ok := v.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap); ok {
+				r = f(nil, standardPixmap, opt, widget)
+			} else {
+				r = v.(interface {
+					StandardPixmap(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap
+				}).StandardPixmap(standardPixmap, opt, widget)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardPixmap")
 		}},
 	{Name: "StandardIcon", Has: func(v any) bool {
@@ -1162,7 +1309,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			standardIcon := QStyleStandardPixmap(*(*C.int64_t)(a[0]))
 			optionP := *(*unsafe.Pointer)(a[1])
@@ -1170,9 +1321,14 @@ var qStyleVTable = []rt.Virtual{
 			defer optionH.Expire()
 			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			r := v.(interface {
-				StandardIcon(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon
-			}).StandardIcon(standardIcon, option, widget)
+			var r = *new(*qtgui.QIcon)
+			if f, ok := v.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon); ok {
+				r = f(nil, standardIcon, option, widget)
+			} else {
+				r = v.(interface {
+					StandardIcon(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon
+				}).StandardIcon(standardIcon, option, widget)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.StandardIcon")
 		}},
 	{Name: "GeneratedIconPixmap", Has: func(v any) bool {
@@ -1181,7 +1337,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap, qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			iconMode := qtgui.QIconMode(*(*C.int64_t)(a[0]))
 			pixmap := rt.View[qtgui.QPixmap](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QPixmap", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
@@ -1189,9 +1349,14 @@ var qStyleVTable = []rt.Virtual{
 			optH := rt.WrapClass(optP, "QStyleOption", rt.NewScoped)
 			defer optH.Expire()
 			opt := rt.View[QStyleOption](optH, optP)
-			r := v.(interface {
-				GeneratedIconPixmap(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap
-			}).GeneratedIconPixmap(iconMode, pixmap, opt)
+			var r = *new(*qtgui.QPixmap)
+			if f, ok := v.(func(func(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap, qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap); ok {
+				r = f(nil, iconMode, pixmap, opt)
+			} else {
+				r = v.(interface {
+					GeneratedIconPixmap(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap
+				}).GeneratedIconPixmap(iconMode, pixmap, opt)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStyle.GeneratedIconPixmap")
 		}},
 	{Name: "LayoutSpacing", Has: func(v any) bool {
@@ -1200,7 +1365,11 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int, QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 5)
 			control1 := QSizePolicyControlTypes(*(*C.int64_t)(a[0]))
 			control2 := QSizePolicyControlTypes(*(*C.int64_t)(a[1]))
@@ -1210,19 +1379,30 @@ var qStyleVTable = []rt.Virtual{
 			defer optionH.Expire()
 			option := rt.View[QStyleOption](optionH, optionP)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[4]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[4]))
-			r := v.(interface {
-				LayoutSpacing(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int
-			}).LayoutSpacing(control1, control2, orientation, option, widget)
+			var r = *new(int)
+			if f, ok := v.(func(func(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int, QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int); ok {
+				r = f(nil, control1, control2, orientation, option, widget)
+			} else {
+				r = v.(interface {
+					LayoutSpacing(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int
+				}).LayoutSpacing(control1, control2, orientation, option, widget)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -1231,57 +1411,382 @@ var qStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QStyleSuper{this: rt.View[QStyle](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qStyleShimInit sets a QStyle shim object's dispatch id and override mask.
+func qStyleShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QStyle_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverridePolish makes f this object's QStyle::polish: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Polish, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverridePolish(f func(super func(widget *QWidget), widget *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverridePolish", "Polish", f)
+}
+
+// OverrideUnpolish makes f this object's QStyle::unpolish: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Unpolish, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideUnpolish(f func(super func(widget *QWidget), widget *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideUnpolish", "Unpolish", f)
+}
+
+// OverridePolishApplication makes f this object's QStyle::polish: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PolishApplication, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverridePolishApplication(f func(super func(application *QApplication), application *QApplication)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverridePolishApplication", "PolishApplication", f)
+}
+
+// OverrideUnpolishApplication makes f this object's QStyle::unpolish: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UnpolishApplication, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideUnpolishApplication(f func(super func(application *QApplication), application *QApplication)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideUnpolishApplication", "UnpolishApplication", f)
+}
+
+// OverrideItemTextRect makes f this object's QStyle::itemTextRect: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ItemTextRect, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideItemTextRect(f func(super func(fm *qtgui.QFontMetrics, rArg qtcore.QRect, flags int, enabled bool, text string) qtcore.QRect, fm *qtgui.QFontMetrics, rArg qtcore.QRect, flags int, enabled bool, text string) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideItemTextRect", "ItemTextRect", f)
+}
+
+// OverrideItemPixmapRect makes f this object's QStyle::itemPixmapRect: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ItemPixmapRect, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideItemPixmapRect(f func(super func(rArg qtcore.QRect, flags int, pixmap *qtgui.QPixmap) qtcore.QRect, rArg qtcore.QRect, flags int, pixmap *qtgui.QPixmap) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideItemPixmapRect", "ItemPixmapRect", f)
+}
+
+// OverrideDrawItemText makes f this object's QStyle::drawItemText: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawItemText, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideDrawItemText(f func(super func(painter *qtgui.QPainter, rect qtcore.QRect, flags int, pal *qtgui.QPalette, enabled bool, text string, textRole qtgui.QPaletteColorRole), painter *qtgui.QPainter, rect qtcore.QRect, flags int, pal *qtgui.QPalette, enabled bool, text string, textRole qtgui.QPaletteColorRole)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideDrawItemText", "DrawItemText", f)
+}
+
+// OverrideDrawItemPixmap makes f this object's QStyle::drawItemPixmap: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawItemPixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideDrawItemPixmap(f func(super func(painter *qtgui.QPainter, rect qtcore.QRect, alignment int, pixmap *qtgui.QPixmap), painter *qtgui.QPainter, rect qtcore.QRect, alignment int, pixmap *qtgui.QPixmap)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideDrawItemPixmap", "DrawItemPixmap", f)
+}
+
+// OverrideStandardPalette makes f this object's QStyle::standardPalette: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines StandardPalette, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideStandardPalette(f func(super func() *qtgui.QPalette) *qtgui.QPalette) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideStandardPalette", "StandardPalette", f)
+}
+
+// OverrideDrawPrimitive makes f this object's QStyle::drawPrimitive: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawPrimitive, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideDrawPrimitive(f func(super func(pe QStylePrimitiveElement, opt *QStyleOption, pArg *qtgui.QPainter, w *QWidget), pe QStylePrimitiveElement, opt *QStyleOption, pArg *qtgui.QPainter, w *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideDrawPrimitive", "DrawPrimitive", f)
+}
+
+// OverrideDrawControl makes f this object's QStyle::drawControl: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawControl, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideDrawControl(f func(super func(element QStyleControlElement, opt *QStyleOption, pArg *qtgui.QPainter, w *QWidget), element QStyleControlElement, opt *QStyleOption, pArg *qtgui.QPainter, w *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideDrawControl", "DrawControl", f)
+}
+
+// OverrideSubElementRect makes f this object's QStyle::subElementRect: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SubElementRect, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideSubElementRect(f func(super func(subElement QStyleSubElement, option *QStyleOption, widget *QWidget) qtcore.QRect, subElement QStyleSubElement, option *QStyleOption, widget *QWidget) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideSubElementRect", "SubElementRect", f)
+}
+
+// OverrideDrawComplexControl makes f this object's QStyle::drawComplexControl: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawComplexControl, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideDrawComplexControl(f func(super func(cc QStyleComplexControl, opt *QStyleOptionComplex, pArg *qtgui.QPainter, widget *QWidget), cc QStyleComplexControl, opt *QStyleOptionComplex, pArg *qtgui.QPainter, widget *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideDrawComplexControl", "DrawComplexControl", f)
+}
+
+// OverrideHitTestComplexControl makes f this object's QStyle::hitTestComplexControl: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HitTestComplexControl, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideHitTestComplexControl(f func(super func(cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint, widget *QWidget) QStyleSubControls, cc QStyleComplexControl, opt *QStyleOptionComplex, pt qtcore.QPoint, widget *QWidget) QStyleSubControls) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideHitTestComplexControl", "HitTestComplexControl", f)
+}
+
+// OverrideSubControlRect makes f this object's QStyle::subControlRect: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SubControlRect, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideSubControlRect(f func(super func(cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls, widget *QWidget) qtcore.QRect, cc QStyleComplexControl, opt *QStyleOptionComplex, sc QStyleSubControls, widget *QWidget) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideSubControlRect", "SubControlRect", f)
+}
+
+// OverridePixelMetric makes f this object's QStyle::pixelMetric: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PixelMetric, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverridePixelMetric(f func(super func(metric QStylePixelMetric, option *QStyleOption, widget *QWidget) int, metric QStylePixelMetric, option *QStyleOption, widget *QWidget) int) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverridePixelMetric", "PixelMetric", f)
+}
+
+// OverrideSizeFromContents makes f this object's QStyle::sizeFromContents: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SizeFromContents, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideSizeFromContents(f func(super func(ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize, w *QWidget) qtcore.QSize, ct QStyleContentsType, opt *QStyleOption, contentsSize qtcore.QSize, w *QWidget) qtcore.QSize) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideSizeFromContents", "SizeFromContents", f)
+}
+
+// OverrideStyleHint makes f this object's QStyle::styleHint: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines StyleHint, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideStyleHint(f func(super func(stylehint QStyleStyleHint, opt *QStyleOption, widget *QWidget, returnData *QStyleHintReturn) int, stylehint QStyleStyleHint, opt *QStyleOption, widget *QWidget, returnData *QStyleHintReturn) int) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideStyleHint", "StyleHint", f)
+}
+
+// OverrideStandardPixmap makes f this object's QStyle::standardPixmap: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines StandardPixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideStandardPixmap(f func(super func(standardPixmap QStyleStandardPixmap, opt *QStyleOption, widget *QWidget) *qtgui.QPixmap, standardPixmap QStyleStandardPixmap, opt *QStyleOption, widget *QWidget) *qtgui.QPixmap) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideStandardPixmap", "StandardPixmap", f)
+}
+
+// OverrideStandardIcon makes f this object's QStyle::standardIcon: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines StandardIcon, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideStandardIcon(f func(super func(standardIcon QStyleStandardPixmap, option *QStyleOption, widget *QWidget) *qtgui.QIcon, standardIcon QStyleStandardPixmap, option *QStyleOption, widget *QWidget) *qtgui.QIcon) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideStandardIcon", "StandardIcon", f)
+}
+
+// OverrideGeneratedIconPixmap makes f this object's QStyle::generatedIconPixmap: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines GeneratedIconPixmap, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideGeneratedIconPixmap(f func(super func(iconMode qtgui.QIconMode, pixmap *qtgui.QPixmap, opt *QStyleOption) *qtgui.QPixmap, iconMode qtgui.QIconMode, pixmap *qtgui.QPixmap, opt *QStyleOption) *qtgui.QPixmap) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideGeneratedIconPixmap", "GeneratedIconPixmap", f)
+}
+
+// OverrideLayoutSpacing makes f this object's QStyle::layoutSpacing: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines LayoutSpacing, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStyle) OverrideLayoutSpacing(f func(super func(control1 QSizePolicyControlTypes, control2 QSizePolicyControlTypes, orientation qtcore.Orientations, option *QStyleOption, widget *QWidget) int, control1 QSizePolicyControlTypes, control2 QSizePolicyControlTypes, orientation qtcore.Orientations, option *QStyleOption, widget *QWidget) int) {
+	rt.Override(unsafe.Pointer(this), "QStyle.OverrideLayoutSpacing", "LayoutSpacing", f)
 }
 
 // QStyleBase is embedded in Go types that subclass QStyle:
@@ -1508,7 +2013,7 @@ func NewQStyleWith(v QStyleSubclass) *QStyle {
 		panic("NewQStyleWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStyle_new_shim()
-	h := rt.WrapNew[QStyle](p, "QStyle", rt.NewOwned)
+	h := rt.WrapNewShim[QStyle](p, "QStyle", rt.NewOwned, qStyleVTable, qStyleShimInit)
 	base.QStyle = rt.View[QStyle](h, p)
 	id := h.SetSelf(v, qStyleVTable)
 	mask := rt.Mask(v, qStyleVTable)

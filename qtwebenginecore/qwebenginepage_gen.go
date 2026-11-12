@@ -68,7 +68,7 @@ func NewQWebEnginePage(parent qtcore.QObjectLike) *QWebEnginePage {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEnginePage](p, "QWebEnginePage", mode)
+	h := rt.WrapNewShim[QWebEnginePage](p, "QWebEnginePage", mode, qWebEnginePageVTable, qWebEnginePageShimInit)
 	return rt.View[QWebEnginePage](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQWebEnginePageWithProfile(profile QWebEngineProfileLike, parent qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEnginePage](p, "QWebEnginePage", mode)
+	h := rt.WrapNewShim[QWebEnginePage](p, "QWebEnginePage", mode, qWebEnginePageVTable, qWebEnginePageShimInit)
 	rt.KeepArg(h, "profile", profileH, true)
 	return rt.View[QWebEnginePage](h, p)
 }
@@ -2019,22 +2019,36 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QWebEnginePageWebAction, bool), QWebEnginePageWebAction, bool))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			action := QWebEnginePageWebAction(*(*C.int64_t)(a[0]))
 			checked := bool(*(*C.bool)(a[1]))
-			v.(interface {
-				TriggerAction(QWebEnginePageWebAction, bool)
-			}).TriggerAction(action, checked)
+			if f, ok := v.(func(func(QWebEnginePageWebAction, bool), QWebEnginePageWebAction, bool)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).TriggerAction, action, checked)
+			} else {
+				v.(interface {
+					TriggerAction(QWebEnginePageWebAction, bool)
+				}).TriggerAction(action, checked)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "CreateWindow", Has: func(v any) bool {
@@ -2043,12 +2057,21 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QWebEnginePageWebWindowType) *QWebEnginePage, QWebEnginePageWebWindowType) *QWebEnginePage)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			typeArg := QWebEnginePageWebWindowType(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				CreateWindow(QWebEnginePageWebWindowType) *QWebEnginePage
-			}).CreateWindow(typeArg)
+			var r = *new(*QWebEnginePage)
+			if f, ok := v.(func(func(QWebEnginePageWebWindowType) *QWebEnginePage, QWebEnginePageWebWindowType) *QWebEnginePage); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).CreateWindow, typeArg)
+			} else {
+				r = v.(interface {
+					CreateWindow(QWebEnginePageWebWindowType) *QWebEnginePage
+				}).CreateWindow(typeArg)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWebEnginePage.CreateWindow")
 		}},
 	{Name: "ChooseFiles", Has: func(v any) bool {
@@ -2057,22 +2080,36 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QWebEnginePageFileSelectionMode, []string, []string) []string, QWebEnginePageFileSelectionMode, []string, []string) []string)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			mode := QWebEnginePageFileSelectionMode(*(*C.int64_t)(a[0]))
 			oldFiles := quteStrList(*(*C.qute_list)(a[1]))
 			acceptedMimeTypes := quteStrList(*(*C.qute_list)(a[2]))
-			r := v.(interface {
-				ChooseFiles(QWebEnginePageFileSelectionMode, []string, []string) []string
-			}).ChooseFiles(mode, oldFiles, acceptedMimeTypes)
+			var r = *new([]string)
+			if f, ok := v.(func(func(QWebEnginePageFileSelectionMode, []string, []string) []string, QWebEnginePageFileSelectionMode, []string, []string) []string); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).ChooseFiles, mode, oldFiles, acceptedMimeTypes)
+			} else {
+				r = v.(interface {
+					ChooseFiles(QWebEnginePageFileSelectionMode, []string, []string) []string
+				}).ChooseFiles(mode, oldFiles, acceptedMimeTypes)
+			}
 			*(*C.qute_list)(ret) = quteCStrList(r)
 		}},
 	{Name: "JavaScriptAlert", Has: func(v any) bool { _, ok := v.(interface{ JavaScriptAlert(*qtcore.QUrl, string) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QUrl, string), *qtcore.QUrl, string)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			securityOrigin := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			msg := quteStr(*(*C.qute_str)(a[1]))
-			v.(interface{ JavaScriptAlert(*qtcore.QUrl, string) }).JavaScriptAlert(securityOrigin, msg)
+			if f, ok := v.(func(func(*qtcore.QUrl, string), *qtcore.QUrl, string)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).JavaScriptAlert, securityOrigin, msg)
+			} else {
+				v.(interface{ JavaScriptAlert(*qtcore.QUrl, string) }).JavaScriptAlert(securityOrigin, msg)
+			}
 		}},
 	{Name: "JavaScriptConfirm", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -2080,13 +2117,22 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QUrl, string) bool, *qtcore.QUrl, string) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			securityOrigin := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			msg := quteStr(*(*C.qute_str)(a[1]))
-			r := v.(interface {
-				JavaScriptConfirm(*qtcore.QUrl, string) bool
-			}).JavaScriptConfirm(securityOrigin, msg)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QUrl, string) bool, *qtcore.QUrl, string) bool); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).JavaScriptConfirm, securityOrigin, msg)
+			} else {
+				r = v.(interface {
+					JavaScriptConfirm(*qtcore.QUrl, string) bool
+				}).JavaScriptConfirm(securityOrigin, msg)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "JavaScriptPrompt", Has: func(v any) bool {
@@ -2095,14 +2141,23 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QUrl, string, string) (bool, string), *qtcore.QUrl, string, string) (bool, string))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			securityOrigin := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			msg := quteStr(*(*C.qute_str)(a[1]))
 			defaultValue := quteStr(*(*C.qute_str)(a[2]))
-			r, o3 := v.(interface {
-				JavaScriptPrompt(*qtcore.QUrl, string, string) (bool, string)
-			}).JavaScriptPrompt(securityOrigin, msg, defaultValue)
+			var r, o3 = *new(bool), *new(string)
+			if f, ok := v.(func(func(*qtcore.QUrl, string, string) (bool, string), *qtcore.QUrl, string, string) (bool, string)); ok {
+				r, o3 = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).JavaScriptPrompt, securityOrigin, msg, defaultValue)
+			} else {
+				r, o3 = v.(interface {
+					JavaScriptPrompt(*qtcore.QUrl, string, string) (bool, string)
+				}).JavaScriptPrompt(securityOrigin, msg, defaultValue)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[3] != nil {
 				*(*C.qute_str)(a[3]) = quteCStr(o3)
@@ -2114,15 +2169,23 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string), QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
 			level := QWebEnginePageJavaScriptConsoleMessageLevel(*(*C.int64_t)(a[0]))
 			message := quteStr(*(*C.qute_str)(a[1]))
 			lineNumber := int(*(*C.int)(a[2]))
 			sourceID := quteStr(*(*C.qute_str)(a[3]))
-			v.(interface {
-				JavaScriptConsoleMessage(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string)
-			}).JavaScriptConsoleMessage(level, message, lineNumber, sourceID)
+			if f, ok := v.(func(func(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string), QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).JavaScriptConsoleMessage, level, message, lineNumber, sourceID)
+			} else {
+				v.(interface {
+					JavaScriptConsoleMessage(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string)
+				}).JavaScriptConsoleMessage(level, message, lineNumber, sourceID)
+			}
 		}},
 	{Name: "AcceptNavigationRequest", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -2130,14 +2193,23 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QUrl, QWebEnginePageNavigationType, bool) bool, *qtcore.QUrl, QWebEnginePageNavigationType, bool) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			url := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			typeArg := QWebEnginePageNavigationType(*(*C.int64_t)(a[1]))
 			isMainFrame := bool(*(*C.bool)(a[2]))
-			r := v.(interface {
-				AcceptNavigationRequest(*qtcore.QUrl, QWebEnginePageNavigationType, bool) bool
-			}).AcceptNavigationRequest(url, typeArg, isMainFrame)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QUrl, QWebEnginePageNavigationType, bool) bool, *qtcore.QUrl, QWebEnginePageNavigationType, bool) bool); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).AcceptNavigationRequest, url, typeArg, isMainFrame)
+			} else {
+				r = v.(interface {
+					AcceptNavigationRequest(*qtcore.QUrl, QWebEnginePageNavigationType, bool) bool
+				}).AcceptNavigationRequest(url, typeArg, isMainFrame)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -2146,57 +2218,200 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QWebEnginePageSuper{this: rt.View[QWebEnginePage](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qWebEnginePageShimInit sets a QWebEnginePage shim object's dispatch id and override mask.
+func qWebEnginePageShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QWebEnginePage_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideTriggerAction makes f this object's QWebEnginePage::triggerAction: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines TriggerAction, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideTriggerAction(f func(super func(action QWebEnginePageWebAction, checked bool), action QWebEnginePageWebAction, checked bool)) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideTriggerAction", "TriggerAction", f)
+}
+
+// OverrideCreateWindow makes f this object's QWebEnginePage::createWindow: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CreateWindow, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideCreateWindow(f func(super func(typeArg QWebEnginePageWebWindowType) *QWebEnginePage, typeArg QWebEnginePageWebWindowType) *QWebEnginePage) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideCreateWindow", "CreateWindow", f)
+}
+
+// OverrideChooseFiles makes f this object's QWebEnginePage::chooseFiles: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ChooseFiles, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideChooseFiles(f func(super func(mode QWebEnginePageFileSelectionMode, oldFiles []string, acceptedMimeTypes []string) []string, mode QWebEnginePageFileSelectionMode, oldFiles []string, acceptedMimeTypes []string) []string) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideChooseFiles", "ChooseFiles", f)
+}
+
+// OverrideJavaScriptAlert makes f this object's QWebEnginePage::javaScriptAlert: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines JavaScriptAlert, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideJavaScriptAlert(f func(super func(securityOrigin *qtcore.QUrl, msg string), securityOrigin *qtcore.QUrl, msg string)) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideJavaScriptAlert", "JavaScriptAlert", f)
+}
+
+// OverrideJavaScriptConfirm makes f this object's QWebEnginePage::javaScriptConfirm: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines JavaScriptConfirm, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideJavaScriptConfirm(f func(super func(securityOrigin *qtcore.QUrl, msg string) bool, securityOrigin *qtcore.QUrl, msg string) bool) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideJavaScriptConfirm", "JavaScriptConfirm", f)
+}
+
+// OverrideJavaScriptPrompt makes f this object's QWebEnginePage::javaScriptPrompt: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines JavaScriptPrompt, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideJavaScriptPrompt(f func(super func(securityOrigin *qtcore.QUrl, msg string, defaultValue string) (bool, string), securityOrigin *qtcore.QUrl, msg string, defaultValue string) (bool, string)) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideJavaScriptPrompt", "JavaScriptPrompt", f)
+}
+
+// OverrideJavaScriptConsoleMessage makes f this object's QWebEnginePage::javaScriptConsoleMessage: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines JavaScriptConsoleMessage, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideJavaScriptConsoleMessage(f func(super func(level QWebEnginePageJavaScriptConsoleMessageLevel, message string, lineNumber int, sourceID string), level QWebEnginePageJavaScriptConsoleMessageLevel, message string, lineNumber int, sourceID string)) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideJavaScriptConsoleMessage", "JavaScriptConsoleMessage", f)
+}
+
+// OverrideAcceptNavigationRequest makes f this object's QWebEnginePage::acceptNavigationRequest: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines AcceptNavigationRequest, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QWebEnginePage) OverrideAcceptNavigationRequest(f func(super func(url *qtcore.QUrl, typeArg QWebEnginePageNavigationType, isMainFrame bool) bool, url *qtcore.QUrl, typeArg QWebEnginePageNavigationType, isMainFrame bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QWebEnginePage.OverrideAcceptNavigationRequest", "AcceptNavigationRequest", f)
 }
 
 // QWebEnginePageBase is embedded in Go types that subclass QWebEnginePage:
@@ -2402,7 +2617,7 @@ func NewQWebEnginePageWith(v QWebEnginePageSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEnginePage](p, "QWebEnginePage", mode)
+	h := rt.WrapNewShim[QWebEnginePage](p, "QWebEnginePage", mode, qWebEnginePageVTable, qWebEnginePageShimInit)
 	base.QWebEnginePage = rt.View[QWebEnginePage](h, p)
 	id := h.SetSelf(v, qWebEnginePageVTable)
 	mask := rt.Mask(v, qWebEnginePageVTable)
@@ -2440,7 +2655,7 @@ func NewQWebEnginePageWithProfileWith(v QWebEnginePageSubclass, profile QWebEngi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QWebEnginePage](p, "QWebEnginePage", mode)
+	h := rt.WrapNewShim[QWebEnginePage](p, "QWebEnginePage", mode, qWebEnginePageVTable, qWebEnginePageShimInit)
 	rt.KeepArg(h, "profile", profileH, true)
 	base.QWebEnginePage = rt.View[QWebEnginePage](h, p)
 	id := h.SetSelf(v, qWebEnginePageVTable)

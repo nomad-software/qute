@@ -789,6 +789,46 @@ func (g *Gen) buildMembers(c *Class) {
 		f.CName = c.cName(f.Field + "_" + f.IR.Name)
 		c.Methods = append(c.Methods, f)
 	}
+	if mm := g.variantConversion(c); mm != nil {
+		if taken[mm.GoName] || reservedMethods[mm.GoName] {
+			g.skip(c, mm.IR, "the name ToQVariant is taken by a method")
+		} else {
+			c.Methods = append(c.Methods, mm)
+		}
+	}
+}
+
+// variantConversion binds a class's operator QVariant(), which irgen leaves
+// out with the other conversion operators, as ToQVariant: an Owned QVariant
+// holding a copy (a QTextFormat for a line edit's placeholder colour).
+// It returns nil when the class has no such conversion.
+func (g *Gen) variantConversion(c *Class) *Method {
+	if !hasVariantConversion(c.IR) {
+		return nil
+	}
+	ret := irType{Spelling: "QVariant", Canonical: "QVariant"}
+	im := &irMethod{Name: "toQVariant", Kind: "method", Access: "public", Return: ret, Const: true}
+	t, err := g.resolve(ret, true)
+	if err != nil {
+		g.skip(c, im, "operator QVariant: "+err.Error())
+		return nil
+	}
+	return &Method{Class: c, Owner: c, IR: im, Ret: t, Field: "conv", GoName: "ToQVariant",
+		CName:   c.cName("to_qvariant"),
+		Overlay: &overlay{Cpp: "QVariant(*$self)"},
+		Sig:     c.Cpp + "::operator QVariant() const [conversion]"}
+}
+
+// variantConversionName is how irgen records the conversion ToQVariant binds.
+const variantConversionName = "operator QVariant()"
+
+func hasVariantConversion(c *irClass) bool {
+	for _, d := range c.Dropped {
+		if d.Kind == "conversion" && d.Name == variantConversionName {
+			return true
+		}
+	}
+	return false
 }
 
 // fullTwin builds the Full form of a method whose trailing default arguments
@@ -2171,3 +2211,33 @@ func arrayWithoutCount(g *Gen, p irParam) bool {
 	n := strings.ToLower(p.Name)
 	return strings.HasSuffix(n, "s") && len(n) > 3 || strings.Contains(n, "array")
 }
+
+// ownsOverrideSetter reports whether c declares the OverrideX setter of v:
+// no class on c's primary base chain that Go subclasses has v with the same
+// signature, so the setter there would not be promoted to c (a covariant
+// result changes the signature, and the derived class gets its own).
+func (c *Class) ownsOverrideSetter(g *Gen, v *Method) bool {
+	want := g.overrideFuncType(c, v, false)
+	for b := c.Base; b != nil; b = b.Base {
+		if !b.overridable() {
+			continue
+		}
+		for _, bv := range b.Virtuals {
+			if bv.GoName == v.GoName && g.overrideFuncType(c, bv, false) == want {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// overridable reports whether Go subclasses c through its shim, so every
+// constructor builds the shim and its objects take per-object overrides.
+func (c *Class) overridable() bool {
+	return c.Opts.Subclass && c.Shim && len(c.SubCtors) > 0
+}
+
+// vtableVar and shimInitFunc name c's generated dispatch table and shim
+// initialiser.
+func (c *Class) vtableVar() string    { return strings.ToLower(c.Name[:1]) + c.Name[1:] + "VTable" }
+func (c *Class) shimInitFunc() string { return strings.ToLower(c.Name[:1]) + c.Name[1:] + "ShimInit" }

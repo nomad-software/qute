@@ -444,6 +444,20 @@ func (this *QQuaternion) GetEulerAngles() (float32, float32, float32) {
 	return float32(pitchOut), float32(yawOut), float32(rollOut)
 }
 
+// ToQVariant wraps the conversion QQuaternion::operator QVariant().
+//
+//	C++: QQuaternion::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qquaternion.html#operator-QVariant
+func (this *QQuaternion) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QQuaternion.ToQVariant")
+	r := C.qute_QQuaternion_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QQuaternionDotProduct wraps QQuaternion::dotProduct.
 //
 //	C++: float QQuaternion::dotProduct(const QQuaternion & q1, const QQuaternion & q2)

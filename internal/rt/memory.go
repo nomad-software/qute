@@ -39,7 +39,7 @@ func RegisterMemory(class string, size func(unsafe.Pointer) int64) {
 }
 
 // trackNew measures a value object Go just took ownership of.
-func trackNew(h *Handle, ci classInfo) {
+func trackNew(h *Handle, ci *classInfo) {
 	if ci.memory != nil && h != nil && h.State() == Owned {
 		setMemory(h, ci.memory(h.ptr))
 	}

@@ -68,7 +68,7 @@ func NewQGraphicsScene(parent qtcore.QObjectLike) *QGraphicsScene {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
+	h := rt.WrapNewShim[QGraphicsScene](p, "QGraphicsScene", mode, qGraphicsSceneVTable, qGraphicsSceneShimInit)
 	return rt.View[QGraphicsScene](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQGraphicsSceneWithRectF(sceneRect qtcore.QRectF, parent qtcore.QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
+	h := rt.WrapNewShim[QGraphicsScene](p, "QGraphicsScene", mode, qGraphicsSceneVTable, qGraphicsSceneShimInit)
 	return rt.View[QGraphicsScene](h, p)
 }
 
@@ -1450,22 +1450,37 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(query)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).InputMethodQuery, query)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(query)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsScene.InputMethodQuery")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -1474,16 +1489,25 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
@@ -1492,15 +1516,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneContextMenuEvent), *QGraphicsSceneContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneContextMenuEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneContextMenuEvent](eventH, eventP)
-			v.(interface {
-				ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
-			}).ContextMenuEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneContextMenuEvent), *QGraphicsSceneContextMenuEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).ContextMenuEvent, event)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
+				}).ContextMenuEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1508,15 +1540,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragEnterEvent(*QGraphicsSceneDragDropEvent)
-			}).DragEnterEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface {
+					DragEnterEvent(*QGraphicsSceneDragDropEvent)
+				}).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1524,15 +1564,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragMoveEvent(*QGraphicsSceneDragDropEvent)
-			}).DragMoveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface {
+					DragMoveEvent(*QGraphicsSceneDragDropEvent)
+				}).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1540,15 +1588,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragLeaveEvent(*QGraphicsSceneDragDropEvent)
-			}).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface {
+					DragLeaveEvent(*QGraphicsSceneDragDropEvent)
+				}).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1556,33 +1612,51 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DropEvent(*QGraphicsSceneDragDropEvent)
-			}).DropEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface {
+					DropEvent(*QGraphicsSceneDragDropEvent)
+				}).DropEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "HelpEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1590,33 +1664,51 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneHelpEvent), *QGraphicsSceneHelpEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHelpEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneHelpEvent](eventH, eventP)
-			v.(interface {
-				HelpEvent(*QGraphicsSceneHelpEvent)
-			}).HelpEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneHelpEvent), *QGraphicsSceneHelpEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).HelpEvent, event)
+			} else {
+				v.(interface {
+					HelpEvent(*QGraphicsSceneHelpEvent)
+				}).HelpEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1624,15 +1716,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MousePressEvent(*QGraphicsSceneMouseEvent)
-			}).MousePressEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface {
+					MousePressEvent(*QGraphicsSceneMouseEvent)
+				}).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1640,15 +1740,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseMoveEvent(*QGraphicsSceneMouseEvent)
-			}).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface {
+					MouseMoveEvent(*QGraphicsSceneMouseEvent)
+				}).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1656,15 +1764,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseReleaseEvent(*QGraphicsSceneMouseEvent)
-			}).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface {
+					MouseReleaseEvent(*QGraphicsSceneMouseEvent)
+				}).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1672,15 +1788,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
-			}).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface {
+					MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
+				}).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1688,15 +1812,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneWheelEvent), *QGraphicsSceneWheelEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneWheelEvent](eventH, eventP)
-			v.(interface {
-				WheelEvent(*QGraphicsSceneWheelEvent)
-			}).WheelEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneWheelEvent), *QGraphicsSceneWheelEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface {
+					WheelEvent(*QGraphicsSceneWheelEvent)
+				}).WheelEvent(event)
+			}
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1704,15 +1836,23 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(event)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).InputMethodEvent, event)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(event)
+			}
 		}},
 	{Name: "DrawBackground", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1720,16 +1860,24 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			rect := goQRectF(*(*C.qute_rectf)(a[1]))
-			v.(interface {
-				DrawBackground(*qtgui.QPainter, qtcore.QRectF)
-			}).DrawBackground(painter, rect)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DrawBackground, painter, rect)
+			} else {
+				v.(interface {
+					DrawBackground(*qtgui.QPainter, qtcore.QRectF)
+				}).DrawBackground(painter, rect)
+			}
 		}},
 	{Name: "DrawForeground", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1737,63 +1885,367 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
 			defer painterH.Expire()
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			rect := goQRectF(*(*C.qute_rectf)(a[1]))
-			v.(interface {
-				DrawForeground(*qtgui.QPainter, qtcore.QRectF)
-			}).DrawForeground(painter, rect)
+			if f, ok := v.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DrawForeground, painter, rect)
+			} else {
+				v.(interface {
+					DrawForeground(*qtgui.QPainter, qtcore.QRectF)
+				}).DrawForeground(painter, rect)
+			}
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsSceneSuper{this: rt.View[QGraphicsScene](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qGraphicsSceneShimInit sets a QGraphicsScene shim object's dispatch id and override mask.
+func qGraphicsSceneShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsScene_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideInputMethodQuery makes f this object's QGraphicsScene::inputMethodQuery: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines InputMethodQuery, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideInputMethodQuery(f func(super func(query qtcore.InputMethodQueries) *qtcore.QVariant, query qtcore.InputMethodQueries) *qtcore.QVariant) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideInputMethodQuery", "InputMethodQuery", f)
+}
+
+// OverrideContextMenuEvent makes f this object's QGraphicsScene::contextMenuEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ContextMenuEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideContextMenuEvent(f func(super func(event *QGraphicsSceneContextMenuEvent), event *QGraphicsSceneContextMenuEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideContextMenuEvent", "ContextMenuEvent", f)
+}
+
+// OverrideDragEnterEvent makes f this object's QGraphicsScene::dragEnterEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DragEnterEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDragEnterEvent(f func(super func(event *QGraphicsSceneDragDropEvent), event *QGraphicsSceneDragDropEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDragEnterEvent", "DragEnterEvent", f)
+}
+
+// OverrideDragMoveEvent makes f this object's QGraphicsScene::dragMoveEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DragMoveEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDragMoveEvent(f func(super func(event *QGraphicsSceneDragDropEvent), event *QGraphicsSceneDragDropEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDragMoveEvent", "DragMoveEvent", f)
+}
+
+// OverrideDragLeaveEvent makes f this object's QGraphicsScene::dragLeaveEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DragLeaveEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDragLeaveEvent(f func(super func(event *QGraphicsSceneDragDropEvent), event *QGraphicsSceneDragDropEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDragLeaveEvent", "DragLeaveEvent", f)
+}
+
+// OverrideDropEvent makes f this object's QGraphicsScene::dropEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DropEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDropEvent(f func(super func(event *QGraphicsSceneDragDropEvent), event *QGraphicsSceneDragDropEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDropEvent", "DropEvent", f)
+}
+
+// OverrideFocusInEvent makes f this object's QGraphicsScene::focusInEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines FocusInEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideFocusInEvent(f func(super func(event *qtgui.QFocusEvent), event *qtgui.QFocusEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideFocusInEvent", "FocusInEvent", f)
+}
+
+// OverrideFocusOutEvent makes f this object's QGraphicsScene::focusOutEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines FocusOutEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideFocusOutEvent(f func(super func(event *qtgui.QFocusEvent), event *qtgui.QFocusEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideFocusOutEvent", "FocusOutEvent", f)
+}
+
+// OverrideHelpEvent makes f this object's QGraphicsScene::helpEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HelpEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideHelpEvent(f func(super func(event *QGraphicsSceneHelpEvent), event *QGraphicsSceneHelpEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideHelpEvent", "HelpEvent", f)
+}
+
+// OverrideKeyPressEvent makes f this object's QGraphicsScene::keyPressEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines KeyPressEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideKeyPressEvent(f func(super func(event *qtgui.QKeyEvent), event *qtgui.QKeyEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideKeyPressEvent", "KeyPressEvent", f)
+}
+
+// OverrideKeyReleaseEvent makes f this object's QGraphicsScene::keyReleaseEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines KeyReleaseEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideKeyReleaseEvent(f func(super func(event *qtgui.QKeyEvent), event *qtgui.QKeyEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideKeyReleaseEvent", "KeyReleaseEvent", f)
+}
+
+// OverrideMousePressEvent makes f this object's QGraphicsScene::mousePressEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MousePressEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideMousePressEvent(f func(super func(event *QGraphicsSceneMouseEvent), event *QGraphicsSceneMouseEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideMousePressEvent", "MousePressEvent", f)
+}
+
+// OverrideMouseMoveEvent makes f this object's QGraphicsScene::mouseMoveEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MouseMoveEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideMouseMoveEvent(f func(super func(event *QGraphicsSceneMouseEvent), event *QGraphicsSceneMouseEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideMouseMoveEvent", "MouseMoveEvent", f)
+}
+
+// OverrideMouseReleaseEvent makes f this object's QGraphicsScene::mouseReleaseEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MouseReleaseEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideMouseReleaseEvent(f func(super func(event *QGraphicsSceneMouseEvent), event *QGraphicsSceneMouseEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideMouseReleaseEvent", "MouseReleaseEvent", f)
+}
+
+// OverrideMouseDoubleClickEvent makes f this object's QGraphicsScene::mouseDoubleClickEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MouseDoubleClickEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideMouseDoubleClickEvent(f func(super func(event *QGraphicsSceneMouseEvent), event *QGraphicsSceneMouseEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideMouseDoubleClickEvent", "MouseDoubleClickEvent", f)
+}
+
+// OverrideWheelEvent makes f this object's QGraphicsScene::wheelEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines WheelEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideWheelEvent(f func(super func(event *QGraphicsSceneWheelEvent), event *QGraphicsSceneWheelEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideWheelEvent", "WheelEvent", f)
+}
+
+// OverrideInputMethodEvent makes f this object's QGraphicsScene::inputMethodEvent: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines InputMethodEvent, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideInputMethodEvent(f func(super func(event *qtgui.QInputMethodEvent), event *qtgui.QInputMethodEvent)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideInputMethodEvent", "InputMethodEvent", f)
+}
+
+// OverrideDrawBackground makes f this object's QGraphicsScene::drawBackground: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawBackground, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDrawBackground(f func(super func(painter *qtgui.QPainter, rect qtcore.QRectF), painter *qtgui.QPainter, rect qtcore.QRectF)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDrawBackground", "DrawBackground", f)
+}
+
+// OverrideDrawForeground makes f this object's QGraphicsScene::drawForeground: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DrawForeground, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideDrawForeground(f func(super func(painter *qtgui.QPainter, rect qtcore.QRectF), painter *qtgui.QPainter, rect qtcore.QRectF)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideDrawForeground", "DrawForeground", f)
+}
+
+// OverrideFocusNextPrevChild makes f this object's QGraphicsScene::focusNextPrevChild: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines FocusNextPrevChild, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsScene) OverrideFocusNextPrevChild(f func(super func(next bool) bool, next bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsScene.OverrideFocusNextPrevChild", "FocusNextPrevChild", f)
 }
 
 // QGraphicsSceneBase is embedded in Go types that subclass QGraphicsScene:
@@ -2163,7 +2615,7 @@ func NewQGraphicsSceneWith(v QGraphicsSceneSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
+	h := rt.WrapNewShim[QGraphicsScene](p, "QGraphicsScene", mode, qGraphicsSceneVTable, qGraphicsSceneShimInit)
 	base.QGraphicsScene = rt.View[QGraphicsScene](h, p)
 	id := h.SetSelf(v, qGraphicsSceneVTable)
 	mask := rt.Mask(v, qGraphicsSceneVTable)
@@ -2195,7 +2647,7 @@ func NewQGraphicsSceneWithRectFWith(v QGraphicsSceneSubclass, sceneRect qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
+	h := rt.WrapNewShim[QGraphicsScene](p, "QGraphicsScene", mode, qGraphicsSceneVTable, qGraphicsSceneShimInit)
 	base.QGraphicsScene = rt.View[QGraphicsScene](h, p)
 	id := h.SetSelf(v, qGraphicsSceneVTable)
 	mask := rt.Mask(v, qGraphicsSceneVTable)

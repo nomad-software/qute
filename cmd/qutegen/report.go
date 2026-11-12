@@ -139,6 +139,9 @@ func (g *Gen) writeReport(path string) error {
 			}
 			byKind := map[string][]string{}
 			for _, d := range c.IR.Dropped {
+				if d.Kind == "conversion" && d.Name == variantConversionName {
+					continue // bound as ToQVariant
+				}
 				byKind[d.Kind] = append(byKind[d.Kind], "`"+d.Name+"`")
 				droppedBy[d.Kind]++
 			}
@@ -230,8 +233,8 @@ func (g *Gen) writeReport(path string) error {
 	p("tools/irgen leaves these out before the IR is written, so the generator never")
 	p("sees them and they are not counted as bound or skipped above. Go has no")
 	p("operator overloading: comparisons and arithmetic are done on the Go structs or")
-	p("through named methods. Conversions to QVariant are covered by")
-	p("`qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and")
+	p("through named methods. `operator QVariant()` is bound as `ToQVariant` (and")
+	p("`qtgui.NewQVariantOf` takes any such value), and `QVariant::value<T>()` by `QVariant.Value` and")
 	p("`qtgui.VariantValue`. Counts: %d operators, %d conversion operators, %d member templates.\n",
 		droppedBy["operator"], droppedBy["conversion"], droppedBy["template"])
 	sort.SliceStable(notIR, func(i, j int) bool { return notIR[i].cls < notIR[j].cls })

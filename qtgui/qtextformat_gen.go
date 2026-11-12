@@ -681,3 +681,17 @@ func (this *QTextFormat) ClearForeground() {
 	C.qute_QTextFormat_clearForeground(self)
 	runtime.KeepAlive(this)
 }
+
+// ToQVariant wraps the conversion QTextFormat::operator QVariant().
+//
+//	C++: QTextFormat::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qtextformat.html#operator-QVariant
+func (this *QTextFormat) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QTextFormat.ToQVariant")
+	r := C.qute_QTextFormat_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

@@ -119,6 +119,20 @@ func (this *QBitmap) Transformed(matrix *QTransform) *QBitmap {
 	return rt.View[QBitmap](rt.WrapClass(r, "QBitmap", rt.TakeOwned), r)
 }
 
+// ToQVariant wraps the conversion QBitmap::operator QVariant().
+//
+//	C++: QBitmap::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qbitmap.html#operator-QVariant
+func (this *QBitmap) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QBitmap.ToQVariant")
+	r := C.qute_QBitmap_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QBitmapFromImage wraps QBitmap::fromImage.
 //
 //	C++: QBitmap QBitmap::fromImage(const QImage & image, Qt::ImageConversionFlags flags = …)

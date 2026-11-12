@@ -53,11 +53,25 @@ func Main(setup func()) int {
 func Post(f func()) { rt.Post(f) }
 
 // PostSync runs f on the GUI thread and waits for it to finish. On the GUI
-// thread it calls f directly. A panic in f is re-raised in the caller.
+// thread it calls f directly. A panic in f is re-raised in the caller: from
+// another goroutine as a *PostSyncPanic, which carries the GUI goroutine's
+// stack at the panic, and from a signal or virtual handler that f triggered
+// as a *CallbackPanic with the handler's stack.
 //
 // Do not call PostSync while holding a lock the GUI thread may need: it
 // blocks until the GUI thread is free.
 func PostSync(f func()) { rt.PostSync(f) }
+
+// PostSyncPanic is what PostSync, called off the GUI thread, re-raises when
+// its function panicked: Value is the original panic value and Stack the
+// GUI goroutine's stack where it happened. Unwrap returns Value when it is
+// an error.
+type PostSyncPanic = rt.PostSyncPanic
+
+// CallbackPanic is a panic recovered from a Go handler that Qt called (a
+// signal, an overridden virtual or a callback), re-raised by PostSync,
+// ProcessEvents or the qutetest helpers with the handler's own stack.
+type CallbackPanic = rt.CallbackPanic
 
 // Quit asks the event loop to exit with code. Safe from any goroutine.
 func Quit(code int) {

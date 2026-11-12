@@ -105,11 +105,10 @@ func InlineOwnedView[T any](p unsafe.Pointer, class string) *T {
 	if p == nil {
 		return nil
 	}
-	v, ok := classes.Load(class)
+	ci, ok := classOf(class)
 	if !ok {
 		panic("qute: class " + class + " is not registered")
 	}
-	ci := v.(classInfo)
 	h, w := newInlineView[T](p, class, ci.inline)
 	ci.deleter(p)
 	h.attachDependency()

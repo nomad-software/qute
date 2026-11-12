@@ -296,19 +296,19 @@ int64_t qute_QSvgGenerator_svgVersion(void *self) {
 // ---- QSvgRenderer
 void * qute_QSvgRenderer_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSvgRenderer *>(new QSvgRenderer(static_cast<QObject *>(a0)));
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(static_cast<QObject *>(a0)));
 }
 void * qute_QSvgRenderer_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QSvgRenderer *>(new QSvgRenderer(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QSvgRenderer_new_2(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QSvgRenderer *>(new QSvgRenderer(QByteArray(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(QByteArray(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QSvgRenderer_new_3(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QSvgRenderer *>(new QSvgRenderer(static_cast<QXmlStreamReader *>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QSvgRenderer *>(new qute_QSvgRenderer(static_cast<QXmlStreamReader *>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QSvgRenderer_new_shim(void * a0) {
 	qute_gui_only();

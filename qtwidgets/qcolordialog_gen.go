@@ -68,7 +68,7 @@ func NewQColorDialog(parent QWidgetLike) *QColorDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
+	h := rt.WrapNewShim[QColorDialog](p, "QColorDialog", mode, qColorDialogVTable, qColorDialogShimInit)
 	return rt.View[QColorDialog](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQColorDialogWithColor(initial qtgui.QColor, parent QWidgetLike) *QColorD
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
+	h := rt.WrapNewShim[QColorDialog](p, "QColorDialog", mode, qColorDialogVTable, qColorDialogShimInit)
 	return rt.View[QColorDialog](h, p)
 }
 
@@ -333,94 +333,162 @@ func (this *QColorDialog) OnColorSelected(f func(color qtgui.QColor)) qtcore.Con
 
 var qColorDialogVTable = []rt.Virtual{
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
-			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			if f, ok := v.(func(func(bool), bool)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).SetVisible, visible)
+			} else {
+				v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			}
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ChangeEvent, event)
+			} else {
+				v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			}
 		}},
 	{Name: "Done", Has: func(v any) bool { _, ok := v.(interface{ Done(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			result := int(*(*C.int)(a[0]))
-			v.(interface{ Done(int) }).Done(result)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Done, result)
+			} else {
+				v.(interface{ Done(int) }).Done(result)
+			}
 		}},
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MinimumSizeHint)
+			} else {
+				r = v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "Open", Has: func(v any) bool { _, ok := v.(interface{ Open() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Open() }).Open()
+			if f, ok := v.(func(func())); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Open)
+			} else {
+				v.(interface{ Open() }).Open()
+			}
 		}},
 	{Name: "Exec", Has: func(v any) bool { _, ok := v.(interface{ Exec() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Exec() int }).Exec()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Exec)
+			} else {
+				r = v.(interface{ Exec() int }).Exec()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Accept", Has: func(v any) bool { _, ok := v.(interface{ Accept() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Accept() }).Accept()
+			if f, ok := v.(func(func())); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Accept)
+			} else {
+				v.(interface{ Accept() }).Accept()
+			}
 		}},
 	{Name: "Reject", Has: func(v any) bool { _, ok := v.(interface{ Reject() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Reject() }).Reject()
+			if f, ok := v.(func(func())); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Reject)
+			} else {
+				v.(interface{ Reject() }).Reject()
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
 			keyEventH := rt.WrapClass(keyEventP, "QKeyEvent", rt.NewScoped)
 			defer keyEventH.Expire()
 			keyEvent := rt.View[qtgui.QKeyEvent](keyEventH, keyEventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(keyEvent)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).KeyPressEvent, keyEvent)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(keyEvent)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
 			closeEventH := rt.WrapClass(closeEventP, "QCloseEvent", rt.NewScoped)
 			defer closeEventH.Expire()
 			closeEvent := rt.View[qtgui.QCloseEvent](closeEventH, closeEventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).CloseEvent, closeEvent)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
 			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
 			defer showEventH.Expire()
 			showEvent := rt.View[qtgui.QShowEvent](showEventH, showEventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ShowEvent, showEvent)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			resizeEventP := *(*unsafe.Pointer)(a[0])
 			resizeEventH := rt.WrapClass(resizeEventP, "QResizeEvent", rt.NewScoped)
 			defer resizeEventH.Expire()
 			resizeEvent := rt.View[qtgui.QResizeEvent](resizeEventH, resizeEventP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(resizeEvent)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ResizeEvent, resizeEvent)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(resizeEvent)
+			}
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -428,15 +496,23 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			contextMenuEventP := *(*unsafe.Pointer)(a[0])
 			contextMenuEventH := rt.WrapClass(contextMenuEventP, "QContextMenuEvent", rt.NewScoped)
 			defer contextMenuEventH.Expire()
 			contextMenuEvent := rt.View[qtgui.QContextMenuEvent](contextMenuEventH, contextMenuEventP)
-			v.(interface {
-				ContextMenuEvent(*qtgui.QContextMenuEvent)
-			}).ContextMenuEvent(contextMenuEvent)
+			if f, ok := v.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ContextMenuEvent, contextMenuEvent)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtgui.QContextMenuEvent)
+				}).ContextMenuEvent(contextMenuEvent)
+			}
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -444,211 +520,333 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(object, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).EventFilter, object, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(object, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QWheelEvent](eventH, eventP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
-			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).EnterEvent, event)
+			} else {
+				v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).LeaveEvent, event)
+			} else {
+				v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).PaintEvent, event)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).MoveEvent, event)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).TabletEvent, event)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
-			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			if f, ok := v.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ActionEvent, event)
+			} else {
+				v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
-			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
-			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
-			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
-			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).HideEvent, event)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -656,13 +854,22 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -674,12 +881,21 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(paintDeviceMetric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).Metric, paintDeviceMetric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(paintDeviceMetric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
@@ -688,15 +904,23 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodEventP := *(*unsafe.Pointer)(a[0])
 			inputMethodEventH := rt.WrapClass(inputMethodEventP, "QInputMethodEvent", rt.NewScoped)
 			defer inputMethodEventH.Expire()
 			inputMethodEvent := rt.View[qtgui.QInputMethodEvent](inputMethodEventH, inputMethodEventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(inputMethodEvent)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).InputMethodEvent, inputMethodEvent)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(inputMethodEvent)
+			}
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -704,60 +928,105 @@ var qColorDialogVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(inputMethodQuery)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).InputMethodQuery, inputMethodQuery)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(inputMethodQuery)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QColorDialog.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QColorDialogSuper{this: rt.View[QColorDialog](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qColorDialogShimInit sets a QColorDialog shim object's dispatch id and override mask.
+func qColorDialogShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QColorDialog_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QColorDialogBase is embedded in Go types that subclass QColorDialog:
@@ -1379,7 +1648,7 @@ func NewQColorDialogWith(v QColorDialogSubclass, parent QWidgetLike) *QColorDial
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
+	h := rt.WrapNewShim[QColorDialog](p, "QColorDialog", mode, qColorDialogVTable, qColorDialogShimInit)
 	base.QColorDialog = rt.View[QColorDialog](h, p)
 	id := h.SetSelf(v, qColorDialogVTable)
 	mask := rt.Mask(v, qColorDialogVTable)
@@ -1411,7 +1680,7 @@ func NewQColorDialogWithColorWith(v QColorDialogSubclass, initial qtgui.QColor, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
+	h := rt.WrapNewShim[QColorDialog](p, "QColorDialog", mode, qColorDialogVTable, qColorDialogShimInit)
 	base.QColorDialog = rt.View[QColorDialog](h, p)
 	id := h.SetSelf(v, qColorDialogVTable)
 	mask := rt.Mask(v, qColorDialogVTable)

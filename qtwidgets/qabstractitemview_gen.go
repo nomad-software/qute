@@ -1199,12 +1199,20 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QAbstractItemModel), *qtcore.QAbstractItemModel))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			model := rt.View[qtcore.QAbstractItemModel](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QAbstractItemModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface {
-				SetModel(*qtcore.QAbstractItemModel)
-			}).SetModel(model)
+			if f, ok := v.(func(func(*qtcore.QAbstractItemModel), *qtcore.QAbstractItemModel)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SetModel, model)
+			} else {
+				v.(interface {
+					SetModel(*qtcore.QAbstractItemModel)
+				}).SetModel(model)
+			}
 		}},
 	{Name: "SetSelectionModel", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1212,18 +1220,31 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QItemSelectionModel), *qtcore.QItemSelectionModel))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			selectionModel := rt.View[qtcore.QItemSelectionModel](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelectionModel", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface {
-				SetSelectionModel(*qtcore.QItemSelectionModel)
-			}).SetSelectionModel(selectionModel)
+			if f, ok := v.(func(func(*qtcore.QItemSelectionModel), *qtcore.QItemSelectionModel)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SetSelectionModel, selectionModel)
+			} else {
+				v.(interface {
+					SetSelectionModel(*qtcore.QItemSelectionModel)
+				}).SetSelectionModel(selectionModel)
+			}
 		}},
 	{Name: "KeyboardSearch", Has: func(v any) bool { _, ok := v.(interface{ KeyboardSearch(string) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(string), string)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			search := quteStr(*(*C.qute_str)(a[0]))
-			v.(interface{ KeyboardSearch(string) }).KeyboardSearch(search)
+			if f, ok := v.(func(func(string), string)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).KeyboardSearch, search)
+			} else {
+				v.(interface{ KeyboardSearch(string) }).KeyboardSearch(search)
+			}
 		}},
 	{Name: "VisualRect", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1231,12 +1252,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex) qtcore.QRect, *qtcore.QModelIndex) qtcore.QRect)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				VisualRect(*qtcore.QModelIndex) qtcore.QRect
-			}).VisualRect(index)
+			var r = *new(qtcore.QRect)
+			if f, ok := v.(func(func(*qtcore.QModelIndex) qtcore.QRect, *qtcore.QModelIndex) qtcore.QRect); ok {
+				r = f(nil, index)
+			} else {
+				r = v.(interface {
+					VisualRect(*qtcore.QModelIndex) qtcore.QRect
+				}).VisualRect(index)
+			}
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "ScrollTo", Has: func(v any) bool {
@@ -1245,13 +1275,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, QAbstractItemViewScrollHint), *qtcore.QModelIndex, QAbstractItemViewScrollHint))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			hint := QAbstractItemViewScrollHint(*(*C.int64_t)(a[1]))
-			v.(interface {
-				ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
-			}).ScrollTo(index, hint)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, QAbstractItemViewScrollHint), *qtcore.QModelIndex, QAbstractItemViewScrollHint)); ok {
+				f(nil, index, hint)
+			} else {
+				v.(interface {
+					ScrollTo(*qtcore.QModelIndex, QAbstractItemViewScrollHint)
+				}).ScrollTo(index, hint)
+			}
 		}},
 	{Name: "IndexAt", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1259,26 +1297,47 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QPoint) *qtcore.QModelIndex, qtcore.QPoint) *qtcore.QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			point := goQPoint(*(*C.qute_point)(a[0]))
-			r := v.(interface {
-				IndexAt(qtcore.QPoint) *qtcore.QModelIndex
-			}).IndexAt(point)
+			var r = *new(*qtcore.QModelIndex)
+			if f, ok := v.(func(func(qtcore.QPoint) *qtcore.QModelIndex, qtcore.QPoint) *qtcore.QModelIndex); ok {
+				r = f(nil, point)
+			} else {
+				r = v.(interface {
+					IndexAt(qtcore.QPoint) *qtcore.QModelIndex
+				}).IndexAt(point)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QAbstractItemView.IndexAt")
 		}},
 	{Name: "SizeHintForRow", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForRow(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			row := int(*(*C.int)(a[0]))
-			r := v.(interface{ SizeHintForRow(int) int }).SizeHintForRow(row)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SizeHintForRow, row)
+			} else {
+				r = v.(interface{ SizeHintForRow(int) int }).SizeHintForRow(row)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "SizeHintForColumn", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForColumn(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			column := int(*(*C.int)(a[0]))
-			r := v.(interface{ SizeHintForColumn(int) int }).SizeHintForColumn(column)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SizeHintForColumn, column)
+			} else {
+				r = v.(interface{ SizeHintForColumn(int) int }).SizeHintForColumn(column)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ItemDelegateForIndex", Has: func(v any) bool {
@@ -1287,12 +1346,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex) *QAbstractItemDelegate, *qtcore.QModelIndex) *QAbstractItemDelegate)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
-			}).ItemDelegateForIndex(index)
+			var r = *new(*QAbstractItemDelegate)
+			if f, ok := v.(func(func(*qtcore.QModelIndex) *QAbstractItemDelegate, *qtcore.QModelIndex) *QAbstractItemDelegate); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ItemDelegateForIndex, index)
+			} else {
+				r = v.(interface {
+					ItemDelegateForIndex(*qtcore.QModelIndex) *QAbstractItemDelegate
+				}).ItemDelegateForIndex(index)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemView.ItemDelegateForIndex")
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
@@ -1301,34 +1369,63 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(query)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).InputMethodQuery, query)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(query)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemView.InputMethodQuery")
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Reset() }).Reset()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).Reset)
+			} else {
+				v.(interface{ Reset() }).Reset()
+			}
 		}},
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
-			v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
+			if f, ok := v.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SetRootIndex, index)
+			} else {
+				v.(interface{ SetRootIndex(*qtcore.QModelIndex) }).SetRootIndex(index)
+			}
 		}},
 	{Name: "DoItemsLayout", Has: func(v any) bool { _, ok := v.(interface{ DoItemsLayout() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ DoItemsLayout() }).DoItemsLayout()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DoItemsLayout)
+			} else {
+				v.(interface{ DoItemsLayout() }).DoItemsLayout()
+			}
 		}},
 	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ SelectAll() }).SelectAll()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SelectAll)
+			} else {
+				v.(interface{ SelectAll() }).SelectAll()
+			}
 		}},
 	{Name: "DataChanged", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1336,14 +1433,22 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex, []int), *qtcore.QModelIndex, *qtcore.QModelIndex, []int))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			topLeft := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			bottomRight := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
 			roles := quteList(*(*C.qute_list)(a[2]), func(e C.int) int { return int(e) })
-			v.(interface {
-				DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
-			}).DataChanged(topLeft, bottomRight, roles)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex, []int), *qtcore.QModelIndex, *qtcore.QModelIndex, []int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DataChanged, topLeft, bottomRight, roles)
+			} else {
+				v.(interface {
+					DataChanged(*qtcore.QModelIndex, *qtcore.QModelIndex, []int)
+				}).DataChanged(topLeft, bottomRight, roles)
+			}
 		}},
 	{Name: "RowsInserted", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1351,14 +1456,22 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
-			v.(interface {
-				RowsInserted(*qtcore.QModelIndex, int, int)
-			}).RowsInserted(parent, start, end)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).RowsInserted, parent, start, end)
+			} else {
+				v.(interface {
+					RowsInserted(*qtcore.QModelIndex, int, int)
+				}).RowsInserted(parent, start, end)
+			}
 		}},
 	{Name: "RowsAboutToBeRemoved", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1366,14 +1479,22 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			start := int(*(*C.int)(a[1]))
 			end := int(*(*C.int)(a[2]))
-			v.(interface {
-				RowsAboutToBeRemoved(*qtcore.QModelIndex, int, int)
-			}).RowsAboutToBeRemoved(parent, start, end)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).RowsAboutToBeRemoved, parent, start, end)
+			} else {
+				v.(interface {
+					RowsAboutToBeRemoved(*qtcore.QModelIndex, int, int)
+				}).RowsAboutToBeRemoved(parent, start, end)
+			}
 		}},
 	{Name: "SelectionChanged", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1381,13 +1502,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QItemSelection, *qtcore.QItemSelection), *qtcore.QItemSelection, *qtcore.QItemSelection))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			selected := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			deselected := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			v.(interface {
-				SelectionChanged(*qtcore.QItemSelection, *qtcore.QItemSelection)
-			}).SelectionChanged(selected, deselected)
+			if f, ok := v.(func(func(*qtcore.QItemSelection, *qtcore.QItemSelection), *qtcore.QItemSelection, *qtcore.QItemSelection)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SelectionChanged, selected, deselected)
+			} else {
+				v.(interface {
+					SelectionChanged(*qtcore.QItemSelection, *qtcore.QItemSelection)
+				}).SelectionChanged(selected, deselected)
+			}
 		}},
 	{Name: "CurrentChanged", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1395,52 +1524,95 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex), *qtcore.QModelIndex, *qtcore.QModelIndex))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			current := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			previous := rt.InlineArgView[qtcore.QModelIndex](a[1], "QModelIndex")
-			v.(interface {
-				CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
-			}).CurrentChanged(current, previous)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex), *qtcore.QModelIndex, *qtcore.QModelIndex)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).CurrentChanged, current, previous)
+			} else {
+				v.(interface {
+					CurrentChanged(*qtcore.QModelIndex, *qtcore.QModelIndex)
+				}).CurrentChanged(current, previous)
+			}
 		}},
 	{Name: "UpdateEditorData", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorData() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ UpdateEditorData() }).UpdateEditorData()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).UpdateEditorData)
+			} else {
+				v.(interface{ UpdateEditorData() }).UpdateEditorData()
+			}
 		}},
 	{Name: "UpdateEditorGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorGeometries() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ UpdateEditorGeometries() }).UpdateEditorGeometries()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).UpdateEditorGeometries)
+			} else {
+				v.(interface{ UpdateEditorGeometries() }).UpdateEditorGeometries()
+			}
 		}},
 	{Name: "UpdateGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometries() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ UpdateGeometries() }).UpdateGeometries()
+			if f, ok := v.(func(func())); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).UpdateGeometries)
+			} else {
+				v.(interface{ UpdateGeometries() }).UpdateGeometries()
+			}
 		}},
 	{Name: "VerticalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarAction(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			action := int(*(*C.int)(a[0]))
-			v.(interface{ VerticalScrollbarAction(int) }).VerticalScrollbarAction(action)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).VerticalScrollbarAction, action)
+			} else {
+				v.(interface{ VerticalScrollbarAction(int) }).VerticalScrollbarAction(action)
+			}
 		}},
 	{Name: "HorizontalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarAction(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			action := int(*(*C.int)(a[0]))
-			v.(interface{ HorizontalScrollbarAction(int) }).HorizontalScrollbarAction(action)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).HorizontalScrollbarAction, action)
+			} else {
+				v.(interface{ HorizontalScrollbarAction(int) }).HorizontalScrollbarAction(action)
+			}
 		}},
 	{Name: "VerticalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarValueChanged(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			value := int(*(*C.int)(a[0]))
-			v.(interface{ VerticalScrollbarValueChanged(int) }).VerticalScrollbarValueChanged(value)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).VerticalScrollbarValueChanged, value)
+			} else {
+				v.(interface{ VerticalScrollbarValueChanged(int) }).VerticalScrollbarValueChanged(value)
+			}
 		}},
 	{Name: "HorizontalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarValueChanged(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			value := int(*(*C.int)(a[0]))
-			v.(interface{ HorizontalScrollbarValueChanged(int) }).HorizontalScrollbarValueChanged(value)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).HorizontalScrollbarValueChanged, value)
+			} else {
+				v.(interface{ HorizontalScrollbarValueChanged(int) }).HorizontalScrollbarValueChanged(value)
+			}
 		}},
 	{Name: "CloseEditor", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1448,25 +1620,43 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QWidget, QAbstractItemDelegateEndEditHint), *QWidget, QAbstractItemDelegateEndEditHint))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			hint := QAbstractItemDelegateEndEditHint(*(*C.int64_t)(a[1]))
-			v.(interface {
-				CloseEditor(*QWidget, QAbstractItemDelegateEndEditHint)
-			}).CloseEditor(editor, hint)
+			if f, ok := v.(func(func(*QWidget, QAbstractItemDelegateEndEditHint), *QWidget, QAbstractItemDelegateEndEditHint)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).CloseEditor, editor, hint)
+			} else {
+				v.(interface {
+					CloseEditor(*QWidget, QAbstractItemDelegateEndEditHint)
+				}).CloseEditor(editor, hint)
+			}
 		}},
 	{Name: "CommitData", Has: func(v any) bool { _, ok := v.(interface{ CommitData(*QWidget) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ CommitData(*QWidget) }).CommitData(editor)
+			if f, ok := v.(func(func(*QWidget), *QWidget)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).CommitData, editor)
+			} else {
+				v.(interface{ CommitData(*QWidget) }).CommitData(editor)
+			}
 		}},
 	{Name: "EditorDestroyed", Has: func(v any) bool { _, ok := v.(interface{ EditorDestroyed(*qtcore.QObject) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QObject), *qtcore.QObject)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			editor := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ EditorDestroyed(*qtcore.QObject) }).EditorDestroyed(editor)
+			if f, ok := v.(func(func(*qtcore.QObject), *qtcore.QObject)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).EditorDestroyed, editor)
+			} else {
+				v.(interface{ EditorDestroyed(*qtcore.QObject) }).EditorDestroyed(editor)
+			}
 		}},
 	{Name: "MoveCursor", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1474,25 +1664,46 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex, QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			cursorAction := QAbstractItemViewCursorAction(*(*C.int64_t)(a[0]))
 			modifiers := qtcore.KeyboardModifiers(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
-			}).MoveCursor(cursorAction, modifiers)
+			var r = *new(*qtcore.QModelIndex)
+			if f, ok := v.(func(func(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex, QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex); ok {
+				r = f(nil, cursorAction, modifiers)
+			} else {
+				r = v.(interface {
+					MoveCursor(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex
+				}).MoveCursor(cursorAction, modifiers)
+			}
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QAbstractItemView.MoveCursor")
 		}},
 	{Name: "HorizontalOffset", Has: func(v any) bool { _, ok := v.(interface{ HorizontalOffset() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HorizontalOffset() int }).HorizontalOffset()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f(nil)
+			} else {
+				r = v.(interface{ HorizontalOffset() int }).HorizontalOffset()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "VerticalOffset", Has: func(v any) bool { _, ok := v.(interface{ VerticalOffset() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ VerticalOffset() int }).VerticalOffset()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f(nil)
+			} else {
+				r = v.(interface{ VerticalOffset() int }).VerticalOffset()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "IsIndexHidden", Has: func(v any) bool {
@@ -1501,12 +1712,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
-			r := v.(interface {
-				IsIndexHidden(*qtcore.QModelIndex) bool
-			}).IsIndexHidden(index)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool); ok {
+				r = f(nil, index)
+			} else {
+				r = v.(interface {
+					IsIndexHidden(*qtcore.QModelIndex) bool
+				}).IsIndexHidden(index)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SetSelection", Has: func(v any) bool {
@@ -1515,13 +1735,21 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags), qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			rect := goQRect(*(*C.qute_rect)(a[0]))
 			command := qtcore.QItemSelectionModelSelectionFlags(*(*C.int64_t)(a[1]))
-			v.(interface {
-				SetSelection(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags)
-			}).SetSelection(rect, command)
+			if f, ok := v.(func(func(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags), qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags)); ok {
+				f(nil, rect, command)
+			} else {
+				v.(interface {
+					SetSelection(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags)
+				}).SetSelection(rect, command)
+			}
 		}},
 	{Name: "VisualRegionForSelection", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1529,18 +1757,33 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QItemSelection) *qtgui.QRegion, *qtcore.QItemSelection) *qtgui.QRegion)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			selection := rt.View[qtcore.QItemSelection](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QItemSelection", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				VisualRegionForSelection(*qtcore.QItemSelection) *qtgui.QRegion
-			}).VisualRegionForSelection(selection)
+			var r = *new(*qtgui.QRegion)
+			if f, ok := v.(func(func(*qtcore.QItemSelection) *qtgui.QRegion, *qtcore.QItemSelection) *qtgui.QRegion); ok {
+				r = f(nil, selection)
+			} else {
+				r = v.(interface {
+					VisualRegionForSelection(*qtcore.QItemSelection) *qtgui.QRegion
+				}).VisualRegionForSelection(selection)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemView.VisualRegionForSelection")
 		}},
 	{Name: "SelectedIndexes", Has: func(v any) bool { _, ok := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() []*qtcore.QModelIndex) []*qtcore.QModelIndex); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }).SelectedIndexes()
+			var r = *new([]*qtcore.QModelIndex)
+			if f, ok := v.(func(func() []*qtcore.QModelIndex) []*qtcore.QModelIndex); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SelectedIndexes)
+			} else {
+				r = v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }).SelectedIndexes()
+			}
 			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QAbstractItemView.SelectedIndexes", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "Edit", Has: func(v any) bool {
@@ -1549,7 +1792,11 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool, *qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			trigger := QAbstractItemViewEditTriggers(*(*C.int64_t)(a[1]))
@@ -1557,9 +1804,14 @@ var qAbstractItemViewVTable = []rt.Virtual{
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				Edit(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool
-			}).Edit(index, trigger, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool, *qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).Edit, index, trigger, event)
+			} else {
+				r = v.(interface {
+					Edit(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool
+				}).Edit(index, trigger, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SelectionCommand", Has: func(v any) bool {
@@ -1568,176 +1820,278 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags, *qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				SelectionCommand(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags
-			}).SelectionCommand(index, event)
+			var r = *new(qtcore.QItemSelectionModelSelectionFlags)
+			if f, ok := v.(func(func(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags, *qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SelectionCommand, index, event)
+			} else {
+				r = v.(interface {
+					SelectionCommand(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags
+				}).SelectionCommand(index, event)
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "StartDrag", Has: func(v any) bool { _, ok := v.(interface{ StartDrag(qtcore.DropActions) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.DropActions), qtcore.DropActions)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			supportedActions := qtcore.DropActions(*(*C.int64_t)(a[0]))
-			v.(interface{ StartDrag(qtcore.DropActions) }).StartDrag(supportedActions)
+			if f, ok := v.(func(func(qtcore.DropActions), qtcore.DropActions)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).StartDrag, supportedActions)
+			} else {
+				v.(interface{ StartDrag(qtcore.DropActions) }).StartDrag(supportedActions)
+			}
 		}},
 	{Name: "InitViewItemOption", Has: func(v any) bool { _, ok := v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionViewItem), *QStyleOptionViewItem)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
 			optionH := rt.WrapClass(optionP, "QStyleOptionViewItem", rt.NewScoped)
 			defer optionH.Expire()
 			option := rt.View[QStyleOptionViewItem](optionH, optionP)
-			v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }).InitViewItemOption(option)
+			if f, ok := v.(func(func(*QStyleOptionViewItem), *QStyleOptionViewItem)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).InitViewItemOption, option)
+			} else {
+				v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }).InitViewItemOption(option)
+			}
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
-			r := v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			var r = *new(bool)
+			if f, ok := v.(func(func(bool) bool, bool) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).FocusNextPrevChild, next)
+			} else {
+				r = v.(interface{ FocusNextPrevChild(bool) bool }).FocusNextPrevChild(next)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ViewportEvent, event)
+			} else {
+				r = v.(interface{ ViewportEvent(*qtcore.QEvent) bool }).ViewportEvent(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMouseEvent](eventH, eventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragEnterEvent](eventH, eventP)
-			v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragMoveEvent](eventH, eventP)
-			v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDragLeaveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDragLeaveEvent](eventH, eventP)
-			v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
-			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			if f, ok := v.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ResizeEvent, event)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			}
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1745,15 +2099,23 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(event)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).InputMethodEvent, event)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(event)
+			}
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1761,59 +2123,101 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			object := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(object, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).EventFilter, object, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(object, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ViewportSizeHint)
+			} else {
+				r = v.(interface{ ViewportSizeHint() qtcore.QSize }).ViewportSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MinimumSizeHint)
+			} else {
+				r = v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SizeHint)
+			} else {
+				r = v.(interface{ SizeHint() qtcore.QSize }).SizeHint()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			viewport := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ SetupViewport(*QWidget) }).SetupViewport(viewport)
+			if f, ok := v.(func(func(*QWidget), *QWidget)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SetupViewport, viewport)
+			} else {
+				v.(interface{ SetupViewport(*QWidget) }).SetupViewport(viewport)
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintEventP := *(*unsafe.Pointer)(a[0])
 			paintEventH := rt.WrapClass(paintEventP, "QPaintEvent", rt.NewScoped)
 			defer paintEventH.Expire()
 			paintEvent := rt.View[qtgui.QPaintEvent](paintEventH, paintEventP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(paintEvent)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).PaintEvent, paintEvent)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(paintEvent)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
 			wheelEventH := rt.WrapClass(wheelEventP, "QWheelEvent", rt.NewScoped)
 			defer wheelEventH.Expire()
 			wheelEvent := rt.View[qtgui.QWheelEvent](wheelEventH, wheelEventP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(wheelEvent)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).WheelEvent, wheelEvent)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(wheelEvent)
+			}
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1821,140 +2225,225 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			contextMenuEventP := *(*unsafe.Pointer)(a[0])
 			contextMenuEventH := rt.WrapClass(contextMenuEventP, "QContextMenuEvent", rt.NewScoped)
 			defer contextMenuEventH.Expire()
 			contextMenuEvent := rt.View[qtgui.QContextMenuEvent](contextMenuEventH, contextMenuEventP)
-			v.(interface {
-				ContextMenuEvent(*qtgui.QContextMenuEvent)
-			}).ContextMenuEvent(contextMenuEvent)
+			if f, ok := v.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ContextMenuEvent, contextMenuEvent)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtgui.QContextMenuEvent)
+				}).ContextMenuEvent(contextMenuEvent)
+			}
 		}},
 	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			dx := int(*(*C.int)(a[0]))
 			dy := int(*(*C.int)(a[1]))
-			v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+			if f, ok := v.(func(func(int, int), int, int)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ScrollContentsBy, dx, dy)
+			} else {
+				v.(interface{ ScrollContentsBy(int, int) }).ScrollContentsBy(dx, dy)
+			}
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ChangeEvent, event)
+			} else {
+				v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+			}
 		}},
 	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
 			optionH := rt.WrapClass(optionP, "QStyleOptionFrame", rt.NewScoped)
 			defer optionH.Expire()
 			option := rt.View[QStyleOptionFrame](optionH, optionP)
-			v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+			if f, ok := v.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).InitStyleOption, option)
+			} else {
+				v.(interface{ InitStyleOption(*QStyleOptionFrame) }).InitStyleOption(option)
+			}
 		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
-			v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			if f, ok := v.(func(func(bool), bool)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).SetVisible, visible)
+			} else {
+				v.(interface{ SetVisible(bool) }).SetVisible(visible)
+			}
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			r := v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			var r = *new(int)
+			if f, ok := v.(func(func(int) int, int) int); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).HeightForWidth, arg0)
+			} else {
+				r = v.(interface{ HeightForWidth(int) int }).HeightForWidth(arg0)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).HasHeightForWidth)
+			} else {
+				r = v.(interface{ HasHeightForWidth() bool }).HasHeightForWidth()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEnterEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QEnterEvent](eventH, eventP)
-			v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			if f, ok := v.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).EnterEvent, event)
+			} else {
+				v.(interface{ EnterEvent(*qtgui.QEnterEvent) }).EnterEvent(event)
+			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).LeaveEvent, event)
+			} else {
+				v.(interface{ LeaveEvent(*qtcore.QEvent) }).LeaveEvent(event)
+			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QMoveEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QMoveEvent](eventH, eventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).MoveEvent, event)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(event)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QCloseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QCloseEvent](eventH, eventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).CloseEvent, event)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(event)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTabletEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QTabletEvent](eventH, eventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).TabletEvent, event)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(event)
+			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QActionEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
-			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			if f, ok := v.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ActionEvent, event)
+			} else {
+				v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QShowEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QShowEvent](eventH, eventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ShowEvent, event)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QHideEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).HideEvent, event)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1962,13 +2451,22 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -1980,44 +2478,585 @@ var qAbstractItemViewVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(paintDeviceMetric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).Metric, paintDeviceMetric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(paintDeviceMetric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QAbstractItemViewSuper{this: rt.View[QAbstractItemView](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qAbstractItemViewShimInit sets a QAbstractItemView shim object's dispatch id and override mask.
+func qAbstractItemViewShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QAbstractItemView_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideSetModel makes f this object's QAbstractItemView::setModel: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetModel, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSetModel(f func(super func(model *qtcore.QAbstractItemModel), model *qtcore.QAbstractItemModel)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSetModel", "SetModel", f)
+}
+
+// OverrideSetSelectionModel makes f this object's QAbstractItemView::setSelectionModel: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetSelectionModel, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSetSelectionModel(f func(super func(selectionModel *qtcore.QItemSelectionModel), selectionModel *qtcore.QItemSelectionModel)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSetSelectionModel", "SetSelectionModel", f)
+}
+
+// OverrideKeyboardSearch makes f this object's QAbstractItemView::keyboardSearch: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines KeyboardSearch, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideKeyboardSearch(f func(super func(search string), search string)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideKeyboardSearch", "KeyboardSearch", f)
+}
+
+// OverrideVisualRect makes f this object's QAbstractItemView::visualRect: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines VisualRect, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideVisualRect(f func(super func(index *qtcore.QModelIndex) qtcore.QRect, index *qtcore.QModelIndex) qtcore.QRect) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideVisualRect", "VisualRect", f)
+}
+
+// OverrideScrollTo makes f this object's QAbstractItemView::scrollTo: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ScrollTo, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideScrollTo(f func(super func(index *qtcore.QModelIndex, hint QAbstractItemViewScrollHint), index *qtcore.QModelIndex, hint QAbstractItemViewScrollHint)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideScrollTo", "ScrollTo", f)
+}
+
+// OverrideIndexAt makes f this object's QAbstractItemView::indexAt: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IndexAt, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideIndexAt(f func(super func(point qtcore.QPoint) *qtcore.QModelIndex, point qtcore.QPoint) *qtcore.QModelIndex) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideIndexAt", "IndexAt", f)
+}
+
+// OverrideSizeHintForRow makes f this object's QAbstractItemView::sizeHintForRow: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SizeHintForRow, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSizeHintForRow(f func(super func(row int) int, row int) int) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSizeHintForRow", "SizeHintForRow", f)
+}
+
+// OverrideSizeHintForColumn makes f this object's QAbstractItemView::sizeHintForColumn: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SizeHintForColumn, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSizeHintForColumn(f func(super func(column int) int, column int) int) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSizeHintForColumn", "SizeHintForColumn", f)
+}
+
+// OverrideItemDelegateForIndex makes f this object's QAbstractItemView::itemDelegateForIndex: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ItemDelegateForIndex, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideItemDelegateForIndex(f func(super func(index *qtcore.QModelIndex) *QAbstractItemDelegate, index *qtcore.QModelIndex) *QAbstractItemDelegate) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideItemDelegateForIndex", "ItemDelegateForIndex", f)
+}
+
+// OverrideReset makes f this object's QAbstractItemView::reset: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Reset, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideReset(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideReset", "Reset", f)
+}
+
+// OverrideSetRootIndex makes f this object's QAbstractItemView::setRootIndex: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetRootIndex, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSetRootIndex(f func(super func(index *qtcore.QModelIndex), index *qtcore.QModelIndex)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSetRootIndex", "SetRootIndex", f)
+}
+
+// OverrideDoItemsLayout makes f this object's QAbstractItemView::doItemsLayout: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DoItemsLayout, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideDoItemsLayout(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideDoItemsLayout", "DoItemsLayout", f)
+}
+
+// OverrideSelectAll makes f this object's QAbstractItemView::selectAll: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SelectAll, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSelectAll(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSelectAll", "SelectAll", f)
+}
+
+// OverrideDataChanged makes f this object's QAbstractItemView::dataChanged: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines DataChanged, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideDataChanged(f func(super func(topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex, roles []int), topLeft *qtcore.QModelIndex, bottomRight *qtcore.QModelIndex, roles []int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideDataChanged", "DataChanged", f)
+}
+
+// OverrideRowsInserted makes f this object's QAbstractItemView::rowsInserted: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines RowsInserted, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideRowsInserted(f func(super func(parent *qtcore.QModelIndex, start int, end int), parent *qtcore.QModelIndex, start int, end int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideRowsInserted", "RowsInserted", f)
+}
+
+// OverrideRowsAboutToBeRemoved makes f this object's QAbstractItemView::rowsAboutToBeRemoved: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines RowsAboutToBeRemoved, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideRowsAboutToBeRemoved(f func(super func(parent *qtcore.QModelIndex, start int, end int), parent *qtcore.QModelIndex, start int, end int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideRowsAboutToBeRemoved", "RowsAboutToBeRemoved", f)
+}
+
+// OverrideSelectionChanged makes f this object's QAbstractItemView::selectionChanged: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SelectionChanged, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSelectionChanged(f func(super func(selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection), selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSelectionChanged", "SelectionChanged", f)
+}
+
+// OverrideCurrentChanged makes f this object's QAbstractItemView::currentChanged: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CurrentChanged, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideCurrentChanged(f func(super func(current *qtcore.QModelIndex, previous *qtcore.QModelIndex), current *qtcore.QModelIndex, previous *qtcore.QModelIndex)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideCurrentChanged", "CurrentChanged", f)
+}
+
+// OverrideUpdateEditorData makes f this object's QAbstractItemView::updateEditorData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UpdateEditorData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideUpdateEditorData(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideUpdateEditorData", "UpdateEditorData", f)
+}
+
+// OverrideUpdateEditorGeometries makes f this object's QAbstractItemView::updateEditorGeometries: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UpdateEditorGeometries, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideUpdateEditorGeometries(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideUpdateEditorGeometries", "UpdateEditorGeometries", f)
+}
+
+// OverrideUpdateGeometries makes f this object's QAbstractItemView::updateGeometries: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UpdateGeometries, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideUpdateGeometries(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideUpdateGeometries", "UpdateGeometries", f)
+}
+
+// OverrideVerticalScrollbarAction makes f this object's QAbstractItemView::verticalScrollbarAction: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines VerticalScrollbarAction, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideVerticalScrollbarAction(f func(super func(action int), action int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideVerticalScrollbarAction", "VerticalScrollbarAction", f)
+}
+
+// OverrideHorizontalScrollbarAction makes f this object's QAbstractItemView::horizontalScrollbarAction: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HorizontalScrollbarAction, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideHorizontalScrollbarAction(f func(super func(action int), action int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideHorizontalScrollbarAction", "HorizontalScrollbarAction", f)
+}
+
+// OverrideVerticalScrollbarValueChanged makes f this object's QAbstractItemView::verticalScrollbarValueChanged: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines VerticalScrollbarValueChanged, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideVerticalScrollbarValueChanged(f func(super func(value int), value int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideVerticalScrollbarValueChanged", "VerticalScrollbarValueChanged", f)
+}
+
+// OverrideHorizontalScrollbarValueChanged makes f this object's QAbstractItemView::horizontalScrollbarValueChanged: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HorizontalScrollbarValueChanged, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideHorizontalScrollbarValueChanged(f func(super func(value int), value int)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideHorizontalScrollbarValueChanged", "HorizontalScrollbarValueChanged", f)
+}
+
+// OverrideCloseEditor makes f this object's QAbstractItemView::closeEditor: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CloseEditor, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideCloseEditor(f func(super func(editor *QWidget, hint QAbstractItemDelegateEndEditHint), editor *QWidget, hint QAbstractItemDelegateEndEditHint)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideCloseEditor", "CloseEditor", f)
+}
+
+// OverrideCommitData makes f this object's QAbstractItemView::commitData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines CommitData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideCommitData(f func(super func(editor *QWidget), editor *QWidget)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideCommitData", "CommitData", f)
+}
+
+// OverrideEditorDestroyed makes f this object's QAbstractItemView::editorDestroyed: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines EditorDestroyed, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideEditorDestroyed(f func(super func(editor *qtcore.QObject), editor *qtcore.QObject)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideEditorDestroyed", "EditorDestroyed", f)
+}
+
+// OverrideMoveCursor makes f this object's QAbstractItemView::moveCursor: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines MoveCursor, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideMoveCursor(f func(super func(cursorAction QAbstractItemViewCursorAction, modifiers qtcore.KeyboardModifiers) *qtcore.QModelIndex, cursorAction QAbstractItemViewCursorAction, modifiers qtcore.KeyboardModifiers) *qtcore.QModelIndex) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideMoveCursor", "MoveCursor", f)
+}
+
+// OverrideHorizontalOffset makes f this object's QAbstractItemView::horizontalOffset: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines HorizontalOffset, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideHorizontalOffset(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideHorizontalOffset", "HorizontalOffset", f)
+}
+
+// OverrideVerticalOffset makes f this object's QAbstractItemView::verticalOffset: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines VerticalOffset, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideVerticalOffset(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideVerticalOffset", "VerticalOffset", f)
+}
+
+// OverrideIsIndexHidden makes f this object's QAbstractItemView::isIndexHidden: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IsIndexHidden, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideIsIndexHidden(f func(super func(index *qtcore.QModelIndex) bool, index *qtcore.QModelIndex) bool) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideIsIndexHidden", "IsIndexHidden", f)
+}
+
+// OverrideSetSelection makes f this object's QAbstractItemView::setSelection: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetSelection, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSetSelection(f func(super func(rect qtcore.QRect, command qtcore.QItemSelectionModelSelectionFlags), rect qtcore.QRect, command qtcore.QItemSelectionModelSelectionFlags)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSetSelection", "SetSelection", f)
+}
+
+// OverrideVisualRegionForSelection makes f this object's QAbstractItemView::visualRegionForSelection: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines VisualRegionForSelection, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideVisualRegionForSelection(f func(super func(selection *qtcore.QItemSelection) *qtgui.QRegion, selection *qtcore.QItemSelection) *qtgui.QRegion) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideVisualRegionForSelection", "VisualRegionForSelection", f)
+}
+
+// OverrideSelectedIndexes makes f this object's QAbstractItemView::selectedIndexes: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SelectedIndexes, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSelectedIndexes(f func(super func() []*qtcore.QModelIndex) []*qtcore.QModelIndex) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSelectedIndexes", "SelectedIndexes", f)
+}
+
+// OverrideEdit makes f this object's QAbstractItemView::edit: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Edit, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideEdit(f func(super func(index *qtcore.QModelIndex, trigger QAbstractItemViewEditTriggers, event *qtcore.QEvent) bool, index *qtcore.QModelIndex, trigger QAbstractItemViewEditTriggers, event *qtcore.QEvent) bool) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideEdit", "Edit", f)
+}
+
+// OverrideSelectionCommand makes f this object's QAbstractItemView::selectionCommand: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SelectionCommand, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideSelectionCommand(f func(super func(index *qtcore.QModelIndex, event *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags, index *qtcore.QModelIndex, event *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideSelectionCommand", "SelectionCommand", f)
+}
+
+// OverrideStartDrag makes f this object's QAbstractItemView::startDrag: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines StartDrag, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideStartDrag(f func(super func(supportedActions qtcore.DropActions), supportedActions qtcore.DropActions)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideStartDrag", "StartDrag", f)
+}
+
+// OverrideInitViewItemOption makes f this object's QAbstractItemView::initViewItemOption: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines InitViewItemOption, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QAbstractItemView) OverrideInitViewItemOption(f func(super func(option *QStyleOptionViewItem), option *QStyleOptionViewItem)) {
+	rt.Override(unsafe.Pointer(this), "QAbstractItemView.OverrideInitViewItemOption", "InitViewItemOption", f)
 }
 
 // QAbstractItemViewBase is embedded in Go types that subclass QAbstractItemView:
@@ -3030,7 +4069,7 @@ func NewQAbstractItemViewWith(v QAbstractItemViewSubclass, parent QWidgetLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QAbstractItemView](p, "QAbstractItemView", mode)
+	h := rt.WrapNewShim[QAbstractItemView](p, "QAbstractItemView", mode, qAbstractItemViewVTable, qAbstractItemViewShimInit)
 	base.QAbstractItemView = rt.View[QAbstractItemView](h, p)
 	id := h.SetSelf(v, qAbstractItemViewVTable)
 	mask := rt.Mask(v, qAbstractItemViewVTable)

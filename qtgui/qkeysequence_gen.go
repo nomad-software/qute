@@ -256,6 +256,20 @@ func (this *QKeySequence) ToStringFull(format QKeySequenceSequenceFormat) string
 	return quteStr(r)
 }
 
+// ToQVariant wraps the conversion QKeySequence::operator QVariant().
+//
+//	C++: QKeySequence::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qkeysequence.html#operator-QVariant
+func (this *QKeySequence) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QKeySequence.ToQVariant")
+	r := C.qute_QKeySequence_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QKeySequenceFromString wraps QKeySequence::fromString.
 //
 //	C++: QKeySequence QKeySequence::fromString(const QString & str, SequenceFormat format = …)

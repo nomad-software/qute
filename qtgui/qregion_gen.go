@@ -403,3 +403,17 @@ func (this *QRegion) RectCount() int {
 	runtime.KeepAlive(this)
 	return int(r)
 }
+
+// ToQVariant wraps the conversion QRegion::operator QVariant().
+//
+//	C++: QRegion::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qregion.html#operator-QVariant
+func (this *QRegion) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QRegion.ToQVariant")
+	r := C.qute_QRegion_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}

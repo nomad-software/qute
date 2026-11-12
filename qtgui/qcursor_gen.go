@@ -241,6 +241,20 @@ func (this *QCursor) HotSpot() qtcore.QPoint {
 	return goQPoint(r)
 }
 
+// ToQVariant wraps the conversion QCursor::operator QVariant().
+//
+//	C++: QCursor::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qcursor.html#operator-QVariant
+func (this *QCursor) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QCursor.ToQVariant")
+	r := C.qute_QCursor_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QCursorPos wraps QCursor::pos.
 //
 //	C++: QPoint QCursor::pos()

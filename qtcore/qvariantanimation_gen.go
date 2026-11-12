@@ -66,7 +66,7 @@ func NewQVariantAnimation(parent QObjectLike) *QVariantAnimation {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QVariantAnimation](p, "QVariantAnimation", mode)
+	h := rt.WrapNewShim[QVariantAnimation](p, "QVariantAnimation", mode, qVariantAnimationVTable, qVariantAnimationShimInit)
 	return rt.View[QVariantAnimation](h, p)
 }
 
@@ -265,26 +265,43 @@ func (this *QVariantAnimation) OnValueChanged(f func(value *QVariant)) Connectio
 
 var qVariantAnimationVTable = []rt.Virtual{
 	{Name: "Duration", Has: func(v any) bool { _, ok := v.(interface{ Duration() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Duration() int }).Duration()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).Duration)
+			} else {
+				r = v.(interface{ Duration() int }).Duration()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ Event(*QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QEvent) bool, *QEvent) bool); ok {
+				r = f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "UpdateCurrentTime", Has: func(v any) bool { _, ok := v.(interface{ UpdateCurrentTime(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
-			v.(interface{ UpdateCurrentTime(int) }).UpdateCurrentTime(arg0)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).UpdateCurrentTime, arg0)
+			} else {
+				v.(interface{ UpdateCurrentTime(int) }).UpdateCurrentTime(arg0)
+			}
 		}},
 	{Name: "UpdateState", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -292,19 +309,32 @@ var qVariantAnimationVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractAnimationState, QAbstractAnimationState), QAbstractAnimationState, QAbstractAnimationState))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			newState := QAbstractAnimationState(*(*C.int64_t)(a[0]))
 			oldState := QAbstractAnimationState(*(*C.int64_t)(a[1]))
-			v.(interface {
-				UpdateState(QAbstractAnimationState, QAbstractAnimationState)
-			}).UpdateState(newState, oldState)
+			if f, ok := v.(func(func(QAbstractAnimationState, QAbstractAnimationState), QAbstractAnimationState, QAbstractAnimationState)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).UpdateState, newState, oldState)
+			} else {
+				v.(interface {
+					UpdateState(QAbstractAnimationState, QAbstractAnimationState)
+				}).UpdateState(newState, oldState)
+			}
 		}},
 	{Name: "UpdateCurrentValue", Has: func(v any) bool { _, ok := v.(interface{ UpdateCurrentValue(*QVariant) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QVariant), *QVariant)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			value := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ UpdateCurrentValue(*QVariant) }).UpdateCurrentValue(value)
+			if f, ok := v.(func(func(*QVariant), *QVariant)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).UpdateCurrentValue, value)
+			} else {
+				v.(interface{ UpdateCurrentValue(*QVariant) }).UpdateCurrentValue(value)
+			}
 		}},
 	{Name: "Interpolated", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -312,14 +342,23 @@ var qVariantAnimationVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QVariant, *QVariant, float64) *QVariant, *QVariant, *QVariant, float64) *QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			from := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			to := rt.View[QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			progress := float64(*(*C.double)(a[2]))
-			r := v.(interface {
-				Interpolated(*QVariant, *QVariant, float64) *QVariant
-			}).Interpolated(from, to, progress)
+			var r = *new(*QVariant)
+			if f, ok := v.(func(func(*QVariant, *QVariant, float64) *QVariant, *QVariant, *QVariant, float64) *QVariant); ok {
+				r = f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).Interpolated, from, to, progress)
+			} else {
+				r = v.(interface {
+					Interpolated(*QVariant, *QVariant, float64) *QVariant
+				}).Interpolated(from, to, progress)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QVariantAnimation.Interpolated")
 		}},
 	{Name: "UpdateDirection", Has: func(v any) bool {
@@ -328,63 +367,133 @@ var qVariantAnimationVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QAbstractAnimationDirection), QAbstractAnimationDirection))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			direction := QAbstractAnimationDirection(*(*C.int64_t)(a[0]))
-			v.(interface {
-				UpdateDirection(QAbstractAnimationDirection)
-			}).UpdateDirection(direction)
+			if f, ok := v.(func(func(QAbstractAnimationDirection), QAbstractAnimationDirection)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).UpdateDirection, direction)
+			} else {
+				v.(interface {
+					UpdateDirection(QAbstractAnimationDirection)
+				}).UpdateDirection(direction)
+			}
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			r := v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); ok {
+				r = f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface{ EventFilter(*QObject, *QEvent) bool }).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*QTimerEvent), *QTimerEvent)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*QChildEvent), *QChildEvent)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*QEvent), *QEvent)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*QMetaMethod), *QMetaMethod)); ok {
+				f((&QVariantAnimationSuper{this: rt.View[QVariantAnimation](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qVariantAnimationShimInit sets a QVariantAnimation shim object's dispatch id and override mask.
+func qVariantAnimationShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QVariantAnimation_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideUpdateCurrentValue makes f this object's QVariantAnimation::updateCurrentValue: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UpdateCurrentValue, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QVariantAnimation) OverrideUpdateCurrentValue(f func(super func(value *QVariant), value *QVariant)) {
+	rt.Override(unsafe.Pointer(this), "QVariantAnimation.OverrideUpdateCurrentValue", "UpdateCurrentValue", f)
+}
+
+// OverrideInterpolated makes f this object's QVariantAnimation::interpolated: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Interpolated, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QVariantAnimation) OverrideInterpolated(f func(super func(from *QVariant, to *QVariant, progress float64) *QVariant, from *QVariant, to *QVariant, progress float64) *QVariant) {
+	rt.Override(unsafe.Pointer(this), "QVariantAnimation.OverrideInterpolated", "Interpolated", f)
 }
 
 // QVariantAnimationBase is embedded in Go types that subclass QVariantAnimation:
@@ -569,7 +678,7 @@ func NewQVariantAnimationWith(v QVariantAnimationSubclass, parent QObjectLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QVariantAnimation](p, "QVariantAnimation", mode)
+	h := rt.WrapNewShim[QVariantAnimation](p, "QVariantAnimation", mode, qVariantAnimationVTable, qVariantAnimationShimInit)
 	base.QVariantAnimation = rt.View[QVariantAnimation](h, p)
 	id := h.SetSelf(v, qVariantAnimationVTable)
 	mask := rt.Mask(v, qVariantAnimationVTable)

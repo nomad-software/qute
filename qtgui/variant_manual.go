@@ -34,7 +34,9 @@ const (
 // qtcore.NewQVariantOf accepts and the GUI types an item model returns for
 // its roles: QColor (ForegroundRole, BackgroundRole), *QIcon
 // (DecorationRole), *QFont (FontRole), *QBrush, *QPixmap, *QImage, *QPen,
-// *QKeySequence, *QCursor, *QPalette, *QTransform and *QRegion. Handles are
+// *QKeySequence, *QCursor, *QPalette, *QTransform and *QRegion, and every
+// other handle with a ToQVariant method (*QTextFormat, *QTextLength,
+// *QMatrix4x4, ...). Handles are
 // copied, so the variant does not depend on them; a nil handle gives an
 // invalid variant.
 func NewQVariantOf(v any) *qtcore.QVariant {

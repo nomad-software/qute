@@ -70,7 +70,7 @@ func NewQGraphicsVideoItem(parent qtwidgets.QGraphicsItemLike) *QGraphicsVideoIt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode)
+	h := rt.WrapNewShim[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode, qGraphicsVideoItemVTable, qGraphicsVideoItemShimInit)
 	return rt.View[QGraphicsVideoItem](h, p)
 }
 
@@ -268,9 +268,15 @@ func (this *QGraphicsVideoItem) OnNativeSizeChanged(f func(size qtcore.QSizeF)) 
 
 var qGraphicsVideoItemVTable = []rt.Virtual{
 	{Name: "BoundingRect", Has: func(v any) bool { _, ok := v.(interface{ BoundingRect() qtcore.QRectF }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRectF) qtcore.QRectF); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BoundingRect() qtcore.QRectF }).BoundingRect()
+			var r = *new(qtcore.QRectF)
+			if f, ok := v.(func(func() qtcore.QRectF) qtcore.QRectF); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).BoundingRect)
+			} else {
+				r = v.(interface{ BoundingRect() qtcore.QRectF }).BoundingRect()
+			}
 			*(*C.qute_rectf)(ret) = cQRectF(r)
 		}},
 	{Name: "Paint", Has: func(v any) bool {
@@ -279,7 +285,11 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget), *qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
@@ -287,24 +297,39 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			option := rt.View[qtwidgets.QStyleOptionGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionGraphicsItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			widget := rt.View[qtwidgets.QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			v.(interface {
-				Paint(*qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget)
-			}).Paint(painter, option, widget)
+			if f, ok := v.(func(func(*qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget), *qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Paint, painter, option, widget)
+			} else {
+				v.(interface {
+					Paint(*qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget)
+				}).Paint(painter, option, widget)
+			}
 		}},
 	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Type() int }).Type()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Type)
+			} else {
+				r = v.(interface{ Type() int }).Type()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -312,23 +337,38 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant, qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			change := qtwidgets.QGraphicsItemGraphicsItemChange(*(*C.int64_t)(a[0]))
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			r := v.(interface {
-				ItemChange(qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
-			}).ItemChange(change, value)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant, qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).ItemChange, change, value)
+			} else {
+				r = v.(interface {
+					ItemChange(qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
+				}).ItemChange(change, value)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.ItemChange")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			evP := *(*unsafe.Pointer)(a[0])
 			evH := rt.WrapClass(evP, "QEvent", rt.NewScoped)
 			defer evH.Expire()
 			ev := rt.View[qtcore.QEvent](evH, evP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(ev)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Event, ev)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(ev)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -337,65 +377,111 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
 	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			phase := int(*(*C.int)(a[0]))
-			v.(interface{ Advance(int) }).Advance(phase)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Advance, phase)
+			} else {
+				v.(interface{ Advance(int) }).Advance(phase)
+			}
 		}},
 	{Name: "Shape", Has: func(v any) bool { _, ok := v.(interface{ Shape() *qtgui.QPainterPath }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Shape() *qtgui.QPainterPath }).Shape()
+			var r = *new(*qtgui.QPainterPath)
+			if f, ok := v.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Shape)
+			} else {
+				r = v.(interface{ Shape() *qtgui.QPainterPath }).Shape()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.Shape")
 		}},
 	{Name: "Contains", Has: func(v any) bool { _, ok := v.(interface{ Contains(qtcore.QPointF) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			point := goQPointF(*(*C.qute_pointf)(a[0]))
-			r := v.(interface{ Contains(qtcore.QPointF) bool }).Contains(point)
+			var r = *new(bool)
+			if f, ok := v.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Contains, point)
+			} else {
+				r = v.(interface{ Contains(qtcore.QPointF) bool }).Contains(point)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "CollidesWithItem", Has: func(v any) bool {
@@ -404,13 +490,22 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool, *qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			other := rt.View[qtwidgets.QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				CollidesWithItem(*qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool
-			}).CollidesWithItem(other, mode)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool, *qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).CollidesWithItem, other, mode)
+			} else {
+				r = v.(interface {
+					CollidesWithItem(*qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool
+				}).CollidesWithItem(other, mode)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "CollidesWithPath", Has: func(v any) bool {
@@ -419,13 +514,22 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool, *qtgui.QPainterPath, qtcore.ItemSelectionMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			path := rt.View[qtgui.QPainterPath](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QPainterPath", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
-			}).CollidesWithPath(path, mode)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool, *qtgui.QPainterPath, qtcore.ItemSelectionMode) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).CollidesWithPath, path, mode)
+			} else {
+				r = v.(interface {
+					CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
+				}).CollidesWithPath(path, mode)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "IsObscuredBy", Has: func(v any) bool {
@@ -434,18 +538,33 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsItem) bool, *qtwidgets.QGraphicsItem) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			item := rt.View[qtwidgets.QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				IsObscuredBy(*qtwidgets.QGraphicsItem) bool
-			}).IsObscuredBy(item)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsItem) bool, *qtwidgets.QGraphicsItem) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).IsObscuredBy, item)
+			} else {
+				r = v.(interface {
+					IsObscuredBy(*qtwidgets.QGraphicsItem) bool
+				}).IsObscuredBy(item)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "OpaqueArea", Has: func(v any) bool { _, ok := v.(interface{ OpaqueArea() *qtgui.QPainterPath }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ OpaqueArea() *qtgui.QPainterPath }).OpaqueArea()
+			var r = *new(*qtgui.QPainterPath)
+			if f, ok := v.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).OpaqueArea)
+			} else {
+				r = v.(interface{ OpaqueArea() *qtgui.QPainterPath }).OpaqueArea()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.OpaqueArea")
 		}},
 	{Name: "SceneEventFilter", Has: func(v any) bool {
@@ -454,26 +573,41 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsItem, *qtcore.QEvent) bool, *qtwidgets.QGraphicsItem, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtwidgets.QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				SceneEventFilter(*qtwidgets.QGraphicsItem, *qtcore.QEvent) bool
-			}).SceneEventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsItem, *qtcore.QEvent) bool, *qtwidgets.QGraphicsItem, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).SceneEventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					SceneEventFilter(*qtwidgets.QGraphicsItem, *qtcore.QEvent) bool
+				}).SceneEventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SceneEvent", Has: func(v any) bool { _, ok := v.(interface{ SceneEvent(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ SceneEvent(*qtcore.QEvent) bool }).SceneEvent(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).SceneEvent, event)
+			} else {
+				r = v.(interface{ SceneEvent(*qtcore.QEvent) bool }).SceneEvent(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
@@ -482,15 +616,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneContextMenuEvent), *qtwidgets.QGraphicsSceneContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneContextMenuEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneContextMenuEvent](eventH, eventP)
-			v.(interface {
-				ContextMenuEvent(*qtwidgets.QGraphicsSceneContextMenuEvent)
-			}).ContextMenuEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneContextMenuEvent), *qtwidgets.QGraphicsSceneContextMenuEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).ContextMenuEvent, event)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*qtwidgets.QGraphicsSceneContextMenuEvent)
+				}).ContextMenuEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -498,15 +640,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragEnterEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
-			}).DragEnterEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface {
+					DragEnterEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
+				}).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -514,15 +664,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragLeaveEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
-			}).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface {
+					DragLeaveEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
+				}).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -530,15 +688,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragMoveEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
-			}).DragMoveEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface {
+					DragMoveEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
+				}).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -546,33 +712,51 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DropEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
-			}).DropEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface {
+					DropEvent(*qtwidgets.QGraphicsSceneDragDropEvent)
+				}).DropEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "HoverEnterEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -580,15 +764,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverEnterEvent(*qtwidgets.QGraphicsSceneHoverEvent)
-			}).HoverEnterEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).HoverEnterEvent, event)
+			} else {
+				v.(interface {
+					HoverEnterEvent(*qtwidgets.QGraphicsSceneHoverEvent)
+				}).HoverEnterEvent(event)
+			}
 		}},
 	{Name: "HoverMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -596,15 +788,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverMoveEvent(*qtwidgets.QGraphicsSceneHoverEvent)
-			}).HoverMoveEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).HoverMoveEvent, event)
+			} else {
+				v.(interface {
+					HoverMoveEvent(*qtwidgets.QGraphicsSceneHoverEvent)
+				}).HoverMoveEvent(event)
+			}
 		}},
 	{Name: "HoverLeaveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -612,33 +812,51 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverLeaveEvent(*qtwidgets.QGraphicsSceneHoverEvent)
-			}).HoverLeaveEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).HoverLeaveEvent, event)
+			} else {
+				v.(interface {
+					HoverLeaveEvent(*qtwidgets.QGraphicsSceneHoverEvent)
+				}).HoverLeaveEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -646,15 +864,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MousePressEvent(*qtwidgets.QGraphicsSceneMouseEvent)
-			}).MousePressEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface {
+					MousePressEvent(*qtwidgets.QGraphicsSceneMouseEvent)
+				}).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -662,15 +888,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseMoveEvent(*qtwidgets.QGraphicsSceneMouseEvent)
-			}).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface {
+					MouseMoveEvent(*qtwidgets.QGraphicsSceneMouseEvent)
+				}).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -678,15 +912,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseReleaseEvent(*qtwidgets.QGraphicsSceneMouseEvent)
-			}).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface {
+					MouseReleaseEvent(*qtwidgets.QGraphicsSceneMouseEvent)
+				}).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -694,15 +936,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseDoubleClickEvent(*qtwidgets.QGraphicsSceneMouseEvent)
-			}).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface {
+					MouseDoubleClickEvent(*qtwidgets.QGraphicsSceneMouseEvent)
+				}).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -710,15 +960,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneWheelEvent), *qtwidgets.QGraphicsSceneWheelEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtwidgets.QGraphicsSceneWheelEvent](eventH, eventP)
-			v.(interface {
-				WheelEvent(*qtwidgets.QGraphicsSceneWheelEvent)
-			}).WheelEvent(event)
+			if f, ok := v.(func(func(*qtwidgets.QGraphicsSceneWheelEvent), *qtwidgets.QGraphicsSceneWheelEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface {
+					WheelEvent(*qtwidgets.QGraphicsSceneWheelEvent)
+				}).WheelEvent(event)
+			}
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -726,15 +984,23 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(event)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).InputMethodEvent, event)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(event)
+			}
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -742,12 +1008,21 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(query)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).InputMethodQuery, query)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(query)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.InputMethodQuery")
 		}},
 	{Name: "SupportsExtension", Has: func(v any) bool {
@@ -756,12 +1031,21 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtwidgets.QGraphicsItemExtension) bool, qtwidgets.QGraphicsItemExtension) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			extension := qtwidgets.QGraphicsItemExtension(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				SupportsExtension(qtwidgets.QGraphicsItemExtension) bool
-			}).SupportsExtension(extension)
+			var r = *new(bool)
+			if f, ok := v.(func(func(qtwidgets.QGraphicsItemExtension) bool, qtwidgets.QGraphicsItemExtension) bool); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).SupportsExtension, extension)
+			} else {
+				r = v.(interface {
+					SupportsExtension(qtwidgets.QGraphicsItemExtension) bool
+				}).SupportsExtension(extension)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SetExtension", Has: func(v any) bool {
@@ -770,13 +1054,21 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtwidgets.QGraphicsItemExtension, *qtcore.QVariant), qtwidgets.QGraphicsItemExtension, *qtcore.QVariant))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			extension := qtwidgets.QGraphicsItemExtension(*(*C.int64_t)(a[0]))
 			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			v.(interface {
-				SetExtension(qtwidgets.QGraphicsItemExtension, *qtcore.QVariant)
-			}).SetExtension(extension, variant)
+			if f, ok := v.(func(func(qtwidgets.QGraphicsItemExtension, *qtcore.QVariant), qtwidgets.QGraphicsItemExtension, *qtcore.QVariant)); ok {
+				f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).SetExtension, extension, variant)
+			} else {
+				v.(interface {
+					SetExtension(qtwidgets.QGraphicsItemExtension, *qtcore.QVariant)
+				}).SetExtension(extension, variant)
+			}
 		}},
 	{Name: "Extension", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -784,14 +1076,28 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QVariant) *qtcore.QVariant, *qtcore.QVariant) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				Extension(*qtcore.QVariant) *qtcore.QVariant
-			}).Extension(variant)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(*qtcore.QVariant) *qtcore.QVariant, *qtcore.QVariant) *qtcore.QVariant); ok {
+				r = f((&QGraphicsVideoItemSuper{this: rt.View[QGraphicsVideoItem](h, h.Ptr())}).Extension, variant)
+			} else {
+				r = v.(interface {
+					Extension(*qtcore.QVariant) *qtcore.QVariant
+				}).Extension(variant)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.Extension")
 		}},
+}
+
+// qGraphicsVideoItemShimInit sets a QGraphicsVideoItem shim object's dispatch id and override mask.
+func qGraphicsVideoItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsVideoItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QGraphicsVideoItemBase is embedded in Go types that subclass QGraphicsVideoItem:
@@ -1352,7 +1658,7 @@ func NewQGraphicsVideoItemWith(v QGraphicsVideoItemSubclass, parent qtwidgets.QG
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode)
+	h := rt.WrapNewShim[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode, qGraphicsVideoItemVTable, qGraphicsVideoItemShimInit)
 	base.QGraphicsVideoItem = rt.View[QGraphicsVideoItem](h, p)
 	id := h.SetSelf(v, qGraphicsVideoItemVTable)
 	mask := rt.Mask(v, qGraphicsVideoItemVTable)

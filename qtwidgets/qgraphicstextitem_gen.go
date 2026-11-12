@@ -68,7 +68,7 @@ func NewQGraphicsTextItem(parent QGraphicsItemLike) *QGraphicsTextItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
+	h := rt.WrapNewShim[QGraphicsTextItem](p, "QGraphicsTextItem", mode, qGraphicsTextItemVTable, qGraphicsTextItemShimInit)
 	return rt.View[QGraphicsTextItem](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQGraphicsTextItemWithText(text string, parent QGraphicsItemLike) *QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
+	h := rt.WrapNewShim[QGraphicsTextItem](p, "QGraphicsTextItem", mode, qGraphicsTextItemVTable, qGraphicsTextItemShimInit)
 	return rt.View[QGraphicsTextItem](h, p)
 }
 
@@ -516,22 +516,40 @@ func (this *QGraphicsTextItem) OnLinkHovered(f func(stringArg string)) qtcore.Co
 
 var qGraphicsTextItemVTable = []rt.Virtual{
 	{Name: "BoundingRect", Has: func(v any) bool { _, ok := v.(interface{ BoundingRect() qtcore.QRectF }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRectF) qtcore.QRectF); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ BoundingRect() qtcore.QRectF }).BoundingRect()
+			var r = *new(qtcore.QRectF)
+			if f, ok := v.(func(func() qtcore.QRectF) qtcore.QRectF); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).BoundingRect)
+			} else {
+				r = v.(interface{ BoundingRect() qtcore.QRectF }).BoundingRect()
+			}
 			*(*C.qute_rectf)(ret) = cQRectF(r)
 		}},
 	{Name: "Shape", Has: func(v any) bool { _, ok := v.(interface{ Shape() *qtgui.QPainterPath }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Shape() *qtgui.QPainterPath }).Shape()
+			var r = *new(*qtgui.QPainterPath)
+			if f, ok := v.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Shape)
+			} else {
+				r = v.(interface{ Shape() *qtgui.QPainterPath }).Shape()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.Shape")
 		}},
 	{Name: "Contains", Has: func(v any) bool { _, ok := v.(interface{ Contains(qtcore.QPointF) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			point := goQPointF(*(*C.qute_pointf)(a[0]))
-			r := v.(interface{ Contains(qtcore.QPointF) bool }).Contains(point)
+			var r = *new(bool)
+			if f, ok := v.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Contains, point)
+			} else {
+				r = v.(interface{ Contains(qtcore.QPointF) bool }).Contains(point)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Paint", Has: func(v any) bool {
@@ -540,7 +558,11 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget), *qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			painterP := *(*unsafe.Pointer)(a[0])
 			painterH := rt.WrapClass(painterP, "QPainter", rt.NewScoped)
@@ -548,37 +570,65 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 			painter := rt.View[qtgui.QPainter](painterH, painterP)
 			option := rt.View[QStyleOptionGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QStyleOptionGraphicsItem", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[2]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[2]))
-			v.(interface {
-				Paint(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
-			}).Paint(painter, option, widget)
+			if f, ok := v.(func(func(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget), *qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Paint, painter, option, widget)
+			} else {
+				v.(interface {
+					Paint(*qtgui.QPainter, *QStyleOptionGraphicsItem, *QWidget)
+				}).Paint(painter, option, widget)
+			}
 		}},
 	{Name: "IsObscuredBy", Has: func(v any) bool { _, ok := v.(interface{ IsObscuredBy(*QGraphicsItem) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*QGraphicsItem) bool, *QGraphicsItem) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			item := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface{ IsObscuredBy(*QGraphicsItem) bool }).IsObscuredBy(item)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QGraphicsItem) bool, *QGraphicsItem) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).IsObscuredBy, item)
+			} else {
+				r = v.(interface{ IsObscuredBy(*QGraphicsItem) bool }).IsObscuredBy(item)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "OpaqueArea", Has: func(v any) bool { _, ok := v.(interface{ OpaqueArea() *qtgui.QPainterPath }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ OpaqueArea() *qtgui.QPainterPath }).OpaqueArea()
+			var r = *new(*qtgui.QPainterPath)
+			if f, ok := v.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).OpaqueArea)
+			} else {
+				r = v.(interface{ OpaqueArea() *qtgui.QPainterPath }).OpaqueArea()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.OpaqueArea")
 		}},
 	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Type() int }).Type()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Type)
+			} else {
+				r = v.(interface{ Type() int }).Type()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "SceneEvent", Has: func(v any) bool { _, ok := v.(interface{ SceneEvent(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ SceneEvent(*qtcore.QEvent) bool }).SceneEvent(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).SceneEvent, event)
+			} else {
+				r = v.(interface{ SceneEvent(*qtcore.QEvent) bool }).SceneEvent(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool {
@@ -587,15 +637,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MousePressEvent(*QGraphicsSceneMouseEvent)
-			}).MousePressEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).MousePressEvent, event)
+			} else {
+				v.(interface {
+					MousePressEvent(*QGraphicsSceneMouseEvent)
+				}).MousePressEvent(event)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -603,15 +661,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseMoveEvent(*QGraphicsSceneMouseEvent)
-			}).MouseMoveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).MouseMoveEvent, event)
+			} else {
+				v.(interface {
+					MouseMoveEvent(*QGraphicsSceneMouseEvent)
+				}).MouseMoveEvent(event)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -619,15 +685,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseReleaseEvent(*QGraphicsSceneMouseEvent)
-			}).MouseReleaseEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).MouseReleaseEvent, event)
+			} else {
+				v.(interface {
+					MouseReleaseEvent(*QGraphicsSceneMouseEvent)
+				}).MouseReleaseEvent(event)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -635,15 +709,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneMouseEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneMouseEvent](eventH, eventP)
-			v.(interface {
-				MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
-			}).MouseDoubleClickEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).MouseDoubleClickEvent, event)
+			} else {
+				v.(interface {
+					MouseDoubleClickEvent(*QGraphicsSceneMouseEvent)
+				}).MouseDoubleClickEvent(event)
+			}
 		}},
 	{Name: "ContextMenuEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -651,51 +733,79 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneContextMenuEvent), *QGraphicsSceneContextMenuEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneContextMenuEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneContextMenuEvent](eventH, eventP)
-			v.(interface {
-				ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
-			}).ContextMenuEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneContextMenuEvent), *QGraphicsSceneContextMenuEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).ContextMenuEvent, event)
+			} else {
+				v.(interface {
+					ContextMenuEvent(*QGraphicsSceneContextMenuEvent)
+				}).ContextMenuEvent(event)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).KeyPressEvent, event)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(event)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QKeyEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QKeyEvent](eventH, eventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).KeyReleaseEvent, event)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(event)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).FocusInEvent, event)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(event)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QFocusEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QFocusEvent](eventH, eventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).FocusOutEvent, event)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(event)
+			}
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -703,15 +813,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragEnterEvent(*QGraphicsSceneDragDropEvent)
-			}).DragEnterEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).DragEnterEvent, event)
+			} else {
+				v.(interface {
+					DragEnterEvent(*QGraphicsSceneDragDropEvent)
+				}).DragEnterEvent(event)
+			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -719,15 +837,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragLeaveEvent(*QGraphicsSceneDragDropEvent)
-			}).DragLeaveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).DragLeaveEvent, event)
+			} else {
+				v.(interface {
+					DragLeaveEvent(*QGraphicsSceneDragDropEvent)
+				}).DragLeaveEvent(event)
+			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -735,15 +861,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DragMoveEvent(*QGraphicsSceneDragDropEvent)
-			}).DragMoveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).DragMoveEvent, event)
+			} else {
+				v.(interface {
+					DragMoveEvent(*QGraphicsSceneDragDropEvent)
+				}).DragMoveEvent(event)
+			}
 		}},
 	{Name: "DropEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -751,15 +885,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneDragDropEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneDragDropEvent](eventH, eventP)
-			v.(interface {
-				DropEvent(*QGraphicsSceneDragDropEvent)
-			}).DropEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).DropEvent, event)
+			} else {
+				v.(interface {
+					DropEvent(*QGraphicsSceneDragDropEvent)
+				}).DropEvent(event)
+			}
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -767,15 +909,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QInputMethodEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QInputMethodEvent](eventH, eventP)
-			v.(interface {
-				InputMethodEvent(*qtgui.QInputMethodEvent)
-			}).InputMethodEvent(event)
+			if f, ok := v.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).InputMethodEvent, event)
+			} else {
+				v.(interface {
+					InputMethodEvent(*qtgui.QInputMethodEvent)
+				}).InputMethodEvent(event)
+			}
 		}},
 	{Name: "HoverEnterEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -783,15 +933,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverEnterEvent(*QGraphicsSceneHoverEvent)
-			}).HoverEnterEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).HoverEnterEvent, event)
+			} else {
+				v.(interface {
+					HoverEnterEvent(*QGraphicsSceneHoverEvent)
+				}).HoverEnterEvent(event)
+			}
 		}},
 	{Name: "HoverMoveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -799,15 +957,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverMoveEvent(*QGraphicsSceneHoverEvent)
-			}).HoverMoveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).HoverMoveEvent, event)
+			} else {
+				v.(interface {
+					HoverMoveEvent(*QGraphicsSceneHoverEvent)
+				}).HoverMoveEvent(event)
+			}
 		}},
 	{Name: "HoverLeaveEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -815,15 +981,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneHoverEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneHoverEvent](eventH, eventP)
-			v.(interface {
-				HoverLeaveEvent(*QGraphicsSceneHoverEvent)
-			}).HoverLeaveEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneHoverEvent), *QGraphicsSceneHoverEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).HoverLeaveEvent, event)
+			} else {
+				v.(interface {
+					HoverLeaveEvent(*QGraphicsSceneHoverEvent)
+				}).HoverLeaveEvent(event)
+			}
 		}},
 	{Name: "InputMethodQuery", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -831,12 +1005,21 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
-			}).InputMethodQuery(query)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).InputMethodQuery, query)
+			} else {
+				r = v.(interface {
+					InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+				}).InputMethodQuery(query)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.InputMethodQuery")
 		}},
 	{Name: "SupportsExtension", Has: func(v any) bool {
@@ -845,12 +1028,21 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QGraphicsItemExtension) bool, QGraphicsItemExtension) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			extension := QGraphicsItemExtension(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				SupportsExtension(QGraphicsItemExtension) bool
-			}).SupportsExtension(extension)
+			var r = *new(bool)
+			if f, ok := v.(func(func(QGraphicsItemExtension) bool, QGraphicsItemExtension) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).SupportsExtension, extension)
+			} else {
+				r = v.(interface {
+					SupportsExtension(QGraphicsItemExtension) bool
+				}).SupportsExtension(extension)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SetExtension", Has: func(v any) bool {
@@ -859,13 +1051,21 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QGraphicsItemExtension, *qtcore.QVariant), QGraphicsItemExtension, *qtcore.QVariant))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			extension := QGraphicsItemExtension(*(*C.int64_t)(a[0]))
 			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			v.(interface {
-				SetExtension(QGraphicsItemExtension, *qtcore.QVariant)
-			}).SetExtension(extension, variant)
+			if f, ok := v.(func(func(QGraphicsItemExtension, *qtcore.QVariant), QGraphicsItemExtension, *qtcore.QVariant)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).SetExtension, extension, variant)
+			} else {
+				v.(interface {
+					SetExtension(QGraphicsItemExtension, *qtcore.QVariant)
+				}).SetExtension(extension, variant)
+			}
 		}},
 	{Name: "Extension", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -873,22 +1073,37 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QVariant) *qtcore.QVariant, *qtcore.QVariant) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			variant := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			r := v.(interface {
-				Extension(*qtcore.QVariant) *qtcore.QVariant
-			}).Extension(variant)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(*qtcore.QVariant) *qtcore.QVariant, *qtcore.QVariant) *qtcore.QVariant); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Extension, variant)
+			} else {
+				r = v.(interface {
+					Extension(*qtcore.QVariant) *qtcore.QVariant
+				}).Extension(variant)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.Extension")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			evP := *(*unsafe.Pointer)(a[0])
 			evH := rt.WrapClass(evP, "QEvent", rt.NewScoped)
 			defer evH.Expire()
 			ev := rt.View[qtcore.QEvent](evH, evP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(ev)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Event, ev)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(ev)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool {
@@ -897,62 +1112,101 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
 	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			phase := int(*(*C.int)(a[0]))
-			v.(interface{ Advance(int) }).Advance(phase)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).Advance, phase)
+			} else {
+				v.(interface{ Advance(int) }).Advance(phase)
+			}
 		}},
 	{Name: "CollidesWithItem", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -960,13 +1214,22 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsItem, qtcore.ItemSelectionMode) bool, *QGraphicsItem, qtcore.ItemSelectionMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			other := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				CollidesWithItem(*QGraphicsItem, qtcore.ItemSelectionMode) bool
-			}).CollidesWithItem(other, mode)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QGraphicsItem, qtcore.ItemSelectionMode) bool, *QGraphicsItem, qtcore.ItemSelectionMode) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).CollidesWithItem, other, mode)
+			} else {
+				r = v.(interface {
+					CollidesWithItem(*QGraphicsItem, qtcore.ItemSelectionMode) bool
+				}).CollidesWithItem(other, mode)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "CollidesWithPath", Has: func(v any) bool {
@@ -975,13 +1238,22 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool, *qtgui.QPainterPath, qtcore.ItemSelectionMode) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			path := rt.View[qtgui.QPainterPath](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QPainterPath", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			mode := qtcore.ItemSelectionMode(*(*C.int64_t)(a[1]))
-			r := v.(interface {
-				CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
-			}).CollidesWithPath(path, mode)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool, *qtgui.QPainterPath, qtcore.ItemSelectionMode) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).CollidesWithPath, path, mode)
+			} else {
+				r = v.(interface {
+					CollidesWithPath(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool
+				}).CollidesWithPath(path, mode)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SceneEventFilter", Has: func(v any) bool {
@@ -990,16 +1262,25 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsItem, *qtcore.QEvent) bool, *QGraphicsItem, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QGraphicsItem](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGraphicsItem", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				SceneEventFilter(*QGraphicsItem, *qtcore.QEvent) bool
-			}).SceneEventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*QGraphicsItem, *qtcore.QEvent) bool, *QGraphicsItem, *qtcore.QEvent) bool); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).SceneEventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					SceneEventFilter(*QGraphicsItem, *qtcore.QEvent) bool
+				}).SceneEventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool {
@@ -1008,15 +1289,23 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*QGraphicsSceneWheelEvent), *QGraphicsSceneWheelEvent))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QGraphicsSceneWheelEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[QGraphicsSceneWheelEvent](eventH, eventP)
-			v.(interface {
-				WheelEvent(*QGraphicsSceneWheelEvent)
-			}).WheelEvent(event)
+			if f, ok := v.(func(func(*QGraphicsSceneWheelEvent), *QGraphicsSceneWheelEvent)); ok {
+				f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).WheelEvent, event)
+			} else {
+				v.(interface {
+					WheelEvent(*QGraphicsSceneWheelEvent)
+				}).WheelEvent(event)
+			}
 		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1024,15 +1313,29 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant, QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			change := QGraphicsItemGraphicsItemChange(*(*C.int64_t)(a[0]))
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[1]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[1]))
-			r := v.(interface {
-				ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
-			}).ItemChange(change, value)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant, QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant); ok {
+				r = f((&QGraphicsTextItemSuper{this: rt.View[QGraphicsTextItem](h, h.Ptr())}).ItemChange, change, value)
+			} else {
+				r = v.(interface {
+					ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
+				}).ItemChange(change, value)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.ItemChange")
 		}},
+}
+
+// qGraphicsTextItemShimInit sets a QGraphicsTextItem shim object's dispatch id and override mask.
+func qGraphicsTextItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsTextItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QGraphicsTextItemBase is embedded in Go types that subclass QGraphicsTextItem:
@@ -1591,7 +1894,7 @@ func NewQGraphicsTextItemWith(v QGraphicsTextItemSubclass, parent QGraphicsItemL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
+	h := rt.WrapNewShim[QGraphicsTextItem](p, "QGraphicsTextItem", mode, qGraphicsTextItemVTable, qGraphicsTextItemShimInit)
 	base.QGraphicsTextItem = rt.View[QGraphicsTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsTextItemVTable)
 	mask := rt.Mask(v, qGraphicsTextItemVTable)
@@ -1623,7 +1926,7 @@ func NewQGraphicsTextItemWithTextWith(v QGraphicsTextItemSubclass, text string, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
+	h := rt.WrapNewShim[QGraphicsTextItem](p, "QGraphicsTextItem", mode, qGraphicsTextItemVTable, qGraphicsTextItemShimInit)
 	base.QGraphicsTextItem = rt.View[QGraphicsTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsTextItemVTable)
 	mask := rt.Mask(v, qGraphicsTextItemVTable)

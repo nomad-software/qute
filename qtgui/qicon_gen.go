@@ -439,6 +439,20 @@ func (this *QIcon) AvailableSizesFull(mode QIconMode, state QIconState) []qtcore
 	return quteList(r, func(e C.qute_size) qtcore.QSize { return goQSize(e) })
 }
 
+// ToQVariant wraps the conversion QIcon::operator QVariant().
+//
+//	C++: QIcon::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qicon.html#operator-QVariant
+func (this *QIcon) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QIcon.ToQVariant")
+	r := C.qute_QIcon_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QIconFromTheme wraps QIcon::fromTheme.
 //
 //	C++: QIcon QIcon::fromTheme(const QString & name)

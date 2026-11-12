@@ -207,8 +207,13 @@ type Virtual struct {
 	Name string
 	// Has reports whether the Go value overrides this virtual.
 	Has func(self any) bool
-	// Call converts the shim's arguments, calls the override and writes ret.
-	Call func(self any, args, ret unsafe.Pointer)
+	// Fits reports whether f is a per-object override of this virtual: a
+	// func(super, args...) of its signature (Override).
+	Fits func(f any) bool
+	// Call converts the shim's arguments, calls the override (the Go value's
+	// method, or a per-object function, which gets the C++ implementation
+	// on the object h as its super) and writes ret.
+	Call func(self any, h *Handle, args, ret unsafe.Pointer)
 }
 
 // Dispatch is called by a shim for an overridden virtual. It reports false
@@ -225,16 +230,25 @@ func Dispatch(id uintptr, idx int, args, ret unsafe.Pointer, off bool) bool {
 		return false
 	}
 	e := h.ext.Load()
-	if e == nil || e.self == nil {
+	if e == nil || e.sub == nil {
+		return false
+	}
+	// set and read on the GUI thread only (Override, guiOnlyEntry)
+	s := e.sub
+	v := s.self
+	if idx >= 0 && idx < len(s.overrides) && s.overrides[idx] != nil {
+		v = s.overrides[idx]
+	}
+	if v == nil {
 		return false
 	}
 	callbackDepth.Add(1)
 	defer callbackDepth.Add(-1)
 	defer catchPanic()
-	if idx < 0 || idx >= len(e.vtable) {
+	if idx < 0 || idx >= len(s.vtable) {
 		panic(fmt.Sprintf("qute: virtual index %d out of range for %s", idx, h.class))
 	}
-	e.vtable[idx].Call(e.self, args, ret)
+	s.vtable[idx].Call(v, h, args, ret)
 	return true
 }
 

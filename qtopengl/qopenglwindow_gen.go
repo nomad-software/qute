@@ -68,7 +68,7 @@ func NewQOpenGLWindowWithUpdateBehavior(updateBehavior QOpenGLWindowUpdateBehavi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
+	h := rt.WrapNewShim[QOpenGLWindow](p, "QOpenGLWindow", mode, qOpenGLWindowVTable, qOpenGLWindowShimInit)
 	return rt.View[QOpenGLWindow](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQOpenGLWindowShared(shareContext qtgui.QOpenGLContextLike, updateBehavio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
+	h := rt.WrapNewShim[QOpenGLWindow](p, "QOpenGLWindow", mode, qOpenGLWindowVTable, qOpenGLWindowShimInit)
 	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
 	return rt.View[QOpenGLWindow](h, p)
 }
@@ -231,49 +231,84 @@ func (this *QOpenGLWindow) OnFrameSwapped(f func()) qtcore.Connection {
 
 var qOpenGLWindowVTable = []rt.Virtual{
 	{Name: "InitializeGL", Has: func(v any) bool { _, ok := v.(interface{ InitializeGL() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ InitializeGL() }).InitializeGL()
+			if f, ok := v.(func(func())); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).InitializeGL)
+			} else {
+				v.(interface{ InitializeGL() }).InitializeGL()
+			}
 		}},
 	{Name: "ResizeGL", Has: func(v any) bool { _, ok := v.(interface{ ResizeGL(int, int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			w := int(*(*C.int)(a[0]))
 			hArg := int(*(*C.int)(a[1]))
-			v.(interface{ ResizeGL(int, int) }).ResizeGL(w, hArg)
+			if f, ok := v.(func(func(int, int), int, int)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ResizeGL, w, hArg)
+			} else {
+				v.(interface{ ResizeGL(int, int) }).ResizeGL(w, hArg)
+			}
 		}},
 	{Name: "PaintGL", Has: func(v any) bool { _, ok := v.(interface{ PaintGL() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ PaintGL() }).PaintGL()
+			if f, ok := v.(func(func())); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).PaintGL)
+			} else {
+				v.(interface{ PaintGL() }).PaintGL()
+			}
 		}},
 	{Name: "PaintUnderGL", Has: func(v any) bool { _, ok := v.(interface{ PaintUnderGL() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ PaintUnderGL() }).PaintUnderGL()
+			if f, ok := v.(func(func())); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).PaintUnderGL)
+			} else {
+				v.(interface{ PaintUnderGL() }).PaintUnderGL()
+			}
 		}},
 	{Name: "PaintOverGL", Has: func(v any) bool { _, ok := v.(interface{ PaintOverGL() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ PaintOverGL() }).PaintOverGL()
+			if f, ok := v.(func(func())); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).PaintOverGL)
+			} else {
+				v.(interface{ PaintOverGL() }).PaintOverGL()
+			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QPaintEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QPaintEvent](eventH, eventP)
-			v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			if f, ok := v.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).PaintEvent, event)
+			} else {
+				v.(interface{ PaintEvent(*qtgui.QPaintEvent) }).PaintEvent(event)
+			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QResizeEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtgui.QResizeEvent](eventH, eventP)
-			v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			if f, ok := v.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ResizeEvent, event)
+			} else {
+				v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }).ResizeEvent(event)
+			}
 		}},
 	{Name: "Metric", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -281,31 +316,51 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
-			r := v.(interface {
-				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
-			}).Metric(metric)
+			var r = *new(int)
+			if f, ok := v.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).Metric, metric)
+			} else {
+				r = v.(interface {
+					Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+				}).Metric(metric)
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ExposeEvent", Has: func(v any) bool { _, ok := v.(interface{ ExposeEvent(*qtgui.QExposeEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QExposeEvent), *qtgui.QExposeEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			exposeEventP := *(*unsafe.Pointer)(a[0])
 			exposeEventH := rt.WrapClass(exposeEventP, "QExposeEvent", rt.NewScoped)
 			defer exposeEventH.Expire()
 			exposeEvent := rt.View[qtgui.QExposeEvent](exposeEventH, exposeEventP)
-			v.(interface{ ExposeEvent(*qtgui.QExposeEvent) }).ExposeEvent(exposeEvent)
+			if f, ok := v.(func(func(*qtgui.QExposeEvent), *qtgui.QExposeEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ExposeEvent, exposeEvent)
+			} else {
+				v.(interface{ ExposeEvent(*qtgui.QExposeEvent) }).ExposeEvent(exposeEvent)
+			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).Event, event)
+			} else {
+				r = v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SurfaceType", Has: func(v any) bool {
@@ -314,165 +369,267 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func() qtgui.QSurfaceSurfaceType) qtgui.QSurfaceSurfaceType)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface {
-				SurfaceType() qtgui.QSurfaceSurfaceType
-			}).SurfaceType()
+			var r = *new(qtgui.QSurfaceSurfaceType)
+			if f, ok := v.(func(func() qtgui.QSurfaceSurfaceType) qtgui.QSurfaceSurfaceType); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).SurfaceType)
+			} else {
+				r = v.(interface {
+					SurfaceType() qtgui.QSurfaceSurfaceType
+				}).SurfaceType()
+			}
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Format", Has: func(v any) bool { _, ok := v.(interface{ Format() *qtgui.QSurfaceFormat }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QSurfaceFormat) *qtgui.QSurfaceFormat); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Format() *qtgui.QSurfaceFormat }).Format()
+			var r = *new(*qtgui.QSurfaceFormat)
+			if f, ok := v.(func(func() *qtgui.QSurfaceFormat) *qtgui.QSurfaceFormat); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).Format)
+			} else {
+				r = v.(interface{ Format() *qtgui.QSurfaceFormat }).Format()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOpenGLWindow.Format")
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() qtcore.QSize }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Size() qtcore.QSize }).Size()
+			var r = *new(qtcore.QSize)
+			if f, ok := v.(func(func() qtcore.QSize) qtcore.QSize); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).Size)
+			} else {
+				r = v.(interface{ Size() qtcore.QSize }).Size()
+			}
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "FocusObject", Has: func(v any) bool { _, ok := v.(interface{ FocusObject() *qtcore.QObject }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ FocusObject() *qtcore.QObject }).FocusObject()
+			var r = *new(*qtcore.QObject)
+			if f, ok := v.(func(func() *qtcore.QObject) *qtcore.QObject); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).FocusObject)
+			} else {
+				r = v.(interface{ FocusObject() *qtcore.QObject }).FocusObject()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOpenGLWindow.FocusObject")
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			moveEventP := *(*unsafe.Pointer)(a[0])
 			moveEventH := rt.WrapClass(moveEventP, "QMoveEvent", rt.NewScoped)
 			defer moveEventH.Expire()
 			moveEvent := rt.View[qtgui.QMoveEvent](moveEventH, moveEventP)
-			v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(moveEvent)
+			if f, ok := v.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).MoveEvent, moveEvent)
+			} else {
+				v.(interface{ MoveEvent(*qtgui.QMoveEvent) }).MoveEvent(moveEvent)
+			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
 			focusEventH := rt.WrapClass(focusEventP, "QFocusEvent", rt.NewScoped)
 			defer focusEventH.Expire()
 			focusEvent := rt.View[qtgui.QFocusEvent](focusEventH, focusEventP)
-			v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(focusEvent)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).FocusInEvent, focusEvent)
+			} else {
+				v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }).FocusInEvent(focusEvent)
+			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
 			focusEventH := rt.WrapClass(focusEventP, "QFocusEvent", rt.NewScoped)
 			defer focusEventH.Expire()
 			focusEvent := rt.View[qtgui.QFocusEvent](focusEventH, focusEventP)
-			v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(focusEvent)
+			if f, ok := v.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).FocusOutEvent, focusEvent)
+			} else {
+				v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }).FocusOutEvent(focusEvent)
+			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
 			showEventH := rt.WrapClass(showEventP, "QShowEvent", rt.NewScoped)
 			defer showEventH.Expire()
 			showEvent := rt.View[qtgui.QShowEvent](showEventH, showEventP)
-			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			if f, ok := v.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ShowEvent, showEvent)
+			} else {
+				v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(showEvent)
+			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			hideEventP := *(*unsafe.Pointer)(a[0])
 			hideEventH := rt.WrapClass(hideEventP, "QHideEvent", rt.NewScoped)
 			defer hideEventH.Expire()
 			hideEvent := rt.View[qtgui.QHideEvent](hideEventH, hideEventP)
-			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(hideEvent)
+			if f, ok := v.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).HideEvent, hideEvent)
+			} else {
+				v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(hideEvent)
+			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
 			closeEventH := rt.WrapClass(closeEventP, "QCloseEvent", rt.NewScoped)
 			defer closeEventH.Expire()
 			closeEvent := rt.View[qtgui.QCloseEvent](closeEventH, closeEventP)
-			v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			if f, ok := v.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).CloseEvent, closeEvent)
+			} else {
+				v.(interface{ CloseEvent(*qtgui.QCloseEvent) }).CloseEvent(closeEvent)
+			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
 			keyEventH := rt.WrapClass(keyEventP, "QKeyEvent", rt.NewScoped)
 			defer keyEventH.Expire()
 			keyEvent := rt.View[qtgui.QKeyEvent](keyEventH, keyEventP)
-			v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(keyEvent)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).KeyPressEvent, keyEvent)
+			} else {
+				v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }).KeyPressEvent(keyEvent)
+			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
 			keyEventH := rt.WrapClass(keyEventP, "QKeyEvent", rt.NewScoped)
 			defer keyEventH.Expire()
 			keyEvent := rt.View[qtgui.QKeyEvent](keyEventH, keyEventP)
-			v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(keyEvent)
+			if f, ok := v.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).KeyReleaseEvent, keyEvent)
+			} else {
+				v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }).KeyReleaseEvent(keyEvent)
+			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[qtgui.QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(mouseEvent)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).MousePressEvent, mouseEvent)
+			} else {
+				v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }).MousePressEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[qtgui.QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(mouseEvent)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).MouseReleaseEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }).MouseReleaseEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[qtgui.QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(mouseEvent)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).MouseDoubleClickEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }).MouseDoubleClickEvent(mouseEvent)
+			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
 			mouseEventH := rt.WrapClass(mouseEventP, "QMouseEvent", rt.NewScoped)
 			defer mouseEventH.Expire()
 			mouseEvent := rt.View[qtgui.QMouseEvent](mouseEventH, mouseEventP)
-			v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(mouseEvent)
+			if f, ok := v.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).MouseMoveEvent, mouseEvent)
+			} else {
+				v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }).MouseMoveEvent(mouseEvent)
+			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
 			wheelEventH := rt.WrapClass(wheelEventP, "QWheelEvent", rt.NewScoped)
 			defer wheelEventH.Expire()
 			wheelEvent := rt.View[qtgui.QWheelEvent](wheelEventH, wheelEventP)
-			v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(wheelEvent)
+			if f, ok := v.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).WheelEvent, wheelEvent)
+			} else {
+				v.(interface{ WheelEvent(*qtgui.QWheelEvent) }).WheelEvent(wheelEvent)
+			}
 		}},
 	{Name: "TouchEvent", Has: func(v any) bool { _, ok := v.(interface{ TouchEvent(*qtgui.QTouchEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTouchEvent), *qtgui.QTouchEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			touchEventP := *(*unsafe.Pointer)(a[0])
 			touchEventH := rt.WrapClass(touchEventP, "QTouchEvent", rt.NewScoped)
 			defer touchEventH.Expire()
 			touchEvent := rt.View[qtgui.QTouchEvent](touchEventH, touchEventP)
-			v.(interface{ TouchEvent(*qtgui.QTouchEvent) }).TouchEvent(touchEvent)
+			if f, ok := v.(func(func(*qtgui.QTouchEvent), *qtgui.QTouchEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).TouchEvent, touchEvent)
+			} else {
+				v.(interface{ TouchEvent(*qtgui.QTouchEvent) }).TouchEvent(touchEvent)
+			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			tabletEventP := *(*unsafe.Pointer)(a[0])
 			tabletEventH := rt.WrapClass(tabletEventP, "QTabletEvent", rt.NewScoped)
 			defer tabletEventH.Expire()
 			tabletEvent := rt.View[qtgui.QTabletEvent](tabletEventH, tabletEventP)
-			v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(tabletEvent)
+			if f, ok := v.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).TabletEvent, tabletEvent)
+			} else {
+				v.(interface{ TabletEvent(*qtgui.QTabletEvent) }).TabletEvent(tabletEvent)
+			}
 		}},
 	{Name: "NativeEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -480,13 +637,22 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
 			eventType := quteBytes(*(*C.qute_str)(a[0]))
 			message := *(*unsafe.Pointer)(a[1])
-			r, o2 := v.(interface {
-				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
-			}).NativeEvent(eventType, message)
+			var r, o2 = *new(bool), *new(int64)
+			if f, ok := v.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64)); ok {
+				r, o2 = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).NativeEvent, eventType, message)
+			} else {
+				r, o2 = v.(interface {
+					NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+				}).NativeEvent(eventType, message)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 			if a[2] != nil {
 				*(*C.longlong)(a[2]) = C.longlong(o2)
@@ -498,57 +664,174 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
 			eventP := *(*unsafe.Pointer)(a[1])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			r := v.(interface {
-				EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
-			}).EventFilter(watched, event)
+			var r = *new(bool)
+			if f, ok := v.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool); ok {
+				r = f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).EventFilter, watched, event)
+			} else {
+				r = v.(interface {
+					EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
+				}).EventFilter(watched, event)
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QTimerEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QTimerEvent](eventH, eventP)
-			v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			if f, ok := v.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).TimerEvent, event)
+			} else {
+				v.(interface{ TimerEvent(*qtcore.QTimerEvent) }).TimerEvent(event)
+			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QChildEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QChildEvent](eventH, eventP)
-			v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			if f, ok := v.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ChildEvent, event)
+			} else {
+				v.(interface{ ChildEvent(*qtcore.QChildEvent) }).ChildEvent(event)
+			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
 			eventH := rt.WrapClass(eventP, "QEvent", rt.NewScoped)
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
-			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).CustomEvent, event)
+			} else {
+				v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).ConnectNotify, signal)
+			} else {
+				v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
-			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			if f, ok := v.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); ok {
+				f((&QOpenGLWindowSuper{this: rt.View[QOpenGLWindow](h, h.Ptr())}).DisconnectNotify, signal)
+			} else {
+				v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+			}
 		}},
+}
+
+// qOpenGLWindowShimInit sets a QOpenGLWindow shim object's dispatch id and override mask.
+func qOpenGLWindowShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QOpenGLWindow_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideInitializeGL makes f this object's QOpenGLWindow::initializeGL: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines InitializeGL, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverrideInitializeGL(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverrideInitializeGL", "InitializeGL", f)
+}
+
+// OverrideResizeGL makes f this object's QOpenGLWindow::resizeGL: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines ResizeGL, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverrideResizeGL(f func(super func(w int, hArg int), w int, hArg int)) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverrideResizeGL", "ResizeGL", f)
+}
+
+// OverridePaintGL makes f this object's QOpenGLWindow::paintGL: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PaintGL, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverridePaintGL(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverridePaintGL", "PaintGL", f)
+}
+
+// OverridePaintUnderGL makes f this object's QOpenGLWindow::paintUnderGL: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PaintUnderGL, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverridePaintUnderGL(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverridePaintUnderGL", "PaintUnderGL", f)
+}
+
+// OverridePaintOverGL makes f this object's QOpenGLWindow::paintOverGL: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines PaintOverGL, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverridePaintOverGL(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverridePaintOverGL", "PaintOverGL", f)
+}
+
+// OverrideMetric makes f this object's QOpenGLWindow::metric: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Metric, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QOpenGLWindow) OverrideMetric(f func(super func(metric qtgui.QPaintDevicePaintDeviceMetric) int, metric qtgui.QPaintDevicePaintDeviceMetric) int) {
+	rt.Override(unsafe.Pointer(this), "QOpenGLWindow.OverrideMetric", "Metric", f)
 }
 
 // QOpenGLWindowBase is embedded in Go types that subclass QOpenGLWindow:
@@ -1006,7 +1289,7 @@ func NewQOpenGLWindowWith(v QOpenGLWindowSubclass, updateBehavior QOpenGLWindowU
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
+	h := rt.WrapNewShim[QOpenGLWindow](p, "QOpenGLWindow", mode, qOpenGLWindowVTable, qOpenGLWindowShimInit)
 	base.QOpenGLWindow = rt.View[QOpenGLWindow](h, p)
 	id := h.SetSelf(v, qOpenGLWindowVTable)
 	mask := rt.Mask(v, qOpenGLWindowVTable)
@@ -1044,7 +1327,7 @@ func NewQOpenGLWindowSharedWith(v QOpenGLWindowSubclass, shareContext qtgui.QOpe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
+	h := rt.WrapNewShim[QOpenGLWindow](p, "QOpenGLWindow", mode, qOpenGLWindowVTable, qOpenGLWindowShimInit)
 	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
 	base.QOpenGLWindow = rt.View[QOpenGLWindow](h, p)
 	id := h.SetSelf(v, qOpenGLWindowVTable)

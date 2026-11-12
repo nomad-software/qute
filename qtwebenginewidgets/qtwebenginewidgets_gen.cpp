@@ -605,15 +605,15 @@ const char *qute_qtwebenginewidgets_check_layout(void) {
 // ---- QWebEngineView
 void * qute_QWebEngineView_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QWebEngineView *>(new QWebEngineView(static_cast<QWidget *>(a0)));
+	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWidget *>(a0)));
 }
 void * qute_QWebEngineView_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QWebEngineView *>(new QWebEngineView(static_cast<QWebEngineProfile *>(a0), static_cast<QWidget *>(a1)));
+	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWebEngineProfile *>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QWebEngineView_new_2(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QWebEngineView *>(new QWebEngineView(static_cast<QWebEnginePage *>(a0), static_cast<QWidget *>(a1)));
+	return static_cast<QWebEngineView *>(new qute_QWebEngineView(static_cast<QWebEnginePage *>(a0), static_cast<QWidget *>(a1)));
 }
 void * qute_QWebEngineView_new_shim(void * a0) {
 	qute_gui_only();

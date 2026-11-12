@@ -54,7 +54,7 @@ func NewQGraphicsLinearLayout(parent QGraphicsLayoutItemLike) *QGraphicsLinearLa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNewShim[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode, qGraphicsLinearLayoutVTable, qGraphicsLinearLayoutShimInit)
 	return rt.View[QGraphicsLinearLayout](h, p)
 }
 
@@ -79,7 +79,7 @@ func NewQGraphicsLinearLayoutWithOrientation(orientation qtcore.Orientations, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNewShim[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode, qGraphicsLinearLayoutVTable, qGraphicsLinearLayoutShimInit)
 	return rt.View[QGraphicsLinearLayout](h, p)
 }
 
@@ -390,21 +390,37 @@ func (this *QGraphicsLinearLayout) DumpFull(indent int) {
 
 var qGraphicsLinearLayoutVTable = []rt.Virtual{
 	{Name: "RemoveAt", Has: func(v any) bool { _, ok := v.(interface{ RemoveAt(int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := int(*(*C.int)(a[0]))
-			v.(interface{ RemoveAt(int) }).RemoveAt(index)
+			if f, ok := v.(func(func(int), int)); ok {
+				f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).RemoveAt, index)
+			} else {
+				v.(interface{ RemoveAt(int) }).RemoveAt(index)
+			}
 		}},
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			rect := goQRectF(*(*C.qute_rectf)(a[0]))
-			v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+			if f, ok := v.(func(func(qtcore.QRectF), qtcore.QRectF)); ok {
+				f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).SetGeometry, rect)
+			} else {
+				v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+			}
 		}},
 	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Count() int }).Count()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).Count)
+			} else {
+				r = v.(interface{ Count() int }).Count()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ItemAt", Has: func(v any) bool {
@@ -413,18 +429,32 @@ var qGraphicsLinearLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(int) *QGraphicsLayoutItem, int) *QGraphicsLayoutItem)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := int(*(*C.int)(a[0]))
-			r := v.(interface {
-				ItemAt(int) *QGraphicsLayoutItem
-			}).ItemAt(index)
+			var r = *new(*QGraphicsLayoutItem)
+			if f, ok := v.(func(func(int) *QGraphicsLayoutItem, int) *QGraphicsLayoutItem); ok {
+				r = f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).ItemAt, index)
+			} else {
+				r = v.(interface {
+					ItemAt(int) *QGraphicsLayoutItem
+				}).ItemAt(index)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsLinearLayout.ItemAt")
 		}},
 	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ Invalidate() }).Invalidate()
+			if f, ok := v.(func(func())); ok {
+				f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).Invalidate)
+			} else {
+				v.(interface{ Invalidate() }).Invalidate()
+			}
 		}},
 	{Name: "SizeHint", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -432,13 +462,22 @@ var qGraphicsLinearLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			which := qtcore.SizeHint(*(*C.int64_t)(a[0]))
 			constraint := goQSizeF(*(*C.qute_sizef)(a[1]))
-			r := v.(interface {
-				SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
-			}).SizeHint(which, constraint)
+			var r = *new(qtcore.QSizeF)
+			if f, ok := v.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF); ok {
+				r = f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).SizeHint, which, constraint)
+			} else {
+				r = v.(interface {
+					SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+				}).SizeHint(which, constraint)
+			}
 			*(*C.qute_sizef)(ret) = cQSizeF(r)
 		}},
 	{Name: "GetContentsMargins", Has: func(v any) bool {
@@ -447,11 +486,20 @@ var qGraphicsLinearLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
-			o0, o1, o2, o3 := v.(interface {
-				GetContentsMargins() (float64, float64, float64, float64)
-			}).GetContentsMargins()
+			var o0, o1, o2, o3 = *new(float64), *new(float64), *new(float64), *new(float64)
+			if f, ok := v.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64)); ok {
+				o0, o1, o2, o3 = f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).GetContentsMargins)
+			} else {
+				o0, o1, o2, o3 = v.(interface {
+					GetContentsMargins() (float64, float64, float64, float64)
+				}).GetContentsMargins()
+			}
 			if a[0] != nil {
 				*(*C.double)(a[0]) = C.double(o0)
 			}
@@ -466,25 +514,46 @@ var qGraphicsLinearLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ UpdateGeometry() }).UpdateGeometry()
+			if f, ok := v.(func(func())); ok {
+				f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).UpdateGeometry)
+			} else {
+				v.(interface{ UpdateGeometry() }).UpdateGeometry()
+			}
 		}},
 	{Name: "WidgetEvent", Has: func(v any) bool { _, ok := v.(interface{ WidgetEvent(*qtcore.QEvent) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
 			eArgH := rt.WrapClass(eArgP, "QEvent", rt.NewScoped)
 			defer eArgH.Expire()
 			eArg := rt.View[qtcore.QEvent](eArgH, eArgP)
-			v.(interface{ WidgetEvent(*qtcore.QEvent) }).WidgetEvent(eArg)
+			if f, ok := v.(func(func(*qtcore.QEvent), *qtcore.QEvent)); ok {
+				f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).WidgetEvent, eArg)
+			} else {
+				v.(interface{ WidgetEvent(*qtcore.QEvent) }).WidgetEvent(eArg)
+			}
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QGraphicsLinearLayoutSuper{this: rt.View[QGraphicsLinearLayout](h, h.Ptr())}).IsEmpty)
+			} else {
+				r = v.(interface{ IsEmpty() bool }).IsEmpty()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+}
+
+// qGraphicsLinearLayoutShimInit sets a QGraphicsLinearLayout shim object's dispatch id and override mask.
+func qGraphicsLinearLayoutShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsLinearLayout_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
 }
 
 // QGraphicsLinearLayoutBase is embedded in Go types that subclass QGraphicsLinearLayout:
@@ -653,7 +722,7 @@ func NewQGraphicsLinearLayoutWith(v QGraphicsLinearLayoutSubclass, parent QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNewShim[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode, qGraphicsLinearLayoutVTable, qGraphicsLinearLayoutShimInit)
 	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
 	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
 	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)
@@ -685,7 +754,7 @@ func NewQGraphicsLinearLayoutWithOrientationWith(v QGraphicsLinearLayoutSubclass
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNewShim[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode, qGraphicsLinearLayoutVTable, qGraphicsLinearLayoutShimInit)
 	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
 	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
 	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)

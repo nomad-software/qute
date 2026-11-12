@@ -16,14 +16,14 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12232 |
+| Bound constructors, methods and functions | 12285 |
 | of which Full forms (every argument, defaults included) | 776 |
-| Plain-object results that depend on their receiver | 100 |
-| Skipped on purpose (with reasons below) | 968 |
+| Plain-object results that depend on their receiver | 101 |
+| Skipped on purpose (with reasons below) | 969 |
 | Classes Go can subclass | 237 |
-| Classes Go cannot subclass (with reasons below) | 31 |
+| Classes Go cannot subclass (with reasons below) | 32 |
 | Virtuals Go cannot override (with reasons below) | 40 |
-| Operators, conversions and member templates not in the IR | 622 |
+| Operators, conversions and member templates not in the IR | 601 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
 | Waiting for type support | 0 |
@@ -50,7 +50,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (968)
+## Skipped on purpose (969)
 
 
 ### QAbstractAnimation
@@ -72,6 +72,12 @@ These bind once the generator learns the type. Counts by type:
 ### QAbstractScrollArea
 
 - `void QAbstractScrollArea::setViewportMargins(int left, int top, int right, int bottom)`: on purpose: plain-number twin of the struct overload
+
+### QAbstractTextDocumentLayout
+
+- `void QAbstractTextDocumentLayout::registerHandler(int objectType, QObject * component)`: skipped by overlay (on purpose: the handler must implement QTextObjectInterface, a C++ interface)
+- `void QAbstractTextDocumentLayout::unregisterHandler(int objectType, QObject * component = …)`: skipped by overlay (on purpose: the handler must implement QTextObjectInterface, a C++ interface)
+- `QTextObjectInterface * QAbstractTextDocumentLayout::handlerForObject(int objectType) const`: skipped by overlay (on purpose: QTextObjectInterface is a C++ interface)
 
 ### QApplication
 
@@ -1164,10 +1170,6 @@ These bind once the generator learns the type. Counts by type:
 
 - `void QPixmapCacheKey::swap(Key & other)`: on purpose: C++ swap; swap the Go variables instead
 
-### QPlainTextEdit
-
-- `QAbstractTextDocumentLayout::PaintContext QPlainTextEdit::getPaintContext() const`: skipped by overlay (on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound)
-
 ### QPlaybackOptions
 
 - `void QPlaybackOptions::swap(QPlaybackOptions & other)`: on purpose: C++ swap; swap the Go variables instead
@@ -1340,8 +1342,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QTextDocument
 
-- `void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout * layout)`: on purpose: custom text layouts need C++ subclassing
-- `QAbstractTextDocumentLayout * QTextDocument::documentLayout() const`: skipped by overlay (QAbstractTextDocumentLayout is not bound)
+- `void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout * layout)`: skipped by overlay (on purpose: custom text layouts need C++ subclassing)
 - `QTextDocument::ResourceProvider QTextDocument::resourceProvider() const`: return: on purpose: a C++ function cannot be turned back into a Go func
 - `QTextDocument::ResourceProvider QTextDocument::defaultResourceProvider()`: return: on purpose: a C++ function cannot be turned back into a Go func
 - `void QTextDocument::appendUndoItem(QAbstractUndoItem *)`: on purpose: custom undo items need C++ subclassing
@@ -1838,11 +1839,12 @@ are left out on purpose (`no-full` in the overlay, or a type-wide reason).
 - `void QWebEngineView::printToPdf(const QString & filePath, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
 - `void QWebEngineView::printToPdf(const std::function<void (const QByteArray &)> & resultCallback, const QPageLayout & layout = …, const QPageRanges & ranges = …)`: on purpose: printing page setup is not bound yet
 
-## Classes Go cannot subclass (31)
+## Classes Go cannot subclass (32)
 
 Every other bound class with virtuals can be subclassed from Go: embed its
 Base and construct with New<Class>With. These cannot:
 
+- `QAbstractTextDocumentLayout`: only Qt creates these objects (no-construct)
 - `QApplication`: only Qt creates these objects (no-construct)
 - `QClipboard`: only Qt creates these objects (no-construct)
 - `QCoreApplication`: only Qt creates these objects (no-construct)
@@ -1875,14 +1877,14 @@ Base and construct with New<Class>With. These cannot:
 - `QWebEngineUrlRequestJob`: only Qt creates these objects (no-construct)
 - `QWebEngineWebAuthUxRequest`: only Qt creates these objects (no-construct)
 
-## Not in the IR: operators, conversions and member templates (622)
+## Not in the IR: operators, conversions and member templates (601)
 
 tools/irgen leaves these out before the IR is written, so the generator never
 sees them and they are not counted as bound or skipped above. Go has no
 operator overloading: comparisons and arithmetic are done on the Go structs or
-through named methods. Conversions to QVariant are covered by
-`qtgui.NewQVariantOf`, and `QVariant::value<T>()` by `QVariant.Value` and
-`qtgui.VariantValue`. Counts: 442 operators, 28 conversion operators, 152 member templates.
+through named methods. `operator QVariant()` is bound as `ToQVariant` (and
+`qtgui.NewQVariantOf` takes any such value), and `QVariant::value<T>()` by `QVariant.Value` and
+`qtgui.VariantValue`. Counts: 442 operators, 7 conversion operators, 152 member templates.
 
 
 ### QAction
@@ -1922,13 +1924,8 @@ through named methods. Conversions to QVariant are covered by
 
 - operators: `operator=(const QBitArray &)`, `operator=(QBitArray &&)`, `operator[](qsizetype)`, `operator[](qsizetype)`, `operator&=(QBitArray &&)`, `operator|=(QBitArray &&)`, `operator^=(QBitArray &&)`, `operator&=(const QBitArray &)`, `operator|=(const QBitArray &)`, `operator^=(const QBitArray &)`
 
-### QBitmap
-
-- conversions: `operator QVariant()`
-
 ### QBrush
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QBrush &)`, `operator=(QBrush &&)`, `operator=(Qt::BrushStyle)`, `operator=(QColor)`, `operator=(Qt::GlobalColor)`, `operator==(const QBrush &)`, `operator!=(const QBrush &)`
 
 ### QCameraDevice
@@ -1974,7 +1971,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QColorSpace
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QColorSpace &)`, `operator=(QColorSpace &&)`
 
 ### QColorTransform
@@ -1991,7 +1987,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QCursor
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QCursor &)`, `operator=(QCursor &&)`
 
 ### QDataStream
@@ -2037,7 +2032,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QFont
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QFont &)`, `operator==(const QFont &)`, `operator!=(const QFont &)`, `operator<(const QFont &)`, `operator=(QFont &&)`
 
 ### QFontInfo
@@ -2070,12 +2064,10 @@ through named methods. Conversions to QVariant are covered by
 
 ### QIcon
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QIcon &)`, `operator=(QIcon &&)`
 
 ### QImage
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QImage &)`, `operator=(QImage &&)`, `operator==(const QImage &)`, `operator!=(const QImage &)`
 
 ### QInputDevice
@@ -2100,7 +2092,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QKeySequence
 
-- conversions: `operator QVariant()`
 - operators: `operator[](uint)`, `operator=(const QKeySequence &)`, `operator=(QKeySequence &&)`, `operator==(const QKeySequence &)`, `operator!=(const QKeySequence &)`, `operator<(const QKeySequence &)`, `operator>(const QKeySequence &)`, `operator<=(const QKeySequence &)`, `operator>=(const QKeySequence &)`
 
 ### QListWidgetItem
@@ -2117,7 +2108,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QMatrix4x4
 
-- conversions: `operator QVariant()`
 - operators: `operator()(int, int)`, `operator()(int, int)`, `operator+=(const QMatrix4x4 &)`, `operator-=(const QMatrix4x4 &)`, `operator*=(const QMatrix4x4 &)`, `operator*=(float)`, `operator/=(float)`, `operator==(const QMatrix4x4 &)`, `operator!=(const QMatrix4x4 &)`
 - templates: `QMatrix4x4(const QGenericMatrix<N, M, float> &)`, `toGenericMatrix()`
 
@@ -2197,7 +2187,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QPalette
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QPalette &)`, `operator=(QPalette &&)`, `operator==(const QPalette &)`, `operator!=(const QPalette &)`
 
 ### QPartialOrdering
@@ -2206,7 +2195,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QPen
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QPen &)`, `operator=(QPen &&)`, `operator=(QColor)`, `operator=(Qt::PenStyle)`, `operator==(const QPen &)`, `operator!=(const QPen &)`
 
 ### QPersistentModelIndex
@@ -2220,7 +2208,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QPixmap
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QPixmap &)`, `operator=(QPixmap &&)`, `operator!()`
 
 ### QPixmapCacheKey
@@ -2241,13 +2228,11 @@ through named methods. Conversions to QVariant are covered by
 
 ### QQuaternion
 
-- conversions: `operator QVariant()`
 - operators: `operator+=(const QQuaternion &)`, `operator-=(const QQuaternion &)`, `operator*=(float)`, `operator*=(const QQuaternion &)`, `operator/=(float)`
 - templates: `fromEulerAngles(const QVector3D &)`
 
 ### QRegion
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QRegion &)`, `operator=(QRegion &&)`, `operator|(const QRegion &)`, `operator+(const QRegion &)`, `operator+(const QRect &)`, `operator&(const QRegion &)`, `operator&(const QRect &)`, `operator-(const QRegion &)`, `operator^(const QRegion &)`, `operator|=(const QRegion &)`, `operator+=(const QRegion &)`, `operator+=(const QRect &)`, `operator&=(const QRegion &)`, `operator&=(const QRect &)`, `operator-=(const QRegion &)`, `operator^=(const QRegion &)`, `operator==(const QRegion &)`, `operator!=(const QRegion &)`
 
 ### QRegularExpression
@@ -2285,7 +2270,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QSizePolicy
 
-- conversions: `operator QVariant()`
 - operators: `operator==(const QSizePolicy &)`, `operator!=(const QSizePolicy &)`
 
 ### QSocketDescriptor
@@ -2438,12 +2422,10 @@ through named methods. Conversions to QVariant are covered by
 
 ### QTextFormat
 
-- conversions: `operator QVariant()`
 - operators: `operator=(const QTextFormat &)`, `operator==(const QTextFormat &)`, `operator!=(const QTextFormat &)`
 
 ### QTextLength
 
-- conversions: `operator QVariant()`
 - operators: `operator==(const QTextLength &)`, `operator!=(const QTextLength &)`
 
 ### QTextOption
@@ -2468,7 +2450,6 @@ through named methods. Conversions to QVariant are covered by
 
 ### QTransform
 
-- conversions: `operator QVariant()`
 - operators: `operator=(QTransform &&)`, `operator=(const QTransform &)`, `operator==(const QTransform &)`, `operator!=(const QTransform &)`, `operator*=(const QTransform &)`, `operator*(const QTransform &)`, `operator*=(qreal)`, `operator/=(qreal)`, `operator+=(qreal)`, `operator-=(qreal)`
 
 ### QTreeWidgetItem
@@ -2498,17 +2479,14 @@ through named methods. Conversions to QVariant are covered by
 
 ### QVector2D
 
-- conversions: `operator QVariant()`
 - operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector2D)`, `operator-=(QVector2D)`, `operator*=(float)`, `operator*=(QVector2D)`, `operator/=(float)`, `operator/=(QVector2D)`
 
 ### QVector3D
 
-- conversions: `operator QVariant()`
 - operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector3D)`, `operator-=(QVector3D)`, `operator*=(float)`, `operator*=(QVector3D)`, `operator/=(float)`, `operator/=(QVector3D)`
 
 ### QVector4D
 
-- conversions: `operator QVariant()`
 - operators: `operator[](int)`, `operator[](int)`, `operator+=(QVector4D)`, `operator-=(QVector4D)`, `operator*=(float)`, `operator*=(QVector4D)`, `operator/=(float)`, `operator/=(QVector4D)`
 
 ### QVersionNumber

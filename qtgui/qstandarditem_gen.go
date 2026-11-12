@@ -96,7 +96,7 @@ func (this *QStandardItem) Unkeep() {
 func NewQStandardItem() *QStandardItem {
 	rt.CheckThread("NewQStandardItem")
 	p := C.qute_QStandardItem_new()
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -108,7 +108,7 @@ func NewQStandardItem() *QStandardItem {
 func NewQStandardItemWithText(text string) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithText")
 	p := C.qute_QStandardItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithIcon")
 	p := C.qute_QStandardItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 func NewQStandardItemWithRows(rows int) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithRows")
 	p := C.qute_QStandardItem_new_3(C.int(rows))
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -149,7 +149,7 @@ func NewQStandardItemWithRows(rows int) *QStandardItem {
 func NewQStandardItemWithRowsFull(rows int, columns int) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithRowsFull")
 	p := C.qute_QStandardItem_new_4(C.int(rows), C.int(columns))
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -1332,52 +1332,168 @@ func (this *QStandardItem) SortChildrenFull(column int, order qtcore.SortOrder) 
 
 var qStandardItemVTable = []rt.Virtual{
 	{Name: "Data", Has: func(v any) bool { _, ok := v.(interface{ Data(int) *qtcore.QVariant }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			role := int(*(*C.int)(a[0]))
-			r := v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			var r = *new(*qtcore.QVariant)
+			if f, ok := v.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); ok {
+				r = f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).Data, role)
+			} else {
+				r = v.(interface{ Data(int) *qtcore.QVariant }).Data(role)
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItem.Data")
 		}},
 	{Name: "SetData", Has: func(v any) bool { _, ok := v.(interface{ SetData(*qtcore.QVariant, int) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QVariant, int), *qtcore.QVariant, int)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
 			role := int(*(*C.int)(a[1]))
-			v.(interface{ SetData(*qtcore.QVariant, int) }).SetData(value, role)
+			if f, ok := v.(func(func(*qtcore.QVariant, int), *qtcore.QVariant, int)); ok {
+				f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).SetData, value, role)
+			} else {
+				v.(interface{ SetData(*qtcore.QVariant, int) }).SetData(value, role)
+			}
 		}},
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QStandardItem }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() *QStandardItem) *QStandardItem); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Clone() *QStandardItem }).Clone()
+			var r = *new(*QStandardItem)
+			if f, ok := v.(func(func() *QStandardItem) *QStandardItem); ok {
+				r = f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).Clone)
+			} else {
+				r = v.(interface{ Clone() *QStandardItem }).Clone()
+			}
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItem.Clone")
 			if r != nil {
 				rt.RefOf(unsafe.Pointer(r)).H.TransferToCpp()
 			}
 		}},
 	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ Type() int }).Type()
+			var r = *new(int)
+			if f, ok := v.(func(func() int) int); ok {
+				r = f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).Type)
+			} else {
+				r = v.(interface{ Type() int }).Type()
+			}
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
 			inH := rt.WrapClass(inP, "QDataStream", rt.NewScoped)
 			defer inH.Expire()
 			in := rt.View[qtcore.QDataStream](inH, inP)
-			v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).Read, in)
+			} else {
+				v.(interface{ Read(*qtcore.QDataStream) }).Read(in)
+			}
 		}},
 	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])
 			outH := rt.WrapClass(outP, "QDataStream", rt.NewScoped)
 			defer outH.Expire()
 			out := rt.View[qtcore.QDataStream](outH, outP)
-			v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			if f, ok := v.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); ok {
+				f((&QStandardItemSuper{this: rt.View[QStandardItem](h, h.Ptr())}).Write, out)
+			} else {
+				v.(interface{ Write(*qtcore.QDataStream) }).Write(out)
+			}
 		}},
+}
+
+// qStandardItemShimInit sets a QStandardItem shim object's dispatch id and override mask.
+func qStandardItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QStandardItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideData makes f this object's QStandardItem::data: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Data, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideData(f func(super func(role int) *qtcore.QVariant, role int) *qtcore.QVariant) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideData", "Data", f)
+}
+
+// OverrideSetData makes f this object's QStandardItem::setData: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetData, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideSetData(f func(super func(value *qtcore.QVariant, role int), value *qtcore.QVariant, role int)) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideSetData", "SetData", f)
+}
+
+// OverrideClone makes f this object's QStandardItem::clone: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Clone, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideClone(f func(super func() *QStandardItem) *QStandardItem) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideClone", "Clone", f)
+}
+
+// OverrideType makes f this object's QStandardItem::type: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Type, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideType(f func(super func() int) int) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideType", "Type", f)
+}
+
+// OverrideRead makes f this object's QStandardItem::read: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Read, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideRead(f func(super func(in *qtcore.QDataStream), in *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideRead", "Read", f)
+}
+
+// OverrideWrite makes f this object's QStandardItem::write: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines Write, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QStandardItem) OverrideWrite(f func(super func(out *qtcore.QDataStream), out *qtcore.QDataStream)) {
+	rt.Override(unsafe.Pointer(this), "QStandardItem.OverrideWrite", "Write", f)
 }
 
 // QStandardItemBase is embedded in Go types that subclass QStandardItem:
@@ -1477,7 +1593,7 @@ func NewQStandardItemWith(v QStandardItemSubclass) *QStandardItem {
 		panic("NewQStandardItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim()
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1500,7 +1616,7 @@ func NewQStandardItemWithTextWith(v QStandardItemSubclass, text string) *QStanda
 		panic("NewQStandardItemWithTextWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1524,7 +1640,7 @@ func NewQStandardItemWithIconWith(v QStandardItemSubclass, icon *QIcon, text str
 	}
 	p := C.qute_QStandardItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1547,7 +1663,7 @@ func NewQStandardItemWithRowsWith(v QStandardItemSubclass, rows int) *QStandardI
 		panic("NewQStandardItemWithRowsWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim_3(C.int(rows))
-	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNewShim[QStandardItem](p, "QStandardItem", rt.NewOwned, qStandardItemVTable, qStandardItemShimInit)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)

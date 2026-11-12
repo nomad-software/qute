@@ -11417,7 +11417,7 @@ void * qute_QBitArray_fromBits(const char *a0, ptrdiff_t a0_len) {
 // ---- QBuffer
 void * qute_QBuffer_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QBuffer *>(new QBuffer(static_cast<QObject *>(a0)));
+	return static_cast<QBuffer *>(new qute_QBuffer(static_cast<QObject *>(a0)));
 }
 void * qute_QBuffer_new_shim(void * a0) {
 	qute_gui_only();
@@ -12688,11 +12688,11 @@ bool qute_QChildEvent_removed(void *self) {
 // ---- QChronoTimer
 void * qute_QChronoTimer_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QChronoTimer *>(new QChronoTimer(static_cast<QObject *>(a0)));
+	return static_cast<QChronoTimer *>(new qute_QChronoTimer(static_cast<QObject *>(a0)));
 }
 void * qute_QChronoTimer_new_1(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QChronoTimer *>(new QChronoTimer(std::chrono::duration_cast<std::chrono::duration<long, std::ratio<1, 1000000000>>>(std::chrono::nanoseconds(a0)), static_cast<QObject *>(a1)));
+	return static_cast<QChronoTimer *>(new qute_QChronoTimer(std::chrono::duration_cast<std::chrono::duration<long, std::ratio<1, 1000000000>>>(std::chrono::nanoseconds(a0)), static_cast<QObject *>(a1)));
 }
 void * qute_QChronoTimer_new_shim(void * a0) {
 	qute_gui_only();
@@ -12996,7 +12996,7 @@ void qute_QCommandLineParser_showMessageAndExit_1(int64_t a0, const char *a1, pt
 // ---- QConcatenateTablesProxyModel
 void * qute_QConcatenateTablesProxyModel_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QConcatenateTablesProxyModel *>(new QConcatenateTablesProxyModel(static_cast<QObject *>(a0)));
+	return static_cast<QConcatenateTablesProxyModel *>(new qute_QConcatenateTablesProxyModel(static_cast<QObject *>(a0)));
 }
 void * qute_QConcatenateTablesProxyModel_new_shim(void * a0) {
 	qute_gui_only();
@@ -14693,7 +14693,7 @@ int qute_QEvent_registerEventType_1(int a0) {
 // ---- QEventLoop
 void * qute_QEventLoop_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QEventLoop *>(new QEventLoop(static_cast<QObject *>(a0)));
+	return static_cast<QEventLoop *>(new qute_QEventLoop(static_cast<QObject *>(a0)));
 }
 void * qute_QEventLoop_new_shim(void * a0) {
 	qute_gui_only();
@@ -14801,11 +14801,11 @@ void qute_QEventLoopLocker_delete(void *self) {
 // ---- QFile
 void * qute_QFile_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QFile *>(new QFile(static_cast<QObject *>(a0)));
+	return static_cast<QFile *>(new qute_QFile(static_cast<QObject *>(a0)));
 }
 void * qute_QFile_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QFile *>(new QFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QFile *>(new qute_QFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QFile_new_shim(void * a0) {
 	qute_gui_only();
@@ -15538,7 +15538,7 @@ bool qute_QFileInfo_exists_1(const char *a0, ptrdiff_t a0_len) {
 // ---- QFileSelector
 void * qute_QFileSelector_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QFileSelector *>(new QFileSelector(static_cast<QObject *>(a0)));
+	return static_cast<QFileSelector *>(new qute_QFileSelector(static_cast<QObject *>(a0)));
 }
 void * qute_QFileSelector_new_shim(void * a0) {
 	qute_gui_only();
@@ -15608,11 +15608,11 @@ qute_list qute_QFileSelector_allSelectors(void *self) {
 // ---- QFileSystemWatcher
 void * qute_QFileSystemWatcher_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QFileSystemWatcher *>(new QFileSystemWatcher(static_cast<QObject *>(a0)));
+	return static_cast<QFileSystemWatcher *>(new qute_QFileSystemWatcher(static_cast<QObject *>(a0)));
 }
 void * qute_QFileSystemWatcher_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, void * a1) {
 	qute_gui_only();
-	return static_cast<QFileSystemWatcher *>(new QFileSystemWatcher(qute_qstrlist(a0, a0_lens, a0_n), static_cast<QObject *>(a1)));
+	return static_cast<QFileSystemWatcher *>(new qute_QFileSystemWatcher(qute_qstrlist(a0, a0_lens, a0_n), static_cast<QObject *>(a1)));
 }
 void * qute_QFileSystemWatcher_new_shim(void * a0) {
 	qute_gui_only();
@@ -15967,7 +15967,7 @@ void * qute_QIODevice_readChannelFinished(void *self, uintptr_t id) {
 // ---- QIdentityProxyModel
 void * qute_QIdentityProxyModel_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QIdentityProxyModel *>(new QIdentityProxyModel(static_cast<QObject *>(a0)));
+	return static_cast<QIdentityProxyModel *>(new qute_QIdentityProxyModel(static_cast<QObject *>(a0)));
 }
 void * qute_QIdentityProxyModel_new_shim(void * a0) {
 	qute_gui_only();
@@ -16315,15 +16315,15 @@ void qute_QItemSelection_split(void * a0, void * a1, void * a2) {
 // ---- QItemSelectionModel
 void * qute_QItemSelectionModel_new(void) {
 	qute_gui_only();
-	return static_cast<QItemSelectionModel *>(new QItemSelectionModel());
+	return static_cast<QItemSelectionModel *>(new qute_QItemSelectionModel());
 }
 void * qute_QItemSelectionModel_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QItemSelectionModel *>(new QItemSelectionModel(static_cast<QAbstractItemModel *>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QItemSelectionModel *>(new qute_QItemSelectionModel(static_cast<QAbstractItemModel *>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QItemSelectionModel_new_2(void * a0) {
 	qute_gui_only();
-	return static_cast<QItemSelectionModel *>(new QItemSelectionModel(static_cast<QAbstractItemModel *>(a0)));
+	return static_cast<QItemSelectionModel *>(new qute_QItemSelectionModel(static_cast<QAbstractItemModel *>(a0)));
 }
 void * qute_QItemSelectionModel_new_shim(void) {
 	qute_gui_only();
@@ -18835,7 +18835,7 @@ void qute_QMetaType_unregisterMetaType(void * a0) {
 // ---- QMimeData
 void * qute_QMimeData_new(void) {
 	qute_gui_only();
-	return static_cast<QMimeData *>(new QMimeData());
+	return static_cast<QMimeData *>(new qute_QMimeData());
 }
 void * qute_QMimeData_new_shim(void) {
 	qute_gui_only();
@@ -19184,7 +19184,7 @@ void * qute_QModelIndex_data_1(void *self, int a0) {
 // ---- QObject
 void * qute_QObject_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QObject *>(new QObject(static_cast<QObject *>(a0)));
+	return static_cast<QObject *>(new qute_QObject(static_cast<QObject *>(a0)));
 }
 void * qute_QObject_new_shim(void * a0) {
 	qute_gui_only();
@@ -19362,7 +19362,7 @@ void * qute_QObject_objectNameChanged(void *self, uintptr_t id) {
 // ---- QObjectCleanupHandler
 void * qute_QObjectCleanupHandler_new(void) {
 	qute_gui_only();
-	return static_cast<QObjectCleanupHandler *>(new QObjectCleanupHandler());
+	return static_cast<QObjectCleanupHandler *>(new qute_QObjectCleanupHandler());
 }
 void * qute_QObjectCleanupHandler_new_shim(void) {
 	qute_gui_only();
@@ -19518,7 +19518,7 @@ void qute_QOperatingSystemVersionUnexported_delete(void *self) {
 // ---- QParallelAnimationGroup
 void * qute_QParallelAnimationGroup_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QParallelAnimationGroup *>(new QParallelAnimationGroup(static_cast<QObject *>(a0)));
+	return static_cast<QParallelAnimationGroup *>(new qute_QParallelAnimationGroup(static_cast<QObject *>(a0)));
 }
 void * qute_QParallelAnimationGroup_new_shim(void * a0) {
 	qute_gui_only();
@@ -19590,11 +19590,11 @@ void qute_QPartialOrdering_delete(void *self) {
 // ---- QPauseAnimation
 void * qute_QPauseAnimation_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QPauseAnimation *>(new QPauseAnimation(static_cast<QObject *>(a0)));
+	return static_cast<QPauseAnimation *>(new qute_QPauseAnimation(static_cast<QObject *>(a0)));
 }
 void * qute_QPauseAnimation_new_1(int a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QPauseAnimation *>(new QPauseAnimation(static_cast<int>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QPauseAnimation *>(new qute_QPauseAnimation(static_cast<int>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QPauseAnimation_new_shim(void * a0) {
 	qute_gui_only();
@@ -19730,7 +19730,7 @@ void * qute_QPersistentModelIndex_data_1(void *self, int a0) {
 // ---- QProcess
 void * qute_QProcess_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QProcess *>(new QProcess(static_cast<QObject *>(a0)));
+	return static_cast<QProcess *>(new qute_QProcess(static_cast<QObject *>(a0)));
 }
 void * qute_QProcess_new_shim(void * a0) {
 	qute_gui_only();
@@ -20210,11 +20210,11 @@ void * qute_QProcessEnvironment_systemEnvironment(void) {
 // ---- QPropertyAnimation
 void * qute_QPropertyAnimation_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QPropertyAnimation *>(new QPropertyAnimation(static_cast<QObject *>(a0)));
+	return static_cast<QPropertyAnimation *>(new qute_QPropertyAnimation(static_cast<QObject *>(a0)));
 }
 void * qute_QPropertyAnimation_new_1(void * a0, const char *a1, ptrdiff_t a1_len, void * a2) {
 	qute_gui_only();
-	return static_cast<QPropertyAnimation *>(new QPropertyAnimation(static_cast<QObject *>(a0), QByteArray(a1, a1_len), static_cast<QObject *>(a2)));
+	return static_cast<QPropertyAnimation *>(new qute_QPropertyAnimation(static_cast<QObject *>(a0), QByteArray(a1, a1_len), static_cast<QObject *>(a2)));
 }
 void * qute_QPropertyAnimation_new_shim(void * a0) {
 	qute_gui_only();
@@ -20664,11 +20664,11 @@ bool qute_QResource_unregisterResource_3(void * a0, const char *a1, ptrdiff_t a1
 // ---- QSaveFile
 void * qute_QSaveFile_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSaveFile *>(new QSaveFile(static_cast<QObject *>(a0)));
+	return static_cast<QSaveFile *>(new qute_QSaveFile(static_cast<QObject *>(a0)));
 }
 void * qute_QSaveFile_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QSaveFile *>(new QSaveFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QSaveFile *>(new qute_QSaveFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QSaveFile_new_shim(void * a0) {
 	qute_gui_only();
@@ -20826,7 +20826,7 @@ qute_str qute_QSaveFile_filesystemFileName(void *self) {
 // ---- QSequentialAnimationGroup
 void * qute_QSequentialAnimationGroup_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSequentialAnimationGroup *>(new QSequentialAnimationGroup(static_cast<QObject *>(a0)));
+	return static_cast<QSequentialAnimationGroup *>(new qute_QSequentialAnimationGroup(static_cast<QObject *>(a0)));
 }
 void * qute_QSequentialAnimationGroup_new_shim(void * a0) {
 	qute_gui_only();
@@ -20914,27 +20914,27 @@ void * qute_QSequentialAnimationGroup_currentAnimationChanged(void *self, uintpt
 // ---- QSettings
 void * qute_QSettings_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(static_cast<QObject *>(a0)));
+	return static_cast<QSettings *>(new qute_QSettings(static_cast<QObject *>(a0)));
 }
 void * qute_QSettings_new_1(const char *a0, ptrdiff_t a0_len, const char *a1, ptrdiff_t a1_len, void * a2) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<QObject *>(a2)));
+	return static_cast<QSettings *>(new qute_QSettings(QString::fromUtf8(a0, a0_len), QString::fromUtf8(a1, a1_len), static_cast<QObject *>(a2)));
 }
 void * qute_QSettings_new_2(int64_t a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, void * a3) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(static_cast<QSettings::Scope>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), static_cast<QObject *>(a3)));
+	return static_cast<QSettings *>(new qute_QSettings(static_cast<QSettings::Scope>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), static_cast<QObject *>(a3)));
 }
 void * qute_QSettings_new_3(int64_t a0, int64_t a1, const char *a2, ptrdiff_t a2_len, const char *a3, ptrdiff_t a3_len, void * a4) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(static_cast<QSettings::Format>(a0), static_cast<QSettings::Scope>(a1), QString::fromUtf8(a2, a2_len), QString::fromUtf8(a3, a3_len), static_cast<QObject *>(a4)));
+	return static_cast<QSettings *>(new qute_QSettings(static_cast<QSettings::Format>(a0), static_cast<QSettings::Scope>(a1), QString::fromUtf8(a2, a2_len), QString::fromUtf8(a3, a3_len), static_cast<QObject *>(a4)));
 }
 void * qute_QSettings_new_4(const char *a0, ptrdiff_t a0_len, int64_t a1, void * a2) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(QString::fromUtf8(a0, a0_len), static_cast<QSettings::Format>(a1), static_cast<QObject *>(a2)));
+	return static_cast<QSettings *>(new qute_QSettings(QString::fromUtf8(a0, a0_len), static_cast<QSettings::Format>(a1), static_cast<QObject *>(a2)));
 }
 void * qute_QSettings_new_5(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QSettings *>(new QSettings(static_cast<QSettings::Scope>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QSettings *>(new qute_QSettings(static_cast<QSettings::Scope>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QSettings_new_shim(void * a0) {
 	qute_gui_only();
@@ -21132,7 +21132,7 @@ void qute_QSettings_setPath(int64_t a0, int64_t a1, const char *a2, ptrdiff_t a2
 // ---- QSignalMapper
 void * qute_QSignalMapper_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSignalMapper *>(new QSignalMapper(static_cast<QObject *>(a0)));
+	return static_cast<QSignalMapper *>(new qute_QSignalMapper(static_cast<QObject *>(a0)));
 }
 void * qute_QSignalMapper_new_shim(void * a0) {
 	qute_gui_only();
@@ -21266,11 +21266,11 @@ bool qute_QSocketDescriptor_isValid(void *self) {
 // ---- QSocketNotifier
 void * qute_QSocketNotifier_new(int64_t a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QSocketNotifier *>(new QSocketNotifier(static_cast<QSocketNotifier::Type>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QSocketNotifier *>(new qute_QSocketNotifier(static_cast<QSocketNotifier::Type>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QSocketNotifier_new_1(long long a0, int64_t a1, void * a2) {
 	qute_gui_only();
-	return static_cast<QSocketNotifier *>(new QSocketNotifier(static_cast<long long>(a0), static_cast<QSocketNotifier::Type>(a1), static_cast<QObject *>(a2)));
+	return static_cast<QSocketNotifier *>(new qute_QSocketNotifier(static_cast<long long>(a0), static_cast<QSocketNotifier::Type>(a1), static_cast<QObject *>(a2)));
 }
 void * qute_QSocketNotifier_new_shim(int64_t a0, void * a1) {
 	qute_gui_only();
@@ -21354,7 +21354,7 @@ void * qute_QSocketNotifier_activated(void *self, uintptr_t id) {
 // ---- QSortFilterProxyModel
 void * qute_QSortFilterProxyModel_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QSortFilterProxyModel *>(new QSortFilterProxyModel(static_cast<QObject *>(a0)));
+	return static_cast<QSortFilterProxyModel *>(new qute_QSortFilterProxyModel(static_cast<QObject *>(a0)));
 }
 void * qute_QSortFilterProxyModel_new_shim(void * a0) {
 	qute_gui_only();
@@ -22000,11 +22000,11 @@ void * qute_QStorageInfo_root(void) {
 // ---- QStringListModel
 void * qute_QStringListModel_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QStringListModel *>(new QStringListModel(static_cast<QObject *>(a0)));
+	return static_cast<QStringListModel *>(new qute_QStringListModel(static_cast<QObject *>(a0)));
 }
 void * qute_QStringListModel_new_1(const char *a0, const ptrdiff_t *a0_lens, ptrdiff_t a0_n, void * a1) {
 	qute_gui_only();
-	return static_cast<QStringListModel *>(new QStringListModel(qute_qstrlist(a0, a0_lens, a0_n), static_cast<QObject *>(a1)));
+	return static_cast<QStringListModel *>(new qute_QStringListModel(qute_qstrlist(a0, a0_lens, a0_n), static_cast<QObject *>(a1)));
 }
 void * qute_QStringListModel_new_shim(void * a0) {
 	qute_gui_only();
@@ -22374,15 +22374,15 @@ qute_str qute_QTemporaryDir_filePath(void *self, const char *a0, ptrdiff_t a0_le
 // ---- QTemporaryFile
 void * qute_QTemporaryFile_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QTemporaryFile *>(new QTemporaryFile(static_cast<QObject *>(a0)));
+	return static_cast<QTemporaryFile *>(new qute_QTemporaryFile(static_cast<QObject *>(a0)));
 }
 void * qute_QTemporaryFile_new_1(const char *a0, ptrdiff_t a0_len) {
 	qute_gui_only();
-	return static_cast<QTemporaryFile *>(new QTemporaryFile(QString::fromUtf8(a0, a0_len)));
+	return static_cast<QTemporaryFile *>(new qute_QTemporaryFile(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QTemporaryFile_new_2(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QTemporaryFile *>(new QTemporaryFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QTemporaryFile *>(new qute_QTemporaryFile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QTemporaryFile_new_shim(void * a0) {
 	qute_gui_only();
@@ -22666,7 +22666,7 @@ bool qute_QTime_isValid_2(int a0, int a1, int a2, int a3) {
 // ---- QTimeLine
 void * qute_QTimeLine_new(int a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QTimeLine *>(new QTimeLine(static_cast<int>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QTimeLine *>(new qute_QTimeLine(static_cast<int>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QTimeLine_new_shim(int a0, void * a1) {
 	qute_gui_only();
@@ -23088,7 +23088,7 @@ void qute_QTimeZoneOffsetData_set_daylightTimeOffset(void *self, int a0) {
 // ---- QTimer
 void * qute_QTimer_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QTimer *>(new QTimer(static_cast<QObject *>(a0)));
+	return static_cast<QTimer *>(new qute_QTimer(static_cast<QObject *>(a0)));
 }
 void * qute_QTimer_new_shim(void * a0) {
 	qute_gui_only();
@@ -23234,7 +23234,7 @@ bool qute_QTimerEvent_matches(void *self, void * a0) {
 // ---- QTranslator
 void * qute_QTranslator_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QTranslator *>(new QTranslator(static_cast<QObject *>(a0)));
+	return static_cast<QTranslator *>(new qute_QTranslator(static_cast<QObject *>(a0)));
 }
 void * qute_QTranslator_new_shim(void * a0) {
 	qute_gui_only();
@@ -23332,7 +23332,7 @@ bool qute_QTranslator_load_4(void *self, void * a0, const char *a1, ptrdiff_t a1
 // ---- QTransposeProxyModel
 void * qute_QTransposeProxyModel_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QTransposeProxyModel *>(new QTransposeProxyModel(static_cast<QObject *>(a0)));
+	return static_cast<QTransposeProxyModel *>(new qute_QTransposeProxyModel(static_cast<QObject *>(a0)));
 }
 void * qute_QTransposeProxyModel_new_shim(void * a0) {
 	qute_gui_only();
@@ -24661,7 +24661,7 @@ void * qute_QVariant_fromMetaType_1(void * a0, void * a1) {
 // ---- QVariantAnimation
 void * qute_QVariantAnimation_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QVariantAnimation *>(new QVariantAnimation(static_cast<QObject *>(a0)));
+	return static_cast<QVariantAnimation *>(new qute_QVariantAnimation(static_cast<QObject *>(a0)));
 }
 void * qute_QVariantAnimation_new_shim(void * a0) {
 	qute_gui_only();

@@ -8,6 +8,7 @@ import "C"
 
 import (
 	"fmt"
+	"reflect"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -15,7 +16,10 @@ import (
 
 // NewQVariantOf converts a Go value to an Owned QVariant. It accepts nil,
 // bool, int, int32, int64, uint, uint32, uint64, float32, float64, string,
-// []byte, []string, *QVariant (copied) and the geometry structs.
+// []byte, []string, *QVariant (copied), the geometry structs, and any
+// handle with a ToQVariant method (the classes with Qt's operator QVariant,
+// such as qtgui's *QTextFormat or qtwidgets' *QSizePolicy; a nil one gives a
+// null variant).
 func NewQVariantOf(v any) *QVariant {
 	rt.CheckThread("NewQVariantOf")
 	var p unsafe.Pointer
@@ -57,11 +61,22 @@ func NewQVariantOf(v any) *QVariant {
 		p = C.qute_variant_rect(cQRect(x))
 	case QPointF:
 		p = C.qute_variant_pointf(cQPointF(x))
+	case variantConvertible:
+		// a value class with operator QVariant (QTextFormat, QSizePolicy);
+		// its methods have pointer receivers, so x is a pointer
+		if reflect.ValueOf(x).IsNil() {
+			p = C.qute_variant_null()
+			break
+		}
+		return x.ToQVariant()
 	default:
 		panic(fmt.Sprintf("NewQVariantOf: unsupported Go type %T; convert it to a basic type first", v))
 	}
 	return QVariantFromPtr(p, Owned)
 }
+
+// variantConvertible is a bound class with Qt's operator QVariant().
+type variantConvertible interface{ ToQVariant() *QVariant }
 
 // Value converts the variant to the closest Go value: nil, bool, int64,
 // uint64, float64, string, []byte, []string or a geometry struct. Other types

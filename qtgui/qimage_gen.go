@@ -1514,6 +1514,20 @@ func (this *QImage) TextFull(key string) string {
 	return quteStr(r)
 }
 
+// ToQVariant wraps the conversion QImage::operator QVariant().
+//
+//	C++: QImage::operator QVariant() const [conversion]
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qimage.html#operator-QVariant
+func (this *QImage) ToQVariant() *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QImage.ToQVariant")
+	r := C.qute_QImage_to_qvariant(self)
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // QImageTrueMatrix wraps QImage::trueMatrix.
 //
 //	C++: QTransform QImage::trueMatrix(const QTransform &, int w, int h)

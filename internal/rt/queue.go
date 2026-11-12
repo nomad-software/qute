@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"runtime/cgo"
+	"runtime/debug"
 	"sync"
 	"sync/atomic"
 )
@@ -296,7 +297,8 @@ const ErrGoexit = "qute.PostSync: the function called runtime.Goexit (t.Fatal, t
 var AfterRescue func()
 
 // PostSync runs f on the GUI thread and waits for it. Called on the GUI
-// thread it runs f directly. A panic in f is re-raised in the caller, and so
+// thread it runs f directly. A panic in f is re-raised in the caller (off the
+// GUI thread as a *PostSyncPanic carrying the GUI goroutine's stack), and so
 // is a panic in a signal or virtual handler that f triggered: it is recovered
 // where Qt called the handler, so Qt's C++ frames return normally, and
 // re-raised with the handler's own stack. If the application exits (or the
@@ -363,6 +365,8 @@ func postSync(f func()) syncResult {
 					// called t.Fatal, which would end the GUI goroutine and
 					// with it every later test
 					r.panicked, r.goexit = false, true
+				} else {
+					r.val = postedPanic(r.val)
 				}
 			} else if cp != nil {
 				r.panicked, r.val = true, cp
@@ -382,6 +386,41 @@ func postSync(f func()) syncResult {
 		s.finish(syncResult{notRun: true})
 	}
 	return <-s.done
+}
+
+// PostSyncPanic is the panic PostSync re-raises in its caller when the
+// function it ran on the GUI thread panicked: the panic crossed goroutines,
+// so the caller's stack would not show where it happened. Stack is the GUI
+// goroutine's stack at the panic.
+type PostSyncPanic struct {
+	Value any
+	Stack string
+}
+
+// Error makes the panic an error, so errors.As reaches an error value
+// through Unwrap.
+func (p *PostSyncPanic) Error() string { return p.String() }
+
+func (p *PostSyncPanic) String() string {
+	return fmt.Sprintf("panic in a function run by qute.PostSync: %v\n%s", p.Value, p.Stack)
+}
+
+// Unwrap returns the panic value when it is an error, for errors.Is and As.
+func (p *PostSyncPanic) Unwrap() error {
+	err, _ := p.Value.(error)
+	return err
+}
+
+// postedPanic wraps a value recovered on the GUI thread with that goroutine's
+// stack. It must be called from the deferred function that recovered it, so
+// debug.Stack still shows the panicking frames. A handler's *CallbackPanic,
+// or a nested PostSync's panic, already carries its stack.
+func postedPanic(v any) any {
+	switch v.(type) {
+	case *CallbackPanic, *PostSyncPanic:
+		return v
+	}
+	return &PostSyncPanic{Value: v, Stack: string(debug.Stack())}
 }
 
 // rescueGUIThread runs while runtime.Goexit unwinds the GUI goroutine, which

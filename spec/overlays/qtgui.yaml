@@ -394,6 +394,36 @@ QStandardItem:
   model: { return: borrowed }
   clone: { return: transfer-to-go, reviewed: true } # with a parent the clone is Parented (rule 3)
 
+QAbstractTextDocumentLayout:
+  draw: { args: { painter: borrowed } } # used for the call only
+  frameBoundingRect: { args: { frame: borrowed } }
+  setPaintDevice:
+    args: { device: keep } # Qt keeps the pointer and does not own it
+    test: |
+      doc := qtgui.NewQTextDocumentWithText("hello", nil)
+      lay := doc.DocumentLayout()
+      img := qtgui.NewQImageWithSize(qtcore.QSize{Width: 10, Height: 10}, qtgui.QImageFormat_ARGB32)
+      lay.SetPaintDevice(img)
+      if !rt.KeepsArg(unsafe.Pointer(lay), unsafe.Pointer(img)) {
+      	t.Error("device: not kept by the layout")
+      }
+      if lay.PaintDevice() == nil {
+      	t.Error("PaintDevice: nil after SetPaintDevice")
+      }
+      lay.SetPaintDevice(nil)
+      if rt.KeepsArg(unsafe.Pointer(lay), unsafe.Pointer(img)) {
+      	t.Error("device: still kept after SetPaintDevice(nil)")
+      }
+      doc.Delete()
+      if lay.Alive() {
+      	t.Error("layout alive after its document was deleted")
+      }
+  paintDevice: { return: borrowed }
+  document: { return: borrowed } # the document owns the layout
+  registerHandler: { skip: "on purpose: the handler must implement QTextObjectInterface, a C++ interface" }
+  unregisterHandler: { skip: "on purpose: the handler must implement QTextObjectInterface, a C++ interface" }
+  handlerForObject: { skip: "on purpose: QTextObjectInterface is a C++ interface" }
+
 QTextDocument:
   createObject: { return: parented } # an override creates the object with the document as parent
   print: { reviewed: true }
@@ -403,7 +433,8 @@ QTextDocument:
   object: { return: borrowed }
   drawContents: { reviewed: true }
   clone: { return: transfer-to-go, reviewed: true } # with a parent the clone is Parented (rule 3)
-  documentLayout: { skip: "QAbstractTextDocumentLayout is not bound" }
+  documentLayout: { return: borrowed } # the document owns its layout; a QObject, so its death is seen
+  setDocumentLayout: { skip: "on purpose: custom text layouts need C++ subclassing" }
 
 QFont:
   QFont(const QFont&, const QPaintDevice*): { name: NewQFontFor, reviewed: true }

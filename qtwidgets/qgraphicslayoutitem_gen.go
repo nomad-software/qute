@@ -525,10 +525,15 @@ func (this *QGraphicsLayoutItem) EffectiveSizeHintFull(which qtcore.SizeHint, co
 
 var qGraphicsLayoutItemVTable = []rt.Virtual{
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			rect := goQRectF(*(*C.qute_rectf)(a[0]))
-			v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+			if f, ok := v.(func(func(qtcore.QRectF), qtcore.QRectF)); ok {
+				f((&QGraphicsLayoutItemSuper{this: rt.View[QGraphicsLayoutItem](h, h.Ptr())}).SetGeometry, rect)
+			} else {
+				v.(interface{ SetGeometry(qtcore.QRectF) }).SetGeometry(rect)
+			}
 		}},
 	{Name: "GetContentsMargins", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -536,11 +541,20 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64))
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 4)
-			o0, o1, o2, o3 := v.(interface {
-				GetContentsMargins() (float64, float64, float64, float64)
-			}).GetContentsMargins()
+			var o0, o1, o2, o3 = *new(float64), *new(float64), *new(float64), *new(float64)
+			if f, ok := v.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64)); ok {
+				o0, o1, o2, o3 = f((&QGraphicsLayoutItemSuper{this: rt.View[QGraphicsLayoutItem](h, h.Ptr())}).GetContentsMargins)
+			} else {
+				o0, o1, o2, o3 = v.(interface {
+					GetContentsMargins() (float64, float64, float64, float64)
+				}).GetContentsMargins()
+			}
 			if a[0] != nil {
 				*(*C.double)(a[0]) = C.double(o0)
 			}
@@ -555,14 +569,25 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			v.(interface{ UpdateGeometry() }).UpdateGeometry()
+			if f, ok := v.(func(func())); ok {
+				f((&QGraphicsLayoutItemSuper{this: rt.View[QGraphicsLayoutItem](h, h.Ptr())}).UpdateGeometry)
+			} else {
+				v.(interface{ UpdateGeometry() }).UpdateGeometry()
+			}
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
-			r := v.(interface{ IsEmpty() bool }).IsEmpty()
+			var r = *new(bool)
+			if f, ok := v.(func(func() bool) bool); ok {
+				r = f((&QGraphicsLayoutItemSuper{this: rt.View[QGraphicsLayoutItem](h, h.Ptr())}).IsEmpty)
+			} else {
+				r = v.(interface{ IsEmpty() bool }).IsEmpty()
+			}
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SizeHint", Has: func(v any) bool {
@@ -571,15 +596,94 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Call: func(v any, args, ret unsafe.Pointer) {
+		Fits: func(f any) bool {
+			_, ok := f.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF)
+			return ok
+		},
+		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			which := qtcore.SizeHint(*(*C.int64_t)(a[0]))
 			constraint := goQSizeF(*(*C.qute_sizef)(a[1]))
-			r := v.(interface {
-				SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
-			}).SizeHint(which, constraint)
+			var r = *new(qtcore.QSizeF)
+			if f, ok := v.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF); ok {
+				r = f(nil, which, constraint)
+			} else {
+				r = v.(interface {
+					SizeHint(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF
+				}).SizeHint(which, constraint)
+			}
 			*(*C.qute_sizef)(ret) = cQSizeF(r)
 		}},
+}
+
+// qGraphicsLayoutItemShimInit sets a QGraphicsLayoutItem shim object's dispatch id and override mask.
+func qGraphicsLayoutItemShimInit(p unsafe.Pointer, id uintptr, mask *uint64) {
+	C.qute_QGraphicsLayoutItem_shim_init(p, C.uintptr_t(id), (*C.uint64_t)(unsafe.Pointer(mask)))
+}
+
+// OverrideSetGeometry makes f this object's QGraphicsLayoutItem::setGeometry: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SetGeometry, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsLayoutItem) OverrideSetGeometry(f func(super func(rect qtcore.QRectF), rect qtcore.QRectF)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsLayoutItem.OverrideSetGeometry", "SetGeometry", f)
+}
+
+// OverrideGetContentsMargins makes f this object's QGraphicsLayoutItem::getContentsMargins: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines GetContentsMargins, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsLayoutItem) OverrideGetContentsMargins(f func(super func() (float64, float64, float64, float64)) (float64, float64, float64, float64)) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsLayoutItem.OverrideGetContentsMargins", "GetContentsMargins", f)
+}
+
+// OverrideUpdateGeometry makes f this object's QGraphicsLayoutItem::updateGeometry: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines UpdateGeometry, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsLayoutItem) OverrideUpdateGeometry(f func(super func())) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsLayoutItem.OverrideUpdateGeometry", "UpdateGeometry", f)
+}
+
+// OverrideIsEmpty makes f this object's QGraphicsLayoutItem::isEmpty: Qt calls f instead of the C++
+// implementation, which f can call through super. A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines IsEmpty, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsLayoutItem) OverrideIsEmpty(f func(super func() bool) bool) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsLayoutItem.OverrideIsEmpty", "IsEmpty", f)
+}
+
+// OverrideSizeHint makes f this object's QGraphicsLayoutItem::sizeHint: Qt calls f instead of the C++
+// implementation, which f can call through super (nil here: the virtual is pure). A nil f restores the
+// C++ implementation.
+//
+// It works on any object a qute constructor made, and panics on one Qt
+// created; use an event filter there. If the object's Go subclass type
+// defines SizeHint, change that method instead. Like a signal's closure, f is
+// the object's Go state: a parentless object with an override must be
+// Delete()d.
+func (this *QGraphicsLayoutItem) OverrideSizeHint(f func(super func(which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF, which qtcore.SizeHint, constraint qtcore.QSizeF) qtcore.QSizeF) {
+	rt.Override(unsafe.Pointer(this), "QGraphicsLayoutItem.OverrideSizeHint", "SizeHint", f)
 }
 
 // QGraphicsLayoutItemBase is embedded in Go types that subclass QGraphicsLayoutItem:
@@ -683,7 +787,7 @@ func NewQGraphicsLayoutItemWith(v QGraphicsLayoutItemSubclass, parent QGraphicsL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapNew[QGraphicsLayoutItem](p, "QGraphicsLayoutItem", mode)
+	h := rt.WrapNewShim[QGraphicsLayoutItem](p, "QGraphicsLayoutItem", mode, qGraphicsLayoutItemVTable, qGraphicsLayoutItemShimInit)
 	base.QGraphicsLayoutItem = rt.View[QGraphicsLayoutItem](h, p)
 	id := h.SetSelf(v, qGraphicsLayoutItemVTable)
 	mask := rt.Mask(v, qGraphicsLayoutItemVTable)

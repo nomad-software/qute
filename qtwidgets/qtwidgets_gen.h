@@ -6911,6 +6911,7 @@ void * qute_QPlainTextEdit_prot_firstVisibleBlock(void *self);
 qute_pointf qute_QPlainTextEdit_prot_contentOffset(void *self);
 qute_rectf qute_QPlainTextEdit_prot_blockBoundingRect(void *self, void * a0);
 qute_rectf qute_QPlainTextEdit_prot_blockBoundingGeometry(void *self, void * a0);
+void * qute_QPlainTextEdit_prot_getPaintContext(void *self);
 void qute_QPlainTextEdit_prot_zoomInF(void *self, float a0);
 void qute_QPlainTextEdit_prot_setViewportMargins(void *self, qute_margins a0);
 qute_margins qute_QPlainTextEdit_prot_viewportMargins(void *self);
@@ -7673,6 +7674,7 @@ bool qute_QSizePolicy_retainSizeWhenHidden(void *self);
 void qute_QSizePolicy_setRetainSizeWhenHidden(void *self, bool a0);
 void qute_QSizePolicy_transpose(void *self);
 void * qute_QSizePolicy_transposed(void *self);
+void * qute_QSizePolicy_to_qvariant(void *self);
 
 // QSlider
 void * qute_QSlider_new(void * a0);

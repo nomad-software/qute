@@ -1606,11 +1606,11 @@ void qute_QWebEngineNewWindowRequest_openIn(void *self, void * a0) {
 // ---- QWebEnginePage
 void * qute_QWebEnginePage_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QWebEnginePage *>(new QWebEnginePage(static_cast<QObject *>(a0)));
+	return static_cast<QWebEnginePage *>(new qute_QWebEnginePage(static_cast<QObject *>(a0)));
 }
 void * qute_QWebEnginePage_new_1(void * a0, void * a1) {
 	qute_gui_only();
-	return static_cast<QWebEnginePage *>(new QWebEnginePage(static_cast<QWebEngineProfile *>(a0), static_cast<QObject *>(a1)));
+	return static_cast<QWebEnginePage *>(new qute_QWebEnginePage(static_cast<QWebEngineProfile *>(a0), static_cast<QObject *>(a1)));
 }
 void * qute_QWebEnginePage_new_shim(void * a0) {
 	qute_gui_only();
@@ -2351,11 +2351,11 @@ bool qute_QWebEnginePermission_isPersistent(int64_t a0) {
 // ---- QWebEngineProfile
 void * qute_QWebEngineProfile_new(void * a0) {
 	qute_gui_only();
-	return static_cast<QWebEngineProfile *>(new QWebEngineProfile(static_cast<QObject *>(a0)));
+	return static_cast<QWebEngineProfile *>(new qute_QWebEngineProfile(static_cast<QObject *>(a0)));
 }
 void * qute_QWebEngineProfile_new_1(const char *a0, ptrdiff_t a0_len, void * a1) {
 	qute_gui_only();
-	return static_cast<QWebEngineProfile *>(new QWebEngineProfile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
+	return static_cast<QWebEngineProfile *>(new qute_QWebEngineProfile(QString::fromUtf8(a0, a0_len), static_cast<QObject *>(a1)));
 }
 void * qute_QWebEngineProfile_new_shim(void * a0) {
 	qute_gui_only();
