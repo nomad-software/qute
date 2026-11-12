@@ -67,7 +67,7 @@ func NewQStandardItemModel(parent qtcore.QObjectLike) *QStandardItemModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStandardItemModel", mode)
+	h := rt.WrapNew[QStandardItemModel](p, "QStandardItemModel", mode)
 	return rt.View[QStandardItemModel](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQStandardItemModelWithRows(rows int, columns int, parent qtcore.QObjectL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStandardItemModel", mode)
+	h := rt.WrapNew[QStandardItemModel](p, "QStandardItemModel", mode)
 	return rt.View[QStandardItemModel](h, p)
 }
 
@@ -1883,7 +1883,7 @@ func NewQStandardItemModelWith(v QStandardItemModelSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStandardItemModel", mode)
+	h := rt.WrapNew[QStandardItemModel](p, "QStandardItemModel", mode)
 	base.QStandardItemModel = rt.View[QStandardItemModel](h, p)
 	id := h.SetSelf(v, qStandardItemModelVTable)
 	mask := rt.Mask(v, qStandardItemModelVTable)
@@ -1915,7 +1915,7 @@ func NewQStandardItemModelWithRowsWith(v QStandardItemModelSubclass, rows int, c
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStandardItemModel", mode)
+	h := rt.WrapNew[QStandardItemModel](p, "QStandardItemModel", mode)
 	base.QStandardItemModel = rt.View[QStandardItemModel](h, p)
 	id := h.SetSelf(v, qStandardItemModelVTable)
 	mask := rt.Mask(v, qStandardItemModelVTable)

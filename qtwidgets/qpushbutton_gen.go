@@ -68,7 +68,7 @@ func NewQPushButton(parent QWidgetLike) *QPushButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	return rt.View[QPushButton](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQPushButtonWithText(text string, parent QWidgetLike) *QPushButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	return rt.View[QPushButton](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQPushButtonWithIcon(icon *qtgui.QIcon, text string, parent QWidgetLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	return rt.View[QPushButton](h, p)
 }
 
@@ -1152,7 +1152,7 @@ func NewQPushButtonWith(v QPushButtonSubclass, parent QWidgetLike) *QPushButton 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	base.QPushButton = rt.View[QPushButton](h, p)
 	id := h.SetSelf(v, qPushButtonVTable)
 	mask := rt.Mask(v, qPushButtonVTable)
@@ -1184,7 +1184,7 @@ func NewQPushButtonWithTextWith(v QPushButtonSubclass, text string, parent QWidg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	base.QPushButton = rt.View[QPushButton](h, p)
 	id := h.SetSelf(v, qPushButtonVTable)
 	mask := rt.Mask(v, qPushButtonVTable)
@@ -1217,7 +1217,7 @@ func NewQPushButtonWithIconWith(v QPushButtonSubclass, icon *qtgui.QIcon, text s
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPushButton", mode)
+	h := rt.WrapNew[QPushButton](p, "QPushButton", mode)
 	base.QPushButton = rt.View[QPushButton](h, p)
 	id := h.SetSelf(v, qPushButtonVTable)
 	mask := rt.Mask(v, qPushButtonVTable)

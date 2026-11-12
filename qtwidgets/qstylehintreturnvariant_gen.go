@@ -65,7 +65,7 @@ func QStyleHintReturnVariantCast(o QStyleHintReturnLike) *QStyleHintReturnVarian
 func NewQStyleHintReturnVariant() *QStyleHintReturnVariant {
 	rt.CheckThread("NewQStyleHintReturnVariant")
 	p := C.qute_QStyleHintReturnVariant_new()
-	h := rt.WrapClass(p, "QStyleHintReturnVariant", rt.NewOwned)
+	h := rt.WrapNew[QStyleHintReturnVariant](p, "QStyleHintReturnVariant", rt.NewOwned)
 	return rt.View[QStyleHintReturnVariant](h, p)
 }
 

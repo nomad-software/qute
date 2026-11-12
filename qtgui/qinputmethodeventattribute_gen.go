@@ -91,7 +91,7 @@ func NewQInputMethodEventAttributeWithValue(typ QInputMethodEventAttributeType, 
 	rt.CheckThread("NewQInputMethodEventAttributeWithValue")
 	p := C.qute_QInputMethodEventAttribute_new(C.int64_t(typ), C.int(sArg), C.int(l), rt.UseArg(unsafe.Pointer(val), "NewQInputMethodEventAttributeWithValue"))
 	runtime.KeepAlive(val)
-	h := rt.WrapClass(p, "QInputMethodEventAttribute", rt.NewOwned)
+	h := rt.WrapNew[QInputMethodEventAttribute](p, "QInputMethodEventAttribute", rt.NewOwned)
 	return rt.View[QInputMethodEventAttribute](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQInputMethodEventAttributeWithValue(typ QInputMethodEventAttributeType, 
 func NewQInputMethodEventAttributeWithAttributeType(typ QInputMethodEventAttributeType, sArg int, l int) *QInputMethodEventAttribute {
 	rt.CheckThread("NewQInputMethodEventAttributeWithAttributeType")
 	p := C.qute_QInputMethodEventAttribute_new_1(C.int64_t(typ), C.int(sArg), C.int(l))
-	h := rt.WrapClass(p, "QInputMethodEventAttribute", rt.NewOwned)
+	h := rt.WrapNew[QInputMethodEventAttribute](p, "QInputMethodEventAttribute", rt.NewOwned)
 	return rt.View[QInputMethodEventAttribute](h, p)
 }
 

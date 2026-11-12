@@ -67,7 +67,7 @@ func QWindowStateChangeEventCast(e qtcore.QEventLike) *QWindowStateChangeEvent {
 func NewQWindowStateChangeEventWithWindowState(oldState qtcore.WindowStates) *QWindowStateChangeEvent {
 	rt.CheckThread("NewQWindowStateChangeEventWithWindowState")
 	p := C.qute_QWindowStateChangeEvent_new(C.int64_t(oldState))
-	h := rt.WrapClass(p, "QWindowStateChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QWindowStateChangeEvent](p, "QWindowStateChangeEvent", rt.NewOwned)
 	return rt.View[QWindowStateChangeEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQWindowStateChangeEventWithWindowState(oldState qtcore.WindowStates) *QW
 func NewQWindowStateChangeEventWithWindowStateFull(oldState qtcore.WindowStates, isOverride bool) *QWindowStateChangeEvent {
 	rt.CheckThread("NewQWindowStateChangeEventWithWindowStateFull")
 	p := C.qute_QWindowStateChangeEvent_new_1(C.int64_t(oldState), C.bool(isOverride))
-	h := rt.WrapClass(p, "QWindowStateChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QWindowStateChangeEvent](p, "QWindowStateChangeEvent", rt.NewOwned)
 	return rt.View[QWindowStateChangeEvent](h, p)
 }
 

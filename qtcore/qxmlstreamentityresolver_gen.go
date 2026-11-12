@@ -99,7 +99,7 @@ func (this *QXmlStreamEntityResolver) Unkeep() {
 func NewQXmlStreamEntityResolver() *QXmlStreamEntityResolver {
 	rt.CheckThread("NewQXmlStreamEntityResolver")
 	p := C.qute_QXmlStreamEntityResolver_new()
-	h := rt.WrapClass(p, "QXmlStreamEntityResolver", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned)
 	return rt.View[QXmlStreamEntityResolver](h, p)
 }
 
@@ -182,7 +182,7 @@ func NewQXmlStreamEntityResolverWith(v QXmlStreamEntityResolverSubclass) *QXmlSt
 		panic("NewQXmlStreamEntityResolverWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QXmlStreamEntityResolver_new_shim()
-	h := rt.WrapClass(p, "QXmlStreamEntityResolver", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamEntityResolver](p, "QXmlStreamEntityResolver", rt.NewOwned)
 	base.QXmlStreamEntityResolver = rt.View[QXmlStreamEntityResolver](h, p)
 	id := h.SetSelf(v, qXmlStreamEntityResolverVTable)
 	mask := rt.Mask(v, qXmlStreamEntityResolverVTable)

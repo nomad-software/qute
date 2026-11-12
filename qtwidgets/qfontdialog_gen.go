@@ -68,7 +68,7 @@ func NewQFontDialog(parent QWidgetLike) *QFontDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontDialog", mode)
+	h := rt.WrapNew[QFontDialog](p, "QFontDialog", mode)
 	return rt.View[QFontDialog](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQFontDialogWithFont(initial *qtgui.QFont, parent QWidgetLike) *QFontDial
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontDialog", mode)
+	h := rt.WrapNew[QFontDialog](p, "QFontDialog", mode)
 	return rt.View[QFontDialog](h, p)
 }
 
@@ -1268,7 +1268,7 @@ func NewQFontDialogWith(v QFontDialogSubclass, parent QWidgetLike) *QFontDialog 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontDialog", mode)
+	h := rt.WrapNew[QFontDialog](p, "QFontDialog", mode)
 	base.QFontDialog = rt.View[QFontDialog](h, p)
 	id := h.SetSelf(v, qFontDialogVTable)
 	mask := rt.Mask(v, qFontDialogVTable)
@@ -1301,7 +1301,7 @@ func NewQFontDialogWithFontWith(v QFontDialogSubclass, initial *qtgui.QFont, par
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontDialog", mode)
+	h := rt.WrapNew[QFontDialog](p, "QFontDialog", mode)
 	base.QFontDialog = rt.View[QFontDialog](h, p)
 	id := h.SetSelf(v, qFontDialogVTable)
 	mask := rt.Mask(v, qFontDialogVTable)

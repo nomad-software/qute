@@ -182,7 +182,7 @@ var globalSkip = map[string]bool{
 	"staticMetaObject": true, "d_func": true, "qt_metacast": true, "qt_metacall": true,
 	"connectNotify": true, "disconnectNotify": true, "isSignalConnected": true, "receivers": true,
 	"sender": true, "senderSignalIndex": true, "swap": true, "data_ptr": true, "detach": true,
-	"isDetached": true, "handle": true, "devType": true, "paintEngine": true, "initPainter": true,
+	"isDetached": true, "devType": true, "paintEngine": true, "initPainter": true,
 	"redirected": true, "sharedPainter": true, "metric": true, "nativeEvent": true,
 	"inputMethodQuery": true, "setupUi": true, "dumpObjectTree": true, "dumpObjectInfo": true,
 	"bindableObjectName": true, "qt_static_metacall": true, "qt_check_for_QGADGET_macro": true,

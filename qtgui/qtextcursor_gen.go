@@ -86,7 +86,7 @@ func (this *QTextCursor) Unkeep() {
 func NewQTextCursor() *QTextCursor {
 	rt.CheckThread("NewQTextCursor")
 	p := C.qute_QTextCursor_new()
-	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
+	h := rt.WrapNew[QTextCursor](p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
 
@@ -108,7 +108,7 @@ func NewQTextCursorWithTextDocument(document QTextDocumentLike) *QTextCursor {
 	}
 	p := C.qute_QTextCursor_new_1(documentPtr)
 	runtime.KeepAlive(document)
-	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
+	h := rt.WrapNew[QTextCursor](p, "QTextCursor", rt.NewOwned)
 	rt.KeepArg(h, "document", documentH, false)
 	return rt.View[QTextCursor](h, p)
 }
@@ -128,7 +128,7 @@ func NewQTextCursorWithTextFrame(frame QTextFrameLike) *QTextCursor {
 	}
 	p := C.qute_QTextCursor_new_2(framePtr)
 	runtime.KeepAlive(frame)
-	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
+	h := rt.WrapNew[QTextCursor](p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
 
@@ -141,7 +141,7 @@ func NewQTextCursorWithTextBlock(block *QTextBlock) *QTextCursor {
 	rt.CheckThread("NewQTextCursorWithTextBlock")
 	p := C.qute_QTextCursor_new_3(rt.UseArg(unsafe.Pointer(block), "NewQTextCursorWithTextBlock"))
 	runtime.KeepAlive(block)
-	h := rt.WrapClass(p, "QTextCursor", rt.NewOwned)
+	h := rt.WrapNew[QTextCursor](p, "QTextCursor", rt.NewOwned)
 	return rt.View[QTextCursor](h, p)
 }
 

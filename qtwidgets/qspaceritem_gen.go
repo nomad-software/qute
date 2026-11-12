@@ -48,7 +48,7 @@ func QSpacerItemFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSpacerItem {
 func NewQSpacerItemWithW(w int, hArg int) *QSpacerItem {
 	rt.CheckThread("NewQSpacerItemWithW")
 	p := C.qute_QSpacerItem_new(C.int(w), C.int(hArg))
-	h := rt.WrapClass(p, "QSpacerItem", rt.NewOwned)
+	h := rt.WrapNew[QSpacerItem](p, "QSpacerItem", rt.NewOwned)
 	return rt.View[QSpacerItem](h, p)
 }
 
@@ -62,7 +62,7 @@ func NewQSpacerItemWithW(w int, hArg int) *QSpacerItem {
 func NewQSpacerItemWithWFull(w int, hArg int, hData QSizePolicyPolicy, vData QSizePolicyPolicy) *QSpacerItem {
 	rt.CheckThread("NewQSpacerItemWithWFull")
 	p := C.qute_QSpacerItem_new_1(C.int(w), C.int(hArg), C.int64_t(hData), C.int64_t(vData))
-	h := rt.WrapClass(p, "QSpacerItem", rt.NewOwned)
+	h := rt.WrapNew[QSpacerItem](p, "QSpacerItem", rt.NewOwned)
 	return rt.View[QSpacerItem](h, p)
 }
 
@@ -356,7 +356,7 @@ func NewQSpacerItemWith(v QSpacerItemSubclass, w int, hArg int) *QSpacerItem {
 		panic("NewQSpacerItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSpacerItem_new_shim(C.int(w), C.int(hArg))
-	h := rt.WrapClass(p, "QSpacerItem", rt.NewOwned)
+	h := rt.WrapNew[QSpacerItem](p, "QSpacerItem", rt.NewOwned)
 	base.QSpacerItem = rt.View[QSpacerItem](h, p)
 	id := h.SetSelf(v, qSpacerItemVTable)
 	mask := rt.Mask(v, qSpacerItemVTable)

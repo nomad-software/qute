@@ -90,7 +90,7 @@ func (this *QWebEngineDesktopMediaRequest) Unkeep() {
 func NewQWebEngineDesktopMediaRequest() *QWebEngineDesktopMediaRequest {
 	rt.CheckThread("NewQWebEngineDesktopMediaRequest")
 	p := C.qute_QWebEngineDesktopMediaRequest_new()
-	h := rt.WrapClass(p, "QWebEngineDesktopMediaRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineDesktopMediaRequest](p, "QWebEngineDesktopMediaRequest", rt.NewOwned)
 	return rt.View[QWebEngineDesktopMediaRequest](h, p)
 }
 

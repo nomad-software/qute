@@ -73,7 +73,7 @@ func NewQPointerEventWithType(typeArg qtcore.QEventType, dev QPointingDeviceLike
 	}
 	p := C.qute_QPointerEvent_new(C.int64_t(typeArg), devPtr)
 	runtime.KeepAlive(dev)
-	h := rt.WrapClass(p, "QPointerEvent", rt.NewOwned)
+	h := rt.WrapNew[QPointerEvent](p, "QPointerEvent", rt.NewOwned)
 	rt.KeepArg(h, "QPointerEvent.dev", devH, true)
 	return rt.View[QPointerEvent](h, p)
 }
@@ -103,7 +103,7 @@ func NewQPointerEventWithTypeFull(typeArg qtcore.QEventType, dev QPointingDevice
 	p := C.qute_QPointerEvent_new_1(C.int64_t(typeArg), devPtr, C.int64_t(modifiers), unsafe.Pointer(unsafe.SliceData(pointsC)), C.ptrdiff_t(len(points)))
 	runtime.KeepAlive(dev)
 	runtime.KeepAlive(points)
-	h := rt.WrapClass(p, "QPointerEvent", rt.NewOwned)
+	h := rt.WrapNew[QPointerEvent](p, "QPointerEvent", rt.NewOwned)
 	rt.KeepArg(h, "QPointerEvent.dev", devH, true)
 	return rt.View[QPointerEvent](h, p)
 }

@@ -89,7 +89,7 @@ func (this *QProcessUnixProcessParameters) Unkeep() {
 func NewQProcessUnixProcessParameters() *QProcessUnixProcessParameters {
 	rt.CheckThread("NewQProcessUnixProcessParameters")
 	p := C.qute_QProcessUnixProcessParameters_new()
-	h := rt.WrapClass(p, "QProcessUnixProcessParameters", rt.NewOwned)
+	h := rt.WrapNew[QProcessUnixProcessParameters](p, "QProcessUnixProcessParameters", rt.NewOwned)
 	return rt.View[QProcessUnixProcessParameters](h, p)
 }
 

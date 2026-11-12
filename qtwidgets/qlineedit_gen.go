@@ -68,7 +68,7 @@ func NewQLineEdit(parent QWidgetLike) *QLineEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLineEdit", mode)
+	h := rt.WrapNew[QLineEdit](p, "QLineEdit", mode)
 	return rt.View[QLineEdit](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQLineEditWithText(stringArg string, parent QWidgetLike) *QLineEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLineEdit", mode)
+	h := rt.WrapNew[QLineEdit](p, "QLineEdit", mode)
 	return rt.View[QLineEdit](h, p)
 }
 
@@ -1982,7 +1982,7 @@ func NewQLineEditWith(v QLineEditSubclass, parent QWidgetLike) *QLineEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLineEdit", mode)
+	h := rt.WrapNew[QLineEdit](p, "QLineEdit", mode)
 	base.QLineEdit = rt.View[QLineEdit](h, p)
 	id := h.SetSelf(v, qLineEditVTable)
 	mask := rt.Mask(v, qLineEditVTable)
@@ -2014,7 +2014,7 @@ func NewQLineEditWithTextWith(v QLineEditSubclass, stringArg string, parent QWid
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLineEdit", mode)
+	h := rt.WrapNew[QLineEdit](p, "QLineEdit", mode)
 	base.QLineEdit = rt.View[QLineEdit](h, p)
 	id := h.SetSelf(v, qLineEditVTable)
 	mask := rt.Mask(v, qLineEditVTable)

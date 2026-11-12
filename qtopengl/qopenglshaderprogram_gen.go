@@ -68,7 +68,7 @@ func NewQOpenGLShaderProgram(parent qtcore.QObjectLike) *QOpenGLShaderProgram {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLShaderProgram", mode)
+	h := rt.WrapNew[QOpenGLShaderProgram](p, "QOpenGLShaderProgram", mode)
 	return rt.View[QOpenGLShaderProgram](h, p)
 }
 
@@ -1160,7 +1160,7 @@ func NewQOpenGLShaderProgramWith(v QOpenGLShaderProgramSubclass, parent qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLShaderProgram", mode)
+	h := rt.WrapNew[QOpenGLShaderProgram](p, "QOpenGLShaderProgram", mode)
 	base.QOpenGLShaderProgram = rt.View[QOpenGLShaderProgram](h, p)
 	id := h.SetSelf(v, qOpenGLShaderProgramVTable)
 	mask := rt.Mask(v, qOpenGLShaderProgramVTable)

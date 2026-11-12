@@ -68,7 +68,7 @@ func NewQDateEdit(parent QWidgetLike) *QDateEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDateEdit", mode)
+	h := rt.WrapNew[QDateEdit](p, "QDateEdit", mode)
 	return rt.View[QDateEdit](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQDateEditWithDate(date *qtcore.QDate, parent QWidgetLike) *QDateEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDateEdit", mode)
+	h := rt.WrapNew[QDateEdit](p, "QDateEdit", mode)
 	return rt.View[QDateEdit](h, p)
 }
 
@@ -1178,7 +1178,7 @@ func NewQDateEditWith(v QDateEditSubclass, parent QWidgetLike) *QDateEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDateEdit", mode)
+	h := rt.WrapNew[QDateEdit](p, "QDateEdit", mode)
 	base.QDateEdit = rt.View[QDateEdit](h, p)
 	id := h.SetSelf(v, qDateEditVTable)
 	mask := rt.Mask(v, qDateEditVTable)
@@ -1211,7 +1211,7 @@ func NewQDateEditWithDateWith(v QDateEditSubclass, date *qtcore.QDate, parent QW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDateEdit", mode)
+	h := rt.WrapNew[QDateEdit](p, "QDateEdit", mode)
 	base.QDateEdit = rt.View[QDateEdit](h, p)
 	id := h.SetSelf(v, qDateEditVTable)
 	mask := rt.Mask(v, qDateEditVTable)

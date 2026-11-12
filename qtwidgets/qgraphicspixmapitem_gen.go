@@ -53,7 +53,7 @@ func NewQGraphicsPixmapItem(parent QGraphicsItemLike) *QGraphicsPixmapItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPixmapItem", mode)
+	h := rt.WrapNew[QGraphicsPixmapItem](p, "QGraphicsPixmapItem", mode)
 	return rt.View[QGraphicsPixmapItem](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQGraphicsPixmapItemWithPixmap(pixmap *qtgui.QPixmap, parent QGraphicsIte
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPixmapItem", mode)
+	h := rt.WrapNew[QGraphicsPixmapItem](p, "QGraphicsPixmapItem", mode)
 	return rt.View[QGraphicsPixmapItem](h, p)
 }
 
@@ -1073,7 +1073,7 @@ func NewQGraphicsPixmapItemWith(v QGraphicsPixmapItemSubclass, parent QGraphicsI
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPixmapItem", mode)
+	h := rt.WrapNew[QGraphicsPixmapItem](p, "QGraphicsPixmapItem", mode)
 	base.QGraphicsPixmapItem = rt.View[QGraphicsPixmapItem](h, p)
 	id := h.SetSelf(v, qGraphicsPixmapItemVTable)
 	mask := rt.Mask(v, qGraphicsPixmapItemVTable)
@@ -1106,7 +1106,7 @@ func NewQGraphicsPixmapItemWithPixmapWith(v QGraphicsPixmapItemSubclass, pixmap 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPixmapItem", mode)
+	h := rt.WrapNew[QGraphicsPixmapItem](p, "QGraphicsPixmapItem", mode)
 	base.QGraphicsPixmapItem = rt.View[QGraphicsPixmapItem](h, p)
 	id := h.SetSelf(v, qGraphicsPixmapItemVTable)
 	mask := rt.Mask(v, qGraphicsPixmapItemVTable)

@@ -1508,7 +1508,7 @@ func (g *Gen) emitCtor(c *Class, mm *Method, b *buf) {
 		b.p("\tmode := rt.NewOwned\n\tif %s != nil {\n\t\tmode = rt.NewParented\n\t}", parentPtr)
 		mode = "mode"
 	}
-	b.p("\th := rt.WrapClass(p, %q, %s)", c.Name, mode)
+	b.p("\th := rt.WrapNew[%s](p, %q, %s)", c.Name, c.Name, mode)
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}
@@ -1914,7 +1914,7 @@ func (g *Gen) emitSubCtor(c *Class, sc subCtor, vt, lower string, b *buf) {
 			mode = "mode"
 		}
 	}
-	b.p("\th := rt.WrapClass(p, %q, %s)", cls, mode)
+	b.p("\th := rt.WrapNew[%s](p, %q, %s)", cls, cls, mode)
 	for _, s := range gc.post {
 		b.p("\t%s", s)
 	}

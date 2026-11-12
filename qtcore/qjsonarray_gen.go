@@ -85,7 +85,7 @@ func (this *QJsonArray) Unkeep() {
 func NewQJsonArray() *QJsonArray {
 	rt.CheckThread("NewQJsonArray")
 	p := C.qute_QJsonArray_new()
-	h := rt.WrapClass(p, "QJsonArray", rt.NewOwned)
+	h := rt.WrapNew[QJsonArray](p, "QJsonArray", rt.NewOwned)
 	return rt.View[QJsonArray](h, p)
 }
 

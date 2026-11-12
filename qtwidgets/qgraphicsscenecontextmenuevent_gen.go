@@ -67,7 +67,7 @@ func QGraphicsSceneContextMenuEventCast(e qtcore.QEventLike) *QGraphicsSceneCont
 func NewQGraphicsSceneContextMenuEvent() *QGraphicsSceneContextMenuEvent {
 	rt.CheckThread("NewQGraphicsSceneContextMenuEvent")
 	p := C.qute_QGraphicsSceneContextMenuEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneContextMenuEvent](p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneContextMenuEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneContextMenuEvent() *QGraphicsSceneContextMenuEvent {
 func NewQGraphicsSceneContextMenuEventFull(typeArg qtcore.QEventType) *QGraphicsSceneContextMenuEvent {
 	rt.CheckThread("NewQGraphicsSceneContextMenuEventFull")
 	p := C.qute_QGraphicsSceneContextMenuEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneContextMenuEvent](p, "QGraphicsSceneContextMenuEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneContextMenuEvent](h, p)
 }
 

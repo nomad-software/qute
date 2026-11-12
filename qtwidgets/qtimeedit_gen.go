@@ -68,7 +68,7 @@ func NewQTimeEdit(parent QWidgetLike) *QTimeEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeEdit", mode)
+	h := rt.WrapNew[QTimeEdit](p, "QTimeEdit", mode)
 	return rt.View[QTimeEdit](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQTimeEditWithTime(time *qtcore.QTime, parent QWidgetLike) *QTimeEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeEdit", mode)
+	h := rt.WrapNew[QTimeEdit](p, "QTimeEdit", mode)
 	return rt.View[QTimeEdit](h, p)
 }
 
@@ -1178,7 +1178,7 @@ func NewQTimeEditWith(v QTimeEditSubclass, parent QWidgetLike) *QTimeEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeEdit", mode)
+	h := rt.WrapNew[QTimeEdit](p, "QTimeEdit", mode)
 	base.QTimeEdit = rt.View[QTimeEdit](h, p)
 	id := h.SetSelf(v, qTimeEditVTable)
 	mask := rt.Mask(v, qTimeEditVTable)
@@ -1211,7 +1211,7 @@ func NewQTimeEditWithTimeWith(v QTimeEditSubclass, time *qtcore.QTime, parent QW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeEdit", mode)
+	h := rt.WrapNew[QTimeEdit](p, "QTimeEdit", mode)
 	base.QTimeEdit = rt.View[QTimeEdit](h, p)
 	id := h.SetSelf(v, qTimeEditVTable)
 	mask := rt.Mask(v, qTimeEditVTable)

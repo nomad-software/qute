@@ -68,7 +68,7 @@ func NewQTextBrowser(parent QWidgetLike) *QTextBrowser {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextBrowser", mode)
+	h := rt.WrapNew[QTextBrowser](p, "QTextBrowser", mode)
 	return rt.View[QTextBrowser](h, p)
 }
 
@@ -1645,7 +1645,7 @@ func NewQTextBrowserWith(v QTextBrowserSubclass, parent QWidgetLike) *QTextBrows
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextBrowser", mode)
+	h := rt.WrapNew[QTextBrowser](p, "QTextBrowser", mode)
 	base.QTextBrowser = rt.View[QTextBrowser](h, p)
 	id := h.SetSelf(v, qTextBrowserVTable)
 	mask := rt.Mask(v, qTextBrowserVTable)

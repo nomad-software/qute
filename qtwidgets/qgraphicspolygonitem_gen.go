@@ -53,7 +53,7 @@ func NewQGraphicsPolygonItem(parent QGraphicsItemLike) *QGraphicsPolygonItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPolygonItem", mode)
+	h := rt.WrapNew[QGraphicsPolygonItem](p, "QGraphicsPolygonItem", mode)
 	return rt.View[QGraphicsPolygonItem](h, p)
 }
 
@@ -80,7 +80,7 @@ func NewQGraphicsPolygonItemWithPointFs(polygon []qtcore.QPointF, parent QGraphi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPolygonItem", mode)
+	h := rt.WrapNew[QGraphicsPolygonItem](p, "QGraphicsPolygonItem", mode)
 	return rt.View[QGraphicsPolygonItem](h, p)
 }
 
@@ -1031,7 +1031,7 @@ func NewQGraphicsPolygonItemWith(v QGraphicsPolygonItemSubclass, parent QGraphic
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPolygonItem", mode)
+	h := rt.WrapNew[QGraphicsPolygonItem](p, "QGraphicsPolygonItem", mode)
 	base.QGraphicsPolygonItem = rt.View[QGraphicsPolygonItem](h, p)
 	id := h.SetSelf(v, qGraphicsPolygonItemVTable)
 	mask := rt.Mask(v, qGraphicsPolygonItemVTable)
@@ -1067,7 +1067,7 @@ func NewQGraphicsPolygonItemWithPointFsWith(v QGraphicsPolygonItemSubclass, poly
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPolygonItem", mode)
+	h := rt.WrapNew[QGraphicsPolygonItem](p, "QGraphicsPolygonItem", mode)
 	base.QGraphicsPolygonItem = rt.View[QGraphicsPolygonItem](h, p)
 	id := h.SetSelf(v, qGraphicsPolygonItemVTable)
 	mask := rt.Mask(v, qGraphicsPolygonItemVTable)

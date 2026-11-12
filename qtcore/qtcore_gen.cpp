@@ -14203,6 +14203,10 @@ void qute_QFileDevice_unsetError(void *self) {
 	qute_gui_only();
 	static_cast<QFileDevice *>(self)->unsetError();
 }
+int qute_QFileDevice_handle(void *self) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<QFileDevice *>(self)->handle());
+}
 qute_str qute_QFileDevice_fileName(void *self) {
 	qute_gui_only();
 	return qute_ret_str(static_cast<QFileDevice *>(self)->fileName());

@@ -86,7 +86,7 @@ func (this *QScrollerProperties) Unkeep() {
 func NewQScrollerProperties() *QScrollerProperties {
 	rt.CheckThread("NewQScrollerProperties")
 	p := C.qute_QScrollerProperties_new()
-	h := rt.WrapClass(p, "QScrollerProperties", rt.NewOwned)
+	h := rt.WrapNew[QScrollerProperties](p, "QScrollerProperties", rt.NewOwned)
 	return rt.View[QScrollerProperties](h, p)
 }
 

@@ -67,7 +67,7 @@ func NewQButtonGroup(parent qtcore.QObjectLike) *QButtonGroup {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QButtonGroup", mode)
+	h := rt.WrapNew[QButtonGroup](p, "QButtonGroup", mode)
 	return rt.View[QButtonGroup](h, p)
 }
 
@@ -652,7 +652,7 @@ func NewQButtonGroupWith(v QButtonGroupSubclass, parent qtcore.QObjectLike) *QBu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QButtonGroup", mode)
+	h := rt.WrapNew[QButtonGroup](p, "QButtonGroup", mode)
 	base.QButtonGroup = rt.View[QButtonGroup](h, p)
 	id := h.SetSelf(v, qButtonGroupVTable)
 	mask := rt.Mask(v, qButtonGroupVTable)

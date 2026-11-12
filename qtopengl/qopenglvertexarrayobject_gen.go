@@ -71,7 +71,7 @@ func NewQOpenGLVertexArrayObject(parent qtcore.QObjectLike) *QOpenGLVertexArrayO
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLVertexArrayObject", mode)
+	h := rt.WrapNew[QOpenGLVertexArrayObject](p, "QOpenGLVertexArrayObject", mode)
 	return rt.View[QOpenGLVertexArrayObject](h, p)
 }
 
@@ -315,7 +315,7 @@ func NewQOpenGLVertexArrayObjectWith(v QOpenGLVertexArrayObjectSubclass, parent 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLVertexArrayObject", mode)
+	h := rt.WrapNew[QOpenGLVertexArrayObject](p, "QOpenGLVertexArrayObject", mode)
 	base.QOpenGLVertexArrayObject = rt.View[QOpenGLVertexArrayObject](h, p)
 	id := h.SetSelf(v, qOpenGLVertexArrayObjectVTable)
 	mask := rt.Mask(v, qOpenGLVertexArrayObjectVTable)

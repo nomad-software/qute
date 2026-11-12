@@ -49,7 +49,7 @@ func QPictureFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPicture {
 func NewQPicture() *QPicture {
 	rt.CheckThread("NewQPicture")
 	p := C.qute_QPicture_new()
-	h := rt.WrapClass(p, "QPicture", rt.NewOwned)
+	h := rt.WrapNew[QPicture](p, "QPicture", rt.NewOwned)
 	return rt.View[QPicture](h, p)
 }
 
@@ -63,7 +63,7 @@ func NewQPicture() *QPicture {
 func NewQPictureFull(formatVersion int) *QPicture {
 	rt.CheckThread("NewQPictureFull")
 	p := C.qute_QPicture_new_1(C.int(formatVersion))
-	h := rt.WrapClass(p, "QPicture", rt.NewOwned)
+	h := rt.WrapNew[QPicture](p, "QPicture", rt.NewOwned)
 	return rt.View[QPicture](h, p)
 }
 

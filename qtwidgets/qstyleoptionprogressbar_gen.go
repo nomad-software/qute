@@ -65,7 +65,7 @@ func QStyleOptionProgressBarCast(o QStyleOptionLike) *QStyleOptionProgressBar {
 func NewQStyleOptionProgressBar() *QStyleOptionProgressBar {
 	rt.CheckThread("NewQStyleOptionProgressBar")
 	p := C.qute_QStyleOptionProgressBar_new()
-	h := rt.WrapClass(p, "QStyleOptionProgressBar", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionProgressBar](p, "QStyleOptionProgressBar", rt.NewOwned)
 	return rt.View[QStyleOptionProgressBar](h, p)
 }
 

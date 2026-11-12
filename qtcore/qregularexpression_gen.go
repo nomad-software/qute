@@ -85,7 +85,7 @@ func (this *QRegularExpression) Unkeep() {
 func NewQRegularExpression() *QRegularExpression {
 	rt.CheckThread("NewQRegularExpression")
 	p := C.qute_QRegularExpression_new()
-	h := rt.WrapClass(p, "QRegularExpression", rt.NewOwned)
+	h := rt.WrapNew[QRegularExpression](p, "QRegularExpression", rt.NewOwned)
 	return rt.View[QRegularExpression](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQRegularExpression() *QRegularExpression {
 func NewQRegularExpressionWithPattern(pattern string) *QRegularExpression {
 	rt.CheckThread("NewQRegularExpressionWithPattern")
 	p := C.qute_QRegularExpression_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)))
-	h := rt.WrapClass(p, "QRegularExpression", rt.NewOwned)
+	h := rt.WrapNew[QRegularExpression](p, "QRegularExpression", rt.NewOwned)
 	return rt.View[QRegularExpression](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQRegularExpressionWithPattern(pattern string) *QRegularExpression {
 func NewQRegularExpressionWithPatternFull(pattern string, options QRegularExpressionPatternOptions) *QRegularExpression {
 	rt.CheckThread("NewQRegularExpressionWithPatternFull")
 	p := C.qute_QRegularExpression_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(pattern))), C.ptrdiff_t(len(pattern)), C.int64_t(options))
-	h := rt.WrapClass(p, "QRegularExpression", rt.NewOwned)
+	h := rt.WrapNew[QRegularExpression](p, "QRegularExpression", rt.NewOwned)
 	return rt.View[QRegularExpression](h, p)
 }
 

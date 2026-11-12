@@ -86,7 +86,7 @@ func (this *QOpenGLDebugMessage) Unkeep() {
 func NewQOpenGLDebugMessage() *QOpenGLDebugMessage {
 	rt.CheckThread("NewQOpenGLDebugMessage")
 	p := C.qute_QOpenGLDebugMessage_new()
-	h := rt.WrapClass(p, "QOpenGLDebugMessage", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLDebugMessage](p, "QOpenGLDebugMessage", rt.NewOwned)
 	return rt.View[QOpenGLDebugMessage](h, p)
 }
 

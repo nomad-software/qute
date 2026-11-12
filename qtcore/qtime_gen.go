@@ -85,7 +85,7 @@ func (this *QTime) Unkeep() {
 func NewQTime() *QTime {
 	rt.CheckThread("NewQTime")
 	p := C.qute_QTime_new()
-	h := rt.WrapClass(p, "QTime", rt.NewOwned)
+	h := rt.WrapNew[QTime](p, "QTime", rt.NewOwned)
 	return rt.View[QTime](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQTime() *QTime {
 func NewQTimeWithHourMinute(hArg int, m int) *QTime {
 	rt.CheckThread("NewQTimeWithHourMinute")
 	p := C.qute_QTime_new_1(C.int(hArg), C.int(m))
-	h := rt.WrapClass(p, "QTime", rt.NewOwned)
+	h := rt.WrapNew[QTime](p, "QTime", rt.NewOwned)
 	return rt.View[QTime](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQTimeWithHourMinute(hArg int, m int) *QTime {
 func NewQTimeWithHourMinuteFull(hArg int, m int, sArg int, ms int) *QTime {
 	rt.CheckThread("NewQTimeWithHourMinuteFull")
 	p := C.qute_QTime_new_2(C.int(hArg), C.int(m), C.int(sArg), C.int(ms))
-	h := rt.WrapClass(p, "QTime", rt.NewOwned)
+	h := rt.WrapNew[QTime](p, "QTime", rt.NewOwned)
 	return rt.View[QTime](h, p)
 }
 

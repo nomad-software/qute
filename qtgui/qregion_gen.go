@@ -86,7 +86,7 @@ func (this *QRegion) Unkeep() {
 func NewQRegion() *QRegion {
 	rt.CheckThread("NewQRegion")
 	p := C.qute_QRegion_new()
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQRegion() *QRegion {
 func NewQRegionWithRect(rArg qtcore.QRect) *QRegion {
 	rt.CheckThread("NewQRegionWithRect")
 	p := C.qute_QRegion_new_1(cQRect(rArg))
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQRegionWithPoints(pa []qtcore.QPoint) *QRegion {
 		paC[i] = cQPoint(pa[i])
 	}
 	p := C.qute_QRegion_new_2(unsafe.Pointer(unsafe.SliceData(paC)), C.ptrdiff_t(len(pa)))
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
@@ -131,7 +131,7 @@ func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
 	rt.CheckThread("NewQRegionWithBitmap")
 	p := C.qute_QRegion_new_3(rt.UseArg(unsafe.Pointer(bitmap), "NewQRegionWithBitmap"))
 	runtime.KeepAlive(bitmap)
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQRegionWithBitmap(bitmap *QBitmap) *QRegion {
 func NewQRegionWithRectFull(rArg qtcore.QRect, t QRegionRegionType) *QRegion {
 	rt.CheckThread("NewQRegionWithRectFull")
 	p := C.qute_QRegion_new_4(cQRect(rArg), C.int64_t(t))
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 
@@ -163,7 +163,7 @@ func NewQRegionWithPointsFull(pa []qtcore.QPoint, fillRule qtcore.FillRule) *QRe
 		paC[i] = cQPoint(pa[i])
 	}
 	p := C.qute_QRegion_new_5(unsafe.Pointer(unsafe.SliceData(paC)), C.ptrdiff_t(len(pa)), C.int64_t(fillRule))
-	h := rt.WrapClass(p, "QRegion", rt.NewOwned)
+	h := rt.WrapNew[QRegion](p, "QRegion", rt.NewOwned)
 	return rt.View[QRegion](h, p)
 }
 

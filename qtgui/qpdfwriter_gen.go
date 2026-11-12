@@ -63,7 +63,7 @@ func (this *QPdfWriter) AsQPagedPaintDevice() *QPagedPaintDevice {
 func NewQPdfWriterWithFilename(filename string) *QPdfWriter {
 	rt.CheckThread("NewQPdfWriterWithFilename")
 	p := C.qute_QPdfWriter_new((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
-	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	h := rt.WrapNew[QPdfWriter](p, "QPdfWriter", rt.NewOwned)
 	return rt.View[QPdfWriter](h, p)
 }
 
@@ -83,7 +83,7 @@ func NewQPdfWriterWithIODevice(device qtcore.QIODeviceLike) *QPdfWriter {
 	}
 	p := C.qute_QPdfWriter_new_1(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	h := rt.WrapNew[QPdfWriter](p, "QPdfWriter", rt.NewOwned)
 	rt.KeepArg(h, "QPdfWriter.device", deviceH, false)
 	return rt.View[QPdfWriter](h, p)
 }
@@ -492,7 +492,7 @@ func NewQPdfWriterWith(v QPdfWriterSubclass, filename string) *QPdfWriter {
 		panic("NewQPdfWriterWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QPdfWriter_new_shim((*C.char)(unsafe.Pointer(unsafe.StringData(filename))), C.ptrdiff_t(len(filename)))
-	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	h := rt.WrapNew[QPdfWriter](p, "QPdfWriter", rt.NewOwned)
 	base.QPdfWriter = rt.View[QPdfWriter](h, p)
 	id := h.SetSelf(v, qPdfWriterVTable)
 	mask := rt.Mask(v, qPdfWriterVTable)
@@ -521,7 +521,7 @@ func NewQPdfWriterWithIODeviceWith(v QPdfWriterSubclass, device qtcore.QIODevice
 	}
 	p := C.qute_QPdfWriter_new_shim_1(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QPdfWriter", rt.NewOwned)
+	h := rt.WrapNew[QPdfWriter](p, "QPdfWriter", rt.NewOwned)
 	rt.KeepArg(h, "QPdfWriter.device", deviceH, false)
 	base.QPdfWriter = rt.View[QPdfWriter](h, p)
 	id := h.SetSelf(v, qPdfWriterVTable)

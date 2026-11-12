@@ -1107,7 +1107,7 @@ func NewQAbstractTableModelWith(v QAbstractTableModelSubclass, parent QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractTableModel", mode)
+	h := rt.WrapNew[QAbstractTableModel](p, "QAbstractTableModel", mode)
 	base.QAbstractTableModel = rt.View[QAbstractTableModel](h, p)
 	id := h.SetSelf(v, qAbstractTableModelVTable)
 	mask := rt.Mask(v, qAbstractTableModelVTable)

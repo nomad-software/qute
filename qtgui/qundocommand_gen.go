@@ -107,7 +107,7 @@ func NewQUndoCommand(parent QUndoCommandLike) *QUndoCommand {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoCommand", mode)
+	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
 	return rt.View[QUndoCommand](h, p)
 }
 
@@ -130,7 +130,7 @@ func NewQUndoCommandWithText(text string, parent QUndoCommandLike) *QUndoCommand
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoCommand", mode)
+	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
 	return rt.View[QUndoCommand](h, p)
 }
 
@@ -372,7 +372,7 @@ func NewQUndoCommandWith(v QUndoCommandSubclass, parent QUndoCommandLike) *QUndo
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoCommand", mode)
+	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
 	base.QUndoCommand = rt.View[QUndoCommand](h, p)
 	id := h.SetSelf(v, qUndoCommandVTable)
 	mask := rt.Mask(v, qUndoCommandVTable)
@@ -404,7 +404,7 @@ func NewQUndoCommandWithTextWith(v QUndoCommandSubclass, text string, parent QUn
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoCommand", mode)
+	h := rt.WrapNew[QUndoCommand](p, "QUndoCommand", mode)
 	base.QUndoCommand = rt.View[QUndoCommand](h, p)
 	id := h.SetSelf(v, qUndoCommandVTable)
 	mask := rt.Mask(v, qUndoCommandVTable)

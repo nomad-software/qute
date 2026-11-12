@@ -166,22 +166,26 @@ func (h *Handle) syncReleaseLocked() {
 	if h.registeredKind() {
 		return
 	}
-	want := h.x().keeps != nil && h.State() != Dead && !h.hasCleanupNow()
-	if want == h.x().hasRelease {
+	e := h.ext.Load()
+	if e == nil {
+		return // keeps nothing, and so has no release cleanup
+	}
+	want := e.keeps != nil && h.State() != Dead && !h.hasCleanupNow()
+	if want == e.hasRelease {
 		return
 	}
 	if want {
-		h.x().release = runtime.AddCleanup(h, releaseHolds, h.serial)
+		e.release = runtime.AddCleanup(h, releaseHolds, h.serial)
 	} else {
-		h.x().release.Stop()
+		e.release.Stop()
 	}
-	h.x().hasRelease = want
+	e.hasRelease = want
 }
 
 // syncRelease is syncReleaseLocked for callers that do not hold keepMu.
 func (h *Handle) syncRelease() {
-	if h.registeredKind() {
-		return
+	if h.registeredKind() || h.ext.Load() == nil {
+		return // a handle with no extension keeps nothing
 	}
 	keepMu.Lock()
 	h.syncReleaseLocked()
@@ -371,8 +375,11 @@ func KeepEachArg(owner, arg unsafe.Pointer) {
 // dropHandleKeeps forgets the references a dead handle held.
 func (h *Handle) dropHandleKeeps() {
 	keepMu.Lock()
-	had := h.x().keeps != nil
-	h.x().keeps = nil
+	had := false
+	if e := h.ext.Load(); e != nil {
+		had = e.keeps != nil
+		e.keeps = nil
+	}
 	h.syncReleaseLocked()
 	keepMu.Unlock()
 	if had && h.registeredKind() {
@@ -460,8 +467,8 @@ func depMessage(h, dep *Handle, method string) string {
 func deathNote(h *Handle) string {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if h.x().deathNote == "" {
-		return "destroyed"
+	if why := h.noteLocked(); why != "" {
+		return why
 	}
-	return h.x().deathNote
+	return "destroyed"
 }

@@ -91,7 +91,7 @@ func (this *QAudioBuffer) Unkeep() {
 func NewQAudioBuffer() *QAudioBuffer {
 	rt.CheckThread("NewQAudioBuffer")
 	p := C.qute_QAudioBuffer_new()
-	h := rt.WrapClass(p, "QAudioBuffer", rt.NewOwned)
+	h := rt.WrapNew[QAudioBuffer](p, "QAudioBuffer", rt.NewOwned)
 	return rt.View[QAudioBuffer](h, p)
 }
 
@@ -106,7 +106,7 @@ func NewQAudioBufferWithBytes(data []byte, format *QAudioFormat) *QAudioBuffer {
 	rt.CheckThread("NewQAudioBufferWithBytes")
 	p := C.qute_QAudioBuffer_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), rt.UseArg(unsafe.Pointer(format), "NewQAudioBufferWithBytes"))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QAudioBuffer", rt.NewOwned)
+	h := rt.WrapNew[QAudioBuffer](p, "QAudioBuffer", rt.NewOwned)
 	return rt.View[QAudioBuffer](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQAudioBufferWithNumFrames(numFrames int, format *QAudioFormat) *QAudioBu
 	rt.CheckThread("NewQAudioBufferWithNumFrames")
 	p := C.qute_QAudioBuffer_new_2(C.int(numFrames), rt.UseArg(unsafe.Pointer(format), "NewQAudioBufferWithNumFrames"))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QAudioBuffer", rt.NewOwned)
+	h := rt.WrapNew[QAudioBuffer](p, "QAudioBuffer", rt.NewOwned)
 	return rt.View[QAudioBuffer](h, p)
 }
 
@@ -136,7 +136,7 @@ func NewQAudioBufferWithBytesFull(data []byte, format *QAudioFormat, startTime i
 	rt.CheckThread("NewQAudioBufferWithBytesFull")
 	p := C.qute_QAudioBuffer_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)), rt.UseArg(unsafe.Pointer(format), "NewQAudioBufferWithBytesFull"), C.longlong(startTime))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QAudioBuffer", rt.NewOwned)
+	h := rt.WrapNew[QAudioBuffer](p, "QAudioBuffer", rt.NewOwned)
 	return rt.View[QAudioBuffer](h, p)
 }
 
@@ -151,7 +151,7 @@ func NewQAudioBufferWithNumFramesFull(numFrames int, format *QAudioFormat, start
 	rt.CheckThread("NewQAudioBufferWithNumFramesFull")
 	p := C.qute_QAudioBuffer_new_4(C.int(numFrames), rt.UseArg(unsafe.Pointer(format), "NewQAudioBufferWithNumFramesFull"), C.longlong(startTime))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QAudioBuffer", rt.NewOwned)
+	h := rt.WrapNew[QAudioBuffer](p, "QAudioBuffer", rt.NewOwned)
 	return rt.View[QAudioBuffer](h, p)
 }
 

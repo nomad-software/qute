@@ -68,7 +68,7 @@ func NewQSplitterHandleWithOrientation(o qtcore.Orientations, parent QSplitterLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitterHandle", mode)
+	h := rt.WrapNew[QSplitterHandle](p, "QSplitterHandle", mode)
 	return rt.View[QSplitterHandle](h, p)
 }
 
@@ -1001,7 +1001,7 @@ func NewQSplitterHandleWith(v QSplitterHandleSubclass, o qtcore.Orientations, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitterHandle", mode)
+	h := rt.WrapNew[QSplitterHandle](p, "QSplitterHandle", mode)
 	base.QSplitterHandle = rt.View[QSplitterHandle](h, p)
 	id := h.SetSelf(v, qSplitterHandleVTable)
 	mask := rt.Mask(v, qSplitterHandleVTable)

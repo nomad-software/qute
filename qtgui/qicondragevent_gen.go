@@ -61,6 +61,6 @@ func QIconDragEventCast(e qtcore.QEventLike) *QIconDragEvent {
 func NewQIconDragEvent() *QIconDragEvent {
 	rt.CheckThread("NewQIconDragEvent")
 	p := C.qute_QIconDragEvent_new()
-	h := rt.WrapClass(p, "QIconDragEvent", rt.NewOwned)
+	h := rt.WrapNew[QIconDragEvent](p, "QIconDragEvent", rt.NewOwned)
 	return rt.View[QIconDragEvent](h, p)
 }

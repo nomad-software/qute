@@ -67,7 +67,7 @@ func QGraphicsSceneHoverEventCast(e qtcore.QEventLike) *QGraphicsSceneHoverEvent
 func NewQGraphicsSceneHoverEvent() *QGraphicsSceneHoverEvent {
 	rt.CheckThread("NewQGraphicsSceneHoverEvent")
 	p := C.qute_QGraphicsSceneHoverEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneHoverEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneHoverEvent](p, "QGraphicsSceneHoverEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneHoverEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneHoverEvent() *QGraphicsSceneHoverEvent {
 func NewQGraphicsSceneHoverEventFull(typeArg qtcore.QEventType) *QGraphicsSceneHoverEvent {
 	rt.CheckThread("NewQGraphicsSceneHoverEventFull")
 	p := C.qute_QGraphicsSceneHoverEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneHoverEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneHoverEvent](p, "QGraphicsSceneHoverEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneHoverEvent](h, p)
 }
 

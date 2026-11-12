@@ -84,7 +84,7 @@ func (this *QPen) Unkeep() {
 func NewQPen() *QPen {
 	rt.CheckThread("NewQPen")
 	p := C.qute_QPen_new()
-	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	h := rt.WrapNew[QPen](p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
 
@@ -96,7 +96,7 @@ func NewQPen() *QPen {
 func NewQPenWithStyle(penStyle qtcore.PenStyle) *QPen {
 	rt.CheckThread("NewQPenWithStyle")
 	p := C.qute_QPen_new_1(C.int64_t(penStyle))
-	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	h := rt.WrapNew[QPen](p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
 
@@ -108,7 +108,7 @@ func NewQPenWithStyle(penStyle qtcore.PenStyle) *QPen {
 func NewQPenWithColor(color QColor) *QPen {
 	rt.CheckThread("NewQPenWithColor")
 	p := C.qute_QPen_new_2(cQColor(color))
-	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	h := rt.WrapNew[QPen](p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
 
@@ -123,7 +123,7 @@ func NewQPenWithBrush(brush *QBrush, width float64) *QPen {
 	rt.CheckThread("NewQPenWithBrush")
 	p := C.qute_QPen_new_3(rt.UseArg(unsafe.Pointer(brush), "NewQPenWithBrush"), C.double(width))
 	runtime.KeepAlive(brush)
-	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	h := rt.WrapNew[QPen](p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
 
@@ -138,7 +138,7 @@ func NewQPenWithBrushFull(brush *QBrush, width float64, sArg qtcore.PenStyle, c 
 	rt.CheckThread("NewQPenWithBrushFull")
 	p := C.qute_QPen_new_4(rt.UseArg(unsafe.Pointer(brush), "NewQPenWithBrushFull"), C.double(width), C.int64_t(sArg), C.int64_t(c), C.int64_t(j))
 	runtime.KeepAlive(brush)
-	h := rt.WrapClass(p, "QPen", rt.NewOwned)
+	h := rt.WrapNew[QPen](p, "QPen", rt.NewOwned)
 	return rt.View[QPen](h, p)
 }
 

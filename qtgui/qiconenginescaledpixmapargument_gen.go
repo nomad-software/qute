@@ -92,7 +92,7 @@ func (this *QIconEngineScaledPixmapArgument) Unkeep() {
 func NewQIconEngineScaledPixmapArgument() *QIconEngineScaledPixmapArgument {
 	rt.CheckThread("NewQIconEngineScaledPixmapArgument")
 	p := C.qute_QIconEngineScaledPixmapArgument_new()
-	h := rt.WrapClass(p, "QIconEngineScaledPixmapArgument", rt.NewOwned)
+	h := rt.WrapNew[QIconEngineScaledPixmapArgument](p, "QIconEngineScaledPixmapArgument", rt.NewOwned)
 	return rt.View[QIconEngineScaledPixmapArgument](h, p)
 }
 

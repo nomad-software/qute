@@ -68,7 +68,7 @@ func NewQCommandLinkButton(parent QWidgetLike) *QCommandLinkButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	return rt.View[QCommandLinkButton](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQCommandLinkButtonWithText(text string, parent QWidgetLike) *QCommandLin
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	return rt.View[QCommandLinkButton](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQCommandLinkButtonWithDescription(text string, description string, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	return rt.View[QCommandLinkButton](h, p)
 }
 
@@ -1074,7 +1074,7 @@ func NewQCommandLinkButtonWith(v QCommandLinkButtonSubclass, parent QWidgetLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	base.QCommandLinkButton = rt.View[QCommandLinkButton](h, p)
 	id := h.SetSelf(v, qCommandLinkButtonVTable)
 	mask := rt.Mask(v, qCommandLinkButtonVTable)
@@ -1106,7 +1106,7 @@ func NewQCommandLinkButtonWithTextWith(v QCommandLinkButtonSubclass, text string
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	base.QCommandLinkButton = rt.View[QCommandLinkButton](h, p)
 	id := h.SetSelf(v, qCommandLinkButtonVTable)
 	mask := rt.Mask(v, qCommandLinkButtonVTable)
@@ -1138,7 +1138,7 @@ func NewQCommandLinkButtonWithDescriptionWith(v QCommandLinkButtonSubclass, text
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCommandLinkButton", mode)
+	h := rt.WrapNew[QCommandLinkButton](p, "QCommandLinkButton", mode)
 	base.QCommandLinkButton = rt.View[QCommandLinkButton](h, p)
 	id := h.SetSelf(v, qCommandLinkButtonVTable)
 	mask := rt.Mask(v, qCommandLinkButtonVTable)

@@ -68,7 +68,7 @@ func NewQScreenCapture(parent qtcore.QObjectLike) *QScreenCapture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScreenCapture", mode)
+	h := rt.WrapNew[QScreenCapture](p, "QScreenCapture", mode)
 	return rt.View[QScreenCapture](h, p)
 }
 
@@ -498,7 +498,7 @@ func NewQScreenCaptureWith(v QScreenCaptureSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScreenCapture", mode)
+	h := rt.WrapNew[QScreenCapture](p, "QScreenCapture", mode)
 	base.QScreenCapture = rt.View[QScreenCapture](h, p)
 	id := h.SetSelf(v, qScreenCaptureVTable)
 	mask := rt.Mask(v, qScreenCaptureVTable)

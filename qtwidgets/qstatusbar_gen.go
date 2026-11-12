@@ -68,7 +68,7 @@ func NewQStatusBar(parent QWidgetLike) *QStatusBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStatusBar", mode)
+	h := rt.WrapNew[QStatusBar](p, "QStatusBar", mode)
 	return rt.View[QStatusBar](h, p)
 }
 
@@ -1247,7 +1247,7 @@ func NewQStatusBarWith(v QStatusBarSubclass, parent QWidgetLike) *QStatusBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStatusBar", mode)
+	h := rt.WrapNew[QStatusBar](p, "QStatusBar", mode)
 	base.QStatusBar = rt.View[QStatusBar](h, p)
 	id := h.SetSelf(v, qStatusBarVTable)
 	mask := rt.Mask(v, qStatusBarVTable)

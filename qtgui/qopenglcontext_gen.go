@@ -67,7 +67,7 @@ func NewQOpenGLContext(parent qtcore.QObjectLike) *QOpenGLContext {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLContext", mode)
+	h := rt.WrapNew[QOpenGLContext](p, "QOpenGLContext", mode)
 	return rt.View[QOpenGLContext](h, p)
 }
 
@@ -611,7 +611,7 @@ func NewQOpenGLContextWith(v QOpenGLContextSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLContext", mode)
+	h := rt.WrapNew[QOpenGLContext](p, "QOpenGLContext", mode)
 	base.QOpenGLContext = rt.View[QOpenGLContext](h, p)
 	id := h.SetSelf(v, qOpenGLContextVTable)
 	mask := rt.Mask(v, qOpenGLContextVTable)

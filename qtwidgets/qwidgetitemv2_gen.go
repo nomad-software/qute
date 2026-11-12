@@ -61,7 +61,7 @@ func NewQWidgetItemV2WithWidget(widget QWidgetLike) *QWidgetItemV2 {
 	}
 	p := C.qute_QWidgetItemV2_new(widgetPtr)
 	runtime.KeepAlive(widget)
-	h := rt.WrapClass(p, "QWidgetItemV2", rt.NewOwned)
+	h := rt.WrapNew[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned)
 	return rt.View[QWidgetItemV2](h, p)
 }
 
@@ -322,7 +322,7 @@ func NewQWidgetItemV2With(v QWidgetItemV2Subclass, widget QWidgetLike) *QWidgetI
 	}
 	p := C.qute_QWidgetItemV2_new_shim(widgetPtr)
 	runtime.KeepAlive(widget)
-	h := rt.WrapClass(p, "QWidgetItemV2", rt.NewOwned)
+	h := rt.WrapNew[QWidgetItemV2](p, "QWidgetItemV2", rt.NewOwned)
 	base.QWidgetItemV2 = rt.View[QWidgetItemV2](h, p)
 	id := h.SetSelf(v, qWidgetItemV2VTable)
 	mask := rt.Mask(v, qWidgetItemV2VTable)

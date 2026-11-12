@@ -61,7 +61,7 @@ func QHelpEventCast(e qtcore.QEventLike) *QHelpEvent {
 func NewQHelpEventWithType(typeArg qtcore.QEventType, pos qtcore.QPoint, globalPos qtcore.QPoint) *QHelpEvent {
 	rt.CheckThread("NewQHelpEventWithType")
 	p := C.qute_QHelpEvent_new(C.int64_t(typeArg), cQPoint(pos), cQPoint(globalPos))
-	h := rt.WrapClass(p, "QHelpEvent", rt.NewOwned)
+	h := rt.WrapNew[QHelpEvent](p, "QHelpEvent", rt.NewOwned)
 	return rt.View[QHelpEvent](h, p)
 }
 

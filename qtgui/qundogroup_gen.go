@@ -67,7 +67,7 @@ func NewQUndoGroup(parent qtcore.QObjectLike) *QUndoGroup {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoGroup", mode)
+	h := rt.WrapNew[QUndoGroup](p, "QUndoGroup", mode)
 	return rt.View[QUndoGroup](h, p)
 }
 
@@ -699,7 +699,7 @@ func NewQUndoGroupWith(v QUndoGroupSubclass, parent qtcore.QObjectLike) *QUndoGr
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoGroup", mode)
+	h := rt.WrapNew[QUndoGroup](p, "QUndoGroup", mode)
 	base.QUndoGroup = rt.View[QUndoGroup](h, p)
 	id := h.SetSelf(v, qUndoGroupVTable)
 	mask := rt.Mask(v, qUndoGroupVTable)

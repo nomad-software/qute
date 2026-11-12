@@ -70,7 +70,7 @@ func NewQGraphicsProxyWidget(parent QGraphicsItemLike) *QGraphicsProxyWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsProxyWidget", mode)
+	h := rt.WrapNew[QGraphicsProxyWidget](p, "QGraphicsProxyWidget", mode)
 	return rt.View[QGraphicsProxyWidget](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQGraphicsProxyWidgetFull(parent QGraphicsItemLike, wFlags qtcore.WindowF
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsProxyWidget", mode)
+	h := rt.WrapNew[QGraphicsProxyWidget](p, "QGraphicsProxyWidget", mode)
 	return rt.View[QGraphicsProxyWidget](h, p)
 }
 
@@ -1700,7 +1700,7 @@ func NewQGraphicsProxyWidgetWith(v QGraphicsProxyWidgetSubclass, parent QGraphic
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsProxyWidget", mode)
+	h := rt.WrapNew[QGraphicsProxyWidget](p, "QGraphicsProxyWidget", mode)
 	base.QGraphicsProxyWidget = rt.View[QGraphicsProxyWidget](h, p)
 	id := h.SetSelf(v, qGraphicsProxyWidgetVTable)
 	mask := rt.Mask(v, qGraphicsProxyWidgetVTable)

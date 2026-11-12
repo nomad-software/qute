@@ -86,7 +86,7 @@ func (this *QAudioDevice) Unkeep() {
 func NewQAudioDevice() *QAudioDevice {
 	rt.CheckThread("NewQAudioDevice")
 	p := C.qute_QAudioDevice_new()
-	h := rt.WrapClass(p, "QAudioDevice", rt.NewOwned)
+	h := rt.WrapNew[QAudioDevice](p, "QAudioDevice", rt.NewOwned)
 	return rt.View[QAudioDevice](h, p)
 }
 

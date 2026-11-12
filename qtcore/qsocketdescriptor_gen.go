@@ -87,7 +87,7 @@ func (this *QSocketDescriptor) Unkeep() {
 func NewQSocketDescriptor() *QSocketDescriptor {
 	rt.CheckThread("NewQSocketDescriptor")
 	p := C.qute_QSocketDescriptor_new()
-	h := rt.WrapClass(p, "QSocketDescriptor", rt.NewOwned)
+	h := rt.WrapNew[QSocketDescriptor](p, "QSocketDescriptor", rt.NewOwned)
 	return rt.View[QSocketDescriptor](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQSocketDescriptor() *QSocketDescriptor {
 func NewQSocketDescriptorFull(descriptor int) *QSocketDescriptor {
 	rt.CheckThread("NewQSocketDescriptorFull")
 	p := C.qute_QSocketDescriptor_new_1(C.int(descriptor))
-	h := rt.WrapClass(p, "QSocketDescriptor", rt.NewOwned)
+	h := rt.WrapNew[QSocketDescriptor](p, "QSocketDescriptor", rt.NewOwned)
 	return rt.View[QSocketDescriptor](h, p)
 }
 

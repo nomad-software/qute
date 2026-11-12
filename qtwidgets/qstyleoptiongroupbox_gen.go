@@ -62,7 +62,7 @@ func QStyleOptionGroupBoxCast(o QStyleOptionLike) *QStyleOptionGroupBox {
 func NewQStyleOptionGroupBox() *QStyleOptionGroupBox {
 	rt.CheckThread("NewQStyleOptionGroupBox")
 	p := C.qute_QStyleOptionGroupBox_new()
-	h := rt.WrapClass(p, "QStyleOptionGroupBox", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionGroupBox](p, "QStyleOptionGroupBox", rt.NewOwned)
 	return rt.View[QStyleOptionGroupBox](h, p)
 }
 

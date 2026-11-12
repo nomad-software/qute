@@ -82987,6 +82987,10 @@ void qute_QSplitter_getRange(void *self, int a0, int *a1_out, int *a2_out) {
 	*a1_out = static_cast<int>(t1);
 	*a2_out = static_cast<int>(t2);
 }
+void * qute_QSplitter_handle(void *self, int a0) {
+	qute_gui_only();
+	return (void *)(static_cast<QSplitter *>(self)->handle(static_cast<int>(a0)));
+}
 void qute_QSplitter_setStretchFactor(void *self, int a0, int a1) {
 	qute_gui_only();
 	static_cast<QSplitter *>(self)->setStretchFactor(static_cast<int>(a0), static_cast<int>(a1));

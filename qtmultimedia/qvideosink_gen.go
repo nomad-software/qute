@@ -67,7 +67,7 @@ func NewQVideoSink(parent qtcore.QObjectLike) *QVideoSink {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoSink", mode)
+	h := rt.WrapNew[QVideoSink](p, "QVideoSink", mode)
 	return rt.View[QVideoSink](h, p)
 }
 
@@ -381,7 +381,7 @@ func NewQVideoSinkWith(v QVideoSinkSubclass, parent qtcore.QObjectLike) *QVideoS
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoSink", mode)
+	h := rt.WrapNew[QVideoSink](p, "QVideoSink", mode)
 	base.QVideoSink = rt.View[QVideoSink](h, p)
 	id := h.SetSelf(v, qVideoSinkVTable)
 	mask := rt.Mask(v, qVideoSinkVTable)

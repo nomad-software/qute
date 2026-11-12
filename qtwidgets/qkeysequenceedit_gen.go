@@ -68,7 +68,7 @@ func NewQKeySequenceEdit(parent QWidgetLike) *QKeySequenceEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QKeySequenceEdit", mode)
+	h := rt.WrapNew[QKeySequenceEdit](p, "QKeySequenceEdit", mode)
 	return rt.View[QKeySequenceEdit](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQKeySequenceEditWithKeySequence(keySequence *qtgui.QKeySequence, parent 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QKeySequenceEdit", mode)
+	h := rt.WrapNew[QKeySequenceEdit](p, "QKeySequenceEdit", mode)
 	return rt.View[QKeySequenceEdit](h, p)
 }
 
@@ -1128,7 +1128,7 @@ func NewQKeySequenceEditWith(v QKeySequenceEditSubclass, parent QWidgetLike) *QK
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QKeySequenceEdit", mode)
+	h := rt.WrapNew[QKeySequenceEdit](p, "QKeySequenceEdit", mode)
 	base.QKeySequenceEdit = rt.View[QKeySequenceEdit](h, p)
 	id := h.SetSelf(v, qKeySequenceEditVTable)
 	mask := rt.Mask(v, qKeySequenceEditVTable)
@@ -1161,7 +1161,7 @@ func NewQKeySequenceEditWithKeySequenceWith(v QKeySequenceEditSubclass, keySeque
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QKeySequenceEdit", mode)
+	h := rt.WrapNew[QKeySequenceEdit](p, "QKeySequenceEdit", mode)
 	base.QKeySequenceEdit = rt.View[QKeySequenceEdit](h, p)
 	id := h.SetSelf(v, qKeySequenceEditVTable)
 	mask := rt.Mask(v, qKeySequenceEditVTable)

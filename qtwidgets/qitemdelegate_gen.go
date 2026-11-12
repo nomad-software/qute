@@ -68,7 +68,7 @@ func NewQItemDelegate(parent qtcore.QObjectLike) *QItemDelegate {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QItemDelegate", mode)
+	h := rt.WrapNew[QItemDelegate](p, "QItemDelegate", mode)
 	return rt.View[QItemDelegate](h, p)
 }
 
@@ -805,7 +805,7 @@ func NewQItemDelegateWith(v QItemDelegateSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QItemDelegate", mode)
+	h := rt.WrapNew[QItemDelegate](p, "QItemDelegate", mode)
 	base.QItemDelegate = rt.View[QItemDelegate](h, p)
 	id := h.SetSelf(v, qItemDelegateVTable)
 	mask := rt.Mask(v, qItemDelegateVTable)

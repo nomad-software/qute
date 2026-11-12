@@ -68,7 +68,7 @@ func NewQGraphicsScene(parent qtcore.QObjectLike) *QGraphicsScene {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScene", mode)
+	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
 	return rt.View[QGraphicsScene](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQGraphicsSceneWithRectF(sceneRect qtcore.QRectF, parent qtcore.QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScene", mode)
+	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
 	return rt.View[QGraphicsScene](h, p)
 }
 
@@ -2089,7 +2089,7 @@ func NewQGraphicsSceneWith(v QGraphicsSceneSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScene", mode)
+	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
 	base.QGraphicsScene = rt.View[QGraphicsScene](h, p)
 	id := h.SetSelf(v, qGraphicsSceneVTable)
 	mask := rt.Mask(v, qGraphicsSceneVTable)
@@ -2121,7 +2121,7 @@ func NewQGraphicsSceneWithRectFWith(v QGraphicsSceneSubclass, sceneRect qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScene", mode)
+	h := rt.WrapNew[QGraphicsScene](p, "QGraphicsScene", mode)
 	base.QGraphicsScene = rt.View[QGraphicsScene](h, p)
 	id := h.SetSelf(v, qGraphicsSceneVTable)
 	mask := rt.Mask(v, qGraphicsSceneVTable)

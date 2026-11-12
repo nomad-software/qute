@@ -70,7 +70,7 @@ func NewQMdiSubWindow(parent QWidgetLike) *QMdiSubWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMdiSubWindow", mode)
+	h := rt.WrapNew[QMdiSubWindow](p, "QMdiSubWindow", mode)
 	return rt.View[QMdiSubWindow](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQMdiSubWindowFull(parent QWidgetLike, flags qtcore.WindowFlags) *QMdiSub
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMdiSubWindow", mode)
+	h := rt.WrapNew[QMdiSubWindow](p, "QMdiSubWindow", mode)
 	return rt.View[QMdiSubWindow](h, p)
 }
 
@@ -1246,7 +1246,7 @@ func NewQMdiSubWindowWith(v QMdiSubWindowSubclass, parent QWidgetLike) *QMdiSubW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMdiSubWindow", mode)
+	h := rt.WrapNew[QMdiSubWindow](p, "QMdiSubWindow", mode)
 	base.QMdiSubWindow = rt.View[QMdiSubWindow](h, p)
 	id := h.SetSelf(v, qMdiSubWindowVTable)
 	mask := rt.Mask(v, qMdiSubWindowVTable)

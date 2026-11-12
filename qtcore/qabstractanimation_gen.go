@@ -587,7 +587,7 @@ func NewQAbstractAnimationWith(v QAbstractAnimationSubclass, parent QObjectLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractAnimation", mode)
+	h := rt.WrapNew[QAbstractAnimation](p, "QAbstractAnimation", mode)
 	base.QAbstractAnimation = rt.View[QAbstractAnimation](h, p)
 	id := h.SetSelf(v, qAbstractAnimationVTable)
 	mask := rt.Mask(v, qAbstractAnimationVTable)

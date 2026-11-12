@@ -82,9 +82,13 @@ func setMemory(h *Handle, n int64) {
 
 // untrackMemory forgets the bytes of a handle that died through Delete().
 func untrackMemory(h *Handle) {
+	e := h.ext.Load()
+	if e == nil {
+		return
+	}
 	h.mu.Lock()
-	n := h.x().memBytes
-	h.x().memBytes = 0
+	n := e.memBytes
+	e.memBytes = 0
 	h.mu.Unlock()
 	if n != 0 {
 		memLive.Add(-n)

@@ -85,7 +85,7 @@ func (this *QVersionNumber) Unkeep() {
 func NewQVersionNumber() *QVersionNumber {
 	rt.CheckThread("NewQVersionNumber")
 	p := C.qute_QVersionNumber_new()
-	h := rt.WrapClass(p, "QVersionNumber", rt.NewOwned)
+	h := rt.WrapNew[QVersionNumber](p, "QVersionNumber", rt.NewOwned)
 	return rt.View[QVersionNumber](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQVersionNumber() *QVersionNumber {
 func NewQVersionNumberWithMaj(maj int) *QVersionNumber {
 	rt.CheckThread("NewQVersionNumberWithMaj")
 	p := C.qute_QVersionNumber_new_1(C.int(maj))
-	h := rt.WrapClass(p, "QVersionNumber", rt.NewOwned)
+	h := rt.WrapNew[QVersionNumber](p, "QVersionNumber", rt.NewOwned)
 	return rt.View[QVersionNumber](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQVersionNumberWithMaj(maj int) *QVersionNumber {
 func NewQVersionNumberWithMajMin(maj int, min int) *QVersionNumber {
 	rt.CheckThread("NewQVersionNumberWithMajMin")
 	p := C.qute_QVersionNumber_new_2(C.int(maj), C.int(min))
-	h := rt.WrapClass(p, "QVersionNumber", rt.NewOwned)
+	h := rt.WrapNew[QVersionNumber](p, "QVersionNumber", rt.NewOwned)
 	return rt.View[QVersionNumber](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQVersionNumberWithMajMin(maj int, min int) *QVersionNumber {
 func NewQVersionNumberWithMajMinMic(maj int, min int, mic int) *QVersionNumber {
 	rt.CheckThread("NewQVersionNumberWithMajMinMic")
 	p := C.qute_QVersionNumber_new_3(C.int(maj), C.int(min), C.int(mic))
-	h := rt.WrapClass(p, "QVersionNumber", rt.NewOwned)
+	h := rt.WrapNew[QVersionNumber](p, "QVersionNumber", rt.NewOwned)
 	return rt.View[QVersionNumber](h, p)
 }
 

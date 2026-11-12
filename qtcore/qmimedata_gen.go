@@ -55,7 +55,7 @@ func QMimeDataCast(o QObjectLike) *QMimeData {
 func NewQMimeData() *QMimeData {
 	rt.CheckThread("NewQMimeData")
 	p := C.qute_QMimeData_new()
-	h := rt.WrapClass(p, "QMimeData", rt.NewOwned)
+	h := rt.WrapNew[QMimeData](p, "QMimeData", rt.NewOwned)
 	return rt.View[QMimeData](h, p)
 }
 
@@ -516,7 +516,7 @@ func NewQMimeDataWith(v QMimeDataSubclass) *QMimeData {
 		panic("NewQMimeDataWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QMimeData_new_shim()
-	h := rt.WrapClass(p, "QMimeData", rt.NewOwned)
+	h := rt.WrapNew[QMimeData](p, "QMimeData", rt.NewOwned)
 	base.QMimeData = rt.View[QMimeData](h, p)
 	id := h.SetSelf(v, qMimeDataVTable)
 	mask := rt.Mask(v, qMimeDataVTable)

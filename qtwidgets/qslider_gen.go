@@ -68,7 +68,7 @@ func NewQSlider(parent QWidgetLike) *QSlider {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSlider", mode)
+	h := rt.WrapNew[QSlider](p, "QSlider", mode)
 	return rt.View[QSlider](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQSliderWithOrientation(orientation qtcore.Orientations, parent QWidgetLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSlider", mode)
+	h := rt.WrapNew[QSlider](p, "QSlider", mode)
 	return rt.View[QSlider](h, p)
 }
 
@@ -1056,7 +1056,7 @@ func NewQSliderWith(v QSliderSubclass, parent QWidgetLike) *QSlider {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSlider", mode)
+	h := rt.WrapNew[QSlider](p, "QSlider", mode)
 	base.QSlider = rt.View[QSlider](h, p)
 	id := h.SetSelf(v, qSliderVTable)
 	mask := rt.Mask(v, qSliderVTable)
@@ -1088,7 +1088,7 @@ func NewQSliderWithOrientationWith(v QSliderSubclass, orientation qtcore.Orienta
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSlider", mode)
+	h := rt.WrapNew[QSlider](p, "QSlider", mode)
 	base.QSlider = rt.View[QSlider](h, p)
 	id := h.SetSelf(v, qSliderVTable)
 	mask := rt.Mask(v, qSliderVTable)

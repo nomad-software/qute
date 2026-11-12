@@ -65,7 +65,7 @@ func QHoverEventCast(e qtcore.QEventLike) *QHoverEvent {
 func NewQHoverEvent(typeArg qtcore.QEventType, scenePos qtcore.QPointF, globalPos qtcore.QPointF, oldPos qtcore.QPointF) *QHoverEvent {
 	rt.CheckThread("NewQHoverEvent")
 	p := C.qute_QHoverEvent_new(C.int64_t(typeArg), cQPointF(scenePos), cQPointF(globalPos), cQPointF(oldPos))
-	h := rt.WrapClass(p, "QHoverEvent", rt.NewOwned)
+	h := rt.WrapNew[QHoverEvent](p, "QHoverEvent", rt.NewOwned)
 	return rt.View[QHoverEvent](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQHoverEventFull(typeArg qtcore.QEventType, scenePos qtcore.QPointF, glob
 	}
 	p := C.qute_QHoverEvent_new_1(C.int64_t(typeArg), cQPointF(scenePos), cQPointF(globalPos), cQPointF(oldPos), C.int64_t(modifiers), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QHoverEvent", rt.NewOwned)
+	h := rt.WrapNew[QHoverEvent](p, "QHoverEvent", rt.NewOwned)
 	rt.KeepArg(h, "QHoverEvent.device", deviceH, true)
 	return rt.View[QHoverEvent](h, p)
 }

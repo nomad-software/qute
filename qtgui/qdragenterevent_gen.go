@@ -71,7 +71,7 @@ func NewQDragEnterEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions
 	}
 	p := C.qute_QDragEnterEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
 	runtime.KeepAlive(data)
-	h := rt.WrapClass(p, "QDragEnterEvent", rt.NewOwned)
+	h := rt.WrapNew[QDragEnterEvent](p, "QDragEnterEvent", rt.NewOwned)
 	rt.KeepArg(h, "QDragEnterEvent.data", dataH, true)
 	return rt.View[QDragEnterEvent](h, p)
 }

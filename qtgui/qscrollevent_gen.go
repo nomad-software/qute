@@ -61,7 +61,7 @@ func QScrollEventCast(e qtcore.QEventLike) *QScrollEvent {
 func NewQScrollEventWithPointF(contentPos qtcore.QPointF, overshoot qtcore.QPointF, scrollState QScrollEventScrollState) *QScrollEvent {
 	rt.CheckThread("NewQScrollEventWithPointF")
 	p := C.qute_QScrollEvent_new(cQPointF(contentPos), cQPointF(overshoot), C.int64_t(scrollState))
-	h := rt.WrapClass(p, "QScrollEvent", rt.NewOwned)
+	h := rt.WrapNew[QScrollEvent](p, "QScrollEvent", rt.NewOwned)
 	return rt.View[QScrollEvent](h, p)
 }
 

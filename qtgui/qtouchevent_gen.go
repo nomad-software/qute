@@ -65,7 +65,7 @@ func QTouchEventCast(e qtcore.QEventLike) *QTouchEvent {
 func NewQTouchEventWithType(eventType qtcore.QEventType) *QTouchEvent {
 	rt.CheckThread("NewQTouchEventWithType")
 	p := C.qute_QTouchEvent_new(C.int64_t(eventType))
-	h := rt.WrapClass(p, "QTouchEvent", rt.NewOwned)
+	h := rt.WrapNew[QTouchEvent](p, "QTouchEvent", rt.NewOwned)
 	return rt.View[QTouchEvent](h, p)
 }
 
@@ -94,7 +94,7 @@ func NewQTouchEventWithTypeFull(eventType qtcore.QEventType, device QPointingDev
 	p := C.qute_QTouchEvent_new_1(C.int64_t(eventType), devicePtr, C.int64_t(modifiers), unsafe.Pointer(unsafe.SliceData(touchPointsC)), C.ptrdiff_t(len(touchPoints)))
 	runtime.KeepAlive(device)
 	runtime.KeepAlive(touchPoints)
-	h := rt.WrapClass(p, "QTouchEvent", rt.NewOwned)
+	h := rt.WrapNew[QTouchEvent](p, "QTouchEvent", rt.NewOwned)
 	rt.KeepArg(h, "QTouchEvent.device", deviceH, true)
 	return rt.View[QTouchEvent](h, p)
 }

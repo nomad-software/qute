@@ -85,7 +85,7 @@ func (this *QCborMap) Unkeep() {
 func NewQCborMap() *QCborMap {
 	rt.CheckThread("NewQCborMap")
 	p := C.qute_QCborMap_new()
-	h := rt.WrapClass(p, "QCborMap", rt.NewOwned)
+	h := rt.WrapNew[QCborMap](p, "QCborMap", rt.NewOwned)
 	return rt.View[QCborMap](h, p)
 }
 

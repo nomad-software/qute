@@ -67,7 +67,7 @@ func NewQAction(parent qtcore.QObjectLike) *QAction {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	return rt.View[QAction](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQActionWithText(text string, parent qtcore.QObjectLike) *QAction {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	return rt.View[QAction](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQActionWithIcon(icon *QIcon, text string, parent qtcore.QObjectLike) *QA
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	return rt.View[QAction](h, p)
 }
 
@@ -1134,7 +1134,7 @@ func NewQActionWith(v QActionSubclass, parent qtcore.QObjectLike) *QAction {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	base.QAction = rt.View[QAction](h, p)
 	id := h.SetSelf(v, qActionVTable)
 	mask := rt.Mask(v, qActionVTable)
@@ -1166,7 +1166,7 @@ func NewQActionWithTextWith(v QActionSubclass, text string, parent qtcore.QObjec
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	base.QAction = rt.View[QAction](h, p)
 	id := h.SetSelf(v, qActionVTable)
 	mask := rt.Mask(v, qActionVTable)
@@ -1199,7 +1199,7 @@ func NewQActionWithIconWith(v QActionSubclass, icon *QIcon, text string, parent 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAction", mode)
+	h := rt.WrapNew[QAction](p, "QAction", mode)
 	base.QAction = rt.View[QAction](h, p)
 	id := h.SetSelf(v, qActionVTable)
 	mask := rt.Mask(v, qActionVTable)

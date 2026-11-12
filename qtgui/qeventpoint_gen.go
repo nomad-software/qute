@@ -88,7 +88,7 @@ func (this *QEventPoint) Unkeep() {
 func NewQEventPoint() *QEventPoint {
 	rt.CheckThread("NewQEventPoint")
 	p := C.qute_QEventPoint_new()
-	h := rt.WrapClass(p, "QEventPoint", rt.NewOwned)
+	h := rt.WrapNew[QEventPoint](p, "QEventPoint", rt.NewOwned)
 	return rt.View[QEventPoint](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQEventPoint() *QEventPoint {
 func NewQEventPointWithPointId(pointId int, state QEventPointStates, scenePosition qtcore.QPointF, globalPosition qtcore.QPointF) *QEventPoint {
 	rt.CheckThread("NewQEventPointWithPointId")
 	p := C.qute_QEventPoint_new_1(C.int(pointId), C.int64_t(state), cQPointF(scenePosition), cQPointF(globalPosition))
-	h := rt.WrapClass(p, "QEventPoint", rt.NewOwned)
+	h := rt.WrapNew[QEventPoint](p, "QEventPoint", rt.NewOwned)
 	return rt.View[QEventPoint](h, p)
 }
 
@@ -119,7 +119,7 @@ func NewQEventPointFull(idArg int, device QPointingDeviceLike) *QEventPoint {
 	}
 	p := C.qute_QEventPoint_new_2(C.int(idArg), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QEventPoint", rt.NewOwned)
+	h := rt.WrapNew[QEventPoint](p, "QEventPoint", rt.NewOwned)
 	return rt.View[QEventPoint](h, p)
 }
 

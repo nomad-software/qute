@@ -59,7 +59,7 @@ func QSplashScreenCast(o qtcore.QObjectLike) *QSplashScreen {
 func NewQSplashScreen() *QSplashScreen {
 	rt.CheckThread("NewQSplashScreen")
 	p := C.qute_QSplashScreen_new()
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	return rt.View[QSplashScreen](h, p)
 }
 
@@ -78,7 +78,7 @@ func NewQSplashScreenWithScreen(screen qtgui.QScreenLike) *QSplashScreen {
 	}
 	p := C.qute_QSplashScreen_new_1(screenPtr)
 	runtime.KeepAlive(screen)
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	return rt.View[QSplashScreen](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQSplashScreenFull(pixmap *qtgui.QPixmap, fArg qtcore.WindowFlags) *QSpla
 	rt.CheckThread("NewQSplashScreenFull")
 	p := C.qute_QSplashScreen_new_2(rt.UseArg(unsafe.Pointer(pixmap), "NewQSplashScreenFull"), C.int64_t(fArg))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	return rt.View[QSplashScreen](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQSplashScreenWithScreenFull(screen qtgui.QScreenLike, pixmap *qtgui.QPix
 	p := C.qute_QSplashScreen_new_3(screenPtr, rt.UseArg(unsafe.Pointer(pixmap), "NewQSplashScreenWithScreenFull"), C.int64_t(fArg))
 	runtime.KeepAlive(screen)
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	return rt.View[QSplashScreen](h, p)
 }
 
@@ -1111,7 +1111,7 @@ func NewQSplashScreenWith(v QSplashScreenSubclass) *QSplashScreen {
 		panic("NewQSplashScreenWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSplashScreen_new_shim()
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	base.QSplashScreen = rt.View[QSplashScreen](h, p)
 	id := h.SetSelf(v, qSplashScreenVTable)
 	mask := rt.Mask(v, qSplashScreenVTable)
@@ -1139,7 +1139,7 @@ func NewQSplashScreenWithScreenWith(v QSplashScreenSubclass, screen qtgui.QScree
 	}
 	p := C.qute_QSplashScreen_new_shim_1(screenPtr)
 	runtime.KeepAlive(screen)
-	h := rt.WrapClass(p, "QSplashScreen", rt.NewOwned)
+	h := rt.WrapNew[QSplashScreen](p, "QSplashScreen", rt.NewOwned)
 	base.QSplashScreen = rt.View[QSplashScreen](h, p)
 	id := h.SetSelf(v, qSplashScreenVTable)
 	mask := rt.Mask(v, qSplashScreenVTable)

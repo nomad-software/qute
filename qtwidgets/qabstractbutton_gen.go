@@ -1355,7 +1355,7 @@ func NewQAbstractButtonWith(v QAbstractButtonSubclass, parent QWidgetLike) *QAbs
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractButton", mode)
+	h := rt.WrapNew[QAbstractButton](p, "QAbstractButton", mode)
 	base.QAbstractButton = rt.View[QAbstractButton](h, p)
 	id := h.SetSelf(v, qAbstractButtonVTable)
 	mask := rt.Mask(v, qAbstractButtonVTable)

@@ -86,7 +86,7 @@ func (this *QIcon) Unkeep() {
 func NewQIcon() *QIcon {
 	rt.CheckThread("NewQIcon")
 	p := C.qute_QIcon_new()
-	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
+	h := rt.WrapNew[QIcon](p, "QIcon", rt.NewOwned)
 	return rt.View[QIcon](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQIconWithPixmap(pixmap *QPixmap) *QIcon {
 	rt.CheckThread("NewQIconWithPixmap")
 	p := C.qute_QIcon_new_1(rt.UseArg(unsafe.Pointer(pixmap), "NewQIconWithPixmap"))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
+	h := rt.WrapNew[QIcon](p, "QIcon", rt.NewOwned)
 	return rt.View[QIcon](h, p)
 }
 
@@ -111,7 +111,7 @@ func NewQIconWithPixmap(pixmap *QPixmap) *QIcon {
 func NewQIconWithFileName(fileName string) *QIcon {
 	rt.CheckThread("NewQIconWithFileName")
 	p := C.qute_QIcon_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
+	h := rt.WrapNew[QIcon](p, "QIcon", rt.NewOwned)
 	return rt.View[QIcon](h, p)
 }
 
@@ -133,7 +133,7 @@ func NewQIconWithIconEngine(engine QIconEngineLike) *QIcon {
 	}
 	p := C.qute_QIcon_new_3(enginePtr)
 	runtime.KeepAlive(engine)
-	h := rt.WrapClass(p, "QIcon", rt.NewOwned)
+	h := rt.WrapNew[QIcon](p, "QIcon", rt.NewOwned)
 	rt.TransferTo(h, engineH)
 	return rt.View[QIcon](h, p)
 }

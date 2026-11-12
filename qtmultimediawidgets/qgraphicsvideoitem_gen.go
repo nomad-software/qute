@@ -70,7 +70,7 @@ func NewQGraphicsVideoItem(parent qtwidgets.QGraphicsItemLike) *QGraphicsVideoIt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsVideoItem", mode)
+	h := rt.WrapNew[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode)
 	return rt.View[QGraphicsVideoItem](h, p)
 }
 
@@ -1292,7 +1292,7 @@ func NewQGraphicsVideoItemWith(v QGraphicsVideoItemSubclass, parent qtwidgets.QG
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsVideoItem", mode)
+	h := rt.WrapNew[QGraphicsVideoItem](p, "QGraphicsVideoItem", mode)
 	base.QGraphicsVideoItem = rt.View[QGraphicsVideoItem](h, p)
 	id := h.SetSelf(v, qGraphicsVideoItemVTable)
 	mask := rt.Mask(v, qGraphicsVideoItemVTable)

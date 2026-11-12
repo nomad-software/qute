@@ -90,7 +90,7 @@ func (this *QOpenGLPixelTransferOptions) Unkeep() {
 func NewQOpenGLPixelTransferOptions() *QOpenGLPixelTransferOptions {
 	rt.CheckThread("NewQOpenGLPixelTransferOptions")
 	p := C.qute_QOpenGLPixelTransferOptions_new()
-	h := rt.WrapClass(p, "QOpenGLPixelTransferOptions", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLPixelTransferOptions](p, "QOpenGLPixelTransferOptions", rt.NewOwned)
 	return rt.View[QOpenGLPixelTransferOptions](h, p)
 }
 

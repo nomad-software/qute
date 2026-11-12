@@ -65,7 +65,7 @@ func QGraphicsSceneMoveEventCast(e qtcore.QEventLike) *QGraphicsSceneMoveEvent {
 func NewQGraphicsSceneMoveEvent() *QGraphicsSceneMoveEvent {
 	rt.CheckThread("NewQGraphicsSceneMoveEvent")
 	p := C.qute_QGraphicsSceneMoveEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneMoveEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneMoveEvent](p, "QGraphicsSceneMoveEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneMoveEvent](h, p)
 }
 

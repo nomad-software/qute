@@ -86,7 +86,7 @@ func (this *QTextDocumentFragment) Unkeep() {
 func NewQTextDocumentFragment() *QTextDocumentFragment {
 	rt.CheckThread("NewQTextDocumentFragment")
 	p := C.qute_QTextDocumentFragment_new()
-	h := rt.WrapClass(p, "QTextDocumentFragment", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentFragment](p, "QTextDocumentFragment", rt.NewOwned)
 	return rt.View[QTextDocumentFragment](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQTextDocumentFragmentWithTextDocument(document QTextDocumentLike) *QText
 	}
 	p := C.qute_QTextDocumentFragment_new_1(documentPtr)
 	runtime.KeepAlive(document)
-	h := rt.WrapClass(p, "QTextDocumentFragment", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentFragment](p, "QTextDocumentFragment", rt.NewOwned)
 	return rt.View[QTextDocumentFragment](h, p)
 }
 
@@ -116,7 +116,7 @@ func NewQTextDocumentFragmentWithTextCursor(rangeArg *QTextCursor) *QTextDocumen
 	rt.CheckThread("NewQTextDocumentFragmentWithTextCursor")
 	p := C.qute_QTextDocumentFragment_new_2(rt.UseArg(unsafe.Pointer(rangeArg), "NewQTextDocumentFragmentWithTextCursor"))
 	runtime.KeepAlive(rangeArg)
-	h := rt.WrapClass(p, "QTextDocumentFragment", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentFragment](p, "QTextDocumentFragment", rt.NewOwned)
 	return rt.View[QTextDocumentFragment](h, p)
 }
 

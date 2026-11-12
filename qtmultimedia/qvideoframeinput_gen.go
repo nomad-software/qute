@@ -67,7 +67,7 @@ func NewQVideoFrameInput(parent qtcore.QObjectLike) *QVideoFrameInput {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	h := rt.WrapNew[QVideoFrameInput](p, "QVideoFrameInput", mode)
 	return rt.View[QVideoFrameInput](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQVideoFrameInputWithVideoFrameFormat(format *QVideoFrameFormat, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	h := rt.WrapNew[QVideoFrameInput](p, "QVideoFrameInput", mode)
 	return rt.View[QVideoFrameInput](h, p)
 }
 
@@ -330,7 +330,7 @@ func NewQVideoFrameInputWith(v QVideoFrameInputSubclass, parent qtcore.QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	h := rt.WrapNew[QVideoFrameInput](p, "QVideoFrameInput", mode)
 	base.QVideoFrameInput = rt.View[QVideoFrameInput](h, p)
 	id := h.SetSelf(v, qVideoFrameInputVTable)
 	mask := rt.Mask(v, qVideoFrameInputVTable)
@@ -363,7 +363,7 @@ func NewQVideoFrameInputWithVideoFrameFormatWith(v QVideoFrameInputSubclass, for
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoFrameInput", mode)
+	h := rt.WrapNew[QVideoFrameInput](p, "QVideoFrameInput", mode)
 	base.QVideoFrameInput = rt.View[QVideoFrameInput](h, p)
 	id := h.SetSelf(v, qVideoFrameInputVTable)
 	mask := rt.Mask(v, qVideoFrameInputVTable)

@@ -85,7 +85,7 @@ func (this *QPersistentModelIndex) Unkeep() {
 func NewQPersistentModelIndex() *QPersistentModelIndex {
 	rt.CheckThread("NewQPersistentModelIndex")
 	p := C.qute_QPersistentModelIndex_new()
-	h := rt.WrapClass(p, "QPersistentModelIndex", rt.NewOwned)
+	h := rt.WrapNew[QPersistentModelIndex](p, "QPersistentModelIndex", rt.NewOwned)
 	return rt.View[QPersistentModelIndex](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQPersistentModelIndexWithModelIndex(index *QModelIndex) *QPersistentMode
 	rt.CheckThread("NewQPersistentModelIndexWithModelIndex")
 	p := C.qute_QPersistentModelIndex_new_1(rt.UseArg(unsafe.Pointer(index), "NewQPersistentModelIndexWithModelIndex"))
 	runtime.KeepAlive(index)
-	h := rt.WrapClass(p, "QPersistentModelIndex", rt.NewOwned)
+	h := rt.WrapNew[QPersistentModelIndex](p, "QPersistentModelIndex", rt.NewOwned)
 	return rt.View[QPersistentModelIndex](h, p)
 }
 

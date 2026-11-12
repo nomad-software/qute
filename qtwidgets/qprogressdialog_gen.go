@@ -70,7 +70,7 @@ func NewQProgressDialog(parent QWidgetLike) *QProgressDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	return rt.View[QProgressDialog](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQProgressDialogWithLabelText(labelText string, cancelButtonText string, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	return rt.View[QProgressDialog](h, p)
 }
 
@@ -120,7 +120,7 @@ func NewQProgressDialogFull(parent QWidgetLike, flags qtcore.WindowFlags) *QProg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	return rt.View[QProgressDialog](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQProgressDialogWithLabelTextFull(labelText string, cancelButtonText stri
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	return rt.View[QProgressDialog](h, p)
 }
 
@@ -1400,7 +1400,7 @@ func NewQProgressDialogWith(v QProgressDialogSubclass, parent QWidgetLike) *QPro
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	base.QProgressDialog = rt.View[QProgressDialog](h, p)
 	id := h.SetSelf(v, qProgressDialogVTable)
 	mask := rt.Mask(v, qProgressDialogVTable)
@@ -1432,7 +1432,7 @@ func NewQProgressDialogWithLabelTextWith(v QProgressDialogSubclass, labelText st
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressDialog", mode)
+	h := rt.WrapNew[QProgressDialog](p, "QProgressDialog", mode)
 	base.QProgressDialog = rt.View[QProgressDialog](h, p)
 	id := h.SetSelf(v, qProgressDialogVTable)
 	mask := rt.Mask(v, qProgressDialogVTable)

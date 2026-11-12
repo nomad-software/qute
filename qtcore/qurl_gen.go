@@ -83,7 +83,7 @@ func (this *QUrl) Unkeep() {
 func NewQUrl() *QUrl {
 	rt.CheckThread("NewQUrl")
 	p := C.qute_QUrl_new()
-	h := rt.WrapClass(p, "QUrl", rt.NewOwned)
+	h := rt.WrapNew[QUrl](p, "QUrl", rt.NewOwned)
 	return rt.View[QUrl](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQUrl() *QUrl {
 func NewQUrlWithUrl(url string) *QUrl {
 	rt.CheckThread("NewQUrlWithUrl")
 	p := C.qute_QUrl_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(url))), C.ptrdiff_t(len(url)))
-	h := rt.WrapClass(p, "QUrl", rt.NewOwned)
+	h := rt.WrapNew[QUrl](p, "QUrl", rt.NewOwned)
 	return rt.View[QUrl](h, p)
 }
 
@@ -111,7 +111,7 @@ func NewQUrlWithUrl(url string) *QUrl {
 func NewQUrlWithUrlFull(url string, mode QUrlParsingMode) *QUrl {
 	rt.CheckThread("NewQUrlWithUrlFull")
 	p := C.qute_QUrl_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(url))), C.ptrdiff_t(len(url)), C.int64_t(mode))
-	h := rt.WrapClass(p, "QUrl", rt.NewOwned)
+	h := rt.WrapNew[QUrl](p, "QUrl", rt.NewOwned)
 	return rt.View[QUrl](h, p)
 }
 

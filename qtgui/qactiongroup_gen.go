@@ -67,7 +67,7 @@ func NewQActionGroup(parent qtcore.QObjectLike) *QActionGroup {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QActionGroup", mode)
+	h := rt.WrapNew[QActionGroup](p, "QActionGroup", mode)
 	return rt.View[QActionGroup](h, p)
 }
 
@@ -509,7 +509,7 @@ func NewQActionGroupWith(v QActionGroupSubclass, parent qtcore.QObjectLike) *QAc
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QActionGroup", mode)
+	h := rt.WrapNew[QActionGroup](p, "QActionGroup", mode)
 	base.QActionGroup = rt.View[QActionGroup](h, p)
 	id := h.SetSelf(v, qActionGroupVTable)
 	mask := rt.Mask(v, qActionGroupVTable)

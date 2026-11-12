@@ -85,7 +85,7 @@ func (this *QLocale) Unkeep() {
 func NewQLocale() *QLocale {
 	rt.CheckThread("NewQLocale")
 	p := C.qute_QLocale_new()
-	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	h := rt.WrapNew[QLocale](p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQLocale() *QLocale {
 func NewQLocaleWithName(name string) *QLocale {
 	rt.CheckThread("NewQLocaleWithName")
 	p := C.qute_QLocale_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	h := rt.WrapNew[QLocale](p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQLocaleWithName(name string) *QLocale {
 func NewQLocaleWithLanguageTerritory(language QLocaleLanguage, territory QLocaleCountry) *QLocale {
 	rt.CheckThread("NewQLocaleWithLanguageTerritory")
 	p := C.qute_QLocale_new_2(C.int64_t(language), C.int64_t(territory))
-	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	h := rt.WrapNew[QLocale](p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
 
@@ -123,7 +123,7 @@ func NewQLocaleWithLanguageTerritory(language QLocaleLanguage, territory QLocale
 func NewQLocaleWithLanguage(language QLocaleLanguage) *QLocale {
 	rt.CheckThread("NewQLocaleWithLanguage")
 	p := C.qute_QLocale_new_3(C.int64_t(language))
-	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	h := rt.WrapNew[QLocale](p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
 
@@ -137,7 +137,7 @@ func NewQLocaleWithLanguage(language QLocaleLanguage) *QLocale {
 func NewQLocaleWithLanguageFull(language QLocaleLanguage, script QLocaleScript, territory QLocaleCountry) *QLocale {
 	rt.CheckThread("NewQLocaleWithLanguageFull")
 	p := C.qute_QLocale_new_4(C.int64_t(language), C.int64_t(script), C.int64_t(territory))
-	h := rt.WrapClass(p, "QLocale", rt.NewOwned)
+	h := rt.WrapNew[QLocale](p, "QLocale", rt.NewOwned)
 	return rt.View[QLocale](h, p)
 }
 

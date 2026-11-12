@@ -85,7 +85,7 @@ func (this *QXmlStreamAttribute) Unkeep() {
 func NewQXmlStreamAttribute() *QXmlStreamAttribute {
 	rt.CheckThread("NewQXmlStreamAttribute")
 	p := C.qute_QXmlStreamAttribute_new()
-	h := rt.WrapClass(p, "QXmlStreamAttribute", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamAttribute](p, "QXmlStreamAttribute", rt.NewOwned)
 	return rt.View[QXmlStreamAttribute](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQXmlStreamAttribute() *QXmlStreamAttribute {
 func NewQXmlStreamAttributeWithQualifiedName(qualifiedName string, value string) *QXmlStreamAttribute {
 	rt.CheckThread("NewQXmlStreamAttributeWithQualifiedName")
 	p := C.qute_QXmlStreamAttribute_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(qualifiedName))), C.ptrdiff_t(len(qualifiedName)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
-	h := rt.WrapClass(p, "QXmlStreamAttribute", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamAttribute](p, "QXmlStreamAttribute", rt.NewOwned)
 	return rt.View[QXmlStreamAttribute](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQXmlStreamAttributeWithQualifiedName(qualifiedName string, value string)
 func NewQXmlStreamAttributeWithNamespaceUri(namespaceUri string, name string, value string) *QXmlStreamAttribute {
 	rt.CheckThread("NewQXmlStreamAttributeWithNamespaceUri")
 	p := C.qute_QXmlStreamAttribute_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(namespaceUri))), C.ptrdiff_t(len(namespaceUri)), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(value))), C.ptrdiff_t(len(value)))
-	h := rt.WrapClass(p, "QXmlStreamAttribute", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamAttribute](p, "QXmlStreamAttribute", rt.NewOwned)
 	return rt.View[QXmlStreamAttribute](h, p)
 }
 

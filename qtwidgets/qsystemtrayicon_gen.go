@@ -68,7 +68,7 @@ func NewQSystemTrayIcon(parent qtcore.QObjectLike) *QSystemTrayIcon {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSystemTrayIcon", mode)
+	h := rt.WrapNew[QSystemTrayIcon](p, "QSystemTrayIcon", mode)
 	return rt.View[QSystemTrayIcon](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQSystemTrayIconWithIcon(icon *qtgui.QIcon, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSystemTrayIcon", mode)
+	h := rt.WrapNew[QSystemTrayIcon](p, "QSystemTrayIcon", mode)
 	return rt.View[QSystemTrayIcon](h, p)
 }
 
@@ -536,7 +536,7 @@ func NewQSystemTrayIconWith(v QSystemTrayIconSubclass, parent qtcore.QObjectLike
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSystemTrayIcon", mode)
+	h := rt.WrapNew[QSystemTrayIcon](p, "QSystemTrayIcon", mode)
 	base.QSystemTrayIcon = rt.View[QSystemTrayIcon](h, p)
 	id := h.SetSelf(v, qSystemTrayIconVTable)
 	mask := rt.Mask(v, qSystemTrayIconVTable)
@@ -569,7 +569,7 @@ func NewQSystemTrayIconWithIconWith(v QSystemTrayIconSubclass, icon *qtgui.QIcon
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSystemTrayIcon", mode)
+	h := rt.WrapNew[QSystemTrayIcon](p, "QSystemTrayIcon", mode)
 	base.QSystemTrayIcon = rt.View[QSystemTrayIcon](h, p)
 	id := h.SetSelf(v, qSystemTrayIconVTable)
 	mask := rt.Mask(v, qSystemTrayIconVTable)

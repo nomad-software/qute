@@ -68,7 +68,7 @@ func NewQToolBar(parent QWidgetLike) *QToolBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBar", mode)
+	h := rt.WrapNew[QToolBar](p, "QToolBar", mode)
 	return rt.View[QToolBar](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQToolBarWithTitle(title string, parent QWidgetLike) *QToolBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBar", mode)
+	h := rt.WrapNew[QToolBar](p, "QToolBar", mode)
 	return rt.View[QToolBar](h, p)
 }
 
@@ -1519,7 +1519,7 @@ func NewQToolBarWith(v QToolBarSubclass, parent QWidgetLike) *QToolBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBar", mode)
+	h := rt.WrapNew[QToolBar](p, "QToolBar", mode)
 	base.QToolBar = rt.View[QToolBar](h, p)
 	id := h.SetSelf(v, qToolBarVTable)
 	mask := rt.Mask(v, qToolBarVTable)
@@ -1551,7 +1551,7 @@ func NewQToolBarWithTitleWith(v QToolBarSubclass, title string, parent QWidgetLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBar", mode)
+	h := rt.WrapNew[QToolBar](p, "QToolBar", mode)
 	base.QToolBar = rt.View[QToolBar](h, p)
 	id := h.SetSelf(v, qToolBarVTable)
 	mask := rt.Mask(v, qToolBarVTable)

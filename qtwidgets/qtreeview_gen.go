@@ -68,7 +68,7 @@ func NewQTreeView(parent QWidgetLike) *QTreeView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeView", mode)
+	h := rt.WrapNew[QTreeView](p, "QTreeView", mode)
 	return rt.View[QTreeView](h, p)
 }
 
@@ -2741,7 +2741,7 @@ func NewQTreeViewWith(v QTreeViewSubclass, parent QWidgetLike) *QTreeView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeView", mode)
+	h := rt.WrapNew[QTreeView](p, "QTreeView", mode)
 	base.QTreeView = rt.View[QTreeView](h, p)
 	id := h.SetSelf(v, qTreeViewVTable)
 	mask := rt.Mask(v, qTreeViewVTable)

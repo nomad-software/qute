@@ -90,7 +90,7 @@ func (this *QFormLayoutTakeRowResult) Unkeep() {
 func NewQFormLayoutTakeRowResult() *QFormLayoutTakeRowResult {
 	rt.CheckThread("NewQFormLayoutTakeRowResult")
 	p := C.qute_QFormLayoutTakeRowResult_new()
-	h := rt.WrapClass(p, "QFormLayoutTakeRowResult", rt.NewOwned)
+	h := rt.WrapNew[QFormLayoutTakeRowResult](p, "QFormLayoutTakeRowResult", rt.NewOwned)
 	return rt.View[QFormLayoutTakeRowResult](h, p)
 }
 

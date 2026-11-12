@@ -67,7 +67,7 @@ func NewQFormLayout(parent QWidgetLike) *QFormLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFormLayout", mode)
+	h := rt.WrapNew[QFormLayout](p, "QFormLayout", mode)
 	return rt.View[QFormLayout](h, p)
 }
 
@@ -1499,7 +1499,7 @@ func NewQFormLayoutWith(v QFormLayoutSubclass, parent QWidgetLike) *QFormLayout 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFormLayout", mode)
+	h := rt.WrapNew[QFormLayout](p, "QFormLayout", mode)
 	base.QFormLayout = rt.View[QFormLayout](h, p)
 	id := h.SetSelf(v, qFormLayoutVTable)
 	mask := rt.Mask(v, qFormLayoutVTable)

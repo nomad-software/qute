@@ -96,7 +96,7 @@ func (this *QTextDocumentWriter) Unkeep() {
 func NewQTextDocumentWriter() *QTextDocumentWriter {
 	rt.CheckThread("NewQTextDocumentWriter")
 	p := C.qute_QTextDocumentWriter_new()
-	h := rt.WrapClass(p, "QTextDocumentWriter", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentWriter](p, "QTextDocumentWriter", rt.NewOwned)
 	return rt.View[QTextDocumentWriter](h, p)
 }
 
@@ -116,7 +116,7 @@ func NewQTextDocumentWriterWithIODevice(device qtcore.QIODeviceLike, format []by
 	}
 	p := C.qute_QTextDocumentWriter_new_1(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QTextDocumentWriter", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentWriter](p, "QTextDocumentWriter", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QTextDocumentWriter](h, p)
 }
@@ -131,7 +131,7 @@ func NewQTextDocumentWriterWithIODevice(device qtcore.QIODeviceLike, format []by
 func NewQTextDocumentWriterWithFileName(fileName string) *QTextDocumentWriter {
 	rt.CheckThread("NewQTextDocumentWriterWithFileName")
 	p := C.qute_QTextDocumentWriter_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QTextDocumentWriter", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentWriter](p, "QTextDocumentWriter", rt.NewOwned)
 	return rt.View[QTextDocumentWriter](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQTextDocumentWriterWithFileName(fileName string) *QTextDocumentWriter {
 func NewQTextDocumentWriterWithFileNameFull(fileName string, format []byte) *QTextDocumentWriter {
 	rt.CheckThread("NewQTextDocumentWriterWithFileNameFull")
 	p := C.qute_QTextDocumentWriter_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
-	h := rt.WrapClass(p, "QTextDocumentWriter", rt.NewOwned)
+	h := rt.WrapNew[QTextDocumentWriter](p, "QTextDocumentWriter", rt.NewOwned)
 	return rt.View[QTextDocumentWriter](h, p)
 }
 

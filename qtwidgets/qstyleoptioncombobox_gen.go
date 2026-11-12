@@ -62,7 +62,7 @@ func QStyleOptionComboBoxCast(o QStyleOptionLike) *QStyleOptionComboBox {
 func NewQStyleOptionComboBox() *QStyleOptionComboBox {
 	rt.CheckThread("NewQStyleOptionComboBox")
 	p := C.qute_QStyleOptionComboBox_new()
-	h := rt.WrapClass(p, "QStyleOptionComboBox", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionComboBox](p, "QStyleOptionComboBox", rt.NewOwned)
 	return rt.View[QStyleOptionComboBox](h, p)
 }
 

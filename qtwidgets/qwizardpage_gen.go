@@ -68,7 +68,7 @@ func NewQWizardPage(parent QWidgetLike) *QWizardPage {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWizardPage", mode)
+	h := rt.WrapNew[QWizardPage](p, "QWizardPage", mode)
 	return rt.View[QWizardPage](h, p)
 }
 
@@ -1265,7 +1265,7 @@ func NewQWizardPageWith(v QWizardPageSubclass, parent QWidgetLike) *QWizardPage 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWizardPage", mode)
+	h := rt.WrapNew[QWizardPage](p, "QWizardPage", mode)
 	base.QWizardPage = rt.View[QWizardPage](h, p)
 	id := h.SetSelf(v, qWizardPageVTable)
 	mask := rt.Mask(v, qWizardPageVTable)

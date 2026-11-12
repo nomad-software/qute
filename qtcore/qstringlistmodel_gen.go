@@ -66,7 +66,7 @@ func NewQStringListModel(parent QObjectLike) *QStringListModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStringListModel", mode)
+	h := rt.WrapNew[QStringListModel](p, "QStringListModel", mode)
 	return rt.View[QStringListModel](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQStringListModelWithStrings(strings []string, parent QObjectLike) *QStri
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStringListModel", mode)
+	h := rt.WrapNew[QStringListModel](p, "QStringListModel", mode)
 	return rt.View[QStringListModel](h, p)
 }
 
@@ -1187,7 +1187,7 @@ func NewQStringListModelWith(v QStringListModelSubclass, parent QObjectLike) *QS
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStringListModel", mode)
+	h := rt.WrapNew[QStringListModel](p, "QStringListModel", mode)
 	base.QStringListModel = rt.View[QStringListModel](h, p)
 	id := h.SetSelf(v, qStringListModelVTable)
 	mask := rt.Mask(v, qStringListModelVTable)
@@ -1220,7 +1220,7 @@ func NewQStringListModelWithStringsWith(v QStringListModelSubclass, strings []st
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStringListModel", mode)
+	h := rt.WrapNew[QStringListModel](p, "QStringListModel", mode)
 	base.QStringListModel = rt.View[QStringListModel](h, p)
 	id := h.SetSelf(v, qStringListModelVTable)
 	mask := rt.Mask(v, qStringListModelVTable)

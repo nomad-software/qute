@@ -85,7 +85,7 @@ func (this *QStorageInfo) Unkeep() {
 func NewQStorageInfo() *QStorageInfo {
 	rt.CheckThread("NewQStorageInfo")
 	p := C.qute_QStorageInfo_new()
-	h := rt.WrapClass(p, "QStorageInfo", rt.NewOwned)
+	h := rt.WrapNew[QStorageInfo](p, "QStorageInfo", rt.NewOwned)
 	return rt.View[QStorageInfo](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQStorageInfo() *QStorageInfo {
 func NewQStorageInfoWithPath(path string) *QStorageInfo {
 	rt.CheckThread("NewQStorageInfoWithPath")
 	p := C.qute_QStorageInfo_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
-	h := rt.WrapClass(p, "QStorageInfo", rt.NewOwned)
+	h := rt.WrapNew[QStorageInfo](p, "QStorageInfo", rt.NewOwned)
 	return rt.View[QStorageInfo](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQStorageInfoWithDir(dir *QDir) *QStorageInfo {
 	rt.CheckThread("NewQStorageInfoWithDir")
 	p := C.qute_QStorageInfo_new_2(rt.UseArg(unsafe.Pointer(dir), "NewQStorageInfoWithDir"))
 	runtime.KeepAlive(dir)
-	h := rt.WrapClass(p, "QStorageInfo", rt.NewOwned)
+	h := rt.WrapNew[QStorageInfo](p, "QStorageInfo", rt.NewOwned)
 	return rt.View[QStorageInfo](h, p)
 }
 

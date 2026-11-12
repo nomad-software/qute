@@ -66,7 +66,7 @@ func NewQFileSystemWatcher(parent QObjectLike) *QFileSystemWatcher {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemWatcher", mode)
+	h := rt.WrapNew[QFileSystemWatcher](p, "QFileSystemWatcher", mode)
 	return rt.View[QFileSystemWatcher](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQFileSystemWatcherWithPaths(paths []string, parent QObjectLike) *QFileSy
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemWatcher", mode)
+	h := rt.WrapNew[QFileSystemWatcher](p, "QFileSystemWatcher", mode)
 	return rt.View[QFileSystemWatcher](h, p)
 }
 
@@ -364,7 +364,7 @@ func NewQFileSystemWatcherWith(v QFileSystemWatcherSubclass, parent QObjectLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemWatcher", mode)
+	h := rt.WrapNew[QFileSystemWatcher](p, "QFileSystemWatcher", mode)
 	base.QFileSystemWatcher = rt.View[QFileSystemWatcher](h, p)
 	id := h.SetSelf(v, qFileSystemWatcherVTable)
 	mask := rt.Mask(v, qFileSystemWatcherVTable)
@@ -397,7 +397,7 @@ func NewQFileSystemWatcherWithPathsWith(v QFileSystemWatcherSubclass, paths []st
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemWatcher", mode)
+	h := rt.WrapNew[QFileSystemWatcher](p, "QFileSystemWatcher", mode)
 	base.QFileSystemWatcher = rt.View[QFileSystemWatcher](h, p)
 	id := h.SetSelf(v, qFileSystemWatcherVTable)
 	mask := rt.Mask(v, qFileSystemWatcherVTable)

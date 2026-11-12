@@ -86,7 +86,7 @@ func (this *QWebEngineScript) Unkeep() {
 func NewQWebEngineScript() *QWebEngineScript {
 	rt.CheckThread("NewQWebEngineScript")
 	p := C.qute_QWebEngineScript_new()
-	h := rt.WrapClass(p, "QWebEngineScript", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineScript](p, "QWebEngineScript", rt.NewOwned)
 	return rt.View[QWebEngineScript](h, p)
 }
 

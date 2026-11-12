@@ -70,7 +70,7 @@ func NewQGraphicsItemAnimation(parent qtcore.QObjectLike) *QGraphicsItemAnimatio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsItemAnimation", mode)
+	h := rt.WrapNew[QGraphicsItemAnimation](p, "QGraphicsItemAnimation", mode)
 	return rt.View[QGraphicsItemAnimation](h, p)
 }
 
@@ -600,7 +600,7 @@ func NewQGraphicsItemAnimationWith(v QGraphicsItemAnimationSubclass, parent qtco
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsItemAnimation", mode)
+	h := rt.WrapNew[QGraphicsItemAnimation](p, "QGraphicsItemAnimation", mode)
 	base.QGraphicsItemAnimation = rt.View[QGraphicsItemAnimation](h, p)
 	id := h.SetSelf(v, qGraphicsItemAnimationVTable)
 	mask := rt.Mask(v, qGraphicsItemAnimationVTable)

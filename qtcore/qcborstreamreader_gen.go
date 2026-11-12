@@ -95,7 +95,7 @@ func (this *QCborStreamReader) Unkeep() {
 func NewQCborStreamReader() *QCborStreamReader {
 	rt.CheckThread("NewQCborStreamReader")
 	p := C.qute_QCborStreamReader_new()
-	h := rt.WrapClass(p, "QCborStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QCborStreamReader](p, "QCborStreamReader", rt.NewOwned)
 	return rt.View[QCborStreamReader](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQCborStreamReader() *QCborStreamReader {
 func NewQCborStreamReaderWithBytes(data []byte) *QCborStreamReader {
 	rt.CheckThread("NewQCborStreamReaderWithBytes")
 	p := C.qute_QCborStreamReader_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)))
-	h := rt.WrapClass(p, "QCborStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QCborStreamReader](p, "QCborStreamReader", rt.NewOwned)
 	return rt.View[QCborStreamReader](h, p)
 }
 
@@ -129,7 +129,7 @@ func NewQCborStreamReaderWithIODevice(device QIODeviceLike) *QCborStreamReader {
 	}
 	p := C.qute_QCborStreamReader_new_2(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QCborStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QCborStreamReader](p, "QCborStreamReader", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QCborStreamReader](h, p)
 }

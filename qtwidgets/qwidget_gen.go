@@ -77,7 +77,7 @@ func NewQWidget(parent QWidgetLike) *QWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWidget", mode)
+	h := rt.WrapNew[QWidget](p, "QWidget", mode)
 	return rt.View[QWidget](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQWidgetFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWidget", mode)
+	h := rt.WrapNew[QWidget](p, "QWidget", mode)
 	return rt.View[QWidget](h, p)
 }
 
@@ -4260,7 +4260,7 @@ func NewQWidgetWith(v QWidgetSubclass, parent QWidgetLike) *QWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWidget", mode)
+	h := rt.WrapNew[QWidget](p, "QWidget", mode)
 	base.QWidget = rt.View[QWidget](h, p)
 	id := h.SetSelf(v, qWidgetVTable)
 	mask := rt.Mask(v, qWidgetVTable)

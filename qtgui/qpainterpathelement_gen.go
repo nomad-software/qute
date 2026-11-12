@@ -86,7 +86,7 @@ func (this *QPainterPathElement) Unkeep() {
 func NewQPainterPathElement() *QPainterPathElement {
 	rt.CheckThread("NewQPainterPathElement")
 	p := C.qute_QPainterPathElement_new()
-	h := rt.WrapClass(p, "QPainterPathElement", rt.NewOwned)
+	h := rt.WrapNew[QPainterPathElement](p, "QPainterPathElement", rt.NewOwned)
 	return rt.View[QPainterPathElement](h, p)
 }
 

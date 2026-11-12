@@ -67,7 +67,7 @@ func NewQOpenGLDebugLogger(parent qtcore.QObjectLike) *QOpenGLDebugLogger {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLDebugLogger", mode)
+	h := rt.WrapNew[QOpenGLDebugLogger](p, "QOpenGLDebugLogger", mode)
 	return rt.View[QOpenGLDebugLogger](h, p)
 }
 
@@ -537,7 +537,7 @@ func NewQOpenGLDebugLoggerWith(v QOpenGLDebugLoggerSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLDebugLogger", mode)
+	h := rt.WrapNew[QOpenGLDebugLogger](p, "QOpenGLDebugLogger", mode)
 	base.QOpenGLDebugLogger = rt.View[QOpenGLDebugLogger](h, p)
 	id := h.SetSelf(v, qOpenGLDebugLoggerVTable)
 	mask := rt.Mask(v, qOpenGLDebugLoggerVTable)

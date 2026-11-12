@@ -110,7 +110,7 @@ func NewQListWidgetItem(listview QListWidgetLike) *QListWidgetItem {
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQListWidgetItemWithText(text string, listview QListWidgetLike) *QListWid
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -161,7 +161,7 @@ func NewQListWidgetItemWithIcon(icon *qtgui.QIcon, text string, listview QListWi
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -186,7 +186,7 @@ func NewQListWidgetItemFull(listview QListWidgetLike, typeArg int) *QListWidgetI
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -211,7 +211,7 @@ func NewQListWidgetItemWithTextFull(text string, listview QListWidgetLike, typeA
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -237,7 +237,7 @@ func NewQListWidgetItemWithIconFull(icon *qtgui.QIcon, text string, listview QLi
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	return rt.View[QListWidgetItem](h, p)
 }
 
@@ -807,7 +807,7 @@ func NewQListWidgetItemWith(v QListWidgetItemSubclass, listview QListWidgetLike)
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)
@@ -839,7 +839,7 @@ func NewQListWidgetItemWithTextWith(v QListWidgetItemSubclass, text string, list
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)
@@ -872,7 +872,7 @@ func NewQListWidgetItemWithIconWith(v QListWidgetItemSubclass, icon *qtgui.QIcon
 	if listviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidgetItem", mode)
+	h := rt.WrapNew[QListWidgetItem](p, "QListWidgetItem", mode)
 	base.QListWidgetItem = rt.View[QListWidgetItem](h, p)
 	id := h.SetSelf(v, qListWidgetItemVTable)
 	mask := rt.Mask(v, qListWidgetItemVTable)

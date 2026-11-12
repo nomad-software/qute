@@ -53,6 +53,41 @@ func SubclassLeak() {
 	qtwidgets.NewQVBoxLayout(ok).AddWidget(given) // the value stands for the widget
 }
 
+// A Go subclass handed on as its wrapper (an embedded field) is not leaked:
+// the caller gives it a parent.
+func SubclassReturned() *qtwidgets.QWidget {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	return c.QWidget
+}
+
+type holder struct{ w *qtwidgets.QWidget }
+
+func SubclassStored(h *holder) {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	h.w = c.QWidget
+}
+
+func SubclassAliased() *qtwidgets.QWidget {
+	c := &Canvas{}
+	qtwidgets.NewQWidgetWith(c, nil)
+	w := c.QWidget
+	return w
+}
+
+// A field that is not the object does not hand it on.
+type labelled struct {
+	qtwidgets.QWidgetBase
+	name string
+}
+
+func SubclassFieldOnly() string {
+	l := &labelled{name: "x"}
+	qtwidgets.NewQWidgetWith(l, nil) // want owned-leak
+	return l.name
+}
+
 func NoLeak() *qtwidgets.QPushButton {
 	btn := qtwidgets.NewQPushButtonWithText("x", nil)
 	btn.OnClicked(func(bool) {})

@@ -65,7 +65,7 @@ func QEnterEventCast(e qtcore.QEventLike) *QEnterEvent {
 func NewQEnterEvent(localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF) *QEnterEvent {
 	rt.CheckThread("NewQEnterEvent")
 	p := C.qute_QEnterEvent_new(cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos))
-	h := rt.WrapClass(p, "QEnterEvent", rt.NewOwned)
+	h := rt.WrapNew[QEnterEvent](p, "QEnterEvent", rt.NewOwned)
 	return rt.View[QEnterEvent](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQEnterEventFull(localPos qtcore.QPointF, scenePos qtcore.QPointF, global
 	}
 	p := C.qute_QEnterEvent_new_1(cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QEnterEvent", rt.NewOwned)
+	h := rt.WrapNew[QEnterEvent](p, "QEnterEvent", rt.NewOwned)
 	rt.KeepArg(h, "QEnterEvent.device", deviceH, true)
 	return rt.View[QEnterEvent](h, p)
 }

@@ -95,7 +95,7 @@ func (this *QXmlStreamReader) Unkeep() {
 func NewQXmlStreamReader() *QXmlStreamReader {
 	rt.CheckThread("NewQXmlStreamReader")
 	p := C.qute_QXmlStreamReader_new()
-	h := rt.WrapClass(p, "QXmlStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamReader](p, "QXmlStreamReader", rt.NewOwned)
 	return rt.View[QXmlStreamReader](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQXmlStreamReaderWithIODevice(device QIODeviceLike) *QXmlStreamReader {
 	}
 	p := C.qute_QXmlStreamReader_new_1(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QXmlStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamReader](p, "QXmlStreamReader", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QXmlStreamReader](h, p)
 }
@@ -128,7 +128,7 @@ func NewQXmlStreamReaderWithIODevice(device QIODeviceLike) *QXmlStreamReader {
 func NewQXmlStreamReaderWithData(data string) *QXmlStreamReader {
 	rt.CheckThread("NewQXmlStreamReaderWithData")
 	p := C.qute_QXmlStreamReader_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(data))), C.ptrdiff_t(len(data)))
-	h := rt.WrapClass(p, "QXmlStreamReader", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamReader](p, "QXmlStreamReader", rt.NewOwned)
 	return rt.View[QXmlStreamReader](h, p)
 }
 

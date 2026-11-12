@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/nomad-software/qute/qtcore"
+	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtwidgets"
 	"github.com/nomad-software/qute/qutetest"
 )
@@ -134,6 +135,62 @@ func BenchmarkModelPaint(b *testing.B) {
 	withBenchView(b, 100000, func(v *qtwidgets.QTableView, m *benchModel) {
 		for b.Loop() {
 			runtime.KeepAlive(v.Viewport().Grab())
+		}
+	})
+}
+
+// BenchmarkListRows fills a list with rows the way an application shows a
+// file list (an item with text, an icon and a tooltip per row), then clears
+// it: the per-object cost of making many small objects and seeing them die.
+func BenchmarkListRows(b *testing.B) {
+	for _, added := range []bool{false, true} {
+		name := "parented"
+		if added {
+			name = "added" // made Owned, then handed to the list
+		}
+		b.Run(name, func(b *testing.B) {
+			qutetest.Run(b, func() {
+				list := qtwidgets.NewQListWidget(nil)
+				defer list.Delete()
+				pm := qtgui.NewQPixmapWithW(16, 16)
+				pm.Fill()
+				icon := qtgui.NewQIconWithPixmap(pm)
+				b.ReportAllocs()
+				for b.Loop() {
+					for i := range 1200 {
+						if added {
+							it := qtwidgets.NewQListWidgetItemWithIcon(icon, "file.go", nil)
+							it.SetToolTip(fmt.Sprint("path/to/file", i))
+							list.AddItem(it)
+						} else {
+							it := qtwidgets.NewQListWidgetItemWithIcon(icon, "file.go", list)
+							it.SetToolTip(fmt.Sprint("path/to/file", i))
+						}
+					}
+					list.Clear()
+				}
+			})
+		})
+	}
+}
+
+// BenchmarkWidgetRows makes a row of widgets per entry (a container, a layout
+// and two labels) under one parent, then deletes the parent: the per-object
+// cost of QObjects, whose death Qt reports.
+func BenchmarkWidgetRows(b *testing.B) {
+	qutetest.Run(b, func() {
+		b.ReportAllocs()
+		for b.Loop() {
+			top := qtwidgets.NewQWidget(nil)
+			lay := qtwidgets.NewQVBoxLayout(top)
+			for range 300 {
+				row := qtwidgets.NewQWidget(nil)
+				rl := qtwidgets.NewQHBoxLayout(row)
+				rl.AddWidget(qtwidgets.NewQLabelWithText("M", nil))
+				rl.AddWidget(qtwidgets.NewQLabelWithText("file.go", nil))
+				lay.AddWidget(row)
+			}
+			top.Delete()
 		}
 	})
 }

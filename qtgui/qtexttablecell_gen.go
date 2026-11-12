@@ -102,7 +102,7 @@ func (this *QTextTableCell) Unkeep() {
 func NewQTextTableCell() *QTextTableCell {
 	rt.CheckThread("NewQTextTableCell")
 	p := C.qute_QTextTableCell_new()
-	h := rt.WrapClass(p, "QTextTableCell", rt.NewOwned)
+	h := rt.WrapNew[QTextTableCell](p, "QTextTableCell", rt.NewOwned)
 	return rt.View[QTextTableCell](h, p)
 }
 

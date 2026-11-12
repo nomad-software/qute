@@ -86,7 +86,7 @@ func (this *QPixmapCacheKey) Unkeep() {
 func NewQPixmapCacheKey() *QPixmapCacheKey {
 	rt.CheckThread("NewQPixmapCacheKey")
 	p := C.qute_QPixmapCacheKey_new()
-	h := rt.WrapClass(p, "QPixmapCacheKey", rt.NewOwned)
+	h := rt.WrapNew[QPixmapCacheKey](p, "QPixmapCacheKey", rt.NewOwned)
 	return rt.View[QPixmapCacheKey](h, p)
 }
 

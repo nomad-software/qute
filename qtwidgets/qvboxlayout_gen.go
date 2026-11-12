@@ -67,7 +67,7 @@ func NewQVBoxLayout(parent QWidgetLike) *QVBoxLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVBoxLayout", mode)
+	h := rt.WrapNew[QVBoxLayout](p, "QVBoxLayout", mode)
 	return rt.View[QVBoxLayout](h, p)
 }
 
@@ -689,7 +689,7 @@ func NewQVBoxLayoutWith(v QVBoxLayoutSubclass, parent QWidgetLike) *QVBoxLayout 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVBoxLayout", mode)
+	h := rt.WrapNew[QVBoxLayout](p, "QVBoxLayout", mode)
 	base.QVBoxLayout = rt.View[QVBoxLayout](h, p)
 	id := h.SetSelf(v, qVBoxLayoutVTable)
 	mask := rt.Mask(v, qVBoxLayoutVTable)

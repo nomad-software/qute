@@ -89,7 +89,7 @@ func (this *QXmlStreamEntityDeclaration) Unkeep() {
 func NewQXmlStreamEntityDeclaration() *QXmlStreamEntityDeclaration {
 	rt.CheckThread("NewQXmlStreamEntityDeclaration")
 	p := C.qute_QXmlStreamEntityDeclaration_new()
-	h := rt.WrapClass(p, "QXmlStreamEntityDeclaration", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamEntityDeclaration](p, "QXmlStreamEntityDeclaration", rt.NewOwned)
 	return rt.View[QXmlStreamEntityDeclaration](h, p)
 }
 

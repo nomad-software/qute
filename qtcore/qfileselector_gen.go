@@ -66,7 +66,7 @@ func NewQFileSelector(parent QObjectLike) *QFileSelector {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSelector", mode)
+	h := rt.WrapNew[QFileSelector](p, "QFileSelector", mode)
 	return rt.View[QFileSelector](h, p)
 }
 
@@ -293,7 +293,7 @@ func NewQFileSelectorWith(v QFileSelectorSubclass, parent QObjectLike) *QFileSel
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSelector", mode)
+	h := rt.WrapNew[QFileSelector](p, "QFileSelector", mode)
 	base.QFileSelector = rt.View[QFileSelector](h, p)
 	id := h.SetSelf(v, qFileSelectorVTable)
 	mask := rt.Mask(v, qFileSelectorVTable)

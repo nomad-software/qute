@@ -95,7 +95,7 @@ func (this *QCommandLineParser) Unkeep() {
 func NewQCommandLineParser() *QCommandLineParser {
 	rt.CheckThread("NewQCommandLineParser")
 	p := C.qute_QCommandLineParser_new()
-	h := rt.WrapClass(p, "QCommandLineParser", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineParser](p, "QCommandLineParser", rt.NewOwned)
 	return rt.View[QCommandLineParser](h, p)
 }
 

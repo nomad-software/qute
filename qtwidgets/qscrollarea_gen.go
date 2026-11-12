@@ -68,7 +68,7 @@ func NewQScrollArea(parent QWidgetLike) *QScrollArea {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollArea", mode)
+	h := rt.WrapNew[QScrollArea](p, "QScrollArea", mode)
 	return rt.View[QScrollArea](h, p)
 }
 
@@ -1217,7 +1217,7 @@ func NewQScrollAreaWith(v QScrollAreaSubclass, parent QWidgetLike) *QScrollArea 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollArea", mode)
+	h := rt.WrapNew[QScrollArea](p, "QScrollArea", mode)
 	base.QScrollArea = rt.View[QScrollArea](h, p)
 	id := h.SetSelf(v, qScrollAreaVTable)
 	mask := rt.Mask(v, qScrollAreaVTable)

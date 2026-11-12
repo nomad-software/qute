@@ -6104,6 +6104,23 @@ func TestOwnership_QSplitter_ReplaceWidget(t *testing.T) {
 	})
 }
 
+// QSplitterHandle * QSplitter::handle(int index) const (test from the overlay)
+func TestOwnership_QSplitter_Handle(t *testing.T) {
+	qutetest.Run(t, func() {
+		sp := qtwidgets.NewQSplitter(nil)
+		defer sp.Delete()
+		sp.AddWidget(qtwidgets.NewQLabelWithText("a", nil))
+		sp.AddWidget(qtwidgets.NewQLabelWithText("b", nil))
+		h := sp.Handle(1)
+		if h == nil || h.Ownership() != qtcore.Borrowed || h.ParentWidget() != sp.AsQWidget() {
+			t.Errorf("Handle(1) = %v, want a Borrowed handle whose parent is the splitter", h)
+		}
+		if sp.Handle(5) != nil {
+			t.Error("Handle(5) of two widgets is not nil")
+		}
+	})
+}
+
 // QSplitterHandle::QSplitterHandle(Qt::Orientation o, QSplitter * parent): a non-nil parent makes the object Parented, nil makes it Owned.
 func TestOwnership_NewQSplitterHandleWithOrientation(t *testing.T) {
 	qutetest.Run(t, func() {

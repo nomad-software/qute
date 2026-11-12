@@ -63,7 +63,7 @@ func QKeyEventCast(e qtcore.QEventLike) *QKeyEvent {
 func NewQKeyEvent(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers) *QKeyEvent {
 	rt.CheckThread("NewQKeyEvent")
 	p := C.qute_QKeyEvent_new(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	h := rt.WrapNew[QKeyEvent](p, "QKeyEvent", rt.NewOwned)
 	return rt.View[QKeyEvent](h, p)
 }
 
@@ -79,7 +79,7 @@ func NewQKeyEvent(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardM
 func NewQKeyEventNative(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers, nativeScanCode uint, nativeVirtualKey uint, nativeModifiers uint) *QKeyEvent {
 	rt.CheckThread("NewQKeyEventNative")
 	p := C.qute_QKeyEvent_new_1(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), C.uint(nativeScanCode), C.uint(nativeVirtualKey), C.uint(nativeModifiers))
-	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	h := rt.WrapNew[QKeyEvent](p, "QKeyEvent", rt.NewOwned)
 	return rt.View[QKeyEvent](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQKeyEventNative(typeArg qtcore.QEventType, key int, modifiers qtcore.Key
 func NewQKeyEventFull(typeArg qtcore.QEventType, key int, modifiers qtcore.KeyboardModifiers, text string, autorep bool, count uint16) *QKeyEvent {
 	rt.CheckThread("NewQKeyEventFull")
 	p := C.qute_QKeyEvent_new_2(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.bool(autorep), C.ushort(count))
-	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	h := rt.WrapNew[QKeyEvent](p, "QKeyEvent", rt.NewOwned)
 	return rt.View[QKeyEvent](h, p)
 }
 
@@ -117,7 +117,7 @@ func NewQKeyEventNativeFull(typeArg qtcore.QEventType, key int, modifiers qtcore
 	}
 	p := C.qute_QKeyEvent_new_3(C.int64_t(typeArg), C.int(key), C.int64_t(modifiers), C.uint(nativeScanCode), C.uint(nativeVirtualKey), C.uint(nativeModifiers), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.bool(autorep), C.ushort(count), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QKeyEvent", rt.NewOwned)
+	h := rt.WrapNew[QKeyEvent](p, "QKeyEvent", rt.NewOwned)
 	rt.KeepArg(h, "QKeyEvent.device", deviceH, true)
 	return rt.View[QKeyEvent](h, p)
 }

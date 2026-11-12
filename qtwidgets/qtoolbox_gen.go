@@ -70,7 +70,7 @@ func NewQToolBox(parent QWidgetLike) *QToolBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBox", mode)
+	h := rt.WrapNew[QToolBox](p, "QToolBox", mode)
 	return rt.View[QToolBox](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQToolBoxFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QToolBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBox", mode)
+	h := rt.WrapNew[QToolBox](p, "QToolBox", mode)
 	return rt.View[QToolBox](h, p)
 }
 
@@ -1332,7 +1332,7 @@ func NewQToolBoxWith(v QToolBoxSubclass, parent QWidgetLike) *QToolBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolBox", mode)
+	h := rt.WrapNew[QToolBox](p, "QToolBox", mode)
 	base.QToolBox = rt.View[QToolBox](h, p)
 	id := h.SetSelf(v, qToolBoxVTable)
 	mask := rt.Mask(v, qToolBoxVTable)

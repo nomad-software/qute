@@ -87,7 +87,7 @@ func (this *QVideoFrameFormat) Unkeep() {
 func NewQVideoFrameFormat() *QVideoFrameFormat {
 	rt.CheckThread("NewQVideoFrameFormat")
 	p := C.qute_QVideoFrameFormat_new()
-	h := rt.WrapClass(p, "QVideoFrameFormat", rt.NewOwned)
+	h := rt.WrapNew[QVideoFrameFormat](p, "QVideoFrameFormat", rt.NewOwned)
 	return rt.View[QVideoFrameFormat](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQVideoFrameFormat() *QVideoFrameFormat {
 func NewQVideoFrameFormatWithSize(size qtcore.QSize, pixelFormat QVideoFrameFormatPixelFormat) *QVideoFrameFormat {
 	rt.CheckThread("NewQVideoFrameFormatWithSize")
 	p := C.qute_QVideoFrameFormat_new_1(cQSize(size), C.int64_t(pixelFormat))
-	h := rt.WrapClass(p, "QVideoFrameFormat", rt.NewOwned)
+	h := rt.WrapNew[QVideoFrameFormat](p, "QVideoFrameFormat", rt.NewOwned)
 	return rt.View[QVideoFrameFormat](h, p)
 }
 

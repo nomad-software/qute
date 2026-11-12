@@ -68,7 +68,7 @@ func NewQDialogButtonBox(parent QWidgetLike) *QDialogButtonBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	return rt.View[QDialogButtonBox](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQDialogButtonBoxWithOrientation(orientation qtcore.Orientations, parent 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	return rt.View[QDialogButtonBox](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQDialogButtonBoxWithStandardButton(buttons QDialogButtonBoxStandardButto
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	return rt.View[QDialogButtonBox](h, p)
 }
 
@@ -137,7 +137,7 @@ func NewQDialogButtonBoxWithButtonsOriented(buttons QDialogButtonBoxStandardButt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	return rt.View[QDialogButtonBox](h, p)
 }
 
@@ -1356,7 +1356,7 @@ func NewQDialogButtonBoxWith(v QDialogButtonBoxSubclass, parent QWidgetLike) *QD
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
 	id := h.SetSelf(v, qDialogButtonBoxVTable)
 	mask := rt.Mask(v, qDialogButtonBoxVTable)
@@ -1388,7 +1388,7 @@ func NewQDialogButtonBoxWithOrientationWith(v QDialogButtonBoxSubclass, orientat
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
 	id := h.SetSelf(v, qDialogButtonBoxVTable)
 	mask := rt.Mask(v, qDialogButtonBoxVTable)
@@ -1420,7 +1420,7 @@ func NewQDialogButtonBoxWithStandardButtonWith(v QDialogButtonBoxSubclass, butto
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
 	id := h.SetSelf(v, qDialogButtonBoxVTable)
 	mask := rt.Mask(v, qDialogButtonBoxVTable)
@@ -1452,7 +1452,7 @@ func NewQDialogButtonBoxWithButtonsOrientedWith(v QDialogButtonBoxSubclass, butt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialogButtonBox", mode)
+	h := rt.WrapNew[QDialogButtonBox](p, "QDialogButtonBox", mode)
 	base.QDialogButtonBox = rt.View[QDialogButtonBox](h, p)
 	id := h.SetSelf(v, qDialogButtonBoxVTable)
 	mask := rt.Mask(v, qDialogButtonBoxVTable)

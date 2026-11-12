@@ -68,7 +68,7 @@ func NewQAudioSinkWithAudioFormat(format *QAudioFormat, parent qtcore.QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSink", mode)
+	h := rt.WrapNew[QAudioSink](p, "QAudioSink", mode)
 	return rt.View[QAudioSink](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQAudioSinkWithAudioDevice(audioDeviceInfo *QAudioDevice, format *QAudioF
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSink", mode)
+	h := rt.WrapNew[QAudioSink](p, "QAudioSink", mode)
 	return rt.View[QAudioSink](h, p)
 }
 
@@ -563,7 +563,7 @@ func NewQAudioSinkWith(v QAudioSinkSubclass, format *QAudioFormat, parent qtcore
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSink", mode)
+	h := rt.WrapNew[QAudioSink](p, "QAudioSink", mode)
 	base.QAudioSink = rt.View[QAudioSink](h, p)
 	id := h.SetSelf(v, qAudioSinkVTable)
 	mask := rt.Mask(v, qAudioSinkVTable)
@@ -597,7 +597,7 @@ func NewQAudioSinkWithAudioDeviceWith(v QAudioSinkSubclass, audioDeviceInfo *QAu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSink", mode)
+	h := rt.WrapNew[QAudioSink](p, "QAudioSink", mode)
 	base.QAudioSink = rt.View[QAudioSink](h, p)
 	id := h.SetSelf(v, qAudioSinkVTable)
 	mask := rt.Mask(v, qAudioSinkVTable)

@@ -62,7 +62,7 @@ func QStyleHintReturnMaskCast(o QStyleHintReturnLike) *QStyleHintReturnMask {
 func NewQStyleHintReturnMask() *QStyleHintReturnMask {
 	rt.CheckThread("NewQStyleHintReturnMask")
 	p := C.qute_QStyleHintReturnMask_new()
-	h := rt.WrapClass(p, "QStyleHintReturnMask", rt.NewOwned)
+	h := rt.WrapNew[QStyleHintReturnMask](p, "QStyleHintReturnMask", rt.NewOwned)
 	return rt.View[QStyleHintReturnMask](h, p)
 }
 

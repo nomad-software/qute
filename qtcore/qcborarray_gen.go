@@ -85,7 +85,7 @@ func (this *QCborArray) Unkeep() {
 func NewQCborArray() *QCborArray {
 	rt.CheckThread("NewQCborArray")
 	p := C.qute_QCborArray_new()
-	h := rt.WrapClass(p, "QCborArray", rt.NewOwned)
+	h := rt.WrapNew[QCborArray](p, "QCborArray", rt.NewOwned)
 	return rt.View[QCborArray](h, p)
 }
 

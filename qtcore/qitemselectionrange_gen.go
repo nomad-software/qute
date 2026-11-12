@@ -85,7 +85,7 @@ func (this *QItemSelectionRange) Unkeep() {
 func NewQItemSelectionRange() *QItemSelectionRange {
 	rt.CheckThread("NewQItemSelectionRange")
 	p := C.qute_QItemSelectionRange_new()
-	h := rt.WrapClass(p, "QItemSelectionRange", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionRange](p, "QItemSelectionRange", rt.NewOwned)
 	return rt.View[QItemSelectionRange](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQItemSelectionRangeSpan(topL *QModelIndex, bottomR *QModelIndex) *QItemS
 	p := C.qute_QItemSelectionRange_new_1(rt.UseArg(unsafe.Pointer(topL), "NewQItemSelectionRangeSpan"), rt.UseArg(unsafe.Pointer(bottomR), "NewQItemSelectionRangeSpan"))
 	runtime.KeepAlive(topL)
 	runtime.KeepAlive(bottomR)
-	h := rt.WrapClass(p, "QItemSelectionRange", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionRange](p, "QItemSelectionRange", rt.NewOwned)
 	return rt.View[QItemSelectionRange](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQItemSelectionRangeOf(index *QModelIndex) *QItemSelectionRange {
 	rt.CheckThread("NewQItemSelectionRangeOf")
 	p := C.qute_QItemSelectionRange_new_2(rt.UseArg(unsafe.Pointer(index), "NewQItemSelectionRangeOf"))
 	runtime.KeepAlive(index)
-	h := rt.WrapClass(p, "QItemSelectionRange", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionRange](p, "QItemSelectionRange", rt.NewOwned)
 	return rt.View[QItemSelectionRange](h, p)
 }
 

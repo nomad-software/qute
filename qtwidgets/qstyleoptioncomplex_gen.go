@@ -63,7 +63,7 @@ func QStyleOptionComplexCast(o QStyleOptionLike) *QStyleOptionComplex {
 func NewQStyleOptionComplex() *QStyleOptionComplex {
 	rt.CheckThread("NewQStyleOptionComplex")
 	p := C.qute_QStyleOptionComplex_new()
-	h := rt.WrapClass(p, "QStyleOptionComplex", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionComplex](p, "QStyleOptionComplex", rt.NewOwned)
 	return rt.View[QStyleOptionComplex](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQStyleOptionComplex() *QStyleOptionComplex {
 func NewQStyleOptionComplexFull(version int, typeArg int) *QStyleOptionComplex {
 	rt.CheckThread("NewQStyleOptionComplexFull")
 	p := C.qute_QStyleOptionComplex_new_1(C.int(version), C.int(typeArg))
-	h := rt.WrapClass(p, "QStyleOptionComplex", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionComplex](p, "QStyleOptionComplex", rt.NewOwned)
 	return rt.View[QStyleOptionComplex](h, p)
 }
 

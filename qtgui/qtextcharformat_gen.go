@@ -42,7 +42,7 @@ func QTextCharFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextCharFo
 func NewQTextCharFormat() *QTextCharFormat {
 	rt.CheckThread("NewQTextCharFormat")
 	p := C.qute_QTextCharFormat_new()
-	h := rt.WrapClass(p, "QTextCharFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextCharFormat](p, "QTextCharFormat", rt.NewOwned)
 	return rt.View[QTextCharFormat](h, p)
 }
 

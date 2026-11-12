@@ -67,7 +67,7 @@ func NewQGesture(parent qtcore.QObjectLike) *QGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGesture", mode)
+	h := rt.WrapNew[QGesture](p, "QGesture", mode)
 	return rt.View[QGesture](h, p)
 }
 
@@ -329,7 +329,7 @@ func NewQGestureWith(v QGestureSubclass, parent qtcore.QObjectLike) *QGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGesture", mode)
+	h := rt.WrapNew[QGesture](p, "QGesture", mode)
 	base.QGesture = rt.View[QGesture](h, p)
 	id := h.SetSelf(v, qGestureVTable)
 	mask := rt.Mask(v, qGestureVTable)

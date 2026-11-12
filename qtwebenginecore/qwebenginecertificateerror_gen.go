@@ -90,7 +90,7 @@ func (this *QWebEngineCertificateError) Unkeep() {
 func NewQWebEngineCertificateError() *QWebEngineCertificateError {
 	rt.CheckThread("NewQWebEngineCertificateError")
 	p := C.qute_QWebEngineCertificateError_new()
-	h := rt.WrapClass(p, "QWebEngineCertificateError", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineCertificateError](p, "QWebEngineCertificateError", rt.NewOwned)
 	return rt.View[QWebEngineCertificateError](h, p)
 }
 

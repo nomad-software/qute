@@ -68,7 +68,7 @@ func NewQRubberBandWithShape(shape QRubberBandShape, widget QWidgetLike) *QRubbe
 	if widgetPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRubberBand", mode)
+	h := rt.WrapNew[QRubberBand](p, "QRubberBand", mode)
 	return rt.View[QRubberBand](h, p)
 }
 
@@ -962,7 +962,7 @@ func NewQRubberBandWith(v QRubberBandSubclass, shape QRubberBandShape, widget QW
 	if widgetPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRubberBand", mode)
+	h := rt.WrapNew[QRubberBand](p, "QRubberBand", mode)
 	base.QRubberBand = rt.View[QRubberBand](h, p)
 	id := h.SetSelf(v, qRubberBandVTable)
 	mask := rt.Mask(v, qRubberBandVTable)

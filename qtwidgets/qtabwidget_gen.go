@@ -68,7 +68,7 @@ func NewQTabWidget(parent QWidgetLike) *QTabWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTabWidget", mode)
+	h := rt.WrapNew[QTabWidget](p, "QTabWidget", mode)
 	return rt.View[QTabWidget](h, p)
 }
 
@@ -1754,7 +1754,7 @@ func NewQTabWidgetWith(v QTabWidgetSubclass, parent QWidgetLike) *QTabWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTabWidget", mode)
+	h := rt.WrapNew[QTabWidget](p, "QTabWidget", mode)
 	base.QTabWidget = rt.View[QTabWidget](h, p)
 	id := h.SetSelf(v, qTabWidgetVTable)
 	mask := rt.Mask(v, qTabWidgetVTable)

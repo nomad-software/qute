@@ -103,7 +103,7 @@ func NewQCborStreamWriterWithIODevice(device QIODeviceLike) *QCborStreamWriter {
 	}
 	p := C.qute_QCborStreamWriter_new(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QCborStreamWriter", rt.NewOwned)
+	h := rt.WrapNew[QCborStreamWriter](p, "QCborStreamWriter", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QCborStreamWriter](h, p)
 }

@@ -67,7 +67,7 @@ func NewQShortcut(parent qtcore.QObjectLike) *QShortcut {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	return rt.View[QShortcut](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQShortcutWithKeySequence(key *QKeySequence, parent qtcore.QObjectLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	return rt.View[QShortcut](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQShortcutStandard(key QKeySequenceStandardKey, parent qtcore.QObjectLike
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	return rt.View[QShortcut](h, p)
 }
 
@@ -148,7 +148,7 @@ func NewQShortcutWithKeySequenceFull(key *QKeySequence, parent qtcore.QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	return rt.View[QShortcut](h, p)
 }
 
@@ -177,7 +177,7 @@ func NewQShortcutStandardFull(key QKeySequenceStandardKey, parent qtcore.QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	return rt.View[QShortcut](h, p)
 }
 
@@ -559,7 +559,7 @@ func NewQShortcutWith(v QShortcutSubclass, parent qtcore.QObjectLike) *QShortcut
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	base.QShortcut = rt.View[QShortcut](h, p)
 	id := h.SetSelf(v, qShortcutVTable)
 	mask := rt.Mask(v, qShortcutVTable)
@@ -592,7 +592,7 @@ func NewQShortcutWithKeySequenceWith(v QShortcutSubclass, key *QKeySequence, par
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	base.QShortcut = rt.View[QShortcut](h, p)
 	id := h.SetSelf(v, qShortcutVTable)
 	mask := rt.Mask(v, qShortcutVTable)
@@ -624,7 +624,7 @@ func NewQShortcutStandardWith(v QShortcutSubclass, key QKeySequenceStandardKey, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QShortcut", mode)
+	h := rt.WrapNew[QShortcut](p, "QShortcut", mode)
 	base.QShortcut = rt.View[QShortcut](h, p)
 	id := h.SetSelf(v, qShortcutVTable)
 	mask := rt.Mask(v, qShortcutVTable)

@@ -68,7 +68,7 @@ func NewQTableView(parent QWidgetLike) *QTableView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableView", mode)
+	h := rt.WrapNew[QTableView](p, "QTableView", mode)
 	return rt.View[QTableView](h, p)
 }
 
@@ -2411,7 +2411,7 @@ func NewQTableViewWith(v QTableViewSubclass, parent QWidgetLike) *QTableView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableView", mode)
+	h := rt.WrapNew[QTableView](p, "QTableView", mode)
 	base.QTableView = rt.View[QTableView](h, p)
 	id := h.SetSelf(v, qTableViewVTable)
 	mask := rt.Mask(v, qTableViewVTable)

@@ -85,7 +85,7 @@ func (this *QMetaType) Unkeep() {
 func NewQMetaTypeWithType(typeArg int) *QMetaType {
 	rt.CheckThread("NewQMetaTypeWithType")
 	p := C.qute_QMetaType_new(C.int(typeArg))
-	h := rt.WrapClass(p, "QMetaType", rt.NewOwned)
+	h := rt.WrapNew[QMetaType](p, "QMetaType", rt.NewOwned)
 	return rt.View[QMetaType](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQMetaTypeWithType(typeArg int) *QMetaType {
 func NewQMetaType() *QMetaType {
 	rt.CheckThread("NewQMetaType")
 	p := C.qute_QMetaType_new_1()
-	h := rt.WrapClass(p, "QMetaType", rt.NewOwned)
+	h := rt.WrapNew[QMetaType](p, "QMetaType", rt.NewOwned)
 	return rt.View[QMetaType](h, p)
 }
 

@@ -85,7 +85,7 @@ func (this *QCommandLineOption) Unkeep() {
 func NewQCommandLineOptionWithName(name string) *QCommandLineOption {
 	rt.CheckThread("NewQCommandLineOptionWithName")
 	p := C.qute_QCommandLineOption_new((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQCommandLineOptionWithNames(names []string) *QCommandLineOption {
 	rt.CheckThread("NewQCommandLineOptionWithNames")
 	namesData, namesLens := quteStrListArg(names)
 	p := C.qute_QCommandLineOption_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(namesData))), (*C.ptrdiff_t)(unsafe.SliceData(namesLens)), C.ptrdiff_t(len(names)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQCommandLineOptionWithNames(names []string) *QCommandLineOption {
 func NewQCommandLineOptionWithNameDescription(name string, description string) *QCommandLineOption {
 	rt.CheckThread("NewQCommandLineOptionWithNameDescription")
 	p := C.qute_QCommandLineOption_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 
@@ -127,7 +127,7 @@ func NewQCommandLineOptionWithNamesDescription(names []string, description strin
 	rt.CheckThread("NewQCommandLineOptionWithNamesDescription")
 	namesData, namesLens := quteStrListArg(names)
 	p := C.qute_QCommandLineOption_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(namesData))), (*C.ptrdiff_t)(unsafe.SliceData(namesLens)), C.ptrdiff_t(len(names)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 
@@ -141,7 +141,7 @@ func NewQCommandLineOptionWithNamesDescription(names []string, description strin
 func NewQCommandLineOptionWithNameDescriptionFull(name string, description string, valueName string, defaultValue string) *QCommandLineOption {
 	rt.CheckThread("NewQCommandLineOptionWithNameDescriptionFull")
 	p := C.qute_QCommandLineOption_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)), (*C.char)(unsafe.Pointer(unsafe.StringData(valueName))), C.ptrdiff_t(len(valueName)), (*C.char)(unsafe.Pointer(unsafe.StringData(defaultValue))), C.ptrdiff_t(len(defaultValue)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 
@@ -156,7 +156,7 @@ func NewQCommandLineOptionWithNamesDescriptionFull(names []string, description s
 	rt.CheckThread("NewQCommandLineOptionWithNamesDescriptionFull")
 	namesData, namesLens := quteStrListArg(names)
 	p := C.qute_QCommandLineOption_new_5((*C.char)(unsafe.Pointer(unsafe.SliceData(namesData))), (*C.ptrdiff_t)(unsafe.SliceData(namesLens)), C.ptrdiff_t(len(names)), (*C.char)(unsafe.Pointer(unsafe.StringData(description))), C.ptrdiff_t(len(description)), (*C.char)(unsafe.Pointer(unsafe.StringData(valueName))), C.ptrdiff_t(len(valueName)), (*C.char)(unsafe.Pointer(unsafe.StringData(defaultValue))), C.ptrdiff_t(len(defaultValue)))
-	h := rt.WrapClass(p, "QCommandLineOption", rt.NewOwned)
+	h := rt.WrapNew[QCommandLineOption](p, "QCommandLineOption", rt.NewOwned)
 	return rt.View[QCommandLineOption](h, p)
 }
 

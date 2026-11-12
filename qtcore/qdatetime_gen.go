@@ -86,7 +86,7 @@ func (this *QDateTime) Unkeep() {
 func NewQDateTime() *QDateTime {
 	rt.CheckThread("NewQDateTime")
 	p := C.qute_QDateTime_new()
-	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	h := rt.WrapNew[QDateTime](p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQDateTimeIn(date *QDate, time *QTime, timeZone *QTimeZone) *QDateTime {
 	runtime.KeepAlive(date)
 	runtime.KeepAlive(time)
 	runtime.KeepAlive(timeZone)
-	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	h := rt.WrapNew[QDateTime](p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQDateTimeLocal(date *QDate, time *QTime) *QDateTime {
 	p := C.qute_QDateTime_new_2(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocal"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocal"))
 	runtime.KeepAlive(date)
 	runtime.KeepAlive(time)
-	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	h := rt.WrapNew[QDateTime](p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
 
@@ -138,7 +138,7 @@ func NewQDateTimeInFull(date *QDate, time *QTime, timeZone *QTimeZone, resolve Q
 	runtime.KeepAlive(date)
 	runtime.KeepAlive(time)
 	runtime.KeepAlive(timeZone)
-	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	h := rt.WrapNew[QDateTime](p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
 
@@ -156,7 +156,7 @@ func NewQDateTimeLocalFull(date *QDate, time *QTime, resolve QDateTimeTransition
 	p := C.qute_QDateTime_new_4(rt.UseArg(unsafe.Pointer(date), "NewQDateTimeLocalFull"), rt.UseArg(unsafe.Pointer(time), "NewQDateTimeLocalFull"), C.int64_t(resolve))
 	runtime.KeepAlive(date)
 	runtime.KeepAlive(time)
-	h := rt.WrapClass(p, "QDateTime", rt.NewOwned)
+	h := rt.WrapNew[QDateTime](p, "QDateTime", rt.NewOwned)
 	return rt.View[QDateTime](h, p)
 }
 

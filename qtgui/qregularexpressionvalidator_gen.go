@@ -71,7 +71,7 @@ func NewQRegularExpressionValidator(parent qtcore.QObjectLike) *QRegularExpressi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRegularExpressionValidator", mode)
+	h := rt.WrapNew[QRegularExpressionValidator](p, "QRegularExpressionValidator", mode)
 	return rt.View[QRegularExpressionValidator](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQRegularExpressionValidatorWithRegularExpression(re *qtcore.QRegularExpr
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRegularExpressionValidator", mode)
+	h := rt.WrapNew[QRegularExpressionValidator](p, "QRegularExpressionValidator", mode)
 	return rt.View[QRegularExpressionValidator](h, p)
 }
 
@@ -385,7 +385,7 @@ func NewQRegularExpressionValidatorWith(v QRegularExpressionValidatorSubclass, p
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRegularExpressionValidator", mode)
+	h := rt.WrapNew[QRegularExpressionValidator](p, "QRegularExpressionValidator", mode)
 	base.QRegularExpressionValidator = rt.View[QRegularExpressionValidator](h, p)
 	id := h.SetSelf(v, qRegularExpressionValidatorVTable)
 	mask := rt.Mask(v, qRegularExpressionValidatorVTable)
@@ -418,7 +418,7 @@ func NewQRegularExpressionValidatorWithRegularExpressionWith(v QRegularExpressio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRegularExpressionValidator", mode)
+	h := rt.WrapNew[QRegularExpressionValidator](p, "QRegularExpressionValidator", mode)
 	base.QRegularExpressionValidator = rt.View[QRegularExpressionValidator](h, p)
 	id := h.SetSelf(v, qRegularExpressionValidatorVTable)
 	mask := rt.Mask(v, qRegularExpressionValidatorVTable)

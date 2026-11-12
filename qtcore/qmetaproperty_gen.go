@@ -85,7 +85,7 @@ func (this *QMetaProperty) Unkeep() {
 func NewQMetaProperty() *QMetaProperty {
 	rt.CheckThread("NewQMetaProperty")
 	p := C.qute_QMetaProperty_new()
-	h := rt.WrapClass(p, "QMetaProperty", rt.NewOwned)
+	h := rt.WrapNew[QMetaProperty](p, "QMetaProperty", rt.NewOwned)
 	return rt.View[QMetaProperty](h, p)
 }
 

@@ -64,9 +64,10 @@ type inlineArg struct {
 	deps [maxInlineDeps]unsafe.Pointer
 }
 
-// inlinePair is an inline value's handle and wrapper in one allocation (its
-// bytes are apart: C++ may only be given memory without Go pointers).
-type inlinePair[T any] struct {
+// viewPair is a handle and its first wrapper in one allocation: an inline
+// value's (its bytes are apart: C++ may only be given memory without Go
+// pointers), or a new object's (WrapNew).
+type viewPair[T any] struct {
 	h Handle
 	v T
 }
@@ -77,7 +78,7 @@ func newInlineView[T any](p unsafe.Pointer, class string, size int) (*Handle, *T
 	buf := make([]uint64, (size+7)/8) // pointer-free and 8-byte aligned
 	dst := unsafe.Pointer(unsafe.SliceData(buf))
 	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
-	x := new(inlinePair[T])
+	x := new(viewPair[T])
 	h, v := &x.h, &x.v
 	h.init(dst, class, KindValue, Owned, nil)
 	h.inline = true

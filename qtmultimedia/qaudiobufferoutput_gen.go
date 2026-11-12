@@ -67,7 +67,7 @@ func NewQAudioBufferOutput(parent qtcore.QObjectLike) *QAudioBufferOutput {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioBufferOutput", mode)
+	h := rt.WrapNew[QAudioBufferOutput](p, "QAudioBufferOutput", mode)
 	return rt.View[QAudioBufferOutput](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQAudioBufferOutputWithAudioFormat(format *QAudioFormat, parent qtcore.QO
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioBufferOutput", mode)
+	h := rt.WrapNew[QAudioBufferOutput](p, "QAudioBufferOutput", mode)
 	return rt.View[QAudioBufferOutput](h, p)
 }
 
@@ -307,7 +307,7 @@ func NewQAudioBufferOutputWith(v QAudioBufferOutputSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioBufferOutput", mode)
+	h := rt.WrapNew[QAudioBufferOutput](p, "QAudioBufferOutput", mode)
 	base.QAudioBufferOutput = rt.View[QAudioBufferOutput](h, p)
 	id := h.SetSelf(v, qAudioBufferOutputVTable)
 	mask := rt.Mask(v, qAudioBufferOutputVTable)
@@ -340,7 +340,7 @@ func NewQAudioBufferOutputWithAudioFormatWith(v QAudioBufferOutputSubclass, form
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioBufferOutput", mode)
+	h := rt.WrapNew[QAudioBufferOutput](p, "QAudioBufferOutput", mode)
 	base.QAudioBufferOutput = rt.View[QAudioBufferOutput](h, p)
 	id := h.SetSelf(v, qAudioBufferOutputVTable)
 	mask := rt.Mask(v, qAudioBufferOutputVTable)

@@ -70,7 +70,7 @@ func NewQFileDialog(parent QWidgetLike) *QFileDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDialog", mode)
+	h := rt.WrapNew[QFileDialog](p, "QFileDialog", mode)
 	return rt.View[QFileDialog](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQFileDialogWithWidget(parent QWidgetLike, fArg qtcore.WindowFlags) *QFil
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDialog", mode)
+	h := rt.WrapNew[QFileDialog](p, "QFileDialog", mode)
 	return rt.View[QFileDialog](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQFileDialogFull(parent QWidgetLike, caption string, directory string, fi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDialog", mode)
+	h := rt.WrapNew[QFileDialog](p, "QFileDialog", mode)
 	return rt.View[QFileDialog](h, p)
 }
 
@@ -2304,7 +2304,7 @@ func NewQFileDialogWith(v QFileDialogSubclass, parent QWidgetLike) *QFileDialog 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDialog", mode)
+	h := rt.WrapNew[QFileDialog](p, "QFileDialog", mode)
 	base.QFileDialog = rt.View[QFileDialog](h, p)
 	id := h.SetSelf(v, qFileDialogVTable)
 	mask := rt.Mask(v, qFileDialogVTable)
@@ -2336,7 +2336,7 @@ func NewQFileDialogWithWidgetWith(v QFileDialogSubclass, parent QWidgetLike, fAr
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDialog", mode)
+	h := rt.WrapNew[QFileDialog](p, "QFileDialog", mode)
 	base.QFileDialog = rt.View[QFileDialog](h, p)
 	id := h.SetSelf(v, qFileDialogVTable)
 	mask := rt.Mask(v, qFileDialogVTable)

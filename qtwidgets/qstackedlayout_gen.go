@@ -67,7 +67,7 @@ func NewQStackedLayout(parent QWidgetLike) *QStackedLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedLayout", mode)
+	h := rt.WrapNew[QStackedLayout](p, "QStackedLayout", mode)
 	return rt.View[QStackedLayout](h, p)
 }
 
@@ -92,7 +92,7 @@ func NewQStackedLayoutIn(parentLayout QLayoutLike) *QStackedLayout {
 	if parentLayoutPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedLayout", mode)
+	h := rt.WrapNew[QStackedLayout](p, "QStackedLayout", mode)
 	return rt.View[QStackedLayout](h, p)
 }
 
@@ -947,7 +947,7 @@ func NewQStackedLayoutWith(v QStackedLayoutSubclass, parent QWidgetLike) *QStack
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedLayout", mode)
+	h := rt.WrapNew[QStackedLayout](p, "QStackedLayout", mode)
 	base.QStackedLayout = rt.View[QStackedLayout](h, p)
 	id := h.SetSelf(v, qStackedLayoutVTable)
 	mask := rt.Mask(v, qStackedLayoutVTable)
@@ -979,7 +979,7 @@ func NewQStackedLayoutInWith(v QStackedLayoutSubclass, parentLayout QLayoutLike)
 	if parentLayoutPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedLayout", mode)
+	h := rt.WrapNew[QStackedLayout](p, "QStackedLayout", mode)
 	base.QStackedLayout = rt.View[QStackedLayout](h, p)
 	id := h.SetSelf(v, qStackedLayoutVTable)
 	mask := rt.Mask(v, qStackedLayoutVTable)

@@ -96,7 +96,7 @@ func (this *QBasicTimer) Unkeep() {
 func NewQBasicTimer() *QBasicTimer {
 	rt.CheckThread("NewQBasicTimer")
 	p := C.qute_QBasicTimer_new()
-	h := rt.WrapClass(p, "QBasicTimer", rt.NewOwned)
+	h := rt.WrapNew[QBasicTimer](p, "QBasicTimer", rt.NewOwned)
 	return rt.View[QBasicTimer](h, p)
 }
 

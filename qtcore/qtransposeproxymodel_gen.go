@@ -66,7 +66,7 @@ func NewQTransposeProxyModel(parent QObjectLike) *QTransposeProxyModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTransposeProxyModel", mode)
+	h := rt.WrapNew[QTransposeProxyModel](p, "QTransposeProxyModel", mode)
 	return rt.View[QTransposeProxyModel](h, p)
 }
 
@@ -1315,7 +1315,7 @@ func NewQTransposeProxyModelWith(v QTransposeProxyModelSubclass, parent QObjectL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTransposeProxyModel", mode)
+	h := rt.WrapNew[QTransposeProxyModel](p, "QTransposeProxyModel", mode)
 	base.QTransposeProxyModel = rt.View[QTransposeProxyModel](h, p)
 	id := h.SetSelf(v, qTransposeProxyModelVTable)
 	mask := rt.Mask(v, qTransposeProxyModelVTable)

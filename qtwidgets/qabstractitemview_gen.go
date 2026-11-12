@@ -2921,7 +2921,7 @@ func NewQAbstractItemViewWith(v QAbstractItemViewSubclass, parent QWidgetLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractItemView", mode)
+	h := rt.WrapNew[QAbstractItemView](p, "QAbstractItemView", mode)
 	base.QAbstractItemView = rt.View[QAbstractItemView](h, p)
 	id := h.SetSelf(v, qAbstractItemViewVTable)
 	mask := rt.Mask(v, qAbstractItemViewVTable)

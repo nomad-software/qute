@@ -97,7 +97,7 @@ func (this *QOpenGLTexture) Unkeep() {
 func NewQOpenGLTextureWithTarget(target QOpenGLTextureTarget) *QOpenGLTexture {
 	rt.CheckThread("NewQOpenGLTextureWithTarget")
 	p := C.qute_QOpenGLTexture_new(C.int64_t(target))
-	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLTexture](p, "QOpenGLTexture", rt.NewOwned)
 	return rt.View[QOpenGLTexture](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQOpenGLTextureWithImage(image *qtgui.QImage) *QOpenGLTexture {
 	rt.CheckThread("NewQOpenGLTextureWithImage")
 	p := C.qute_QOpenGLTexture_new_1(rt.UseArg(unsafe.Pointer(image), "NewQOpenGLTextureWithImage"))
 	runtime.KeepAlive(image)
-	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLTexture](p, "QOpenGLTexture", rt.NewOwned)
 	return rt.View[QOpenGLTexture](h, p)
 }
 
@@ -127,7 +127,7 @@ func NewQOpenGLTextureWithImageFull(image *qtgui.QImage, genMipMaps QOpenGLTextu
 	rt.CheckThread("NewQOpenGLTextureWithImageFull")
 	p := C.qute_QOpenGLTexture_new_2(rt.UseArg(unsafe.Pointer(image), "NewQOpenGLTextureWithImageFull"), C.int64_t(genMipMaps))
 	runtime.KeepAlive(image)
-	h := rt.WrapClass(p, "QOpenGLTexture", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLTexture](p, "QOpenGLTexture", rt.NewOwned)
 	return rt.View[QOpenGLTexture](h, p)
 }
 

@@ -99,7 +99,7 @@ func NewQLoggingCategoryWithCategory(category string) *QLoggingCategory {
 	categoryCStr := C.CString(category)
 	defer C.free(unsafe.Pointer(categoryCStr))
 	p := C.qute_QLoggingCategory_new(categoryCStr)
-	h := rt.WrapClass(p, "QLoggingCategory", rt.NewOwned)
+	h := rt.WrapNew[QLoggingCategory](p, "QLoggingCategory", rt.NewOwned)
 	return rt.View[QLoggingCategory](h, p)
 }
 

@@ -42,7 +42,7 @@ func QStylePainterFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QStylePainter
 func NewQStylePainter() *QStylePainter {
 	rt.CheckThread("NewQStylePainter")
 	p := C.qute_QStylePainter_new()
-	h := rt.WrapClass(p, "QStylePainter", rt.NewOwned)
+	h := rt.WrapNew[QStylePainter](p, "QStylePainter", rt.NewOwned)
 	return rt.View[QStylePainter](h, p)
 }
 
@@ -64,7 +64,7 @@ func NewQStylePainterWithWidget(w QWidgetLike) *QStylePainter {
 	}
 	p := C.qute_QStylePainter_new_1(wPtr)
 	runtime.KeepAlive(w)
-	h := rt.WrapClass(p, "QStylePainter", rt.NewOwned)
+	h := rt.WrapNew[QStylePainter](p, "QStylePainter", rt.NewOwned)
 	rt.KeepArg(h, "device", wH, true)
 	return rt.View[QStylePainter](h, p)
 }
@@ -93,7 +93,7 @@ func NewQStylePainterWithPaintDevice(pd qtgui.QPaintDeviceLike, w QWidgetLike) *
 	p := C.qute_QStylePainter_new_2(pdPtr, wPtr)
 	runtime.KeepAlive(pd)
 	runtime.KeepAlive(w)
-	h := rt.WrapClass(p, "QStylePainter", rt.NewOwned)
+	h := rt.WrapNew[QStylePainter](p, "QStylePainter", rt.NewOwned)
 	rt.KeepArg(h, "device", pdH, true)
 	rt.KeepArg(h, "widget", wH, true)
 	return rt.View[QStylePainter](h, p)

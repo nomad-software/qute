@@ -100,7 +100,7 @@ func (this *QAbstractFileIconProvider) Unkeep() {
 func NewQAbstractFileIconProvider() *QAbstractFileIconProvider {
 	rt.CheckThread("NewQAbstractFileIconProvider")
 	p := C.qute_QAbstractFileIconProvider_new()
-	h := rt.WrapClass(p, "QAbstractFileIconProvider", rt.NewOwned)
+	h := rt.WrapNew[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned)
 	return rt.View[QAbstractFileIconProvider](h, p)
 }
 
@@ -318,7 +318,7 @@ func NewQAbstractFileIconProviderWith(v QAbstractFileIconProviderSubclass) *QAbs
 		panic("NewQAbstractFileIconProviderWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QAbstractFileIconProvider_new_shim()
-	h := rt.WrapClass(p, "QAbstractFileIconProvider", rt.NewOwned)
+	h := rt.WrapNew[QAbstractFileIconProvider](p, "QAbstractFileIconProvider", rt.NewOwned)
 	base.QAbstractFileIconProvider = rt.View[QAbstractFileIconProvider](h, p)
 	id := h.SetSelf(v, qAbstractFileIconProviderVTable)
 	mask := rt.Mask(v, qAbstractFileIconProviderVTable)

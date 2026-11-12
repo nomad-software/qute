@@ -67,7 +67,7 @@ func NewQTimer(parent QObjectLike) *QTimer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimer", mode)
+	h := rt.WrapNew[QTimer](p, "QTimer", mode)
 	return rt.View[QTimer](h, p)
 }
 
@@ -441,7 +441,7 @@ func NewQTimerWith(v QTimerSubclass, parent QObjectLike) *QTimer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimer", mode)
+	h := rt.WrapNew[QTimer](p, "QTimer", mode)
 	base.QTimer = rt.View[QTimer](h, p)
 	id := h.SetSelf(v, qTimerVTable)
 	mask := rt.Mask(v, qTimerVTable)

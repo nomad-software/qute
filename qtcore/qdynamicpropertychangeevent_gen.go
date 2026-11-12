@@ -64,7 +64,7 @@ func QDynamicPropertyChangeEventCast(e QEventLike) *QDynamicPropertyChangeEvent 
 func NewQDynamicPropertyChangeEventWithBytes(name []byte) *QDynamicPropertyChangeEvent {
 	rt.CheckThread("NewQDynamicPropertyChangeEventWithBytes")
 	p := C.qute_QDynamicPropertyChangeEvent_new((*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QDynamicPropertyChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QDynamicPropertyChangeEvent](p, "QDynamicPropertyChangeEvent", rt.NewOwned)
 	return rt.View[QDynamicPropertyChangeEvent](h, p)
 }
 

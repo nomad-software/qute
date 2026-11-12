@@ -97,7 +97,7 @@ func (this *QResource) Unkeep() {
 func NewQResource() *QResource {
 	rt.CheckThread("NewQResource")
 	p := C.qute_QResource_new()
-	h := rt.WrapClass(p, "QResource", rt.NewOwned)
+	h := rt.WrapNew[QResource](p, "QResource", rt.NewOwned)
 	return rt.View[QResource](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQResourceFull(file string, locale *QLocale) *QResource {
 	rt.CheckThread("NewQResourceFull")
 	p := C.qute_QResource_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)), rt.UseArg(unsafe.Pointer(locale), "NewQResourceFull"))
 	runtime.KeepAlive(locale)
-	h := rt.WrapClass(p, "QResource", rt.NewOwned)
+	h := rt.WrapNew[QResource](p, "QResource", rt.NewOwned)
 	return rt.View[QResource](h, p)
 }
 

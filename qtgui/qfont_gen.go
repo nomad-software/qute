@@ -86,7 +86,7 @@ func (this *QFont) Unkeep() {
 func NewQFont() *QFont {
 	rt.CheckThread("NewQFont")
 	p := C.qute_QFont_new()
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQFont() *QFont {
 func NewQFontWithFamily(family string) *QFont {
 	rt.CheckThread("NewQFontWithFamily")
 	p := C.qute_QFont_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)))
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQFontWithFamilies(families []string) *QFont {
 	rt.CheckThread("NewQFontWithFamilies")
 	familiesData, familiesLens := quteStrListArg(families)
 	p := C.qute_QFont_new_2((*C.char)(unsafe.Pointer(unsafe.SliceData(familiesData))), (*C.ptrdiff_t)(unsafe.SliceData(familiesLens)), C.ptrdiff_t(len(families)))
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 
@@ -133,7 +133,7 @@ func NewQFontFor(font *QFont, pd QPaintDeviceLike) *QFont {
 	p := C.qute_QFont_new_3(rt.UseArg(unsafe.Pointer(font), "NewQFontFor"), pdPtr)
 	runtime.KeepAlive(font)
 	runtime.KeepAlive(pd)
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 
@@ -147,7 +147,7 @@ func NewQFontFor(font *QFont, pd QPaintDeviceLike) *QFont {
 func NewQFontWithFamilyFull(family string, pointSize int, weight int, italic bool) *QFont {
 	rt.CheckThread("NewQFontWithFamilyFull")
 	p := C.qute_QFont_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(family))), C.ptrdiff_t(len(family)), C.int(pointSize), C.int(weight), C.bool(italic))
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 
@@ -162,7 +162,7 @@ func NewQFontWithFamiliesFull(families []string, pointSize int, weight int, ital
 	rt.CheckThread("NewQFontWithFamiliesFull")
 	familiesData, familiesLens := quteStrListArg(families)
 	p := C.qute_QFont_new_5((*C.char)(unsafe.Pointer(unsafe.SliceData(familiesData))), (*C.ptrdiff_t)(unsafe.SliceData(familiesLens)), C.ptrdiff_t(len(families)), C.int(pointSize), C.int(weight), C.bool(italic))
-	h := rt.WrapClass(p, "QFont", rt.NewOwned)
+	h := rt.WrapNew[QFont](p, "QFont", rt.NewOwned)
 	return rt.View[QFont](h, p)
 }
 

@@ -70,7 +70,7 @@ func NewQConcatenateTablesProxyModel(parent QObjectLike) *QConcatenateTablesProx
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QConcatenateTablesProxyModel", mode)
+	h := rt.WrapNew[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode)
 	return rt.View[QConcatenateTablesProxyModel](h, p)
 }
 
@@ -1294,7 +1294,7 @@ func NewQConcatenateTablesProxyModelWith(v QConcatenateTablesProxyModelSubclass,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QConcatenateTablesProxyModel", mode)
+	h := rt.WrapNew[QConcatenateTablesProxyModel](p, "QConcatenateTablesProxyModel", mode)
 	base.QConcatenateTablesProxyModel = rt.View[QConcatenateTablesProxyModel](h, p)
 	id := h.SetSelf(v, qConcatenateTablesProxyModelVTable)
 	mask := rt.Mask(v, qConcatenateTablesProxyModelVTable)

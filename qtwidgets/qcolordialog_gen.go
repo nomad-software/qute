@@ -68,7 +68,7 @@ func NewQColorDialog(parent QWidgetLike) *QColorDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColorDialog", mode)
+	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
 	return rt.View[QColorDialog](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQColorDialogWithColor(initial qtgui.QColor, parent QWidgetLike) *QColorD
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColorDialog", mode)
+	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
 	return rt.View[QColorDialog](h, p)
 }
 
@@ -1270,7 +1270,7 @@ func NewQColorDialogWith(v QColorDialogSubclass, parent QWidgetLike) *QColorDial
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColorDialog", mode)
+	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
 	base.QColorDialog = rt.View[QColorDialog](h, p)
 	id := h.SetSelf(v, qColorDialogVTable)
 	mask := rt.Mask(v, qColorDialogVTable)
@@ -1302,7 +1302,7 @@ func NewQColorDialogWithColorWith(v QColorDialogSubclass, initial qtgui.QColor, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColorDialog", mode)
+	h := rt.WrapNew[QColorDialog](p, "QColorDialog", mode)
 	base.QColorDialog = rt.View[QColorDialog](h, p)
 	id := h.SetSelf(v, qColorDialogVTable)
 	mask := rt.Mask(v, qColorDialogVTable)

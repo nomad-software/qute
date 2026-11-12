@@ -92,7 +92,7 @@ func (this *QVideoFrame) Unkeep() {
 func NewQVideoFrame() *QVideoFrame {
 	rt.CheckThread("NewQVideoFrame")
 	p := C.qute_QVideoFrame_new()
-	h := rt.WrapClass(p, "QVideoFrame", rt.NewOwned)
+	h := rt.WrapNew[QVideoFrame](p, "QVideoFrame", rt.NewOwned)
 	return rt.View[QVideoFrame](h, p)
 }
 
@@ -105,7 +105,7 @@ func NewQVideoFrameWithVideoFrameFormat(format *QVideoFrameFormat) *QVideoFrame 
 	rt.CheckThread("NewQVideoFrameWithVideoFrameFormat")
 	p := C.qute_QVideoFrame_new_1(rt.UseArg(unsafe.Pointer(format), "NewQVideoFrameWithVideoFrameFormat"))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QVideoFrame", rt.NewOwned)
+	h := rt.WrapNew[QVideoFrame](p, "QVideoFrame", rt.NewOwned)
 	return rt.View[QVideoFrame](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQVideoFrameWithImage(image *qtgui.QImage) *QVideoFrame {
 	rt.CheckThread("NewQVideoFrameWithImage")
 	p := C.qute_QVideoFrame_new_2(rt.UseArg(unsafe.Pointer(image), "NewQVideoFrameWithImage"))
 	runtime.KeepAlive(image)
-	h := rt.WrapClass(p, "QVideoFrame", rt.NewOwned)
+	h := rt.WrapNew[QVideoFrame](p, "QVideoFrame", rt.NewOwned)
 	return rt.View[QVideoFrame](h, p)
 }
 

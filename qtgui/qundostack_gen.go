@@ -67,7 +67,7 @@ func NewQUndoStack(parent qtcore.QObjectLike) *QUndoStack {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoStack", mode)
+	h := rt.WrapNew[QUndoStack](p, "QUndoStack", mode)
 	return rt.View[QUndoStack](h, p)
 }
 
@@ -789,7 +789,7 @@ func NewQUndoStackWith(v QUndoStackSubclass, parent qtcore.QObjectLike) *QUndoSt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoStack", mode)
+	h := rt.WrapNew[QUndoStack](p, "QUndoStack", mode)
 	base.QUndoStack = rt.View[QUndoStack](h, p)
 	id := h.SetSelf(v, qUndoStackVTable)
 	mask := rt.Mask(v, qUndoStackVTable)

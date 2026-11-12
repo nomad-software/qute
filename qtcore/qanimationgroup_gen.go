@@ -396,7 +396,7 @@ func NewQAnimationGroupWith(v QAnimationGroupSubclass, parent QObjectLike) *QAni
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAnimationGroup", mode)
+	h := rt.WrapNew[QAnimationGroup](p, "QAnimationGroup", mode)
 	base.QAnimationGroup = rt.View[QAnimationGroup](h, p)
 	id := h.SetSelf(v, qAnimationGroupVTable)
 	mask := rt.Mask(v, qAnimationGroupVTable)

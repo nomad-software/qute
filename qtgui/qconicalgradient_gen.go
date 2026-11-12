@@ -42,7 +42,7 @@ func QConicalGradientFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QConicalGr
 func NewQConicalGradient() *QConicalGradient {
 	rt.CheckThread("NewQConicalGradient")
 	p := C.qute_QConicalGradient_new()
-	h := rt.WrapClass(p, "QConicalGradient", rt.NewOwned)
+	h := rt.WrapNew[QConicalGradient](p, "QConicalGradient", rt.NewOwned)
 	return rt.View[QConicalGradient](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQConicalGradient() *QConicalGradient {
 func NewQConicalGradientWithPointF(center qtcore.QPointF, startAngle float64) *QConicalGradient {
 	rt.CheckThread("NewQConicalGradientWithPointF")
 	p := C.qute_QConicalGradient_new_1(cQPointF(center), C.double(startAngle))
-	h := rt.WrapClass(p, "QConicalGradient", rt.NewOwned)
+	h := rt.WrapNew[QConicalGradient](p, "QConicalGradient", rt.NewOwned)
 	return rt.View[QConicalGradient](h, p)
 }
 

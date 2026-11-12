@@ -201,11 +201,18 @@ class: <bound class>}` when Qt has no getter; a class may list several
   debug call sites) is in a `handleExt` made on first use, and the first
   wrapper is cached without a slice. Code that only asks (`Anchored`,
   `Keeps`, `Unkeep`, the reparenting walk's `anchorCount`) reads
-  `h.ext.Load()` and must not call `h.x()`, which makes the extension. A value Qt hands an override for every
+  `h.ext.Load()` and must not call `h.x()`, which makes the extension; so
+  does the death path, and why an object died is a one-byte code on
+  `Handle` for the common reasons (`deathCode`), so a list row that Qt
+  destroys allocates nothing. A constructor makes the handle and its
+  wrapper in one allocation (`rt.WrapNew`), and registry entries are map
+  values, not pointers. A value Qt hands an override for every
   row costs two allocations, its bytes and its handle and wrapper made
   together (`rt.InlineArgView`, `InlineOwnedView`), and no call into C++: the
   shim passes the objects it depends on (`qute_inline_arg`, filled from its
-  `depends-on`; `rt.RegisterDependencyWrap`). `bench_test.go` measures it.
+  `depends-on`; `rt.RegisterDependencyWrap`). `bench_test.go` measures it,
+  and the cost of many small objects (`BenchmarkListRows`,
+  `BenchmarkWidgetRows`).
 - **Registry.** Object address to a `weak.Pointer[Handle]` plus a serial.
   Wrapping a pointer twice returns the same handle, and the same Go wrapper
   per type; an upcast of a derived wrapper returns its embedded base, so
@@ -602,7 +609,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   Threading).
 - `qute vet`: owned-leak (also a parentless Go subclass never deleted; a
   parent is any non-nil object argument; `Show` counts as keeping a window
-  for the program's life, `Exec` does not), delete-handler (QObjects only,
+  for the program's life, `Exec` does not; a variable handed on, also as
+  one of its embedded fields, `return s.QSplitter`, is taken to be parented
+  where it goes), delete-handler (QObjects only,
   as rule 5: a type with `AsQObject`), gui-goroutine
   (also the inspection helpers of `qute` and the input helpers of
   `qutetest`), scoped-escape. A handler is an `On*` closure or an override: a
@@ -798,7 +807,8 @@ Layout:
   `QInputDialogGetTextFull`) from a timer.
 - `bench_test.go` also measures a Go table model under a view
   (`BenchmarkModelSelectAll`, `BenchmarkModelPaint`): Qt calls its overrides
-  with an index for every row.
+  with an index for every row; and rows of list items and of widgets made
+  and destroyed (`BenchmarkListRows`, `BenchmarkWidgetRows`).
 - `keepalive_test.go` runs the GC inside a call (nested event loop, a
   synchronous event) and checks the receiver and arguments survive it.
 - Inside `qutetest.Run`, prefer `t.Error` and `return`. `t.Fatal` works (it ends

@@ -67,7 +67,7 @@ func NewQCamera(parent qtcore.QObjectLike) *QCamera {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	return rt.View[QCamera](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQCameraWithCameraDevice(cameraDevice *QCameraDevice, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	return rt.View[QCamera](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQCameraWithPosition(position QCameraDevicePosition, parent qtcore.QObjec
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	return rt.View[QCamera](h, p)
 }
 
@@ -1700,7 +1700,7 @@ func NewQCameraWith(v QCameraSubclass, parent qtcore.QObjectLike) *QCamera {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	base.QCamera = rt.View[QCamera](h, p)
 	id := h.SetSelf(v, qCameraVTable)
 	mask := rt.Mask(v, qCameraVTable)
@@ -1733,7 +1733,7 @@ func NewQCameraWithCameraDeviceWith(v QCameraSubclass, cameraDevice *QCameraDevi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	base.QCamera = rt.View[QCamera](h, p)
 	id := h.SetSelf(v, qCameraVTable)
 	mask := rt.Mask(v, qCameraVTable)
@@ -1765,7 +1765,7 @@ func NewQCameraWithPositionWith(v QCameraSubclass, position QCameraDevicePositio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCamera", mode)
+	h := rt.WrapNew[QCamera](p, "QCamera", mode)
 	base.QCamera = rt.View[QCamera](h, p)
 	id := h.SetSelf(v, qCameraVTable)
 	mask := rt.Mask(v, qCameraVTable)

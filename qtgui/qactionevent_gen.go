@@ -73,7 +73,7 @@ func NewQActionEventWithType(typeArg int, action QActionLike) *QActionEvent {
 	}
 	p := C.qute_QActionEvent_new(C.int(typeArg), actionPtr)
 	runtime.KeepAlive(action)
-	h := rt.WrapClass(p, "QActionEvent", rt.NewOwned)
+	h := rt.WrapNew[QActionEvent](p, "QActionEvent", rt.NewOwned)
 	rt.KeepArg(h, "action", actionH, true)
 	return rt.View[QActionEvent](h, p)
 }
@@ -104,7 +104,7 @@ func NewQActionEventWithTypeFull(typeArg int, action QActionLike, before QAction
 	p := C.qute_QActionEvent_new_1(C.int(typeArg), actionPtr, beforePtr)
 	runtime.KeepAlive(action)
 	runtime.KeepAlive(before)
-	h := rt.WrapClass(p, "QActionEvent", rt.NewOwned)
+	h := rt.WrapNew[QActionEvent](p, "QActionEvent", rt.NewOwned)
 	rt.KeepArg(h, "action", actionH, true)
 	rt.KeepArg(h, "before", beforeH, true)
 	return rt.View[QActionEvent](h, p)

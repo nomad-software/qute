@@ -65,7 +65,7 @@ func QGraphicsSceneResizeEventCast(e qtcore.QEventLike) *QGraphicsSceneResizeEve
 func NewQGraphicsSceneResizeEvent() *QGraphicsSceneResizeEvent {
 	rt.CheckThread("NewQGraphicsSceneResizeEvent")
 	p := C.qute_QGraphicsSceneResizeEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneResizeEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneResizeEvent](p, "QGraphicsSceneResizeEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneResizeEvent](h, p)
 }
 

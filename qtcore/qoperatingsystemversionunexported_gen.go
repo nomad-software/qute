@@ -46,6 +46,6 @@ func NewQOperatingSystemVersionUnexportedWithOperatingSystemVersionBase(other *Q
 	rt.CheckThread("NewQOperatingSystemVersionUnexportedWithOperatingSystemVersionBase")
 	p := C.qute_QOperatingSystemVersionUnexported_new(rt.Use(unsafe.Pointer(other), "NewQOperatingSystemVersionUnexportedWithOperatingSystemVersionBase"))
 	runtime.KeepAlive(other)
-	h := rt.WrapClass(p, "QOperatingSystemVersionUnexported", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersionUnexported](p, "QOperatingSystemVersionUnexported", rt.NewOwned)
 	return rt.View[QOperatingSystemVersionUnexported](h, p)
 }

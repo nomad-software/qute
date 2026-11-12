@@ -61,7 +61,7 @@ func QStyleOptionSliderCast(o QStyleOptionLike) *QStyleOptionSlider {
 func NewQStyleOptionSlider() *QStyleOptionSlider {
 	rt.CheckThread("NewQStyleOptionSlider")
 	p := C.qute_QStyleOptionSlider_new()
-	h := rt.WrapClass(p, "QStyleOptionSlider", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionSlider](p, "QStyleOptionSlider", rt.NewOwned)
 	return rt.View[QStyleOptionSlider](h, p)
 }
 

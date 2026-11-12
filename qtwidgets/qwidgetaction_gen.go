@@ -68,7 +68,7 @@ func NewQWidgetAction(parent qtcore.QObjectLike) *QWidgetAction {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWidgetAction", mode)
+	h := rt.WrapNew[QWidgetAction](p, "QWidgetAction", mode)
 	return rt.View[QWidgetAction](h, p)
 }
 
@@ -362,7 +362,7 @@ func NewQWidgetActionWith(v QWidgetActionSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWidgetAction", mode)
+	h := rt.WrapNew[QWidgetAction](p, "QWidgetAction", mode)
 	base.QWidgetAction = rt.View[QWidgetAction](h, p)
 	id := h.SetSelf(v, qWidgetActionVTable)
 	mask := rt.Mask(v, qWidgetActionVTable)

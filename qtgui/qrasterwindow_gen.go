@@ -67,7 +67,7 @@ func NewQRasterWindow(parent QWindowLike) *QRasterWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRasterWindow", mode)
+	h := rt.WrapNew[QRasterWindow](p, "QRasterWindow", mode)
 	return rt.View[QRasterWindow](h, p)
 }
 
@@ -692,7 +692,7 @@ func NewQRasterWindowWith(v QRasterWindowSubclass, parent QWindowLike) *QRasterW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRasterWindow", mode)
+	h := rt.WrapNew[QRasterWindow](p, "QRasterWindow", mode)
 	base.QRasterWindow = rt.View[QRasterWindow](h, p)
 	id := h.SetSelf(v, qRasterWindowVTable)
 	mask := rt.Mask(v, qRasterWindowVTable)

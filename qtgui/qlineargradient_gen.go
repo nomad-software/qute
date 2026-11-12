@@ -42,7 +42,7 @@ func QLinearGradientFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QLinearGrad
 func NewQLinearGradient() *QLinearGradient {
 	rt.CheckThread("NewQLinearGradient")
 	p := C.qute_QLinearGradient_new()
-	h := rt.WrapClass(p, "QLinearGradient", rt.NewOwned)
+	h := rt.WrapNew[QLinearGradient](p, "QLinearGradient", rt.NewOwned)
 	return rt.View[QLinearGradient](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQLinearGradient() *QLinearGradient {
 func NewQLinearGradientWithPointF(start qtcore.QPointF, finalStop qtcore.QPointF) *QLinearGradient {
 	rt.CheckThread("NewQLinearGradientWithPointF")
 	p := C.qute_QLinearGradient_new_1(cQPointF(start), cQPointF(finalStop))
-	h := rt.WrapClass(p, "QLinearGradient", rt.NewOwned)
+	h := rt.WrapNew[QLinearGradient](p, "QLinearGradient", rt.NewOwned)
 	return rt.View[QLinearGradient](h, p)
 }
 
@@ -66,7 +66,7 @@ func NewQLinearGradientWithPointF(start qtcore.QPointF, finalStop qtcore.QPointF
 func NewQLinearGradientWithXStart(xStart float64, yStart float64, xFinalStop float64, yFinalStop float64) *QLinearGradient {
 	rt.CheckThread("NewQLinearGradientWithXStart")
 	p := C.qute_QLinearGradient_new_2(C.double(xStart), C.double(yStart), C.double(xFinalStop), C.double(yFinalStop))
-	h := rt.WrapClass(p, "QLinearGradient", rt.NewOwned)
+	h := rt.WrapNew[QLinearGradient](p, "QLinearGradient", rt.NewOwned)
 	return rt.View[QLinearGradient](h, p)
 }
 

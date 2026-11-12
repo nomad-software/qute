@@ -382,7 +382,7 @@ func NewQGraphicsLayoutWith(v QGraphicsLayoutSubclass, parent QGraphicsLayoutIte
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLayout", mode)
+	h := rt.WrapNew[QGraphicsLayout](p, "QGraphicsLayout", mode)
 	base.QGraphicsLayout = rt.View[QGraphicsLayout](h, p)
 	id := h.SetSelf(v, qGraphicsLayoutVTable)
 	mask := rt.Mask(v, qGraphicsLayoutVTable)

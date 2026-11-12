@@ -68,7 +68,7 @@ func NewQImageCapture(parent qtcore.QObjectLike) *QImageCapture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QImageCapture", mode)
+	h := rt.WrapNew[QImageCapture](p, "QImageCapture", mode)
 	return rt.View[QImageCapture](h, p)
 }
 
@@ -821,7 +821,7 @@ func NewQImageCaptureWith(v QImageCaptureSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QImageCapture", mode)
+	h := rt.WrapNew[QImageCapture](p, "QImageCapture", mode)
 	base.QImageCapture = rt.View[QImageCapture](h, p)
 	id := h.SetSelf(v, qImageCaptureVTable)
 	mask := rt.Mask(v, qImageCaptureVTable)

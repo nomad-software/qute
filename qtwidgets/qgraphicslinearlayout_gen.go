@@ -54,7 +54,7 @@ func NewQGraphicsLinearLayout(parent QGraphicsLayoutItemLike) *QGraphicsLinearLa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
 	return rt.View[QGraphicsLinearLayout](h, p)
 }
 
@@ -79,7 +79,7 @@ func NewQGraphicsLinearLayoutWithOrientation(orientation qtcore.Orientations, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
 	return rt.View[QGraphicsLinearLayout](h, p)
 }
 
@@ -653,7 +653,7 @@ func NewQGraphicsLinearLayoutWith(v QGraphicsLinearLayoutSubclass, parent QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
 	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
 	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
 	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)
@@ -685,7 +685,7 @@ func NewQGraphicsLinearLayoutWithOrientationWith(v QGraphicsLinearLayoutSubclass
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLinearLayout", mode)
+	h := rt.WrapNew[QGraphicsLinearLayout](p, "QGraphicsLinearLayout", mode)
 	base.QGraphicsLinearLayout = rt.View[QGraphicsLinearLayout](h, p)
 	id := h.SetSelf(v, qGraphicsLinearLayoutVTable)
 	mask := rt.Mask(v, qGraphicsLinearLayoutVTable)

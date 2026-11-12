@@ -48,7 +48,7 @@ func NewQOperatingSystemVersionWithOperatingSystemVersionBase(osversion *QOperat
 	rt.CheckThread("NewQOperatingSystemVersionWithOperatingSystemVersionBase")
 	p := C.qute_QOperatingSystemVersion_new(rt.Use(unsafe.Pointer(osversion), "NewQOperatingSystemVersionWithOperatingSystemVersionBase"))
 	runtime.KeepAlive(osversion)
-	h := rt.WrapClass(p, "QOperatingSystemVersion", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersion](p, "QOperatingSystemVersion", rt.NewOwned)
 	return rt.View[QOperatingSystemVersion](h, p)
 }
 
@@ -62,7 +62,7 @@ func NewQOperatingSystemVersionWithOperatingSystemVersionBase(osversion *QOperat
 func NewQOperatingSystemVersionWithOSType(osType QOperatingSystemVersionOSType, vmajor int) *QOperatingSystemVersion {
 	rt.CheckThread("NewQOperatingSystemVersionWithOSType")
 	p := C.qute_QOperatingSystemVersion_new_1(C.int64_t(osType), C.int(vmajor))
-	h := rt.WrapClass(p, "QOperatingSystemVersion", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersion](p, "QOperatingSystemVersion", rt.NewOwned)
 	return rt.View[QOperatingSystemVersion](h, p)
 }
 
@@ -76,7 +76,7 @@ func NewQOperatingSystemVersionWithOSType(osType QOperatingSystemVersionOSType, 
 func NewQOperatingSystemVersionWithOSTypeFull(osType QOperatingSystemVersionOSType, vmajor int, vminor int, vmicro int) *QOperatingSystemVersion {
 	rt.CheckThread("NewQOperatingSystemVersionWithOSTypeFull")
 	p := C.qute_QOperatingSystemVersion_new_2(C.int64_t(osType), C.int(vmajor), C.int(vminor), C.int(vmicro))
-	h := rt.WrapClass(p, "QOperatingSystemVersion", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersion](p, "QOperatingSystemVersion", rt.NewOwned)
 	return rt.View[QOperatingSystemVersion](h, p)
 }
 

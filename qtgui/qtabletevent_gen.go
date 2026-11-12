@@ -71,7 +71,7 @@ func NewQTabletEventWithType(t qtcore.QEventType, device QPointingDeviceLike, po
 	}
 	p := C.qute_QTabletEvent_new(C.int64_t(t), devicePtr, cQPointF(pos), cQPointF(globalPos), C.double(pressure), C.float(xTilt), C.float(yTilt), C.float(tangentialPressure), C.double(rotation), C.float(z), C.int64_t(keyState), C.int64_t(button), C.int64_t(buttons))
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QTabletEvent", rt.NewOwned)
+	h := rt.WrapNew[QTabletEvent](p, "QTabletEvent", rt.NewOwned)
 	rt.KeepArg(h, "QTabletEvent.device", deviceH, true)
 	return rt.View[QTabletEvent](h, p)
 }

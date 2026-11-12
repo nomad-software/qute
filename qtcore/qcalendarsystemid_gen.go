@@ -85,7 +85,7 @@ func (this *QCalendarSystemId) Unkeep() {
 func NewQCalendarSystemId() *QCalendarSystemId {
 	rt.CheckThread("NewQCalendarSystemId")
 	p := C.qute_QCalendarSystemId_new()
-	h := rt.WrapClass(p, "QCalendarSystemId", rt.NewOwned)
+	h := rt.WrapNew[QCalendarSystemId](p, "QCalendarSystemId", rt.NewOwned)
 	return rt.View[QCalendarSystemId](h, p)
 }
 

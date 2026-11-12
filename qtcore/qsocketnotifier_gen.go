@@ -66,7 +66,7 @@ func NewQSocketNotifierWithType(typeArg QSocketNotifierType, parent QObjectLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSocketNotifier", mode)
+	h := rt.WrapNew[QSocketNotifier](p, "QSocketNotifier", mode)
 	return rt.View[QSocketNotifier](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQSocketNotifierWithSocket(socket int64, typeArg QSocketNotifierType, par
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSocketNotifier", mode)
+	h := rt.WrapNew[QSocketNotifier](p, "QSocketNotifier", mode)
 	return rt.View[QSocketNotifier](h, p)
 }
 
@@ -341,7 +341,7 @@ func NewQSocketNotifierWith(v QSocketNotifierSubclass, typeArg QSocketNotifierTy
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSocketNotifier", mode)
+	h := rt.WrapNew[QSocketNotifier](p, "QSocketNotifier", mode)
 	base.QSocketNotifier = rt.View[QSocketNotifier](h, p)
 	id := h.SetSelf(v, qSocketNotifierVTable)
 	mask := rt.Mask(v, qSocketNotifierVTable)
@@ -373,7 +373,7 @@ func NewQSocketNotifierWithSocketWith(v QSocketNotifierSubclass, socket int64, t
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSocketNotifier", mode)
+	h := rt.WrapNew[QSocketNotifier](p, "QSocketNotifier", mode)
 	base.QSocketNotifier = rt.View[QSocketNotifier](h, p)
 	id := h.SetSelf(v, qSocketNotifierVTable)
 	mask := rt.Mask(v, qSocketNotifierVTable)

@@ -68,7 +68,7 @@ func NewQCalendarWidget(parent QWidgetLike) *QCalendarWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCalendarWidget", mode)
+	h := rt.WrapNew[QCalendarWidget](p, "QCalendarWidget", mode)
 	return rt.View[QCalendarWidget](h, p)
 }
 
@@ -1601,7 +1601,7 @@ func NewQCalendarWidgetWith(v QCalendarWidgetSubclass, parent QWidgetLike) *QCal
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCalendarWidget", mode)
+	h := rt.WrapNew[QCalendarWidget](p, "QCalendarWidget", mode)
 	base.QCalendarWidget = rt.View[QCalendarWidget](h, p)
 	id := h.SetSelf(v, qCalendarWidgetVTable)
 	mask := rt.Mask(v, qCalendarWidgetVTable)

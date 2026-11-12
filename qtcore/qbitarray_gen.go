@@ -85,7 +85,7 @@ func (this *QBitArray) Unkeep() {
 func NewQBitArray() *QBitArray {
 	rt.CheckThread("NewQBitArray")
 	p := C.qute_QBitArray_new()
-	h := rt.WrapClass(p, "QBitArray", rt.NewOwned)
+	h := rt.WrapNew[QBitArray](p, "QBitArray", rt.NewOwned)
 	return rt.View[QBitArray](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQBitArray() *QBitArray {
 func NewQBitArrayWithSize(size int) *QBitArray {
 	rt.CheckThread("NewQBitArrayWithSize")
 	p := C.qute_QBitArray_new_1(C.longlong(size))
-	h := rt.WrapClass(p, "QBitArray", rt.NewOwned)
+	h := rt.WrapNew[QBitArray](p, "QBitArray", rt.NewOwned)
 	return rt.View[QBitArray](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQBitArrayWithSize(size int) *QBitArray {
 func NewQBitArrayWithSizeFull(size int, val bool) *QBitArray {
 	rt.CheckThread("NewQBitArrayWithSizeFull")
 	p := C.qute_QBitArray_new_2(C.longlong(size), C.bool(val))
-	h := rt.WrapClass(p, "QBitArray", rt.NewOwned)
+	h := rt.WrapNew[QBitArray](p, "QBitArray", rt.NewOwned)
 	return rt.View[QBitArray](h, p)
 }
 

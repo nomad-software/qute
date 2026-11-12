@@ -95,7 +95,7 @@ func (this *QTemporaryDir) Unkeep() {
 func NewQTemporaryDir() *QTemporaryDir {
 	rt.CheckThread("NewQTemporaryDir")
 	p := C.qute_QTemporaryDir_new()
-	h := rt.WrapClass(p, "QTemporaryDir", rt.NewOwned)
+	h := rt.WrapNew[QTemporaryDir](p, "QTemporaryDir", rt.NewOwned)
 	return rt.View[QTemporaryDir](h, p)
 }
 
@@ -107,7 +107,7 @@ func NewQTemporaryDir() *QTemporaryDir {
 func NewQTemporaryDirWithTemplateName(templateName string) *QTemporaryDir {
 	rt.CheckThread("NewQTemporaryDirWithTemplateName")
 	p := C.qute_QTemporaryDir_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(templateName))), C.ptrdiff_t(len(templateName)))
-	h := rt.WrapClass(p, "QTemporaryDir", rt.NewOwned)
+	h := rt.WrapNew[QTemporaryDir](p, "QTemporaryDir", rt.NewOwned)
 	return rt.View[QTemporaryDir](h, p)
 }
 

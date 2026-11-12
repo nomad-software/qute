@@ -67,7 +67,7 @@ func NewQSwipeGesture(parent qtcore.QObjectLike) *QSwipeGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSwipeGesture", mode)
+	h := rt.WrapNew[QSwipeGesture](p, "QSwipeGesture", mode)
 	return rt.View[QSwipeGesture](h, p)
 }
 
@@ -285,7 +285,7 @@ func NewQSwipeGestureWith(v QSwipeGestureSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSwipeGesture", mode)
+	h := rt.WrapNew[QSwipeGesture](p, "QSwipeGesture", mode)
 	base.QSwipeGesture = rt.View[QSwipeGesture](h, p)
 	id := h.SetSelf(v, qSwipeGestureVTable)
 	mask := rt.Mask(v, qSwipeGestureVTable)

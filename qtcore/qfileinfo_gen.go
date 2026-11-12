@@ -85,7 +85,7 @@ func (this *QFileInfo) Unkeep() {
 func NewQFileInfo() *QFileInfo {
 	rt.CheckThread("NewQFileInfo")
 	p := C.qute_QFileInfo_new()
-	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
+	h := rt.WrapNew[QFileInfo](p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQFileInfo() *QFileInfo {
 func NewQFileInfoWithFile(file string) *QFileInfo {
 	rt.CheckThread("NewQFileInfoWithFile")
 	p := C.qute_QFileInfo_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
-	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
+	h := rt.WrapNew[QFileInfo](p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQFileInfoFor(file QFileDeviceLike) *QFileInfo {
 	}
 	p := C.qute_QFileInfo_new_2(filePtr)
 	runtime.KeepAlive(file)
-	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
+	h := rt.WrapNew[QFileInfo](p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
 
@@ -127,7 +127,7 @@ func NewQFileInfoWithDir(dir *QDir, file string) *QFileInfo {
 	rt.CheckThread("NewQFileInfoWithDir")
 	p := C.qute_QFileInfo_new_3(rt.UseArg(unsafe.Pointer(dir), "NewQFileInfoWithDir"), (*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
 	runtime.KeepAlive(dir)
-	h := rt.WrapClass(p, "QFileInfo", rt.NewOwned)
+	h := rt.WrapNew[QFileInfo](p, "QFileInfo", rt.NewOwned)
 	return rt.View[QFileInfo](h, p)
 }
 

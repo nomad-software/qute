@@ -99,7 +99,7 @@ func (this *QTreeWidgetItem) Unkeep() {
 func NewQTreeWidgetItem() *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItem")
 	p := C.qute_QTreeWidgetItem_new()
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQTreeWidgetItemWithStrings(strings []string) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemWithStrings")
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -139,7 +139,7 @@ func NewQTreeWidgetItemIn(treeview QTreeWidgetLike) *QTreeWidgetItem {
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -165,7 +165,7 @@ func NewQTreeWidgetItemInWithStrings(treeview QTreeWidgetLike, strings []string)
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -195,7 +195,7 @@ func NewQTreeWidgetItemInAfter(treeview QTreeWidgetLike, after QTreeWidgetItemLi
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -220,7 +220,7 @@ func NewQTreeWidgetItemUnder(parent QTreeWidgetItemLike) *QTreeWidgetItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -246,7 +246,7 @@ func NewQTreeWidgetItemUnderWithStrings(parent QTreeWidgetItemLike, strings []st
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -276,7 +276,7 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -290,7 +290,7 @@ func NewQTreeWidgetItemUnderAfter(parent QTreeWidgetItemLike, after QTreeWidgetI
 func NewQTreeWidgetItemFull(typeArg int) *QTreeWidgetItem {
 	rt.CheckThread("NewQTreeWidgetItemFull")
 	p := C.qute_QTreeWidgetItem_new_8(C.int(typeArg))
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -305,7 +305,7 @@ func NewQTreeWidgetItemWithStringsFull(strings []string, typeArg int) *QTreeWidg
 	rt.CheckThread("NewQTreeWidgetItemWithStringsFull")
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_9((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)), C.int(typeArg))
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -330,7 +330,7 @@ func NewQTreeWidgetItemInFull(treeview QTreeWidgetLike, typeArg int) *QTreeWidge
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -356,7 +356,7 @@ func NewQTreeWidgetItemInWithStringsFull(treeview QTreeWidgetLike, strings []str
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -386,7 +386,7 @@ func NewQTreeWidgetItemInAfterFull(treeview QTreeWidgetLike, after QTreeWidgetIt
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -411,7 +411,7 @@ func NewQTreeWidgetItemUnderFull(parent QTreeWidgetItemLike, typeArg int) *QTree
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -437,7 +437,7 @@ func NewQTreeWidgetItemUnderWithStringsFull(parent QTreeWidgetItemLike, strings 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -467,7 +467,7 @@ func NewQTreeWidgetItemUnderAfterFull(parent QTreeWidgetItemLike, after QTreeWid
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	return rt.View[QTreeWidgetItem](h, p)
 }
 
@@ -1362,7 +1362,7 @@ func NewQTreeWidgetItemWith(v QTreeWidgetItemSubclass) *QTreeWidgetItem {
 		panic("NewQTreeWidgetItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTreeWidgetItem_new_shim()
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1386,7 +1386,7 @@ func NewQTreeWidgetItemWithStringsWith(v QTreeWidgetItemSubclass, strings []stri
 	}
 	stringsData, stringsLens := quteStrListArg(strings)
 	p := C.qute_QTreeWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.SliceData(stringsData))), (*C.ptrdiff_t)(unsafe.SliceData(stringsLens)), C.ptrdiff_t(len(strings)))
-	h := rt.WrapClass(p, "QTreeWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", rt.NewOwned)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1418,7 +1418,7 @@ func NewQTreeWidgetItemInWith(v QTreeWidgetItemSubclass, treeview QTreeWidgetLik
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1451,7 +1451,7 @@ func NewQTreeWidgetItemInWithStringsWith(v QTreeWidgetItemSubclass, treeview QTr
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1488,7 +1488,7 @@ func NewQTreeWidgetItemInAfterWith(v QTreeWidgetItemSubclass, treeview QTreeWidg
 	if treeviewPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1520,7 +1520,7 @@ func NewQTreeWidgetItemUnderWith(v QTreeWidgetItemSubclass, parent QTreeWidgetIt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1553,7 +1553,7 @@ func NewQTreeWidgetItemUnderWithStringsWith(v QTreeWidgetItemSubclass, parent QT
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)
@@ -1590,7 +1590,7 @@ func NewQTreeWidgetItemUnderAfterWith(v QTreeWidgetItemSubclass, parent QTreeWid
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTreeWidgetItem", mode)
+	h := rt.WrapNew[QTreeWidgetItem](p, "QTreeWidgetItem", mode)
 	base.QTreeWidgetItem = rt.View[QTreeWidgetItem](h, p)
 	id := h.SetSelf(v, qTreeWidgetItemVTable)
 	mask := rt.Mask(v, qTreeWidgetItemVTable)

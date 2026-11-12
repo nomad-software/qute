@@ -86,7 +86,7 @@ func (this *QWebEngineUrlScheme) Unkeep() {
 func NewQWebEngineUrlScheme() *QWebEngineUrlScheme {
 	rt.CheckThread("NewQWebEngineUrlScheme")
 	p := C.qute_QWebEngineUrlScheme_new()
-	h := rt.WrapClass(p, "QWebEngineUrlScheme", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineUrlScheme](p, "QWebEngineUrlScheme", rt.NewOwned)
 	return rt.View[QWebEngineUrlScheme](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQWebEngineUrlScheme() *QWebEngineUrlScheme {
 func NewQWebEngineUrlSchemeWithBytes(name []byte) *QWebEngineUrlScheme {
 	rt.CheckThread("NewQWebEngineUrlSchemeWithBytes")
 	p := C.qute_QWebEngineUrlScheme_new_1((*C.char)(unsafe.Pointer(unsafe.SliceData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QWebEngineUrlScheme", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineUrlScheme](p, "QWebEngineUrlScheme", rt.NewOwned)
 	return rt.View[QWebEngineUrlScheme](h, p)
 }
 

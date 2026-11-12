@@ -374,7 +374,7 @@ func NewQSyntaxHighlighterWith(v QSyntaxHighlighterSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSyntaxHighlighter", mode)
+	h := rt.WrapNew[QSyntaxHighlighter](p, "QSyntaxHighlighter", mode)
 	base.QSyntaxHighlighter = rt.View[QSyntaxHighlighter](h, p)
 	id := h.SetSelf(v, qSyntaxHighlighterVTable)
 	mask := rt.Mask(v, qSyntaxHighlighterVTable)

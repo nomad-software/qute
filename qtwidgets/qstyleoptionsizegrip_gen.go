@@ -61,7 +61,7 @@ func QStyleOptionSizeGripCast(o QStyleOptionLike) *QStyleOptionSizeGrip {
 func NewQStyleOptionSizeGrip() *QStyleOptionSizeGrip {
 	rt.CheckThread("NewQStyleOptionSizeGrip")
 	p := C.qute_QStyleOptionSizeGrip_new()
-	h := rt.WrapClass(p, "QStyleOptionSizeGrip", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionSizeGrip](p, "QStyleOptionSizeGrip", rt.NewOwned)
 	return rt.View[QStyleOptionSizeGrip](h, p)
 }
 

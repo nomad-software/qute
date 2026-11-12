@@ -57,7 +57,7 @@ func NewQGraphicsSimpleTextItem(parent QGraphicsItemLike) *QGraphicsSimpleTextIt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSimpleTextItem", mode)
+	h := rt.WrapNew[QGraphicsSimpleTextItem](p, "QGraphicsSimpleTextItem", mode)
 	return rt.View[QGraphicsSimpleTextItem](h, p)
 }
 
@@ -80,7 +80,7 @@ func NewQGraphicsSimpleTextItemWithText(text string, parent QGraphicsItemLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSimpleTextItem", mode)
+	h := rt.WrapNew[QGraphicsSimpleTextItem](p, "QGraphicsSimpleTextItem", mode)
 	return rt.View[QGraphicsSimpleTextItem](h, p)
 }
 
@@ -1032,7 +1032,7 @@ func NewQGraphicsSimpleTextItemWith(v QGraphicsSimpleTextItemSubclass, parent QG
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSimpleTextItem", mode)
+	h := rt.WrapNew[QGraphicsSimpleTextItem](p, "QGraphicsSimpleTextItem", mode)
 	base.QGraphicsSimpleTextItem = rt.View[QGraphicsSimpleTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsSimpleTextItemVTable)
 	mask := rt.Mask(v, qGraphicsSimpleTextItemVTable)
@@ -1064,7 +1064,7 @@ func NewQGraphicsSimpleTextItemWithTextWith(v QGraphicsSimpleTextItemSubclass, t
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSimpleTextItem", mode)
+	h := rt.WrapNew[QGraphicsSimpleTextItem](p, "QGraphicsSimpleTextItem", mode)
 	base.QGraphicsSimpleTextItem = rt.View[QGraphicsSimpleTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsSimpleTextItemVTable)
 	mask := rt.Mask(v, qGraphicsSimpleTextItemVTable)

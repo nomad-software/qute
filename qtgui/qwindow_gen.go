@@ -74,7 +74,7 @@ func NewQWindow(parent QWindowLike) *QWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWindow", mode)
+	h := rt.WrapNew[QWindow](p, "QWindow", mode)
 	return rt.View[QWindow](h, p)
 }
 
@@ -2613,7 +2613,7 @@ func NewQWindowWith(v QWindowSubclass, parent QWindowLike) *QWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWindow", mode)
+	h := rt.WrapNew[QWindow](p, "QWindow", mode)
 	base.QWindow = rt.View[QWindow](h, p)
 	id := h.SetSelf(v, qWindowVTable)
 	mask := rt.Mask(v, qWindowVTable)

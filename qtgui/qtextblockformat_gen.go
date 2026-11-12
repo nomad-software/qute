@@ -42,7 +42,7 @@ func QTextBlockFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextBlock
 func NewQTextBlockFormat() *QTextBlockFormat {
 	rt.CheckThread("NewQTextBlockFormat")
 	p := C.qute_QTextBlockFormat_new()
-	h := rt.WrapClass(p, "QTextBlockFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextBlockFormat](p, "QTextBlockFormat", rt.NewOwned)
 	return rt.View[QTextBlockFormat](h, p)
 }
 

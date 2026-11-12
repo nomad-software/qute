@@ -53,7 +53,7 @@ func NewQGraphicsItemGroup(parent QGraphicsItemLike) *QGraphicsItemGroup {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsItemGroup", mode)
+	h := rt.WrapNew[QGraphicsItemGroup](p, "QGraphicsItemGroup", mode)
 	return rt.View[QGraphicsItemGroup](h, p)
 }
 
@@ -994,7 +994,7 @@ func NewQGraphicsItemGroupWith(v QGraphicsItemGroupSubclass, parent QGraphicsIte
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsItemGroup", mode)
+	h := rt.WrapNew[QGraphicsItemGroup](p, "QGraphicsItemGroup", mode)
 	base.QGraphicsItemGroup = rt.View[QGraphicsItemGroup](h, p)
 	id := h.SetSelf(v, qGraphicsItemGroupVTable)
 	mask := rt.Mask(v, qGraphicsItemGroupVTable)

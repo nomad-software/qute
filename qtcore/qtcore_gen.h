@@ -1415,6 +1415,7 @@ void qute_QFileDevice_prot_setErrorString(void *self, const char *a0, ptrdiff_t 
 void * qute_QFileDevice_cast(void *obj);
 int64_t qute_QFileDevice_error(void *self);
 void qute_QFileDevice_unsetError(void *self);
+int qute_QFileDevice_handle(void *self);
 qute_str qute_QFileDevice_fileName(void *self);
 bool qute_QFileDevice_flush(void *self);
 bool qute_QFileDevice_resize(void *self, long long a0);

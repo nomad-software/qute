@@ -68,7 +68,7 @@ func NewQToolButton(parent QWidgetLike) *QToolButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolButton", mode)
+	h := rt.WrapNew[QToolButton](p, "QToolButton", mode)
 	return rt.View[QToolButton](h, p)
 }
 
@@ -1195,7 +1195,7 @@ func NewQToolButtonWith(v QToolButtonSubclass, parent QWidgetLike) *QToolButton 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QToolButton", mode)
+	h := rt.WrapNew[QToolButton](p, "QToolButton", mode)
 	base.QToolButton = rt.View[QToolButton](h, p)
 	id := h.SetSelf(v, qToolButtonVTable)
 	mask := rt.Mask(v, qToolButtonVTable)

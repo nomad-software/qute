@@ -70,7 +70,7 @@ func NewQSvgWidget(parent qtwidgets.QWidgetLike) *QSvgWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgWidget", mode)
+	h := rt.WrapNew[QSvgWidget](p, "QSvgWidget", mode)
 	return rt.View[QSvgWidget](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQSvgWidgetWithFile(file string, parent qtwidgets.QWidgetLike) *QSvgWidge
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgWidget", mode)
+	h := rt.WrapNew[QSvgWidget](p, "QSvgWidget", mode)
 	return rt.View[QSvgWidget](h, p)
 }
 
@@ -1019,7 +1019,7 @@ func NewQSvgWidgetWith(v QSvgWidgetSubclass, parent qtwidgets.QWidgetLike) *QSvg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgWidget", mode)
+	h := rt.WrapNew[QSvgWidget](p, "QSvgWidget", mode)
 	base.QSvgWidget = rt.View[QSvgWidget](h, p)
 	id := h.SetSelf(v, qSvgWidgetVTable)
 	mask := rt.Mask(v, qSvgWidgetVTable)
@@ -1051,7 +1051,7 @@ func NewQSvgWidgetWithFileWith(v QSvgWidgetSubclass, file string, parent qtwidge
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgWidget", mode)
+	h := rt.WrapNew[QSvgWidget](p, "QSvgWidget", mode)
 	base.QSvgWidget = rt.View[QSvgWidget](h, p)
 	id := h.SetSelf(v, qSvgWidgetVTable)
 	mask := rt.Mask(v, qSvgWidgetVTable)

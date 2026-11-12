@@ -68,7 +68,7 @@ func NewQListWidget(parent QWidgetLike) *QListWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidget", mode)
+	h := rt.WrapNew[QListWidget](p, "QListWidget", mode)
 	return rt.View[QListWidget](h, p)
 }
 
@@ -2880,7 +2880,7 @@ func NewQListWidgetWith(v QListWidgetSubclass, parent QWidgetLike) *QListWidget 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QListWidget", mode)
+	h := rt.WrapNew[QListWidget](p, "QListWidget", mode)
 	base.QListWidget = rt.View[QListWidget](h, p)
 	id := h.SetSelf(v, qListWidgetVTable)
 	mask := rt.Mask(v, qListWidgetVTable)

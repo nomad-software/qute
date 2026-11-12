@@ -68,7 +68,7 @@ func NewQFocusFrame(parent QWidgetLike) *QFocusFrame {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFocusFrame", mode)
+	h := rt.WrapNew[QFocusFrame](p, "QFocusFrame", mode)
 	return rt.View[QFocusFrame](h, p)
 }
 
@@ -984,7 +984,7 @@ func NewQFocusFrameWith(v QFocusFrameSubclass, parent QWidgetLike) *QFocusFrame 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFocusFrame", mode)
+	h := rt.WrapNew[QFocusFrame](p, "QFocusFrame", mode)
 	base.QFocusFrame = rt.View[QFocusFrame](h, p)
 	id := h.SetSelf(v, qFocusFrameVTable)
 	mask := rt.Mask(v, qFocusFrameVTable)

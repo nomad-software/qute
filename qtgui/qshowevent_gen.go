@@ -61,6 +61,6 @@ func QShowEventCast(e qtcore.QEventLike) *QShowEvent {
 func NewQShowEvent() *QShowEvent {
 	rt.CheckThread("NewQShowEvent")
 	p := C.qute_QShowEvent_new()
-	h := rt.WrapClass(p, "QShowEvent", rt.NewOwned)
+	h := rt.WrapNew[QShowEvent](p, "QShowEvent", rt.NewOwned)
 	return rt.View[QShowEvent](h, p)
 }

@@ -77,7 +77,7 @@ func NewQGraphicsWidget(parent QGraphicsItemLike) *QGraphicsWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsWidget", mode)
+	h := rt.WrapNew[QGraphicsWidget](p, "QGraphicsWidget", mode)
 	return rt.View[QGraphicsWidget](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQGraphicsWidgetFull(parent QGraphicsItemLike, wFlags qtcore.WindowFlags)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsWidget", mode)
+	h := rt.WrapNew[QGraphicsWidget](p, "QGraphicsWidget", mode)
 	return rt.View[QGraphicsWidget](h, p)
 }
 
@@ -2532,7 +2532,7 @@ func NewQGraphicsWidgetWith(v QGraphicsWidgetSubclass, parent QGraphicsItemLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsWidget", mode)
+	h := rt.WrapNew[QGraphicsWidget](p, "QGraphicsWidget", mode)
 	base.QGraphicsWidget = rt.View[QGraphicsWidget](h, p)
 	id := h.SetSelf(v, qGraphicsWidgetVTable)
 	mask := rt.Mask(v, qGraphicsWidgetVTable)

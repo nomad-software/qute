@@ -64,7 +64,7 @@ func QStyleOptionToolButtonCast(o QStyleOptionLike) *QStyleOptionToolButton {
 func NewQStyleOptionToolButton() *QStyleOptionToolButton {
 	rt.CheckThread("NewQStyleOptionToolButton")
 	p := C.qute_QStyleOptionToolButton_new()
-	h := rt.WrapClass(p, "QStyleOptionToolButton", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionToolButton](p, "QStyleOptionToolButton", rt.NewOwned)
 	return rt.View[QStyleOptionToolButton](h, p)
 }
 

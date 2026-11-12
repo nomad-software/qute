@@ -68,7 +68,7 @@ func NewQScrollBar(parent QWidgetLike) *QScrollBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollBar", mode)
+	h := rt.WrapNew[QScrollBar](p, "QScrollBar", mode)
 	return rt.View[QScrollBar](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQScrollBarWithOrientation(orientation qtcore.Orientations, parent QWidge
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollBar", mode)
+	h := rt.WrapNew[QScrollBar](p, "QScrollBar", mode)
 	return rt.View[QScrollBar](h, p)
 }
 
@@ -1026,7 +1026,7 @@ func NewQScrollBarWith(v QScrollBarSubclass, parent QWidgetLike) *QScrollBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollBar", mode)
+	h := rt.WrapNew[QScrollBar](p, "QScrollBar", mode)
 	base.QScrollBar = rt.View[QScrollBar](h, p)
 	id := h.SetSelf(v, qScrollBarVTable)
 	mask := rt.Mask(v, qScrollBarVTable)
@@ -1058,7 +1058,7 @@ func NewQScrollBarWithOrientationWith(v QScrollBarSubclass, orientation qtcore.O
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QScrollBar", mode)
+	h := rt.WrapNew[QScrollBar](p, "QScrollBar", mode)
 	base.QScrollBar = rt.View[QScrollBar](h, p)
 	id := h.SetSelf(v, qScrollBarVTable)
 	mask := rt.Mask(v, qScrollBarVTable)

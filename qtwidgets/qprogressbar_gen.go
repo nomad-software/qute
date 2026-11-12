@@ -68,7 +68,7 @@ func NewQProgressBar(parent QWidgetLike) *QProgressBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressBar", mode)
+	h := rt.WrapNew[QProgressBar](p, "QProgressBar", mode)
 	return rt.View[QProgressBar](h, p)
 }
 
@@ -1253,7 +1253,7 @@ func NewQProgressBarWith(v QProgressBarSubclass, parent QWidgetLike) *QProgressB
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProgressBar", mode)
+	h := rt.WrapNew[QProgressBar](p, "QProgressBar", mode)
 	base.QProgressBar = rt.View[QProgressBar](h, p)
 	id := h.SetSelf(v, qProgressBarVTable)
 	mask := rt.Mask(v, qProgressBarVTable)

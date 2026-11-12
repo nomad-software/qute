@@ -91,7 +91,7 @@ func (this *QVideoFramePaintOptions) Unkeep() {
 func NewQVideoFramePaintOptions() *QVideoFramePaintOptions {
 	rt.CheckThread("NewQVideoFramePaintOptions")
 	p := C.qute_QVideoFramePaintOptions_new()
-	h := rt.WrapClass(p, "QVideoFramePaintOptions", rt.NewOwned)
+	h := rt.WrapNew[QVideoFramePaintOptions](p, "QVideoFramePaintOptions", rt.NewOwned)
 	return rt.View[QVideoFramePaintOptions](h, p)
 }
 

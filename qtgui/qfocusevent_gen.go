@@ -63,7 +63,7 @@ func QFocusEventCast(e qtcore.QEventLike) *QFocusEvent {
 func NewQFocusEventWithType(typeArg qtcore.QEventType) *QFocusEvent {
 	rt.CheckThread("NewQFocusEventWithType")
 	p := C.qute_QFocusEvent_new(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QFocusEvent", rt.NewOwned)
+	h := rt.WrapNew[QFocusEvent](p, "QFocusEvent", rt.NewOwned)
 	return rt.View[QFocusEvent](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQFocusEventWithType(typeArg qtcore.QEventType) *QFocusEvent {
 func NewQFocusEventWithTypeFull(typeArg qtcore.QEventType, reason qtcore.FocusReason) *QFocusEvent {
 	rt.CheckThread("NewQFocusEventWithTypeFull")
 	p := C.qute_QFocusEvent_new_1(C.int64_t(typeArg), C.int64_t(reason))
-	h := rt.WrapClass(p, "QFocusEvent", rt.NewOwned)
+	h := rt.WrapNew[QFocusEvent](p, "QFocusEvent", rt.NewOwned)
 	return rt.View[QFocusEvent](h, p)
 }
 

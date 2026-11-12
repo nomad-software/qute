@@ -89,7 +89,7 @@ func (this *QXmlStreamNotationDeclaration) Unkeep() {
 func NewQXmlStreamNotationDeclaration() *QXmlStreamNotationDeclaration {
 	rt.CheckThread("NewQXmlStreamNotationDeclaration")
 	p := C.qute_QXmlStreamNotationDeclaration_new()
-	h := rt.WrapClass(p, "QXmlStreamNotationDeclaration", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamNotationDeclaration](p, "QXmlStreamNotationDeclaration", rt.NewOwned)
 	return rt.View[QXmlStreamNotationDeclaration](h, p)
 }
 

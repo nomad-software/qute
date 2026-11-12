@@ -62,7 +62,7 @@ func QStyleOptionViewItemCast(o QStyleOptionLike) *QStyleOptionViewItem {
 func NewQStyleOptionViewItem() *QStyleOptionViewItem {
 	rt.CheckThread("NewQStyleOptionViewItem")
 	p := C.qute_QStyleOptionViewItem_new()
-	h := rt.WrapClass(p, "QStyleOptionViewItem", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionViewItem](p, "QStyleOptionViewItem", rt.NewOwned)
 	return rt.View[QStyleOptionViewItem](h, p)
 }
 

@@ -88,7 +88,7 @@ func (this *QPainterPixmapFragment) Unkeep() {
 func NewQPainterPixmapFragment() *QPainterPixmapFragment {
 	rt.CheckThread("NewQPainterPixmapFragment")
 	p := C.qute_QPainterPixmapFragment_new()
-	h := rt.WrapClass(p, "QPainterPixmapFragment", rt.NewOwned)
+	h := rt.WrapNew[QPainterPixmapFragment](p, "QPainterPixmapFragment", rt.NewOwned)
 	return rt.View[QPainterPixmapFragment](h, p)
 }
 

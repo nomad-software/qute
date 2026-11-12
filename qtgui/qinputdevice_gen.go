@@ -67,7 +67,7 @@ func NewQInputDevice(parent qtcore.QObjectLike) *QInputDevice {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDevice", mode)
+	h := rt.WrapNew[QInputDevice](p, "QInputDevice", mode)
 	return rt.View[QInputDevice](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQInputDeviceWithName(name string, systemId int64, typeArg QInputDeviceDe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDevice", mode)
+	h := rt.WrapNew[QInputDevice](p, "QInputDevice", mode)
 	return rt.View[QInputDevice](h, p)
 }
 
@@ -457,7 +457,7 @@ func NewQInputDeviceWith(v QInputDeviceSubclass, parent qtcore.QObjectLike) *QIn
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDevice", mode)
+	h := rt.WrapNew[QInputDevice](p, "QInputDevice", mode)
 	base.QInputDevice = rt.View[QInputDevice](h, p)
 	id := h.SetSelf(v, qInputDeviceVTable)
 	mask := rt.Mask(v, qInputDeviceVTable)
@@ -489,7 +489,7 @@ func NewQInputDeviceWithNameWith(v QInputDeviceSubclass, name string, systemId i
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDevice", mode)
+	h := rt.WrapNew[QInputDevice](p, "QInputDevice", mode)
 	base.QInputDevice = rt.View[QInputDevice](h, p)
 	id := h.SetSelf(v, qInputDeviceVTable)
 	mask := rt.Mask(v, qInputDeviceVTable)

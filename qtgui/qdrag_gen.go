@@ -69,7 +69,7 @@ func NewQDrag(dragSource qtcore.QObjectLike) *QDrag {
 	if dragSourcePtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDrag", mode)
+	h := rt.WrapNew[QDrag](p, "QDrag", mode)
 	return rt.View[QDrag](h, p)
 }
 
@@ -512,7 +512,7 @@ func NewQDragWith(v QDragSubclass, dragSource qtcore.QObjectLike) *QDrag {
 	if dragSourcePtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDrag", mode)
+	h := rt.WrapNew[QDrag](p, "QDrag", mode)
 	base.QDrag = rt.View[QDrag](h, p)
 	id := h.SetSelf(v, qDragVTable)
 	mask := rt.Mask(v, qDragVTable)

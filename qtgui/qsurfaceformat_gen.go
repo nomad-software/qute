@@ -86,7 +86,7 @@ func (this *QSurfaceFormat) Unkeep() {
 func NewQSurfaceFormat() *QSurfaceFormat {
 	rt.CheckThread("NewQSurfaceFormat")
 	p := C.qute_QSurfaceFormat_new()
-	h := rt.WrapClass(p, "QSurfaceFormat", rt.NewOwned)
+	h := rt.WrapNew[QSurfaceFormat](p, "QSurfaceFormat", rt.NewOwned)
 	return rt.View[QSurfaceFormat](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQSurfaceFormat() *QSurfaceFormat {
 func NewQSurfaceFormatWithFormatOption(options QSurfaceFormatFormatOptions) *QSurfaceFormat {
 	rt.CheckThread("NewQSurfaceFormatWithFormatOption")
 	p := C.qute_QSurfaceFormat_new_1(C.int64_t(options))
-	h := rt.WrapClass(p, "QSurfaceFormat", rt.NewOwned)
+	h := rt.WrapNew[QSurfaceFormat](p, "QSurfaceFormat", rt.NewOwned)
 	return rt.View[QSurfaceFormat](h, p)
 }
 

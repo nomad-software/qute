@@ -95,7 +95,7 @@ func (this *QXmlStreamWriter) Unkeep() {
 func NewQXmlStreamWriter() *QXmlStreamWriter {
 	rt.CheckThread("NewQXmlStreamWriter")
 	p := C.qute_QXmlStreamWriter_new()
-	h := rt.WrapClass(p, "QXmlStreamWriter", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamWriter](p, "QXmlStreamWriter", rt.NewOwned)
 	return rt.View[QXmlStreamWriter](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQXmlStreamWriterWithIODevice(device QIODeviceLike) *QXmlStreamWriter {
 	}
 	p := C.qute_QXmlStreamWriter_new_1(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QXmlStreamWriter", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamWriter](p, "QXmlStreamWriter", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QXmlStreamWriter](h, p)
 }

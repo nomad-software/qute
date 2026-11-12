@@ -65,7 +65,7 @@ func QStyleOptionTabWidgetFrameCast(o QStyleOptionLike) *QStyleOptionTabWidgetFr
 func NewQStyleOptionTabWidgetFrame() *QStyleOptionTabWidgetFrame {
 	rt.CheckThread("NewQStyleOptionTabWidgetFrame")
 	p := C.qute_QStyleOptionTabWidgetFrame_new()
-	h := rt.WrapClass(p, "QStyleOptionTabWidgetFrame", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionTabWidgetFrame](p, "QStyleOptionTabWidgetFrame", rt.NewOwned)
 	return rt.View[QStyleOptionTabWidgetFrame](h, p)
 }
 

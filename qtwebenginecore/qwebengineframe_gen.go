@@ -86,7 +86,7 @@ func (this *QWebEngineFrame) Unkeep() {
 func NewQWebEngineFrame() *QWebEngineFrame {
 	rt.CheckThread("NewQWebEngineFrame")
 	p := C.qute_QWebEngineFrame_new()
-	h := rt.WrapClass(p, "QWebEngineFrame", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineFrame](p, "QWebEngineFrame", rt.NewOwned)
 	return rt.View[QWebEngineFrame](h, p)
 }
 

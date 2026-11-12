@@ -68,7 +68,7 @@ func NewQMessageBox(parent QWidgetLike) *QMessageBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMessageBox", mode)
+	h := rt.WrapNew[QMessageBox](p, "QMessageBox", mode)
 	return rt.View[QMessageBox](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQMessageBoxWithIcon(icon QMessageBoxIcon, title string, text string, but
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMessageBox", mode)
+	h := rt.WrapNew[QMessageBox](p, "QMessageBox", mode)
 	return rt.View[QMessageBox](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQMessageBoxWithIconFull(icon QMessageBoxIcon, title string, text string,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMessageBox", mode)
+	h := rt.WrapNew[QMessageBox](p, "QMessageBox", mode)
 	return rt.View[QMessageBox](h, p)
 }
 
@@ -1797,7 +1797,7 @@ func NewQMessageBoxWith(v QMessageBoxSubclass, parent QWidgetLike) *QMessageBox 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMessageBox", mode)
+	h := rt.WrapNew[QMessageBox](p, "QMessageBox", mode)
 	base.QMessageBox = rt.View[QMessageBox](h, p)
 	id := h.SetSelf(v, qMessageBoxVTable)
 	mask := rt.Mask(v, qMessageBoxVTable)
@@ -1829,7 +1829,7 @@ func NewQMessageBoxWithIconWith(v QMessageBoxSubclass, icon QMessageBoxIcon, tit
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMessageBox", mode)
+	h := rt.WrapNew[QMessageBox](p, "QMessageBox", mode)
 	base.QMessageBox = rt.View[QMessageBox](h, p)
 	id := h.SetSelf(v, qMessageBoxVTable)
 	mask := rt.Mask(v, qMessageBoxVTable)

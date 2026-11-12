@@ -66,7 +66,7 @@ func NewQSortFilterProxyModel(parent QObjectLike) *QSortFilterProxyModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSortFilterProxyModel", mode)
+	h := rt.WrapNew[QSortFilterProxyModel](p, "QSortFilterProxyModel", mode)
 	return rt.View[QSortFilterProxyModel](h, p)
 }
 
@@ -1934,7 +1934,7 @@ func NewQSortFilterProxyModelWith(v QSortFilterProxyModelSubclass, parent QObjec
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSortFilterProxyModel", mode)
+	h := rt.WrapNew[QSortFilterProxyModel](p, "QSortFilterProxyModel", mode)
 	base.QSortFilterProxyModel = rt.View[QSortFilterProxyModel](h, p)
 	id := h.SetSelf(v, qSortFilterProxyModelVTable)
 	mask := rt.Mask(v, qSortFilterProxyModelVTable)

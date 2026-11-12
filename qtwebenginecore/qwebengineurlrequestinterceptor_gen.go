@@ -250,7 +250,7 @@ func NewQWebEngineUrlRequestInterceptorWith(v QWebEngineUrlRequestInterceptorSub
 		panic("NewQWebEngineUrlRequestInterceptorWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QWebEngineUrlRequestInterceptor_new_shim()
-	h := rt.WrapClass(p, "QWebEngineUrlRequestInterceptor", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineUrlRequestInterceptor](p, "QWebEngineUrlRequestInterceptor", rt.NewOwned)
 	base.QWebEngineUrlRequestInterceptor = rt.View[QWebEngineUrlRequestInterceptor](h, p)
 	id := h.SetSelf(v, qWebEngineUrlRequestInterceptorVTable)
 	mask := rt.Mask(v, qWebEngineUrlRequestInterceptorVTable)

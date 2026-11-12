@@ -62,7 +62,7 @@ func QStyleOptionHeaderCast(o QStyleOptionLike) *QStyleOptionHeader {
 func NewQStyleOptionHeader() *QStyleOptionHeader {
 	rt.CheckThread("NewQStyleOptionHeader")
 	p := C.qute_QStyleOptionHeader_new()
-	h := rt.WrapClass(p, "QStyleOptionHeader", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionHeader](p, "QStyleOptionHeader", rt.NewOwned)
 	return rt.View[QStyleOptionHeader](h, p)
 }
 

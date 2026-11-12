@@ -808,7 +808,7 @@ func NewQAbstractItemDelegateWith(v QAbstractItemDelegateSubclass, parent qtcore
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractItemDelegate", mode)
+	h := rt.WrapNew[QAbstractItemDelegate](p, "QAbstractItemDelegate", mode)
 	base.QAbstractItemDelegate = rt.View[QAbstractItemDelegate](h, p)
 	id := h.SetSelf(v, qAbstractItemDelegateVTable)
 	mask := rt.Mask(v, qAbstractItemDelegateVTable)

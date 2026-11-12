@@ -67,7 +67,7 @@ func NewQIntValidator(parent qtcore.QObjectLike) *QIntValidator {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIntValidator", mode)
+	h := rt.WrapNew[QIntValidator](p, "QIntValidator", mode)
 	return rt.View[QIntValidator](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQIntValidatorWithBottom(bottom int, top int, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIntValidator", mode)
+	h := rt.WrapNew[QIntValidator](p, "QIntValidator", mode)
 	return rt.View[QIntValidator](h, p)
 }
 
@@ -434,7 +434,7 @@ func NewQIntValidatorWith(v QIntValidatorSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIntValidator", mode)
+	h := rt.WrapNew[QIntValidator](p, "QIntValidator", mode)
 	base.QIntValidator = rt.View[QIntValidator](h, p)
 	id := h.SetSelf(v, qIntValidatorVTable)
 	mask := rt.Mask(v, qIntValidatorVTable)
@@ -466,7 +466,7 @@ func NewQIntValidatorWithBottomWith(v QIntValidatorSubclass, bottom int, top int
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIntValidator", mode)
+	h := rt.WrapNew[QIntValidator](p, "QIntValidator", mode)
 	base.QIntValidator = rt.View[QIntValidator](h, p)
 	id := h.SetSelf(v, qIntValidatorVTable)
 	mask := rt.Mask(v, qIntValidatorVTable)

@@ -67,7 +67,7 @@ func NewQMediaPlayer(parent qtcore.QObjectLike) *QMediaPlayer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaPlayer", mode)
+	h := rt.WrapNew[QMediaPlayer](p, "QMediaPlayer", mode)
 	return rt.View[QMediaPlayer](h, p)
 }
 
@@ -1525,7 +1525,7 @@ func NewQMediaPlayerWith(v QMediaPlayerSubclass, parent qtcore.QObjectLike) *QMe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaPlayer", mode)
+	h := rt.WrapNew[QMediaPlayer](p, "QMediaPlayer", mode)
 	base.QMediaPlayer = rt.View[QMediaPlayer](h, p)
 	id := h.SetSelf(v, qMediaPlayerVTable)
 	mask := rt.Mask(v, qMediaPlayerVTable)

@@ -61,7 +61,7 @@ func QMoveEventCast(e qtcore.QEventLike) *QMoveEvent {
 func NewQMoveEventWithPoint(pos qtcore.QPoint, oldPos qtcore.QPoint) *QMoveEvent {
 	rt.CheckThread("NewQMoveEventWithPoint")
 	p := C.qute_QMoveEvent_new(cQPoint(pos), cQPoint(oldPos))
-	h := rt.WrapClass(p, "QMoveEvent", rt.NewOwned)
+	h := rt.WrapNew[QMoveEvent](p, "QMoveEvent", rt.NewOwned)
 	return rt.View[QMoveEvent](h, p)
 }
 

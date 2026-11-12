@@ -103,7 +103,7 @@ func (this *QOpenGLFramebufferObject) Unkeep() {
 func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSize")
 	p := C.qute_QOpenGLFramebufferObject_new(cQSize(size))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -117,7 +117,7 @@ func NewQOpenGLFramebufferObjectWithSize(size qtcore.QSize) *QOpenGLFramebufferO
 func NewQOpenGLFramebufferObjectWithSizeAttachment(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachment")
 	p := C.qute_QOpenGLFramebufferObject_new_1(cQSize(size), C.int64_t(attachment))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -130,7 +130,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat")
 	p := C.qute_QOpenGLFramebufferObject_new_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat"))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -144,7 +144,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormat(size qtcor
 func NewQOpenGLFramebufferObjectWithSizeFull(size qtcore.QSize, target uint) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeFull")
 	p := C.qute_QOpenGLFramebufferObject_new_3(cQSize(size), C.uint(target))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -158,7 +158,7 @@ func NewQOpenGLFramebufferObjectWithSizeFull(size qtcore.QSize, target uint) *QO
 func NewQOpenGLFramebufferObjectWithSizeAttachmentFull(size qtcore.QSize, attachment QOpenGLFramebufferObjectAttachment, target uint, internalFormat uint) *QOpenGLFramebufferObject {
 	rt.CheckThread("NewQOpenGLFramebufferObjectWithSizeAttachmentFull")
 	p := C.qute_QOpenGLFramebufferObject_new_4(cQSize(size), C.int64_t(attachment), C.uint(target), C.uint(internalFormat))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObject](h, p)
 }
 
@@ -384,6 +384,18 @@ func (this *QOpenGLFramebufferObject) SetAttachment(attachment QOpenGLFramebuffe
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.SetAttachment")
 	C.qute_QOpenGLFramebufferObject_setAttachment(self, C.int64_t(attachment))
 	runtime.KeepAlive(this)
+}
+
+// Handle wraps QOpenGLFramebufferObject::handle.
+//
+//	C++: GLuint QOpenGLFramebufferObject::handle() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglframebufferobject.html#handle
+func (this *QOpenGLFramebufferObject) Handle() uint {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLFramebufferObject.Handle")
+	r := C.qute_QOpenGLFramebufferObject_handle(self)
+	runtime.KeepAlive(this)
+	return uint(r)
 }
 
 // AddColorAttachmentFull wraps QOpenGLFramebufferObject::addColorAttachment.
@@ -615,7 +627,7 @@ func NewQOpenGLFramebufferObjectWith(v QOpenGLFramebufferObjectSubclass, size qt
 		panic("NewQOpenGLFramebufferObjectWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim(cQSize(size))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
@@ -638,7 +650,7 @@ func NewQOpenGLFramebufferObjectWithSizeAttachmentWith(v QOpenGLFramebufferObjec
 		panic("NewQOpenGLFramebufferObjectWithSizeAttachmentWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim_1(cQSize(size), C.int64_t(attachment))
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)
@@ -662,7 +674,7 @@ func NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith(v QOpe
 	}
 	p := C.qute_QOpenGLFramebufferObject_new_shim_2(cQSize(size), rt.UseArg(unsafe.Pointer(format), "NewQOpenGLFramebufferObjectWithSizeOpenGLFramebufferObjectFormatWith"))
 	runtime.KeepAlive(format)
-	h := rt.WrapClass(p, "QOpenGLFramebufferObject", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObject](p, "QOpenGLFramebufferObject", rt.NewOwned)
 	base.QOpenGLFramebufferObject = rt.View[QOpenGLFramebufferObject](h, p)
 	id := h.SetSelf(v, qOpenGLFramebufferObjectVTable)
 	mask := rt.Mask(v, qOpenGLFramebufferObjectVTable)

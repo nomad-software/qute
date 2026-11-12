@@ -63,7 +63,7 @@ func QWhatsThisClickedEventCast(e qtcore.QEventLike) *QWhatsThisClickedEvent {
 func NewQWhatsThisClickedEventWithHref(href string) *QWhatsThisClickedEvent {
 	rt.CheckThread("NewQWhatsThisClickedEventWithHref")
 	p := C.qute_QWhatsThisClickedEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(href))), C.ptrdiff_t(len(href)))
-	h := rt.WrapClass(p, "QWhatsThisClickedEvent", rt.NewOwned)
+	h := rt.WrapNew[QWhatsThisClickedEvent](p, "QWhatsThisClickedEvent", rt.NewOwned)
 	return rt.View[QWhatsThisClickedEvent](h, p)
 }
 

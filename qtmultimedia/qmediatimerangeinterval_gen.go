@@ -90,7 +90,7 @@ func (this *QMediaTimeRangeInterval) Unkeep() {
 func NewQMediaTimeRangeInterval() *QMediaTimeRangeInterval {
 	rt.CheckThread("NewQMediaTimeRangeInterval")
 	p := C.qute_QMediaTimeRangeInterval_new()
-	h := rt.WrapClass(p, "QMediaTimeRangeInterval", rt.NewOwned)
+	h := rt.WrapNew[QMediaTimeRangeInterval](p, "QMediaTimeRangeInterval", rt.NewOwned)
 	return rt.View[QMediaTimeRangeInterval](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQMediaTimeRangeInterval() *QMediaTimeRangeInterval {
 func NewQMediaTimeRangeIntervalWithStart(start int64, end int64) *QMediaTimeRangeInterval {
 	rt.CheckThread("NewQMediaTimeRangeIntervalWithStart")
 	p := C.qute_QMediaTimeRangeInterval_new_1(C.longlong(start), C.longlong(end))
-	h := rt.WrapClass(p, "QMediaTimeRangeInterval", rt.NewOwned)
+	h := rt.WrapNew[QMediaTimeRangeInterval](p, "QMediaTimeRangeInterval", rt.NewOwned)
 	return rt.View[QMediaTimeRangeInterval](h, p)
 }
 

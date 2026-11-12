@@ -66,7 +66,7 @@ func NewQSignalMapper(parent QObjectLike) *QSignalMapper {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSignalMapper", mode)
+	h := rt.WrapNew[QSignalMapper](p, "QSignalMapper", mode)
 	return rt.View[QSignalMapper](h, p)
 }
 
@@ -468,7 +468,7 @@ func NewQSignalMapperWith(v QSignalMapperSubclass, parent QObjectLike) *QSignalM
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSignalMapper", mode)
+	h := rt.WrapNew[QSignalMapper](p, "QSignalMapper", mode)
 	base.QSignalMapper = rt.View[QSignalMapper](h, p)
 	id := h.SetSelf(v, qSignalMapperVTable)
 	mask := rt.Mask(v, qSignalMapperVTable)

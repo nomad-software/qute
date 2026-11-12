@@ -68,7 +68,7 @@ func NewQMenuBar(parent QWidgetLike) *QMenuBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenuBar", mode)
+	h := rt.WrapNew[QMenuBar](p, "QMenuBar", mode)
 	return rt.View[QMenuBar](h, p)
 }
 
@@ -1334,7 +1334,7 @@ func NewQMenuBarWith(v QMenuBarSubclass, parent QWidgetLike) *QMenuBar {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenuBar", mode)
+	h := rt.WrapNew[QMenuBar](p, "QMenuBar", mode)
 	base.QMenuBar = rt.View[QMenuBar](h, p)
 	id := h.SetSelf(v, qMenuBarVTable)
 	mask := rt.Mask(v, qMenuBarVTable)

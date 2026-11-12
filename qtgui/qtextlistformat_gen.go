@@ -42,7 +42,7 @@ func QTextListFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextListFo
 func NewQTextListFormat() *QTextListFormat {
 	rt.CheckThread("NewQTextListFormat")
 	p := C.qute_QTextListFormat_new()
-	h := rt.WrapClass(p, "QTextListFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextListFormat](p, "QTextListFormat", rt.NewOwned)
 	return rt.View[QTextListFormat](h, p)
 }
 

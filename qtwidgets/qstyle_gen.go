@@ -1470,7 +1470,7 @@ func NewQStyleWith(v QStyleSubclass) *QStyle {
 		panic("NewQStyleWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStyle_new_shim()
-	h := rt.WrapClass(p, "QStyle", rt.NewOwned)
+	h := rt.WrapNew[QStyle](p, "QStyle", rt.NewOwned)
 	base.QStyle = rt.View[QStyle](h, p)
 	id := h.SetSelf(v, qStyleVTable)
 	mask := rt.Mask(v, qStyleVTable)

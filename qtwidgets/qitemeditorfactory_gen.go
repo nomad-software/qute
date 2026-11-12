@@ -96,7 +96,7 @@ func (this *QItemEditorFactory) Unkeep() {
 func NewQItemEditorFactory() *QItemEditorFactory {
 	rt.CheckThread("NewQItemEditorFactory")
 	p := C.qute_QItemEditorFactory_new()
-	h := rt.WrapClass(p, "QItemEditorFactory", rt.NewOwned)
+	h := rt.WrapNew[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned)
 	return rt.View[QItemEditorFactory](h, p)
 }
 
@@ -246,7 +246,7 @@ func NewQItemEditorFactoryWith(v QItemEditorFactorySubclass) *QItemEditorFactory
 		panic("NewQItemEditorFactoryWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QItemEditorFactory_new_shim()
-	h := rt.WrapClass(p, "QItemEditorFactory", rt.NewOwned)
+	h := rt.WrapNew[QItemEditorFactory](p, "QItemEditorFactory", rt.NewOwned)
 	base.QItemEditorFactory = rt.View[QItemEditorFactory](h, p)
 	id := h.SetSelf(v, qItemEditorFactoryVTable)
 	mask := rt.Mask(v, qItemEditorFactoryVTable)

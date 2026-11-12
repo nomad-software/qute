@@ -68,7 +68,7 @@ func NewQTableWidget(parent QWidgetLike) *QTableWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableWidget", mode)
+	h := rt.WrapNew[QTableWidget](p, "QTableWidget", mode)
 	return rt.View[QTableWidget](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQTableWidgetWithRows(rows int, columns int, parent QWidgetLike) *QTableW
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableWidget", mode)
+	h := rt.WrapNew[QTableWidget](p, "QTableWidget", mode)
 	return rt.View[QTableWidget](h, p)
 }
 
@@ -3285,7 +3285,7 @@ func NewQTableWidgetWith(v QTableWidgetSubclass, parent QWidgetLike) *QTableWidg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableWidget", mode)
+	h := rt.WrapNew[QTableWidget](p, "QTableWidget", mode)
 	base.QTableWidget = rt.View[QTableWidget](h, p)
 	id := h.SetSelf(v, qTableWidgetVTable)
 	mask := rt.Mask(v, qTableWidgetVTable)
@@ -3317,7 +3317,7 @@ func NewQTableWidgetWithRowsWith(v QTableWidgetSubclass, rows int, columns int, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTableWidget", mode)
+	h := rt.WrapNew[QTableWidget](p, "QTableWidget", mode)
 	base.QTableWidget = rt.View[QTableWidget](h, p)
 	id := h.SetSelf(v, qTableWidgetVTable)
 	mask := rt.Mask(v, qTableWidgetVTable)

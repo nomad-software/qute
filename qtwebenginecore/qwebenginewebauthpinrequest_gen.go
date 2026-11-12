@@ -90,7 +90,7 @@ func (this *QWebEngineWebAuthPinRequest) Unkeep() {
 func NewQWebEngineWebAuthPinRequest() *QWebEngineWebAuthPinRequest {
 	rt.CheckThread("NewQWebEngineWebAuthPinRequest")
 	p := C.qute_QWebEngineWebAuthPinRequest_new()
-	h := rt.WrapClass(p, "QWebEngineWebAuthPinRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineWebAuthPinRequest](p, "QWebEngineWebAuthPinRequest", rt.NewOwned)
 	return rt.View[QWebEngineWebAuthPinRequest](h, p)
 }
 

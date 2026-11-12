@@ -67,7 +67,7 @@ func QGraphicsSceneWheelEventCast(e qtcore.QEventLike) *QGraphicsSceneWheelEvent
 func NewQGraphicsSceneWheelEvent() *QGraphicsSceneWheelEvent {
 	rt.CheckThread("NewQGraphicsSceneWheelEvent")
 	p := C.qute_QGraphicsSceneWheelEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneWheelEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneWheelEvent](p, "QGraphicsSceneWheelEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneWheelEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneWheelEvent() *QGraphicsSceneWheelEvent {
 func NewQGraphicsSceneWheelEventFull(typeArg qtcore.QEventType) *QGraphicsSceneWheelEvent {
 	rt.CheckThread("NewQGraphicsSceneWheelEventFull")
 	p := C.qute_QGraphicsSceneWheelEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneWheelEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneWheelEvent](p, "QGraphicsSceneWheelEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneWheelEvent](h, p)
 }
 

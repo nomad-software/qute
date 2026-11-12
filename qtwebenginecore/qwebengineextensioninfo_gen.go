@@ -90,7 +90,7 @@ func (this *QWebEngineExtensionInfo) Unkeep() {
 func NewQWebEngineExtensionInfo() *QWebEngineExtensionInfo {
 	rt.CheckThread("NewQWebEngineExtensionInfo")
 	p := C.qute_QWebEngineExtensionInfo_new()
-	h := rt.WrapClass(p, "QWebEngineExtensionInfo", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineExtensionInfo](p, "QWebEngineExtensionInfo", rt.NewOwned)
 	return rt.View[QWebEngineExtensionInfo](h, p)
 }
 

@@ -88,7 +88,7 @@ func (this *QMediaFormat) Unkeep() {
 func NewQMediaFormat() *QMediaFormat {
 	rt.CheckThread("NewQMediaFormat")
 	p := C.qute_QMediaFormat_new()
-	h := rt.WrapClass(p, "QMediaFormat", rt.NewOwned)
+	h := rt.WrapNew[QMediaFormat](p, "QMediaFormat", rt.NewOwned)
 	return rt.View[QMediaFormat](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQMediaFormat() *QMediaFormat {
 func NewQMediaFormatFull(format QMediaFormatFileFormat) *QMediaFormat {
 	rt.CheckThread("NewQMediaFormatFull")
 	p := C.qute_QMediaFormat_new_1(C.int64_t(format))
-	h := rt.WrapClass(p, "QMediaFormat", rt.NewOwned)
+	h := rt.WrapNew[QMediaFormat](p, "QMediaFormat", rt.NewOwned)
 	return rt.View[QMediaFormat](h, p)
 }
 

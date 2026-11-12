@@ -88,7 +88,7 @@ func (this *QStyleHintReturn) Unkeep() {
 func NewQStyleHintReturn() *QStyleHintReturn {
 	rt.CheckThread("NewQStyleHintReturn")
 	p := C.qute_QStyleHintReturn_new()
-	h := rt.WrapClass(p, "QStyleHintReturn", rt.NewOwned)
+	h := rt.WrapNew[QStyleHintReturn](p, "QStyleHintReturn", rt.NewOwned)
 	return rt.View[QStyleHintReturn](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQStyleHintReturn() *QStyleHintReturn {
 func NewQStyleHintReturnFull(version int, typeArg int) *QStyleHintReturn {
 	rt.CheckThread("NewQStyleHintReturnFull")
 	p := C.qute_QStyleHintReturn_new_1(C.int(version), C.int(typeArg))
-	h := rt.WrapClass(p, "QStyleHintReturn", rt.NewOwned)
+	h := rt.WrapNew[QStyleHintReturn](p, "QStyleHintReturn", rt.NewOwned)
 	return rt.View[QStyleHintReturn](h, p)
 }
 

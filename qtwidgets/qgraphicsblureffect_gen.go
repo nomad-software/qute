@@ -68,7 +68,7 @@ func NewQGraphicsBlurEffect(parent qtcore.QObjectLike) *QGraphicsBlurEffect {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsBlurEffect", mode)
+	h := rt.WrapNew[QGraphicsBlurEffect](p, "QGraphicsBlurEffect", mode)
 	return rt.View[QGraphicsBlurEffect](h, p)
 }
 
@@ -454,7 +454,7 @@ func NewQGraphicsBlurEffectWith(v QGraphicsBlurEffectSubclass, parent qtcore.QOb
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsBlurEffect", mode)
+	h := rt.WrapNew[QGraphicsBlurEffect](p, "QGraphicsBlurEffect", mode)
 	base.QGraphicsBlurEffect = rt.View[QGraphicsBlurEffect](h, p)
 	id := h.SetSelf(v, qGraphicsBlurEffectVTable)
 	mask := rt.Mask(v, qGraphicsBlurEffectVTable)

@@ -61,7 +61,7 @@ func QGraphicsSceneEventCast(e qtcore.QEventLike) *QGraphicsSceneEvent {
 func NewQGraphicsSceneEventWithType(typeArg qtcore.QEventType) *QGraphicsSceneEvent {
 	rt.CheckThread("NewQGraphicsSceneEventWithType")
 	p := C.qute_QGraphicsSceneEvent_new(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneEvent](p, "QGraphicsSceneEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneEvent](h, p)
 }
 

@@ -48,7 +48,7 @@ func QImageFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QImage {
 func NewQImage() *QImage {
 	rt.CheckThread("NewQImage")
 	p := C.qute_QImage_new()
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
@@ -60,7 +60,7 @@ func NewQImage() *QImage {
 func NewQImageWithSize(size qtcore.QSize, format QImageFormat) *QImage {
 	rt.CheckThread("NewQImageWithSize")
 	p := C.qute_QImage_new_1(cQSize(size), C.int64_t(format))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
@@ -74,7 +74,7 @@ func NewQImageWithSize(size qtcore.QSize, format QImageFormat) *QImage {
 func NewQImageOverMemory(data unsafe.Pointer, width int, height int, format QImageFormat) *QImage {
 	rt.CheckThread("NewQImageOverMemory")
 	p := C.qute_QImage_new_2(data, C.int(width), C.int(height), C.int64_t(format))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
@@ -88,7 +88,7 @@ func NewQImageOverMemory(data unsafe.Pointer, width int, height int, format QIma
 func NewQImageOverMemoryBytesPerLine(data unsafe.Pointer, width int, height int, bytesPerLine int, format QImageFormat) *QImage {
 	rt.CheckThread("NewQImageOverMemoryBytesPerLine")
 	p := C.qute_QImage_new_3(data, C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQImageOverMemoryBytesPerLine(data unsafe.Pointer, width int, height int,
 func NewQImageWithFileName(fileName string) *QImage {
 	rt.CheckThread("NewQImageWithFileName")
 	p := C.qute_QImage_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQImageWithFileNameFull(fileName string, format string) *QImage {
 	formatCStr := C.CString(format)
 	defer C.free(unsafe.Pointer(formatCStr))
 	p := C.qute_QImage_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr)
-	h := rt.WrapClass(p, "QImage", rt.NewOwned)
+	h := rt.WrapNew[QImage](p, "QImage", rt.NewOwned)
 	return rt.View[QImage](h, p)
 }
 

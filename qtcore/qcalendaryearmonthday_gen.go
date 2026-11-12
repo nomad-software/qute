@@ -85,7 +85,7 @@ func (this *QCalendarYearMonthDay) Unkeep() {
 func NewQCalendarYearMonthDay() *QCalendarYearMonthDay {
 	rt.CheckThread("NewQCalendarYearMonthDay")
 	p := C.qute_QCalendarYearMonthDay_new()
-	h := rt.WrapClass(p, "QCalendarYearMonthDay", rt.NewOwned)
+	h := rt.WrapNew[QCalendarYearMonthDay](p, "QCalendarYearMonthDay", rt.NewOwned)
 	return rt.View[QCalendarYearMonthDay](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQCalendarYearMonthDay() *QCalendarYearMonthDay {
 func NewQCalendarYearMonthDayWithYear(y int) *QCalendarYearMonthDay {
 	rt.CheckThread("NewQCalendarYearMonthDayWithYear")
 	p := C.qute_QCalendarYearMonthDay_new_1(C.int(y))
-	h := rt.WrapClass(p, "QCalendarYearMonthDay", rt.NewOwned)
+	h := rt.WrapNew[QCalendarYearMonthDay](p, "QCalendarYearMonthDay", rt.NewOwned)
 	return rt.View[QCalendarYearMonthDay](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQCalendarYearMonthDayWithYear(y int) *QCalendarYearMonthDay {
 func NewQCalendarYearMonthDayWithYearFull(y int, m int, d int) *QCalendarYearMonthDay {
 	rt.CheckThread("NewQCalendarYearMonthDayWithYearFull")
 	p := C.qute_QCalendarYearMonthDay_new_2(C.int(y), C.int(m), C.int(d))
-	h := rt.WrapClass(p, "QCalendarYearMonthDay", rt.NewOwned)
+	h := rt.WrapNew[QCalendarYearMonthDay](p, "QCalendarYearMonthDay", rt.NewOwned)
 	return rt.View[QCalendarYearMonthDay](h, p)
 }
 

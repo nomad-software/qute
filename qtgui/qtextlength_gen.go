@@ -86,7 +86,7 @@ func (this *QTextLength) Unkeep() {
 func NewQTextLength() *QTextLength {
 	rt.CheckThread("NewQTextLength")
 	p := C.qute_QTextLength_new()
-	h := rt.WrapClass(p, "QTextLength", rt.NewOwned)
+	h := rt.WrapNew[QTextLength](p, "QTextLength", rt.NewOwned)
 	return rt.View[QTextLength](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQTextLength() *QTextLength {
 func NewQTextLengthWithType(typeArg QTextLengthType, value float64) *QTextLength {
 	rt.CheckThread("NewQTextLengthWithType")
 	p := C.qute_QTextLength_new_1(C.int64_t(typeArg), C.double(value))
-	h := rt.WrapClass(p, "QTextLength", rt.NewOwned)
+	h := rt.WrapNew[QTextLength](p, "QTextLength", rt.NewOwned)
 	return rt.View[QTextLength](h, p)
 }
 

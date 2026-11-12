@@ -85,7 +85,7 @@ func (this *QUuid) Unkeep() {
 func NewQUuid() *QUuid {
 	rt.CheckThread("NewQUuid")
 	p := C.qute_QUuid_new()
-	h := rt.WrapClass(p, "QUuid", rt.NewOwned)
+	h := rt.WrapNew[QUuid](p, "QUuid", rt.NewOwned)
 	return rt.View[QUuid](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQUuid() *QUuid {
 func NewQUuidWithL(l uint, w1 uint16, w2 uint16, b1 uint8, b2 uint8, b3 uint8, b4 uint8, b5 uint8, b6 uint8, b7 uint8, b8 uint8) *QUuid {
 	rt.CheckThread("NewQUuidWithL")
 	p := C.qute_QUuid_new_1(C.uint(l), C.ushort(w1), C.ushort(w2), C.uchar(b1), C.uchar(b2), C.uchar(b3), C.uchar(b4), C.uchar(b5), C.uchar(b6), C.uchar(b7), C.uchar(b8))
-	h := rt.WrapClass(p, "QUuid", rt.NewOwned)
+	h := rt.WrapNew[QUuid](p, "QUuid", rt.NewOwned)
 	return rt.View[QUuid](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQUuidWithL(l uint, w1 uint16, w2 uint16, b1 uint8, b2 uint8, b3 uint8, b
 func NewQUuidWithString(stringArg string) *QUuid {
 	rt.CheckThread("NewQUuidWithString")
 	p := C.qute_QUuid_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
-	h := rt.WrapClass(p, "QUuid", rt.NewOwned)
+	h := rt.WrapNew[QUuid](p, "QUuid", rt.NewOwned)
 	return rt.View[QUuid](h, p)
 }
 

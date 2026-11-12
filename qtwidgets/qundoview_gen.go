@@ -68,7 +68,7 @@ func NewQUndoView(parent QWidgetLike) *QUndoView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	return rt.View[QUndoView](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQUndoViewWithUndoStack(stack qtgui.QUndoStackLike, parent QWidgetLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	rt.KeepArg(h, "stack", stackH, false)
 	return rt.View[QUndoView](h, p)
 }
@@ -127,7 +127,7 @@ func NewQUndoViewWithUndoGroup(group qtgui.QUndoGroupLike, parent QWidgetLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	rt.KeepArg(h, "group", groupH, false)
 	return rt.View[QUndoView](h, p)
 }
@@ -2090,7 +2090,7 @@ func NewQUndoViewWith(v QUndoViewSubclass, parent QWidgetLike) *QUndoView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	base.QUndoView = rt.View[QUndoView](h, p)
 	id := h.SetSelf(v, qUndoViewVTable)
 	mask := rt.Mask(v, qUndoViewVTable)
@@ -2128,7 +2128,7 @@ func NewQUndoViewWithUndoStackWith(v QUndoViewSubclass, stack qtgui.QUndoStackLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	rt.KeepArg(h, "stack", stackH, false)
 	base.QUndoView = rt.View[QUndoView](h, p)
 	id := h.SetSelf(v, qUndoViewVTable)
@@ -2167,7 +2167,7 @@ func NewQUndoViewWithUndoGroupWith(v QUndoViewSubclass, group qtgui.QUndoGroupLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QUndoView", mode)
+	h := rt.WrapNew[QUndoView](p, "QUndoView", mode)
 	rt.KeepArg(h, "group", groupH, false)
 	base.QUndoView = rt.View[QUndoView](h, p)
 	id := h.SetSelf(v, qUndoViewVTable)

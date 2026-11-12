@@ -87,7 +87,7 @@ func NewQFontInfoWithFont(font *QFont) *QFontInfo {
 	rt.CheckThread("NewQFontInfoWithFont")
 	p := C.qute_QFontInfo_new(rt.UseArg(unsafe.Pointer(font), "NewQFontInfoWithFont"))
 	runtime.KeepAlive(font)
-	h := rt.WrapClass(p, "QFontInfo", rt.NewOwned)
+	h := rt.WrapNew[QFontInfo](p, "QFontInfo", rt.NewOwned)
 	return rt.View[QFontInfo](h, p)
 }
 

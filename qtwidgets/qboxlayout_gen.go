@@ -67,7 +67,7 @@ func NewQBoxLayoutWithDirection(direction QBoxLayoutDirection, parent QWidgetLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QBoxLayout", mode)
+	h := rt.WrapNew[QBoxLayout](p, "QBoxLayout", mode)
 	return rt.View[QBoxLayout](h, p)
 }
 
@@ -1138,7 +1138,7 @@ func NewQBoxLayoutWith(v QBoxLayoutSubclass, direction QBoxLayoutDirection, pare
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QBoxLayout", mode)
+	h := rt.WrapNew[QBoxLayout](p, "QBoxLayout", mode)
 	base.QBoxLayout = rt.View[QBoxLayout](h, p)
 	id := h.SetSelf(v, qBoxLayoutVTable)
 	mask := rt.Mask(v, qBoxLayoutVTable)

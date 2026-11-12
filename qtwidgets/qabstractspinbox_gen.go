@@ -68,7 +68,7 @@ func NewQAbstractSpinBox(parent QWidgetLike) *QAbstractSpinBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractSpinBox", mode)
+	h := rt.WrapNew[QAbstractSpinBox](p, "QAbstractSpinBox", mode)
 	return rt.View[QAbstractSpinBox](h, p)
 }
 
@@ -1483,7 +1483,7 @@ func NewQAbstractSpinBoxWith(v QAbstractSpinBoxSubclass, parent QWidgetLike) *QA
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractSpinBox", mode)
+	h := rt.WrapNew[QAbstractSpinBox](p, "QAbstractSpinBox", mode)
 	base.QAbstractSpinBox = rt.View[QAbstractSpinBox](h, p)
 	id := h.SetSelf(v, qAbstractSpinBoxVTable)
 	mask := rt.Mask(v, qAbstractSpinBoxVTable)

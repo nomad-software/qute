@@ -65,7 +65,7 @@ func QMouseEventCast(e qtcore.QEventLike) *QMouseEvent {
 func NewQMouseEvent(typeArg qtcore.QEventType, localPos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QMouseEvent {
 	rt.CheckThread("NewQMouseEvent")
 	p := C.qute_QMouseEvent_new(C.int64_t(typeArg), cQPointF(localPos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	return rt.View[QMouseEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQMouseEvent(typeArg qtcore.QEventType, localPos qtcore.QPointF, globalPo
 func NewQMouseEventWithScenePos(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers) *QMouseEvent {
 	rt.CheckThread("NewQMouseEventWithScenePos")
 	p := C.qute_QMouseEvent_new_1(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	return rt.View[QMouseEvent](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQMouseEventWithScenePos(typeArg qtcore.QEventType, localPos qtcore.QPoin
 func NewQMouseEventWithSource(typeArg qtcore.QEventType, localPos qtcore.QPointF, scenePos qtcore.QPointF, globalPos qtcore.QPointF, button qtcore.MouseButtons, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, source qtcore.MouseEventSource) *QMouseEvent {
 	rt.CheckThread("NewQMouseEventWithSource")
 	p := C.qute_QMouseEvent_new_2(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(source))
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	return rt.View[QMouseEvent](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQMouseEventFull(typeArg qtcore.QEventType, localPos qtcore.QPointF, glob
 	}
 	p := C.qute_QMouseEvent_new_3(C.int64_t(typeArg), cQPointF(localPos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
 	return rt.View[QMouseEvent](h, p)
 }
@@ -146,7 +146,7 @@ func NewQMouseEventWithScenePosFull(typeArg qtcore.QEventType, localPos qtcore.Q
 	}
 	p := C.qute_QMouseEvent_new_4(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
 	return rt.View[QMouseEvent](h, p)
 }
@@ -171,7 +171,7 @@ func NewQMouseEventWithSourceFull(typeArg qtcore.QEventType, localPos qtcore.QPo
 	}
 	p := C.qute_QMouseEvent_new_5(C.int64_t(typeArg), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.int64_t(button), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(source), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QMouseEvent](p, "QMouseEvent", rt.NewOwned)
 	rt.KeepArg(h, "QMouseEvent.device", deviceH, true)
 	return rt.View[QMouseEvent](h, p)
 }

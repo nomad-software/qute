@@ -386,7 +386,12 @@ its name plus `With` (`qtwebenginecore.NewQWebEnginePageWithProfileWith(v,
 profile, parent)` makes a Go page in a profile of your own). Abstract classes (`QGraphicsItem`, `QLayout`,
 `QValidator`, `QSyntaxHighlighter`) are built only that way, and a pure
 virtual you don't define returns its zero value (the one exception is
-`QIconEngine.Clone`, which Qt needs: the constructor panics without it). An override has the same
+`QIconEngine.Clone`, which Qt needs: the constructor panics without it).
+Overrides only reach objects built this way: a widget made with plain
+`New<Class>` (or by Qt, like a dialog's buttons) can't gain them later, so
+build the Go type with `New…With` from the start, or watch an existing object
+with an event filter (a Go `QObject` that overrides `EventFilter`, passed to
+`InstallEventFilter`). An override has the same
 Go signature as the method's binding, so in-out parameters are a parameter
 plus a result:
 

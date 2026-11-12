@@ -90,7 +90,7 @@ func (this *QColorSpacePrimaryPoints) Unkeep() {
 func NewQColorSpacePrimaryPoints() *QColorSpacePrimaryPoints {
 	rt.CheckThread("NewQColorSpacePrimaryPoints")
 	p := C.qute_QColorSpacePrimaryPoints_new()
-	h := rt.WrapClass(p, "QColorSpacePrimaryPoints", rt.NewOwned)
+	h := rt.WrapNew[QColorSpacePrimaryPoints](p, "QColorSpacePrimaryPoints", rt.NewOwned)
 	return rt.View[QColorSpacePrimaryPoints](h, p)
 }
 

@@ -63,7 +63,7 @@ func QStyleOptionRubberBandCast(o QStyleOptionLike) *QStyleOptionRubberBand {
 func NewQStyleOptionRubberBand() *QStyleOptionRubberBand {
 	rt.CheckThread("NewQStyleOptionRubberBand")
 	p := C.qute_QStyleOptionRubberBand_new()
-	h := rt.WrapClass(p, "QStyleOptionRubberBand", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionRubberBand](p, "QStyleOptionRubberBand", rt.NewOwned)
 	return rt.View[QStyleOptionRubberBand](h, p)
 }
 

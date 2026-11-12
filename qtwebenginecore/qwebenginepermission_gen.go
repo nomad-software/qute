@@ -86,7 +86,7 @@ func (this *QWebEnginePermission) Unkeep() {
 func NewQWebEnginePermission() *QWebEnginePermission {
 	rt.CheckThread("NewQWebEnginePermission")
 	p := C.qute_QWebEnginePermission_new()
-	h := rt.WrapClass(p, "QWebEnginePermission", rt.NewOwned)
+	h := rt.WrapNew[QWebEnginePermission](p, "QWebEnginePermission", rt.NewOwned)
 	return rt.View[QWebEnginePermission](h, p)
 }
 

@@ -87,7 +87,7 @@ func NewQItemSelectionWithModelIndex(topLeft *QModelIndex, bottomRight *QModelIn
 	p := C.qute_QItemSelection_new(rt.UseArg(unsafe.Pointer(topLeft), "NewQItemSelectionWithModelIndex"), rt.UseArg(unsafe.Pointer(bottomRight), "NewQItemSelectionWithModelIndex"))
 	runtime.KeepAlive(topLeft)
 	runtime.KeepAlive(bottomRight)
-	h := rt.WrapClass(p, "QItemSelection", rt.NewOwned)
+	h := rt.WrapNew[QItemSelection](p, "QItemSelection", rt.NewOwned)
 	return rt.View[QItemSelection](h, p)
 }
 

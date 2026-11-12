@@ -61,7 +61,7 @@ func QInputMethodEventCast(e qtcore.QEventLike) *QInputMethodEvent {
 func NewQInputMethodEvent() *QInputMethodEvent {
 	rt.CheckThread("NewQInputMethodEvent")
 	p := C.qute_QInputMethodEvent_new()
-	h := rt.WrapClass(p, "QInputMethodEvent", rt.NewOwned)
+	h := rt.WrapNew[QInputMethodEvent](p, "QInputMethodEvent", rt.NewOwned)
 	return rt.View[QInputMethodEvent](h, p)
 }
 
@@ -78,7 +78,7 @@ func NewQInputMethodEventWithPreeditText(preeditText string, attributes []*QInpu
 	}
 	p := C.qute_QInputMethodEvent_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(preeditText))), C.ptrdiff_t(len(preeditText)), unsafe.Pointer(unsafe.SliceData(attributesC)), C.ptrdiff_t(len(attributes)))
 	runtime.KeepAlive(attributes)
-	h := rt.WrapClass(p, "QInputMethodEvent", rt.NewOwned)
+	h := rt.WrapNew[QInputMethodEvent](p, "QInputMethodEvent", rt.NewOwned)
 	return rt.View[QInputMethodEvent](h, p)
 }
 

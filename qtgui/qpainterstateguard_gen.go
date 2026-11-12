@@ -108,7 +108,7 @@ func NewQPainterStateGuardWithPainter(painter QPainterLike) *QPainterStateGuard 
 	}
 	p := C.qute_QPainterStateGuard_new(painterPtr)
 	runtime.KeepAlive(painter)
-	h := rt.WrapClass(p, "QPainterStateGuard", rt.NewOwned)
+	h := rt.WrapNew[QPainterStateGuard](p, "QPainterStateGuard", rt.NewOwned)
 	rt.KeepArg(h, "QPainterStateGuard.painter", painterH, true)
 	return rt.View[QPainterStateGuard](h, p)
 }
@@ -133,7 +133,7 @@ func NewQPainterStateGuardWithPainterFull(painter QPainterLike, state QPainterSt
 	}
 	p := C.qute_QPainterStateGuard_new_1(painterPtr, C.int64_t(state))
 	runtime.KeepAlive(painter)
-	h := rt.WrapClass(p, "QPainterStateGuard", rt.NewOwned)
+	h := rt.WrapNew[QPainterStateGuard](p, "QPainterStateGuard", rt.NewOwned)
 	rt.KeepArg(h, "QPainterStateGuard.painter", painterH, true)
 	return rt.View[QPainterStateGuard](h, p)
 }

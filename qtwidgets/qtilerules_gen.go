@@ -86,7 +86,7 @@ func (this *QTileRules) Unkeep() {
 func NewQTileRulesWithTileRule(horizontalRule qtcore.TileRule, verticalRule qtcore.TileRule) *QTileRules {
 	rt.CheckThread("NewQTileRulesWithTileRule")
 	p := C.qute_QTileRules_new(C.int64_t(horizontalRule), C.int64_t(verticalRule))
-	h := rt.WrapClass(p, "QTileRules", rt.NewOwned)
+	h := rt.WrapNew[QTileRules](p, "QTileRules", rt.NewOwned)
 	return rt.View[QTileRules](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQTileRulesWithTileRule(horizontalRule qtcore.TileRule, verticalRule qtco
 func NewQTileRules() *QTileRules {
 	rt.CheckThread("NewQTileRules")
 	p := C.qute_QTileRules_new_1()
-	h := rt.WrapClass(p, "QTileRules", rt.NewOwned)
+	h := rt.WrapNew[QTileRules](p, "QTileRules", rt.NewOwned)
 	return rt.View[QTileRules](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQTileRules() *QTileRules {
 func NewQTileRulesFull(rule qtcore.TileRule) *QTileRules {
 	rt.CheckThread("NewQTileRulesFull")
 	p := C.qute_QTileRules_new_2(C.int64_t(rule))
-	h := rt.WrapClass(p, "QTileRules", rt.NewOwned)
+	h := rt.WrapNew[QTileRules](p, "QTileRules", rt.NewOwned)
 	return rt.View[QTileRules](h, p)
 }
 

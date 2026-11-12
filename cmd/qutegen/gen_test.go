@@ -1253,3 +1253,20 @@ func TestInlineValueCode(t *testing.T) {
 		t.Error("QModelIndex does not register as inline with a dependency wrap")
 	}
 }
+
+// A method name is never skipped everywhere just because some classes use it
+// for platform internals: QSplitter::handle(int) was hidden that way, while
+// the QPlatform* handles are left out by their type, with the reason listed.
+func TestHandleMethods(t *testing.T) {
+	if mm := method(t, "QSplitter", "handle(int"); mm.GoName != "Handle" || mm.RetRule != "borrowed" || !mm.RetRuled {
+		t.Errorf("QSplitter::handle bound as %s returning %q, want Handle, borrowed by rule", mm.GoName, mm.RetRule)
+	}
+	method(t, "QFileDevice", "handle()")
+	notBound(t, "QWindow", "handle()")
+	for _, s := range class(t, "QWindow").Skipped {
+		if strings.Contains(s.Sig, "handle()") && strings.Contains(s.Why, "on purpose") {
+			return
+		}
+	}
+	t.Error("QWindow::handle is not listed as skipped on purpose")
+}

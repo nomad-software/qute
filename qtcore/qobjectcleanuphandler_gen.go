@@ -55,7 +55,7 @@ func QObjectCleanupHandlerCast(o QObjectLike) *QObjectCleanupHandler {
 func NewQObjectCleanupHandler() *QObjectCleanupHandler {
 	rt.CheckThread("NewQObjectCleanupHandler")
 	p := C.qute_QObjectCleanupHandler_new()
-	h := rt.WrapClass(p, "QObjectCleanupHandler", rt.NewOwned)
+	h := rt.WrapNew[QObjectCleanupHandler](p, "QObjectCleanupHandler", rt.NewOwned)
 	return rt.View[QObjectCleanupHandler](h, p)
 }
 
@@ -282,7 +282,7 @@ func NewQObjectCleanupHandlerWith(v QObjectCleanupHandlerSubclass) *QObjectClean
 		panic("NewQObjectCleanupHandlerWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QObjectCleanupHandler_new_shim()
-	h := rt.WrapClass(p, "QObjectCleanupHandler", rt.NewOwned)
+	h := rt.WrapNew[QObjectCleanupHandler](p, "QObjectCleanupHandler", rt.NewOwned)
 	base.QObjectCleanupHandler = rt.View[QObjectCleanupHandler](h, p)
 	id := h.SetSelf(v, qObjectCleanupHandlerVTable)
 	mask := rt.Mask(v, qObjectCleanupHandlerVTable)

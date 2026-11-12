@@ -90,7 +90,7 @@ func (this *QTableWidgetSelectionRange) Unkeep() {
 func NewQTableWidgetSelectionRange() *QTableWidgetSelectionRange {
 	rt.CheckThread("NewQTableWidgetSelectionRange")
 	p := C.qute_QTableWidgetSelectionRange_new()
-	h := rt.WrapClass(p, "QTableWidgetSelectionRange", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetSelectionRange](p, "QTableWidgetSelectionRange", rt.NewOwned)
 	return rt.View[QTableWidgetSelectionRange](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQTableWidgetSelectionRange() *QTableWidgetSelectionRange {
 func NewQTableWidgetSelectionRangeWithTop(top int, left int, bottom int, right int) *QTableWidgetSelectionRange {
 	rt.CheckThread("NewQTableWidgetSelectionRangeWithTop")
 	p := C.qute_QTableWidgetSelectionRange_new_1(C.int(top), C.int(left), C.int(bottom), C.int(right))
-	h := rt.WrapClass(p, "QTableWidgetSelectionRange", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetSelectionRange](p, "QTableWidgetSelectionRange", rt.NewOwned)
 	return rt.View[QTableWidgetSelectionRange](h, p)
 }
 

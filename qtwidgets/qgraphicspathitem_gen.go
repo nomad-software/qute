@@ -53,7 +53,7 @@ func NewQGraphicsPathItem(parent QGraphicsItemLike) *QGraphicsPathItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPathItem", mode)
+	h := rt.WrapNew[QGraphicsPathItem](p, "QGraphicsPathItem", mode)
 	return rt.View[QGraphicsPathItem](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQGraphicsPathItemWithPainterPath(path *qtgui.QPainterPath, parent QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPathItem", mode)
+	h := rt.WrapNew[QGraphicsPathItem](p, "QGraphicsPathItem", mode)
 	return rt.View[QGraphicsPathItem](h, p)
 }
 
@@ -1002,7 +1002,7 @@ func NewQGraphicsPathItemWith(v QGraphicsPathItemSubclass, parent QGraphicsItemL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPathItem", mode)
+	h := rt.WrapNew[QGraphicsPathItem](p, "QGraphicsPathItem", mode)
 	base.QGraphicsPathItem = rt.View[QGraphicsPathItem](h, p)
 	id := h.SetSelf(v, qGraphicsPathItemVTable)
 	mask := rt.Mask(v, qGraphicsPathItemVTable)
@@ -1035,7 +1035,7 @@ func NewQGraphicsPathItemWithPainterPathWith(v QGraphicsPathItemSubclass, path *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsPathItem", mode)
+	h := rt.WrapNew[QGraphicsPathItem](p, "QGraphicsPathItem", mode)
 	base.QGraphicsPathItem = rt.View[QGraphicsPathItem](h, p)
 	id := h.SetSelf(v, qGraphicsPathItemVTable)
 	mask := rt.Mask(v, qGraphicsPathItemVTable)

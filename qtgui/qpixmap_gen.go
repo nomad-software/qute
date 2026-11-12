@@ -48,7 +48,7 @@ func QPixmapFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QPixmap {
 func NewQPixmap() *QPixmap {
 	rt.CheckThread("NewQPixmap")
 	p := C.qute_QPixmap_new()
-	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
+	h := rt.WrapNew[QPixmap](p, "QPixmap", rt.NewOwned)
 	return rt.View[QPixmap](h, p)
 }
 
@@ -60,7 +60,7 @@ func NewQPixmap() *QPixmap {
 func NewQPixmapWithW(w int, hArg int) *QPixmap {
 	rt.CheckThread("NewQPixmapWithW")
 	p := C.qute_QPixmap_new_1(C.int(w), C.int(hArg))
-	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
+	h := rt.WrapNew[QPixmap](p, "QPixmap", rt.NewOwned)
 	return rt.View[QPixmap](h, p)
 }
 
@@ -74,7 +74,7 @@ func NewQPixmapWithW(w int, hArg int) *QPixmap {
 func NewQPixmapWithFileName(fileName string) *QPixmap {
 	rt.CheckThread("NewQPixmapWithFileName")
 	p := C.qute_QPixmap_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
+	h := rt.WrapNew[QPixmap](p, "QPixmap", rt.NewOwned)
 	return rt.View[QPixmap](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQPixmapWithFileNameFull(fileName string, format string, flags qtcore.Ima
 	formatCStr := C.CString(format)
 	defer C.free(unsafe.Pointer(formatCStr))
 	p := C.qute_QPixmap_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), formatCStr, C.int64_t(flags))
-	h := rt.WrapClass(p, "QPixmap", rt.NewOwned)
+	h := rt.WrapNew[QPixmap](p, "QPixmap", rt.NewOwned)
 	return rt.View[QPixmap](h, p)
 }
 

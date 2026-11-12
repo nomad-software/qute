@@ -89,7 +89,7 @@ func (this *QRegularExpressionMatch) Unkeep() {
 func NewQRegularExpressionMatch() *QRegularExpressionMatch {
 	rt.CheckThread("NewQRegularExpressionMatch")
 	p := C.qute_QRegularExpressionMatch_new()
-	h := rt.WrapClass(p, "QRegularExpressionMatch", rt.NewOwned)
+	h := rt.WrapNew[QRegularExpressionMatch](p, "QRegularExpressionMatch", rt.NewOwned)
 	return rt.View[QRegularExpressionMatch](h, p)
 }
 

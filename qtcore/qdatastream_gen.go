@@ -40,7 +40,7 @@ func QDataStreamFromPtr(p unsafe.Pointer, own Ownership) *QDataStream {
 func NewQDataStream() *QDataStream {
 	rt.CheckThread("NewQDataStream")
 	p := C.qute_QDataStream_new()
-	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
+	h := rt.WrapNew[QDataStream](p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)
 }
 
@@ -60,7 +60,7 @@ func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 	}
 	p := C.qute_QDataStream_new_1(iODevicePtr)
 	runtime.KeepAlive(iODevice)
-	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
+	h := rt.WrapNew[QDataStream](p, "QDataStream", rt.NewOwned)
 	rt.KeepArg(h, "device", iODeviceH, true)
 	return rt.View[QDataStream](h, p)
 }
@@ -73,7 +73,7 @@ func NewQDataStreamWithIODevice(iODevice QIODeviceLike) *QDataStream {
 func NewQDataStreamWithBytes(byteArray []byte) *QDataStream {
 	rt.CheckThread("NewQDataStreamWithBytes")
 	p := C.qute_QDataStream_new_2((*C.char)(unsafe.Pointer(unsafe.SliceData(byteArray))), C.ptrdiff_t(len(byteArray)))
-	h := rt.WrapClass(p, "QDataStream", rt.NewOwned)
+	h := rt.WrapNew[QDataStream](p, "QDataStream", rt.NewOwned)
 	return rt.View[QDataStream](h, p)
 }
 

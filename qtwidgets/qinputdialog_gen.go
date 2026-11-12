@@ -70,7 +70,7 @@ func NewQInputDialog(parent QWidgetLike) *QInputDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDialog", mode)
+	h := rt.WrapNew[QInputDialog](p, "QInputDialog", mode)
 	return rt.View[QInputDialog](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQInputDialogFull(parent QWidgetLike, flags qtcore.WindowFlags) *QInputDi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDialog", mode)
+	h := rt.WrapNew[QInputDialog](p, "QInputDialog", mode)
 	return rt.View[QInputDialog](h, p)
 }
 
@@ -1868,7 +1868,7 @@ func NewQInputDialogWith(v QInputDialogSubclass, parent QWidgetLike) *QInputDial
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QInputDialog", mode)
+	h := rt.WrapNew[QInputDialog](p, "QInputDialog", mode)
 	base.QInputDialog = rt.View[QInputDialog](h, p)
 	id := h.SetSelf(v, qInputDialogVTable)
 	mask := rt.Mask(v, qInputDialogVTable)

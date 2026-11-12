@@ -67,7 +67,7 @@ func NewQGridLayout(parent QWidgetLike) *QGridLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGridLayout", mode)
+	h := rt.WrapNew[QGridLayout](p, "QGridLayout", mode)
 	return rt.View[QGridLayout](h, p)
 }
 
@@ -1195,7 +1195,7 @@ func NewQGridLayoutWith(v QGridLayoutSubclass, parent QWidgetLike) *QGridLayout 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGridLayout", mode)
+	h := rt.WrapNew[QGridLayout](p, "QGridLayout", mode)
 	base.QGridLayout = rt.View[QGridLayout](h, p)
 	id := h.SetSelf(v, qGridLayoutVTable)
 	mask := rt.Mask(v, qGridLayoutVTable)

@@ -73,7 +73,7 @@ func NewQNativeGestureEventWithNativeGestureType(typeArg qtcore.NativeGestureTyp
 	}
 	p := C.qute_QNativeGestureEvent_new(C.int64_t(typeArg), devPtr, C.int(fingerCount), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.double(value), cQPointF(delta))
 	runtime.KeepAlive(dev)
-	h := rt.WrapClass(p, "QNativeGestureEvent", rt.NewOwned)
+	h := rt.WrapNew[QNativeGestureEvent](p, "QNativeGestureEvent", rt.NewOwned)
 	rt.KeepArg(h, "QNativeGestureEvent.dev", devH, true)
 	return rt.View[QNativeGestureEvent](h, p)
 }
@@ -98,7 +98,7 @@ func NewQNativeGestureEventWithNativeGestureTypeFull(typeArg qtcore.NativeGestur
 	}
 	p := C.qute_QNativeGestureEvent_new_1(C.int64_t(typeArg), devPtr, C.int(fingerCount), cQPointF(localPos), cQPointF(scenePos), cQPointF(globalPos), C.double(value), cQPointF(delta), C.ulonglong(sequenceId))
 	runtime.KeepAlive(dev)
-	h := rt.WrapClass(p, "QNativeGestureEvent", rt.NewOwned)
+	h := rt.WrapNew[QNativeGestureEvent](p, "QNativeGestureEvent", rt.NewOwned)
 	rt.KeepArg(h, "QNativeGestureEvent.dev", devH, true)
 	return rt.View[QNativeGestureEvent](h, p)
 }

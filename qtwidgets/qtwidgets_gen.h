@@ -7579,6 +7579,7 @@ int qute_QSplitter_indexOf(void *self, void * a0);
 void * qute_QSplitter_widget(void *self, int a0);
 int qute_QSplitter_count(void *self);
 void qute_QSplitter_getRange(void *self, int a0, int *a1_out, int *a2_out);
+void * qute_QSplitter_handle(void *self, int a0);
 void qute_QSplitter_setStretchFactor(void *self, int a0, int a1);
 void qute_QSplitter_splitterMoved_1(void *self, int a0, int a1);
 void qute_QSplitter_setOpaqueResize_1(void *self, bool a0);

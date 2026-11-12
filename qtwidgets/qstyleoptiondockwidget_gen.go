@@ -63,7 +63,7 @@ func QStyleOptionDockWidgetCast(o QStyleOptionLike) *QStyleOptionDockWidget {
 func NewQStyleOptionDockWidget() *QStyleOptionDockWidget {
 	rt.CheckThread("NewQStyleOptionDockWidget")
 	p := C.qute_QStyleOptionDockWidget_new()
-	h := rt.WrapClass(p, "QStyleOptionDockWidget", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionDockWidget](p, "QStyleOptionDockWidget", rt.NewOwned)
 	return rt.View[QStyleOptionDockWidget](h, p)
 }
 

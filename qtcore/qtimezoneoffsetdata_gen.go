@@ -85,7 +85,7 @@ func (this *QTimeZoneOffsetData) Unkeep() {
 func NewQTimeZoneOffsetData() *QTimeZoneOffsetData {
 	rt.CheckThread("NewQTimeZoneOffsetData")
 	p := C.qute_QTimeZoneOffsetData_new()
-	h := rt.WrapClass(p, "QTimeZoneOffsetData", rt.NewOwned)
+	h := rt.WrapNew[QTimeZoneOffsetData](p, "QTimeZoneOffsetData", rt.NewOwned)
 	return rt.View[QTimeZoneOffsetData](h, p)
 }
 

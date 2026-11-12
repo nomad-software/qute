@@ -86,7 +86,7 @@ func (this *QPalette) Unkeep() {
 func NewQPalette() *QPalette {
 	rt.CheckThread("NewQPalette")
 	p := C.qute_QPalette_new()
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
+	h := rt.WrapNew[QPalette](p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQPalette() *QPalette {
 func NewQPaletteWithButton(button QColor) *QPalette {
 	rt.CheckThread("NewQPaletteWithButton")
 	p := C.qute_QPalette_new_1(cQColor(button))
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
+	h := rt.WrapNew[QPalette](p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQPaletteWithButton(button QColor) *QPalette {
 func NewQPaletteWithButtonWindow(button QColor, window QColor) *QPalette {
 	rt.CheckThread("NewQPaletteWithButtonWindow")
 	p := C.qute_QPalette_new_2(cQColor(button), cQColor(window))
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
+	h := rt.WrapNew[QPalette](p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 
@@ -131,7 +131,7 @@ func NewQPaletteWithBrush(windowText *QBrush, button *QBrush, light *QBrush, dar
 	runtime.KeepAlive(bright_text)
 	runtime.KeepAlive(base)
 	runtime.KeepAlive(window)
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
+	h := rt.WrapNew[QPalette](p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 
@@ -143,7 +143,7 @@ func NewQPaletteWithBrush(windowText *QBrush, button *QBrush, light *QBrush, dar
 func NewQPaletteWithColors(windowText QColor, window QColor, light QColor, dark QColor, mid QColor, text QColor, base QColor) *QPalette {
 	rt.CheckThread("NewQPaletteWithColors")
 	p := C.qute_QPalette_new_4(cQColor(windowText), cQColor(window), cQColor(light), cQColor(dark), cQColor(mid), cQColor(text), cQColor(base))
-	h := rt.WrapClass(p, "QPalette", rt.NewOwned)
+	h := rt.WrapNew[QPalette](p, "QPalette", rt.NewOwned)
 	return rt.View[QPalette](h, p)
 }
 

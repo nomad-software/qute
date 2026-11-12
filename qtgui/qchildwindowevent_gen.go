@@ -71,7 +71,7 @@ func NewQChildWindowEventWithType(typeArg qtcore.QEventType, childWindow QWindow
 	}
 	p := C.qute_QChildWindowEvent_new(C.int64_t(typeArg), childWindowPtr)
 	runtime.KeepAlive(childWindow)
-	h := rt.WrapClass(p, "QChildWindowEvent", rt.NewOwned)
+	h := rt.WrapNew[QChildWindowEvent](p, "QChildWindowEvent", rt.NewOwned)
 	rt.KeepArg(h, "QChildWindowEvent.childWindow", childWindowH, true)
 	return rt.View[QChildWindowEvent](h, p)
 }

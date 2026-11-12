@@ -86,7 +86,7 @@ func (this *QVector2D) Unkeep() {
 func NewQVector2D() *QVector2D {
 	rt.CheckThread("NewQVector2D")
 	p := C.qute_QVector2D_new()
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQVector2D() *QVector2D {
 func NewQVector2DWithInitialization(initialization qtcore.Initialization) *QVector2D {
 	rt.CheckThread("NewQVector2DWithInitialization")
 	p := C.qute_QVector2D_new_1(C.int64_t(initialization))
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQVector2DWithInitialization(initialization qtcore.Initialization) *QVect
 func NewQVector2DWithPoint(point qtcore.QPoint) *QVector2D {
 	rt.CheckThread("NewQVector2DWithPoint")
 	p := C.qute_QVector2D_new_2(cQPoint(point))
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 
@@ -122,7 +122,7 @@ func NewQVector2DWithPoint(point qtcore.QPoint) *QVector2D {
 func NewQVector2DWithPointF(point qtcore.QPointF) *QVector2D {
 	rt.CheckThread("NewQVector2DWithPointF")
 	p := C.qute_QVector2D_new_3(cQPointF(point))
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQVector2DWithVector3D(vector *QVector3D) *QVector2D {
 	rt.CheckThread("NewQVector2DWithVector3D")
 	p := C.qute_QVector2D_new_4(rt.UseArg(unsafe.Pointer(vector), "NewQVector2DWithVector3D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 
@@ -148,7 +148,7 @@ func NewQVector2DWithVector4D(vector *QVector4D) *QVector2D {
 	rt.CheckThread("NewQVector2DWithVector4D")
 	p := C.qute_QVector2D_new_5(rt.UseArg(unsafe.Pointer(vector), "NewQVector2DWithVector4D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QVector2D", rt.NewOwned)
+	h := rt.WrapNew[QVector2D](p, "QVector2D", rt.NewOwned)
 	return rt.View[QVector2D](h, p)
 }
 

@@ -68,7 +68,7 @@ func NewQStackedWidget(parent QWidgetLike) *QStackedWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedWidget", mode)
+	h := rt.WrapNew[QStackedWidget](p, "QStackedWidget", mode)
 	return rt.View[QStackedWidget](h, p)
 }
 
@@ -1205,7 +1205,7 @@ func NewQStackedWidgetWith(v QStackedWidgetSubclass, parent QWidgetLike) *QStack
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QStackedWidget", mode)
+	h := rt.WrapNew[QStackedWidget](p, "QStackedWidget", mode)
 	base.QStackedWidget = rt.View[QStackedWidget](h, p)
 	id := h.SetSelf(v, qStackedWidgetVTable)
 	mask := rt.Mask(v, qStackedWidgetVTable)

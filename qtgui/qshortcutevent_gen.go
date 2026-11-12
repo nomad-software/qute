@@ -64,7 +64,7 @@ func NewQShortcutEventWithKeySequence(key *QKeySequence, idArg int) *QShortcutEv
 	rt.CheckThread("NewQShortcutEventWithKeySequence")
 	p := C.qute_QShortcutEvent_new(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventWithKeySequence"), C.int(idArg))
 	runtime.KeepAlive(key)
-	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	h := rt.WrapNew[QShortcutEvent](p, "QShortcutEvent", rt.NewOwned)
 	return rt.View[QShortcutEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQShortcutEventForShortcut(key *QKeySequence) *QShortcutEvent {
 	rt.CheckThread("NewQShortcutEventForShortcut")
 	p := C.qute_QShortcutEvent_new_1(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventForShortcut"))
 	runtime.KeepAlive(key)
-	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	h := rt.WrapNew[QShortcutEvent](p, "QShortcutEvent", rt.NewOwned)
 	return rt.View[QShortcutEvent](h, p)
 }
 
@@ -96,7 +96,7 @@ func NewQShortcutEventWithKeySequenceFull(key *QKeySequence, idArg int, ambiguou
 	rt.CheckThread("NewQShortcutEventWithKeySequenceFull")
 	p := C.qute_QShortcutEvent_new_2(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventWithKeySequenceFull"), C.int(idArg), C.bool(ambiguous))
 	runtime.KeepAlive(key)
-	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	h := rt.WrapNew[QShortcutEvent](p, "QShortcutEvent", rt.NewOwned)
 	return rt.View[QShortcutEvent](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQShortcutEventForShortcutFull(key *QKeySequence, shortcut QShortcutLike,
 	p := C.qute_QShortcutEvent_new_3(rt.UseArg(unsafe.Pointer(key), "NewQShortcutEventForShortcutFull"), shortcutPtr, C.bool(ambiguous))
 	runtime.KeepAlive(key)
 	runtime.KeepAlive(shortcut)
-	h := rt.WrapClass(p, "QShortcutEvent", rt.NewOwned)
+	h := rt.WrapNew[QShortcutEvent](p, "QShortcutEvent", rt.NewOwned)
 	rt.KeepArg(h, "QShortcutEvent.shortcut", shortcutH, true)
 	return rt.View[QShortcutEvent](h, p)
 }

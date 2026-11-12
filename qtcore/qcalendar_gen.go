@@ -85,7 +85,7 @@ func (this *QCalendar) Unkeep() {
 func NewQCalendar() *QCalendar {
 	rt.CheckThread("NewQCalendar")
 	p := C.qute_QCalendar_new()
-	h := rt.WrapClass(p, "QCalendar", rt.NewOwned)
+	h := rt.WrapNew[QCalendar](p, "QCalendar", rt.NewOwned)
 	return rt.View[QCalendar](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQCalendar() *QCalendar {
 func NewQCalendarWithSystem(system QCalendarSystem) *QCalendar {
 	rt.CheckThread("NewQCalendarWithSystem")
 	p := C.qute_QCalendar_new_1(C.int64_t(system))
-	h := rt.WrapClass(p, "QCalendar", rt.NewOwned)
+	h := rt.WrapNew[QCalendar](p, "QCalendar", rt.NewOwned)
 	return rt.View[QCalendar](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQCalendarWithSystem(system QCalendarSystem) *QCalendar {
 func NewQCalendarWithName(name string) *QCalendar {
 	rt.CheckThread("NewQCalendarWithName")
 	p := C.qute_QCalendar_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)))
-	h := rt.WrapClass(p, "QCalendar", rt.NewOwned)
+	h := rt.WrapNew[QCalendar](p, "QCalendar", rt.NewOwned)
 	return rt.View[QCalendar](h, p)
 }
 
@@ -122,7 +122,7 @@ func NewQCalendarWithCalendarSystemId(idArg *QCalendarSystemId) *QCalendar {
 	rt.CheckThread("NewQCalendarWithCalendarSystemId")
 	p := C.qute_QCalendar_new_3(rt.UseArg(unsafe.Pointer(idArg), "NewQCalendarWithCalendarSystemId"))
 	runtime.KeepAlive(idArg)
-	h := rt.WrapClass(p, "QCalendar", rt.NewOwned)
+	h := rt.WrapNew[QCalendar](p, "QCalendar", rt.NewOwned)
 	return rt.View[QCalendar](h, p)
 }
 

@@ -68,7 +68,7 @@ func NewQCheckBox(parent QWidgetLike) *QCheckBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCheckBox", mode)
+	h := rt.WrapNew[QCheckBox](p, "QCheckBox", mode)
 	return rt.View[QCheckBox](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQCheckBoxWithText(text string, parent QWidgetLike) *QCheckBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCheckBox", mode)
+	h := rt.WrapNew[QCheckBox](p, "QCheckBox", mode)
 	return rt.View[QCheckBox](h, p)
 }
 
@@ -1101,7 +1101,7 @@ func NewQCheckBoxWith(v QCheckBoxSubclass, parent QWidgetLike) *QCheckBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCheckBox", mode)
+	h := rt.WrapNew[QCheckBox](p, "QCheckBox", mode)
 	base.QCheckBox = rt.View[QCheckBox](h, p)
 	id := h.SetSelf(v, qCheckBoxVTable)
 	mask := rt.Mask(v, qCheckBoxVTable)
@@ -1133,7 +1133,7 @@ func NewQCheckBoxWithTextWith(v QCheckBoxSubclass, text string, parent QWidgetLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCheckBox", mode)
+	h := rt.WrapNew[QCheckBox](p, "QCheckBox", mode)
 	base.QCheckBox = rt.View[QCheckBox](h, p)
 	id := h.SetSelf(v, qCheckBoxVTable)
 	mask := rt.Mask(v, qCheckBoxVTable)

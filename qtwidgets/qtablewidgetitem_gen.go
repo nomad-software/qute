@@ -99,7 +99,7 @@ func (this *QTableWidgetItem) Unkeep() {
 func NewQTableWidgetItem() *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItem")
 	p := C.qute_QTableWidgetItem_new()
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQTableWidgetItem() *QTableWidgetItem {
 func NewQTableWidgetItemWithText(text string) *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItemWithText")
 	p := C.qute_QTableWidgetItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -128,7 +128,7 @@ func NewQTableWidgetItemWithIcon(icon *qtgui.QIcon, text string) *QTableWidgetIt
 	rt.CheckThread("NewQTableWidgetItemWithIcon")
 	p := C.qute_QTableWidgetItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -142,7 +142,7 @@ func NewQTableWidgetItemWithIcon(icon *qtgui.QIcon, text string) *QTableWidgetIt
 func NewQTableWidgetItemFull(typeArg int) *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItemFull")
 	p := C.qute_QTableWidgetItem_new_3(C.int(typeArg))
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -156,7 +156,7 @@ func NewQTableWidgetItemFull(typeArg int) *QTableWidgetItem {
 func NewQTableWidgetItemWithTextFull(text string, typeArg int) *QTableWidgetItem {
 	rt.CheckThread("NewQTableWidgetItemWithTextFull")
 	p := C.qute_QTableWidgetItem_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int(typeArg))
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -171,7 +171,7 @@ func NewQTableWidgetItemWithIconFull(icon *qtgui.QIcon, text string, typeArg int
 	rt.CheckThread("NewQTableWidgetItemWithIconFull")
 	p := C.qute_QTableWidgetItem_new_5(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIconFull"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)), C.int(typeArg))
 	runtime.KeepAlive(icon)
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	return rt.View[QTableWidgetItem](h, p)
 }
 
@@ -733,7 +733,7 @@ func NewQTableWidgetItemWith(v QTableWidgetItemSubclass) *QTableWidgetItem {
 		panic("NewQTableWidgetItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTableWidgetItem_new_shim()
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
 	id := h.SetSelf(v, qTableWidgetItemVTable)
 	mask := rt.Mask(v, qTableWidgetItemVTable)
@@ -756,7 +756,7 @@ func NewQTableWidgetItemWithTextWith(v QTableWidgetItemSubclass, text string) *Q
 		panic("NewQTableWidgetItemWithTextWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTableWidgetItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
 	id := h.SetSelf(v, qTableWidgetItemVTable)
 	mask := rt.Mask(v, qTableWidgetItemVTable)
@@ -780,7 +780,7 @@ func NewQTableWidgetItemWithIconWith(v QTableWidgetItemSubclass, icon *qtgui.QIc
 	}
 	p := C.qute_QTableWidgetItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQTableWidgetItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapClass(p, "QTableWidgetItem", rt.NewOwned)
+	h := rt.WrapNew[QTableWidgetItem](p, "QTableWidgetItem", rt.NewOwned)
 	base.QTableWidgetItem = rt.View[QTableWidgetItem](h, p)
 	id := h.SetSelf(v, qTableWidgetItemVTable)
 	mask := rt.Mask(v, qTableWidgetItemVTable)

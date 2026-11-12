@@ -91,7 +91,7 @@ func (this *QOperatingSystemVersionBase) Unkeep() {
 func NewQOperatingSystemVersionBaseWithOSType(osType QOperatingSystemVersionBaseOSType, vmajor int) *QOperatingSystemVersionBase {
 	rt.CheckThread("NewQOperatingSystemVersionBaseWithOSType")
 	p := C.qute_QOperatingSystemVersionBase_new(C.int64_t(osType), C.int(vmajor))
-	h := rt.WrapClass(p, "QOperatingSystemVersionBase", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersionBase](p, "QOperatingSystemVersionBase", rt.NewOwned)
 	return rt.View[QOperatingSystemVersionBase](h, p)
 }
 
@@ -105,7 +105,7 @@ func NewQOperatingSystemVersionBaseWithOSType(osType QOperatingSystemVersionBase
 func NewQOperatingSystemVersionBaseWithOSTypeFull(osType QOperatingSystemVersionBaseOSType, vmajor int, vminor int, vmicro int) *QOperatingSystemVersionBase {
 	rt.CheckThread("NewQOperatingSystemVersionBaseWithOSTypeFull")
 	p := C.qute_QOperatingSystemVersionBase_new_1(C.int64_t(osType), C.int(vmajor), C.int(vminor), C.int(vmicro))
-	h := rt.WrapClass(p, "QOperatingSystemVersionBase", rt.NewOwned)
+	h := rt.WrapNew[QOperatingSystemVersionBase](p, "QOperatingSystemVersionBase", rt.NewOwned)
 	return rt.View[QOperatingSystemVersionBase](h, p)
 }
 

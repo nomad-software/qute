@@ -67,7 +67,7 @@ func NewQTapAndHoldGesture(parent qtcore.QObjectLike) *QTapAndHoldGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTapAndHoldGesture", mode)
+	h := rt.WrapNew[QTapAndHoldGesture](p, "QTapAndHoldGesture", mode)
 	return rt.View[QTapAndHoldGesture](h, p)
 }
 
@@ -284,7 +284,7 @@ func NewQTapAndHoldGestureWith(v QTapAndHoldGestureSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTapAndHoldGesture", mode)
+	h := rt.WrapNew[QTapAndHoldGesture](p, "QTapAndHoldGesture", mode)
 	base.QTapAndHoldGesture = rt.View[QTapAndHoldGesture](h, p)
 	id := h.SetSelf(v, qTapAndHoldGestureVTable)
 	mask := rt.Mask(v, qTapAndHoldGestureVTable)

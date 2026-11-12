@@ -63,7 +63,7 @@ func QStyleOptionTabBarBaseCast(o QStyleOptionLike) *QStyleOptionTabBarBase {
 func NewQStyleOptionTabBarBase() *QStyleOptionTabBarBase {
 	rt.CheckThread("NewQStyleOptionTabBarBase")
 	p := C.qute_QStyleOptionTabBarBase_new()
-	h := rt.WrapClass(p, "QStyleOptionTabBarBase", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionTabBarBase](p, "QStyleOptionTabBarBase", rt.NewOwned)
 	return rt.View[QStyleOptionTabBarBase](h, p)
 }
 

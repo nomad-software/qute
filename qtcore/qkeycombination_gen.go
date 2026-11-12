@@ -87,7 +87,7 @@ func (this *QKeyCombination) Unkeep() {
 func NewQKeyCombination() *QKeyCombination {
 	rt.CheckThread("NewQKeyCombination")
 	p := C.qute_QKeyCombination_new()
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQKeyCombination() *QKeyCombination {
 func NewQKeyCombinationWithModifier(modifiers Modifiers) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationWithModifier")
 	p := C.qute_QKeyCombination_new_1(C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQKeyCombinationWithModifier(modifiers Modifiers) *QKeyCombination {
 func NewQKeyCombinationWithKeyboardModifier(modifiers KeyboardModifiers) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationWithKeyboardModifier")
 	p := C.qute_QKeyCombination_new_2(C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 
@@ -129,7 +129,7 @@ func NewQKeyCombinationWithKeyboardModifier(modifiers KeyboardModifiers) *QKeyCo
 func NewQKeyCombinationFull(key Key) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationFull")
 	p := C.qute_QKeyCombination_new_3(C.int64_t(key))
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 
@@ -143,7 +143,7 @@ func NewQKeyCombinationFull(key Key) *QKeyCombination {
 func NewQKeyCombinationWithModifierFull(modifiers Modifiers, key Key) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationWithModifierFull")
 	p := C.qute_QKeyCombination_new_4(C.int64_t(modifiers), C.int64_t(key))
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 
@@ -157,7 +157,7 @@ func NewQKeyCombinationWithModifierFull(modifiers Modifiers, key Key) *QKeyCombi
 func NewQKeyCombinationWithKeyboardModifierFull(modifiers KeyboardModifiers, key Key) *QKeyCombination {
 	rt.CheckThread("NewQKeyCombinationWithKeyboardModifierFull")
 	p := C.qute_QKeyCombination_new_5(C.int64_t(modifiers), C.int64_t(key))
-	h := rt.WrapClass(p, "QKeyCombination", rt.NewOwned)
+	h := rt.WrapNew[QKeyCombination](p, "QKeyCombination", rt.NewOwned)
 	return rt.View[QKeyCombination](h, p)
 }
 

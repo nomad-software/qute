@@ -86,7 +86,7 @@ func (this *QTransform) Unkeep() {
 func NewQTransform() *QTransform {
 	rt.CheckThread("NewQTransform")
 	p := C.qute_QTransform_new()
-	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
+	h := rt.WrapNew[QTransform](p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQTransform() *QTransform {
 func NewQTransformProjective(h11 float64, h12 float64, h13 float64, h21 float64, h22 float64, h23 float64, h31 float64, h32 float64, h33 float64) *QTransform {
 	rt.CheckThread("NewQTransformProjective")
 	p := C.qute_QTransform_new_1(C.double(h11), C.double(h12), C.double(h13), C.double(h21), C.double(h22), C.double(h23), C.double(h31), C.double(h32), C.double(h33))
-	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
+	h := rt.WrapNew[QTransform](p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQTransformProjective(h11 float64, h12 float64, h13 float64, h21 float64,
 func NewQTransformAffine(h11 float64, h12 float64, h21 float64, h22 float64, dx float64, dy float64) *QTransform {
 	rt.CheckThread("NewQTransformAffine")
 	p := C.qute_QTransform_new_2(C.double(h11), C.double(h12), C.double(h21), C.double(h22), C.double(dx), C.double(dy))
-	h := rt.WrapClass(p, "QTransform", rt.NewOwned)
+	h := rt.WrapNew[QTransform](p, "QTransform", rt.NewOwned)
 	return rt.View[QTransform](h, p)
 }
 

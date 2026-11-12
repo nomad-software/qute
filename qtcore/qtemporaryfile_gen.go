@@ -66,7 +66,7 @@ func NewQTemporaryFile(parent QObjectLike) *QTemporaryFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTemporaryFile", mode)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", mode)
 	return rt.View[QTemporaryFile](h, p)
 }
 
@@ -78,7 +78,7 @@ func NewQTemporaryFile(parent QObjectLike) *QTemporaryFile {
 func NewQTemporaryFileWithTemplateName(templateName string) *QTemporaryFile {
 	rt.CheckThread("NewQTemporaryFileWithTemplateName")
 	p := C.qute_QTemporaryFile_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(templateName))), C.ptrdiff_t(len(templateName)))
-	h := rt.WrapClass(p, "QTemporaryFile", rt.NewOwned)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", rt.NewOwned)
 	return rt.View[QTemporaryFile](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQTemporaryFileWithTemplateNameObject(templateName string, parent QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTemporaryFile", mode)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", mode)
 	return rt.View[QTemporaryFile](h, p)
 }
 
@@ -675,7 +675,7 @@ func NewQTemporaryFileWith(v QTemporaryFileSubclass, parent QObjectLike) *QTempo
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTemporaryFile", mode)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", mode)
 	base.QTemporaryFile = rt.View[QTemporaryFile](h, p)
 	id := h.SetSelf(v, qTemporaryFileVTable)
 	mask := rt.Mask(v, qTemporaryFileVTable)
@@ -698,7 +698,7 @@ func NewQTemporaryFileWithTemplateNameWith(v QTemporaryFileSubclass, templateNam
 		panic("NewQTemporaryFileWithTemplateNameWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTemporaryFile_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(templateName))), C.ptrdiff_t(len(templateName)))
-	h := rt.WrapClass(p, "QTemporaryFile", rt.NewOwned)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", rt.NewOwned)
 	base.QTemporaryFile = rt.View[QTemporaryFile](h, p)
 	id := h.SetSelf(v, qTemporaryFileVTable)
 	mask := rt.Mask(v, qTemporaryFileVTable)
@@ -730,7 +730,7 @@ func NewQTemporaryFileWithTemplateNameObjectWith(v QTemporaryFileSubclass, templ
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTemporaryFile", mode)
+	h := rt.WrapNew[QTemporaryFile](p, "QTemporaryFile", mode)
 	base.QTemporaryFile = rt.View[QTemporaryFile](h, p)
 	id := h.SetSelf(v, qTemporaryFileVTable)
 	mask := rt.Mask(v, qTemporaryFileVTable)

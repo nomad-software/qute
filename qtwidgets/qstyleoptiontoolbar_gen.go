@@ -61,7 +61,7 @@ func QStyleOptionToolBarCast(o QStyleOptionLike) *QStyleOptionToolBar {
 func NewQStyleOptionToolBar() *QStyleOptionToolBar {
 	rt.CheckThread("NewQStyleOptionToolBar")
 	p := C.qute_QStyleOptionToolBar_new()
-	h := rt.WrapClass(p, "QStyleOptionToolBar", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionToolBar](p, "QStyleOptionToolBar", rt.NewOwned)
 	return rt.View[QStyleOptionToolBar](h, p)
 }
 

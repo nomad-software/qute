@@ -57,7 +57,7 @@ func QCommonStyleCast(o qtcore.QObjectLike) *QCommonStyle {
 func NewQCommonStyle() *QCommonStyle {
 	rt.CheckThread("NewQCommonStyle")
 	p := C.qute_QCommonStyle_new()
-	h := rt.WrapClass(p, "QCommonStyle", rt.NewOwned)
+	h := rt.WrapNew[QCommonStyle](p, "QCommonStyle", rt.NewOwned)
 	return rt.View[QCommonStyle](h, p)
 }
 
@@ -880,7 +880,7 @@ func NewQCommonStyleWith(v QCommonStyleSubclass) *QCommonStyle {
 		panic("NewQCommonStyleWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QCommonStyle_new_shim()
-	h := rt.WrapClass(p, "QCommonStyle", rt.NewOwned)
+	h := rt.WrapNew[QCommonStyle](p, "QCommonStyle", rt.NewOwned)
 	base.QCommonStyle = rt.View[QCommonStyle](h, p)
 	id := h.SetSelf(v, qCommonStyleVTable)
 	mask := rt.Mask(v, qCommonStyleVTable)

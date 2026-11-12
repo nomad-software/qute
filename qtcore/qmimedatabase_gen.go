@@ -95,7 +95,7 @@ func (this *QMimeDatabase) Unkeep() {
 func NewQMimeDatabase() *QMimeDatabase {
 	rt.CheckThread("NewQMimeDatabase")
 	p := C.qute_QMimeDatabase_new()
-	h := rt.WrapClass(p, "QMimeDatabase", rt.NewOwned)
+	h := rt.WrapNew[QMimeDatabase](p, "QMimeDatabase", rt.NewOwned)
 	return rt.View[QMimeDatabase](h, p)
 }
 

@@ -86,7 +86,7 @@ func (this *QWebEngineLoadingInfo) Unkeep() {
 func NewQWebEngineLoadingInfo() *QWebEngineLoadingInfo {
 	rt.CheckThread("NewQWebEngineLoadingInfo")
 	p := C.qute_QWebEngineLoadingInfo_new()
-	h := rt.WrapClass(p, "QWebEngineLoadingInfo", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineLoadingInfo](p, "QWebEngineLoadingInfo", rt.NewOwned)
 	return rt.View[QWebEngineLoadingInfo](h, p)
 }
 

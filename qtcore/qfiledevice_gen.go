@@ -70,6 +70,18 @@ func (this *QFileDevice) UnsetError() {
 	runtime.KeepAlive(this)
 }
 
+// Handle wraps QFileDevice::handle.
+//
+//	C++: int QFileDevice::handle() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qfiledevice.html#handle
+func (this *QFileDevice) Handle() int {
+	self := rt.Use(unsafe.Pointer(this), "QFileDevice.Handle")
+	r := C.qute_QFileDevice_handle(self)
+	runtime.KeepAlive(this)
+	return int(r)
+}
+
 // FileName wraps QFileDevice::fileName.
 //
 //	C++: QString QFileDevice::fileName() const
@@ -660,7 +672,7 @@ func NewQFileDeviceWith(v QFileDeviceSubclass, parent QObjectLike) *QFileDevice 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileDevice", mode)
+	h := rt.WrapNew[QFileDevice](p, "QFileDevice", mode)
 	base.QFileDevice = rt.View[QFileDevice](h, p)
 	id := h.SetSelf(v, qFileDeviceVTable)
 	mask := rt.Mask(v, qFileDeviceVTable)

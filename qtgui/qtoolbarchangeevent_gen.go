@@ -61,7 +61,7 @@ func QToolBarChangeEventCast(e qtcore.QEventLike) *QToolBarChangeEvent {
 func NewQToolBarChangeEventWithBool(t bool) *QToolBarChangeEvent {
 	rt.CheckThread("NewQToolBarChangeEventWithBool")
 	p := C.qute_QToolBarChangeEvent_new(C.bool(t))
-	h := rt.WrapClass(p, "QToolBarChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QToolBarChangeEvent](p, "QToolBarChangeEvent", rt.NewOwned)
 	return rt.View[QToolBarChangeEvent](h, p)
 }
 

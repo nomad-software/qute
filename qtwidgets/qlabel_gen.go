@@ -70,7 +70,7 @@ func NewQLabel(parent QWidgetLike) *QLabel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	return rt.View[QLabel](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQLabelWithText(text string, parent QWidgetLike) *QLabel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	return rt.View[QLabel](h, p)
 }
 
@@ -120,7 +120,7 @@ func NewQLabelFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QLabel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	return rt.View[QLabel](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQLabelWithTextFull(text string, parent QWidgetLike, fArg qtcore.WindowFl
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	return rt.View[QLabel](h, p)
 }
 
@@ -1521,7 +1521,7 @@ func NewQLabelWith(v QLabelSubclass, parent QWidgetLike) *QLabel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	base.QLabel = rt.View[QLabel](h, p)
 	id := h.SetSelf(v, qLabelVTable)
 	mask := rt.Mask(v, qLabelVTable)
@@ -1553,7 +1553,7 @@ func NewQLabelWithTextWith(v QLabelSubclass, text string, parent QWidgetLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLabel", mode)
+	h := rt.WrapNew[QLabel](p, "QLabel", mode)
 	base.QLabel = rt.View[QLabel](h, p)
 	id := h.SetSelf(v, qLabelVTable)
 	mask := rt.Mask(v, qLabelVTable)

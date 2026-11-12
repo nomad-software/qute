@@ -86,7 +86,7 @@ func (this *QFontTag) Unkeep() {
 func NewQFontTag() *QFontTag {
 	rt.CheckThread("NewQFontTag")
 	p := C.qute_QFontTag_new()
-	h := rt.WrapClass(p, "QFontTag", rt.NewOwned)
+	h := rt.WrapNew[QFontTag](p, "QFontTag", rt.NewOwned)
 	return rt.View[QFontTag](h, p)
 }
 

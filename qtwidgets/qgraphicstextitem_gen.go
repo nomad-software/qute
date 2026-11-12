@@ -68,7 +68,7 @@ func NewQGraphicsTextItem(parent QGraphicsItemLike) *QGraphicsTextItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsTextItem", mode)
+	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
 	return rt.View[QGraphicsTextItem](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQGraphicsTextItemWithText(text string, parent QGraphicsItemLike) *QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsTextItem", mode)
+	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
 	return rt.View[QGraphicsTextItem](h, p)
 }
 
@@ -1531,7 +1531,7 @@ func NewQGraphicsTextItemWith(v QGraphicsTextItemSubclass, parent QGraphicsItemL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsTextItem", mode)
+	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
 	base.QGraphicsTextItem = rt.View[QGraphicsTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsTextItemVTable)
 	mask := rt.Mask(v, qGraphicsTextItemVTable)
@@ -1563,7 +1563,7 @@ func NewQGraphicsTextItemWithTextWith(v QGraphicsTextItemSubclass, text string, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsTextItem", mode)
+	h := rt.WrapNew[QGraphicsTextItem](p, "QGraphicsTextItem", mode)
 	base.QGraphicsTextItem = rt.View[QGraphicsTextItem](h, p)
 	id := h.SetSelf(v, qGraphicsTextItemVTable)
 	mask := rt.Mask(v, qGraphicsTextItemVTable)

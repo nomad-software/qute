@@ -86,7 +86,7 @@ func (this *QColorTransform) Unkeep() {
 func NewQColorTransform() *QColorTransform {
 	rt.CheckThread("NewQColorTransform")
 	p := C.qute_QColorTransform_new()
-	h := rt.WrapClass(p, "QColorTransform", rt.NewOwned)
+	h := rt.WrapNew[QColorTransform](p, "QColorTransform", rt.NewOwned)
 	return rt.View[QColorTransform](h, p)
 }
 

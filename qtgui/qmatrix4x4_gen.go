@@ -86,7 +86,7 @@ func (this *QMatrix4x4) Unkeep() {
 func NewQMatrix4x4() *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4")
 	p := C.qute_QMatrix4x4_new()
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQMatrix4x4() *QMatrix4x4 {
 func NewQMatrix4x4WithInitialization(initialization qtcore.Initialization) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithInitialization")
 	p := C.qute_QMatrix4x4_new_1(C.int64_t(initialization))
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQMatrix4x4WithInitialization(initialization qtcore.Initialization) *QMat
 func NewQMatrix4x4WithPtr(values unsafe.Pointer) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithPtr")
 	p := C.qute_QMatrix4x4_new_2(values)
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 
@@ -122,7 +122,7 @@ func NewQMatrix4x4WithPtr(values unsafe.Pointer) *QMatrix4x4 {
 func NewQMatrix4x4WithM11(m11 float32, m12 float32, m13 float32, m14 float32, m21 float32, m22 float32, m23 float32, m24 float32, m31 float32, m32 float32, m33 float32, m34 float32, m41 float32, m42 float32, m43 float32, m44 float32) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithM11")
 	p := C.qute_QMatrix4x4_new_3(C.float(m11), C.float(m12), C.float(m13), C.float(m14), C.float(m21), C.float(m22), C.float(m23), C.float(m24), C.float(m31), C.float(m32), C.float(m33), C.float(m34), C.float(m41), C.float(m42), C.float(m43), C.float(m44))
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 
@@ -134,7 +134,7 @@ func NewQMatrix4x4WithM11(m11 float32, m12 float32, m13 float32, m14 float32, m2
 func NewQMatrix4x4WithPtrCols(values unsafe.Pointer, cols int, rows int) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithPtrCols")
 	p := C.qute_QMatrix4x4_new_4(values, C.int(cols), C.int(rows))
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 
@@ -147,7 +147,7 @@ func NewQMatrix4x4WithTransform(transform *QTransform) *QMatrix4x4 {
 	rt.CheckThread("NewQMatrix4x4WithTransform")
 	p := C.qute_QMatrix4x4_new_5(rt.UseArg(unsafe.Pointer(transform), "NewQMatrix4x4WithTransform"))
 	runtime.KeepAlive(transform)
-	h := rt.WrapClass(p, "QMatrix4x4", rt.NewOwned)
+	h := rt.WrapNew[QMatrix4x4](p, "QMatrix4x4", rt.NewOwned)
 	return rt.View[QMatrix4x4](h, p)
 }
 

@@ -66,8 +66,9 @@ type Handle struct {
 	ptr     unsafe.Pointer // registry key: QObject* or the object pointer
 	class   string
 	kind    Kind
-	inline  bool // an inline value: its bytes are in Go memory (inline.go)
-	scoped  bool // a scoped argument: Dead when its callback returns (keepMu)
+	inline  bool      // an inline value: its bytes are in Go memory (inline.go)
+	scoped  bool      // a scoped argument: Dead when its callback returns (keepMu)
+	note    deathCode // why it died, when the reason is a common one (h.mu)
 	state   atomic.Uint32
 	pins    atomic.Int32
 	serial  uint64
@@ -93,8 +94,8 @@ type handleExt struct {
 	// guarded by Handle.mu
 	visiblePin bool
 	keepPins   int32
-	selfSlot   uintptr // the id the shim dispatches virtuals with
-	deathNote  string
+	selfSlot   uintptr                               // the id the shim dispatches virtuals with
+	deathNote  string                                // why it died, when note cannot say (noteOther)
 	callbacks  map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
 	memBytes   int64                                 // external memory counted for this value (memory.go)
 
@@ -165,7 +166,7 @@ type regEntry struct {
 
 var (
 	regMu    sync.Mutex
-	registry = map[unsafe.Pointer]*regEntry{}
+	registry = map[unsafe.Pointer]regEntry{} // by value: no allocation per object
 	strongMu sync.Mutex
 	strong   = map[*Handle]struct{}{}
 )
@@ -223,6 +224,11 @@ const (
 // Wrapping the same pointer twice returns the same handle, so its state never
 // diverges.
 func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter func(unsafe.Pointer)) *Handle {
+	return wrap(key, class, kind, mode, deleter, nil)
+}
+
+// wrap is Wrap; a new handle is made in fresh when it is not nil (WrapNew).
+func wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter func(unsafe.Pointer), fresh *Handle) *Handle {
 	if key == nil {
 		return nil
 	}
@@ -236,7 +242,7 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 		if kind == KindPlain && st == Owned && deleter == nil {
 			st = Borrowed
 		}
-		h := newHandle(key, class, kind, st, deleter)
+		h := newHandleIn(fresh, key, class, kind, st, deleter)
 		h.attachDependency()
 		if st == Owned {
 			h.attachCleanup()
@@ -245,8 +251,8 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	}
 
 	regMu.Lock()
-	e := registry[key]
-	if e != nil {
+	e, found := registry[key]
+	if found {
 		if h := e.w.Value(); h != nil && h.State() != Dead {
 			regMu.Unlock()
 			h.retake(mode)
@@ -263,16 +269,13 @@ func Wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	if st == Owned && kind == KindQObject && AppExists() && HasParent(key) {
 		st = Parented // a transfer-to-go result Qt gave a parent (see TransferToGo)
 	}
-	h := newHandle(key, class, kind, st, deleter)
+	h := newHandleIn(fresh, key, class, kind, st, deleter)
 	needWatch := kind == KindQObject
-	if e != nil {
+	if found {
 		needWatch = needWatch && !e.watched
-		e.w = weak.Make(h)
-		e.prevSerial = e.serial
-		e.serial = h.serial
-		e.watched = e.watched || needWatch
+		registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: e.watched || needWatch, prevSerial: e.serial}
 	} else {
-		registry[key] = &regEntry{w: weak.Make(h), serial: h.serial, watched: needWatch}
+		registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: needWatch}
 	}
 	delete(dying, key) // a new object at the address of one destroyed earlier
 	regMu.Unlock()
@@ -310,7 +313,14 @@ func (h *Handle) retake(mode WrapMode) {
 }
 
 func newHandle(key unsafe.Pointer, class string, kind Kind, st State, deleter func(unsafe.Pointer)) *Handle {
-	h := new(Handle)
+	return newHandleIn(nil, key, class, kind, st, deleter)
+}
+
+// newHandleIn sets up a new handle in h, or in a new one when h is nil.
+func newHandleIn(h *Handle, key unsafe.Pointer, class string, kind Kind, st State, deleter func(unsafe.Pointer)) *Handle {
+	if h == nil {
+		h = new(Handle)
+	}
 	h.init(key, class, kind, st, deleter)
 	return h
 }
@@ -606,17 +616,17 @@ func (h *Handle) Subclass() (any, []Virtual) {
 // a new object at the same address gets a fresh handle.
 func Destroyed(key unsafe.Pointer, why string) {
 	regMu.Lock()
-	e := registry[key]
+	e, found := registry[key]
 	delete(registry, key)
 	var h *Handle
-	if e != nil {
+	if found {
 		h = e.w.Value()
 		if h != nil && h.kind == KindQObject {
 			buryLocked(key, h) // handed back if Qt passes the dying object to Go
 		}
 	}
 	regMu.Unlock()
-	if e != nil {
+	if found {
 		if h != nil {
 			h.markDead(why)
 		} else {
@@ -639,17 +649,17 @@ func (h *Handle) markDead(why string) {
 		return
 	}
 	h.stopCleanup()
-	if h.ext.Load() == nil && why == scopedNote && !debugEnabled {
-		// a scoped argument with no other state (the usual case): nothing
-		// to release, and deadMessage knows its note
-		return
-	}
 	h.mu.Lock()
-	if h.x().deathNote == "" {
-		h.x().deathNote = why
-	}
+	h.setNoteLocked(why)
 	if debugEnabled {
 		h.x().died = callSite()
+	}
+	if h.ext.Load() == nil {
+		// no pins, connections, keeps, anchoring or memory (the usual
+		// case): nothing to release. A keeper always has an extension
+		// (slotsFor makes it before holdLocked), so it holds nothing either.
+		h.mu.Unlock()
+		return
 	}
 	visible, keeps, id := h.x().visiblePin, h.x().keepPins, h.x().selfSlot
 	h.x().visiblePin, h.x().keepPins, h.x().selfSlot = false, 0, 0
@@ -712,7 +722,7 @@ func (h *Handle) Delete(method string) {
 	}
 	h.stopCleanup()
 	h.mu.Lock()
-	h.x().deathNote = "deleted by Delete()"
+	h.setNoteLocked("deleted by Delete()")
 	h.mu.Unlock()
 	key, del := h.ptr, h.deleter
 	if h.registeredKind() {
@@ -773,7 +783,11 @@ func CheckThread(method string) {
 
 func deadMessage(h *Handle, method string) string {
 	h.mu.Lock()
-	why, site, created := h.x().deathNote, h.x().died, h.x().created
+	why := h.noteLocked()
+	var site, created string
+	if e := h.ext.Load(); e != nil {
+		site, created = e.died, e.created
+	}
 	if why == "" && h.scoped {
 		why = scopedNote
 	}
@@ -799,6 +813,53 @@ func deadMessage(h *Handle, method string) string {
 }
 
 const scopedNote = "scoped argument expired"
+
+// deathCode is why a handle died, for the common reasons, so recording it
+// needs no handleExt: Qt destroys many small objects (list rows) that never
+// had any other state.
+type deathCode uint8
+
+const (
+	noteNone  deathCode = iota
+	noteOther           // the reason is in handleExt.deathNote
+	noteQt
+	noteDelete
+	noteGC
+	noteScoped
+	noteDying
+)
+
+var deathNotes = [...]string{
+	noteQt:     "destroyed by Qt",
+	noteDelete: "deleted by Delete()",
+	noteGC:     "freed by GC",
+	noteScoped: scopedNote,
+	noteDying:  "wrapped while Qt was destroying it",
+}
+
+// setNoteLocked records why h died, unless a reason is already recorded (Delete
+// names itself before Qt's death notice arrives). The caller holds h.mu.
+func (h *Handle) setNoteLocked(why string) {
+	if h.note != noteNone || why == "" {
+		return
+	}
+	for c := noteQt; int(c) < len(deathNotes); c++ {
+		if deathNotes[c] == why {
+			h.note = c
+			return
+		}
+	}
+	h.note = noteOther
+	h.x().deathNote = why
+}
+
+// noteLocked returns why h died, or "". The caller holds h.mu.
+func (h *Handle) noteLocked() string {
+	if h.note == noteOther {
+		return h.ext.Load().deathNote
+	}
+	return deathNotes[h.note]
+}
 
 // Expire marks a scoped argument handle Dead when its callback returns.
 // Objects Go built on it inside the handler and left alive (a
@@ -895,13 +956,8 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 			return h
 		}
 	}
-	switch mode {
-	case NewOwned:
-		h := Wrap(p, class, kind, TakeOwned, ci.deleter)
-		trackNew(h, ci)
-		return h
-	case NewParented:
-		return Wrap(p, class, kind, TakeParented, ci.deleter)
+	if mode == NewOwned || mode == NewParented {
+		return wrapNew(p, class, ci, mode, nil)
 	}
 	if kind == KindValue {
 		h := Wrap(p, class, kind, mode, ci.deleter)
@@ -932,6 +988,42 @@ func WrapClass(p unsafe.Pointer, class string, mode WrapMode) *Handle {
 		kind = KindPlain
 	}
 	return Wrap(p, class, kind, mode, ci.deleter)
+}
+
+// WrapNew is WrapClass for an object a constructor just made (mode NewOwned
+// or NewParented): its handle is new, so the handle and its wrapper of type
+// T are made in one allocation, and View[T] finds the wrapper cached.
+func WrapNew[T any](p unsafe.Pointer, class string, mode WrapMode) *Handle {
+	if p == nil {
+		return nil
+	}
+	v, ok := classes.Load(class)
+	if !ok {
+		panic("qute: class " + class + " is not registered")
+	}
+	ci := v.(classInfo)
+	if ci.inline > 0 || (mode != NewOwned && mode != NewParented) {
+		return WrapClass(p, class, mode)
+	}
+	x := new(viewPair[T])
+	h := wrapNew(p, class, ci, mode, &x.h)
+	if h == &x.h {
+		*RefOf(unsafe.Pointer(&x.v)) = Ref{H: h, P: p}
+		h.cache1[0] = &x.v
+		h.cache = h.cache1[:1]
+	}
+	return h
+}
+
+// wrapNew wraps an object a constructor just made, in fresh when it is not
+// nil and the handle is new (WrapNew), and counts the memory of an Owned one.
+func wrapNew(p unsafe.Pointer, class string, ci classInfo, mode WrapMode, fresh *Handle) *Handle {
+	if mode == NewParented {
+		return wrap(p, class, ci.kind, TakeParented, ci.deleter, fresh)
+	}
+	h := wrap(p, class, ci.kind, TakeOwned, ci.deleter, fresh)
+	trackNew(h, ci)
+	return h
 }
 
 // WrapClassFrom is WrapClass for an object pointer returned by a method of

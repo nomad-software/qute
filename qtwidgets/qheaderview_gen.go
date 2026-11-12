@@ -68,7 +68,7 @@ func NewQHeaderViewWithOrientation(orientation qtcore.Orientations, parent QWidg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QHeaderView", mode)
+	h := rt.WrapNew[QHeaderView](p, "QHeaderView", mode)
 	return rt.View[QHeaderView](h, p)
 }
 
@@ -3054,7 +3054,7 @@ func NewQHeaderViewWith(v QHeaderViewSubclass, orientation qtcore.Orientations, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QHeaderView", mode)
+	h := rt.WrapNew[QHeaderView](p, "QHeaderView", mode)
 	base.QHeaderView = rt.View[QHeaderView](h, p)
 	id := h.SetSelf(v, qHeaderViewVTable)
 	mask := rt.Mask(v, qHeaderViewVTable)

@@ -90,7 +90,7 @@ func (this *QPointingDeviceUniqueId) Unkeep() {
 func NewQPointingDeviceUniqueId() *QPointingDeviceUniqueId {
 	rt.CheckThread("NewQPointingDeviceUniqueId")
 	p := C.qute_QPointingDeviceUniqueId_new()
-	h := rt.WrapClass(p, "QPointingDeviceUniqueId", rt.NewOwned)
+	h := rt.WrapNew[QPointingDeviceUniqueId](p, "QPointingDeviceUniqueId", rt.NewOwned)
 	return rt.View[QPointingDeviceUniqueId](h, p)
 }
 

@@ -86,7 +86,7 @@ func (this *QOpenGLBuffer) Unkeep() {
 func NewQOpenGLBuffer() *QOpenGLBuffer {
 	rt.CheckThread("NewQOpenGLBuffer")
 	p := C.qute_QOpenGLBuffer_new()
-	h := rt.WrapClass(p, "QOpenGLBuffer", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLBuffer](p, "QOpenGLBuffer", rt.NewOwned)
 	return rt.View[QOpenGLBuffer](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQOpenGLBuffer() *QOpenGLBuffer {
 func NewQOpenGLBufferWithType(typeArg QOpenGLBufferType) *QOpenGLBuffer {
 	rt.CheckThread("NewQOpenGLBufferWithType")
 	p := C.qute_QOpenGLBuffer_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QOpenGLBuffer", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLBuffer](p, "QOpenGLBuffer", rt.NewOwned)
 	return rt.View[QOpenGLBuffer](h, p)
 }
 

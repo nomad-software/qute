@@ -70,7 +70,7 @@ func NewQDialog(parent QWidgetLike) *QDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialog", mode)
+	h := rt.WrapNew[QDialog](p, "QDialog", mode)
 	return rt.View[QDialog](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQDialogFull(parent QWidgetLike, fArg qtcore.WindowFlags) *QDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialog", mode)
+	h := rt.WrapNew[QDialog](p, "QDialog", mode)
 	return rt.View[QDialog](h, p)
 }
 
@@ -1231,7 +1231,7 @@ func NewQDialogWith(v QDialogSubclass, parent QWidgetLike) *QDialog {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDialog", mode)
+	h := rt.WrapNew[QDialog](p, "QDialog", mode)
 	base.QDialog = rt.View[QDialog](h, p)
 	id := h.SetSelf(v, qDialogVTable)
 	mask := rt.Mask(v, qDialogVTable)

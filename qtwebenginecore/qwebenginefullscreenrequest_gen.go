@@ -90,7 +90,7 @@ func (this *QWebEngineFullScreenRequest) Unkeep() {
 func NewQWebEngineFullScreenRequest() *QWebEngineFullScreenRequest {
 	rt.CheckThread("NewQWebEngineFullScreenRequest")
 	p := C.qute_QWebEngineFullScreenRequest_new()
-	h := rt.WrapClass(p, "QWebEngineFullScreenRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineFullScreenRequest](p, "QWebEngineFullScreenRequest", rt.NewOwned)
 	return rt.View[QWebEngineFullScreenRequest](h, p)
 }
 

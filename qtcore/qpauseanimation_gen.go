@@ -66,7 +66,7 @@ func NewQPauseAnimation(parent QObjectLike) *QPauseAnimation {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPauseAnimation", mode)
+	h := rt.WrapNew[QPauseAnimation](p, "QPauseAnimation", mode)
 	return rt.View[QPauseAnimation](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQPauseAnimationWithMsecs(msecs int, parent QObjectLike) *QPauseAnimation
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPauseAnimation", mode)
+	h := rt.WrapNew[QPauseAnimation](p, "QPauseAnimation", mode)
 	return rt.View[QPauseAnimation](h, p)
 }
 
@@ -332,7 +332,7 @@ func NewQPauseAnimationWith(v QPauseAnimationSubclass, parent QObjectLike) *QPau
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPauseAnimation", mode)
+	h := rt.WrapNew[QPauseAnimation](p, "QPauseAnimation", mode)
 	base.QPauseAnimation = rt.View[QPauseAnimation](h, p)
 	id := h.SetSelf(v, qPauseAnimationVTable)
 	mask := rt.Mask(v, qPauseAnimationVTable)
@@ -364,7 +364,7 @@ func NewQPauseAnimationWithMsecsWith(v QPauseAnimationSubclass, msecs int, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPauseAnimation", mode)
+	h := rt.WrapNew[QPauseAnimation](p, "QPauseAnimation", mode)
 	base.QPauseAnimation = rt.View[QPauseAnimation](h, p)
 	id := h.SetSelf(v, qPauseAnimationVTable)
 	mask := rt.Mask(v, qPauseAnimationVTable)

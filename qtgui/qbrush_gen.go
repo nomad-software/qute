@@ -86,7 +86,7 @@ func (this *QBrush) Unkeep() {
 func NewQBrush() *QBrush {
 	rt.CheckThread("NewQBrush")
 	p := C.qute_QBrush_new()
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQBrush() *QBrush {
 func NewQBrushWithStyle(bs qtcore.BrushStyle) *QBrush {
 	rt.CheckThread("NewQBrushWithStyle")
 	p := C.qute_QBrush_new_1(C.int64_t(bs))
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQBrushWithStyle(bs qtcore.BrushStyle) *QBrush {
 func NewQBrushWithColor(color QColor) *QBrush {
 	rt.CheckThread("NewQBrushWithColor")
 	p := C.qute_QBrush_new_2(cQColor(color))
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -125,7 +125,7 @@ func NewQBrushWithColorPixmap(color QColor, pixmap *QPixmap) *QBrush {
 	rt.CheckThread("NewQBrushWithColorPixmap")
 	p := C.qute_QBrush_new_3(cQColor(color), rt.UseArg(unsafe.Pointer(pixmap), "NewQBrushWithColorPixmap"))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -138,7 +138,7 @@ func NewQBrushWithPixmap(pixmap *QPixmap) *QBrush {
 	rt.CheckThread("NewQBrushWithPixmap")
 	p := C.qute_QBrush_new_4(rt.UseArg(unsafe.Pointer(pixmap), "NewQBrushWithPixmap"))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -151,7 +151,7 @@ func NewQBrushWithImage(image *QImage) *QBrush {
 	rt.CheckThread("NewQBrushWithImage")
 	p := C.qute_QBrush_new_5(rt.UseArg(unsafe.Pointer(image), "NewQBrushWithImage"))
 	runtime.KeepAlive(image)
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -164,7 +164,7 @@ func NewQBrushWithGradient(gradient *QGradient) *QBrush {
 	rt.CheckThread("NewQBrushWithGradient")
 	p := C.qute_QBrush_new_6(rt.UseArg(unsafe.Pointer(gradient), "NewQBrushWithGradient"))
 	runtime.KeepAlive(gradient)
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 
@@ -178,7 +178,7 @@ func NewQBrushWithGradient(gradient *QGradient) *QBrush {
 func NewQBrushWithColorFull(color QColor, bs qtcore.BrushStyle) *QBrush {
 	rt.CheckThread("NewQBrushWithColorFull")
 	p := C.qute_QBrush_new_7(cQColor(color), C.int64_t(bs))
-	h := rt.WrapClass(p, "QBrush", rt.NewOwned)
+	h := rt.WrapNew[QBrush](p, "QBrush", rt.NewOwned)
 	return rt.View[QBrush](h, p)
 }
 

@@ -95,7 +95,7 @@ func (this *QEventLoopLocker) Unkeep() {
 func NewQEventLoopLocker() *QEventLoopLocker {
 	rt.CheckThread("NewQEventLoopLocker")
 	p := C.qute_QEventLoopLocker_new()
-	h := rt.WrapClass(p, "QEventLoopLocker", rt.NewOwned)
+	h := rt.WrapNew[QEventLoopLocker](p, "QEventLoopLocker", rt.NewOwned)
 	return rt.View[QEventLoopLocker](h, p)
 }
 
@@ -115,7 +115,7 @@ func NewQEventLoopLockerWithEventLoop(loop QEventLoopLike) *QEventLoopLocker {
 	}
 	p := C.qute_QEventLoopLocker_new_1(loopPtr)
 	runtime.KeepAlive(loop)
-	h := rt.WrapClass(p, "QEventLoopLocker", rt.NewOwned)
+	h := rt.WrapNew[QEventLoopLocker](p, "QEventLoopLocker", rt.NewOwned)
 	rt.KeepArg(h, "QEventLoopLocker.loop", loopH, true)
 	return rt.View[QEventLoopLocker](h, p)
 }

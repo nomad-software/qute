@@ -67,7 +67,7 @@ func NewQDoubleValidator(parent qtcore.QObjectLike) *QDoubleValidator {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleValidator", mode)
+	h := rt.WrapNew[QDoubleValidator](p, "QDoubleValidator", mode)
 	return rt.View[QDoubleValidator](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQDoubleValidatorWithBottom(bottom float64, top float64, decimals int, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleValidator", mode)
+	h := rt.WrapNew[QDoubleValidator](p, "QDoubleValidator", mode)
 	return rt.View[QDoubleValidator](h, p)
 }
 
@@ -547,7 +547,7 @@ func NewQDoubleValidatorWith(v QDoubleValidatorSubclass, parent qtcore.QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleValidator", mode)
+	h := rt.WrapNew[QDoubleValidator](p, "QDoubleValidator", mode)
 	base.QDoubleValidator = rt.View[QDoubleValidator](h, p)
 	id := h.SetSelf(v, qDoubleValidatorVTable)
 	mask := rt.Mask(v, qDoubleValidatorVTable)
@@ -579,7 +579,7 @@ func NewQDoubleValidatorWithBottomWith(v QDoubleValidatorSubclass, bottom float6
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleValidator", mode)
+	h := rt.WrapNew[QDoubleValidator](p, "QDoubleValidator", mode)
 	base.QDoubleValidator = rt.View[QDoubleValidator](h, p)
 	id := h.SetSelf(v, qDoubleValidatorVTable)
 	mask := rt.Mask(v, qDoubleValidatorVTable)

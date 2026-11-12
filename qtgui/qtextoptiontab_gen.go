@@ -86,7 +86,7 @@ func (this *QTextOptionTab) Unkeep() {
 func NewQTextOptionTab() *QTextOptionTab {
 	rt.CheckThread("NewQTextOptionTab")
 	p := C.qute_QTextOptionTab_new()
-	h := rt.WrapClass(p, "QTextOptionTab", rt.NewOwned)
+	h := rt.WrapNew[QTextOptionTab](p, "QTextOptionTab", rt.NewOwned)
 	return rt.View[QTextOptionTab](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQTextOptionTab() *QTextOptionTab {
 func NewQTextOptionTabWithPos(pos float64, tabType QTextOptionTabType) *QTextOptionTab {
 	rt.CheckThread("NewQTextOptionTabWithPos")
 	p := C.qute_QTextOptionTab_new_1(C.double(pos), C.int64_t(tabType))
-	h := rt.WrapClass(p, "QTextOptionTab", rt.NewOwned)
+	h := rt.WrapNew[QTextOptionTab](p, "QTextOptionTab", rt.NewOwned)
 	return rt.View[QTextOptionTab](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQTextOptionTabWithPos(pos float64, tabType QTextOptionTabType) *QTextOpt
 func NewQTextOptionTabWithPosFull(pos float64, tabType QTextOptionTabType, delim rune) *QTextOptionTab {
 	rt.CheckThread("NewQTextOptionTabWithPosFull")
 	p := C.qute_QTextOptionTab_new_2(C.double(pos), C.int64_t(tabType), C.uint(delim))
-	h := rt.WrapClass(p, "QTextOptionTab", rt.NewOwned)
+	h := rt.WrapNew[QTextOptionTab](p, "QTextOptionTab", rt.NewOwned)
 	return rt.View[QTextOptionTab](h, p)
 }
 

@@ -42,7 +42,7 @@ func QSvgGeneratorFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QSvgGenerator
 func NewQSvgGenerator() *QSvgGenerator {
 	rt.CheckThread("NewQSvgGenerator")
 	p := C.qute_QSvgGenerator_new()
-	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
 	return rt.View[QSvgGenerator](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQSvgGenerator() *QSvgGenerator {
 func NewQSvgGeneratorWithSvgVersion(version QSvgGeneratorSvgVersion) *QSvgGenerator {
 	rt.CheckThread("NewQSvgGeneratorWithSvgVersion")
 	p := C.qute_QSvgGenerator_new_1(C.int64_t(version))
-	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
 	return rt.View[QSvgGenerator](h, p)
 }
 
@@ -311,7 +311,7 @@ func NewQSvgGeneratorWith(v QSvgGeneratorSubclass) *QSvgGenerator {
 		panic("NewQSvgGeneratorWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSvgGenerator_new_shim()
-	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
 	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
 	id := h.SetSelf(v, qSvgGeneratorVTable)
 	mask := rt.Mask(v, qSvgGeneratorVTable)
@@ -334,7 +334,7 @@ func NewQSvgGeneratorWithSvgVersionWith(v QSvgGeneratorSubclass, version QSvgGen
 		panic("NewQSvgGeneratorWithSvgVersionWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QSvgGenerator_new_shim_1(C.int64_t(version))
-	h := rt.WrapClass(p, "QSvgGenerator", rt.NewOwned)
+	h := rt.WrapNew[QSvgGenerator](p, "QSvgGenerator", rt.NewOwned)
 	base.QSvgGenerator = rt.View[QSvgGenerator](h, p)
 	id := h.SetSelf(v, qSvgGeneratorVTable)
 	mask := rt.Mask(v, qSvgGeneratorVTable)

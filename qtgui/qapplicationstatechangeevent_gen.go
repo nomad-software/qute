@@ -65,7 +65,7 @@ func QApplicationStateChangeEventCast(e qtcore.QEventLike) *QApplicationStateCha
 func NewQApplicationStateChangeEventWithApplicationState(state qtcore.ApplicationStates) *QApplicationStateChangeEvent {
 	rt.CheckThread("NewQApplicationStateChangeEventWithApplicationState")
 	p := C.qute_QApplicationStateChangeEvent_new(C.int64_t(state))
-	h := rt.WrapClass(p, "QApplicationStateChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QApplicationStateChangeEvent](p, "QApplicationStateChangeEvent", rt.NewOwned)
 	return rt.View[QApplicationStateChangeEvent](h, p)
 }
 

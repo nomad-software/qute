@@ -61,6 +61,6 @@ func QHideEventCast(e qtcore.QEventLike) *QHideEvent {
 func NewQHideEvent() *QHideEvent {
 	rt.CheckThread("NewQHideEvent")
 	p := C.qute_QHideEvent_new()
-	h := rt.WrapClass(p, "QHideEvent", rt.NewOwned)
+	h := rt.WrapNew[QHideEvent](p, "QHideEvent", rt.NewOwned)
 	return rt.View[QHideEvent](h, p)
 }

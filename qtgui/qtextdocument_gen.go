@@ -67,7 +67,7 @@ func NewQTextDocument(parent qtcore.QObjectLike) *QTextDocument {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextDocument", mode)
+	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
 	return rt.View[QTextDocument](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQTextDocumentWithText(text string, parent qtcore.QObjectLike) *QTextDocu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextDocument", mode)
+	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
 	return rt.View[QTextDocument](h, p)
 }
 
@@ -1876,7 +1876,7 @@ func NewQTextDocumentWith(v QTextDocumentSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextDocument", mode)
+	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
 	base.QTextDocument = rt.View[QTextDocument](h, p)
 	id := h.SetSelf(v, qTextDocumentVTable)
 	mask := rt.Mask(v, qTextDocumentVTable)
@@ -1908,7 +1908,7 @@ func NewQTextDocumentWithTextWith(v QTextDocumentSubclass, text string, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextDocument", mode)
+	h := rt.WrapNew[QTextDocument](p, "QTextDocument", mode)
 	base.QTextDocument = rt.View[QTextDocument](h, p)
 	id := h.SetSelf(v, qTextDocumentVTable)
 	mask := rt.Mask(v, qTextDocumentVTable)

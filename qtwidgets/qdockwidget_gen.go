@@ -70,7 +70,7 @@ func NewQDockWidget(parent QWidgetLike) *QDockWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	return rt.View[QDockWidget](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQDockWidgetWithTitle(title string, parent QWidgetLike) *QDockWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	return rt.View[QDockWidget](h, p)
 }
 
@@ -120,7 +120,7 @@ func NewQDockWidgetWithTitleFull(title string, parent QWidgetLike, flags qtcore.
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	return rt.View[QDockWidget](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQDockWidgetFull(parent QWidgetLike, flags qtcore.WindowFlags) *QDockWidg
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	return rt.View[QDockWidget](h, p)
 }
 
@@ -1353,7 +1353,7 @@ func NewQDockWidgetWith(v QDockWidgetSubclass, parent QWidgetLike) *QDockWidget 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	base.QDockWidget = rt.View[QDockWidget](h, p)
 	id := h.SetSelf(v, qDockWidgetVTable)
 	mask := rt.Mask(v, qDockWidgetVTable)
@@ -1385,7 +1385,7 @@ func NewQDockWidgetWithTitleWith(v QDockWidgetSubclass, title string, parent QWi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDockWidget", mode)
+	h := rt.WrapNew[QDockWidget](p, "QDockWidget", mode)
 	base.QDockWidget = rt.View[QDockWidget](h, p)
 	id := h.SetSelf(v, qDockWidgetVTable)
 	mask := rt.Mask(v, qDockWidgetVTable)

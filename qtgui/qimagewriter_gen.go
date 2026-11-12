@@ -96,7 +96,7 @@ func (this *QImageWriter) Unkeep() {
 func NewQImageWriter() *QImageWriter {
 	rt.CheckThread("NewQImageWriter")
 	p := C.qute_QImageWriter_new()
-	h := rt.WrapClass(p, "QImageWriter", rt.NewOwned)
+	h := rt.WrapNew[QImageWriter](p, "QImageWriter", rt.NewOwned)
 	return rt.View[QImageWriter](h, p)
 }
 
@@ -116,7 +116,7 @@ func NewQImageWriterWithIODevice(device qtcore.QIODeviceLike, format []byte) *QI
 	}
 	p := C.qute_QImageWriter_new_1(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QImageWriter", rt.NewOwned)
+	h := rt.WrapNew[QImageWriter](p, "QImageWriter", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QImageWriter](h, p)
 }
@@ -131,7 +131,7 @@ func NewQImageWriterWithIODevice(device qtcore.QIODeviceLike, format []byte) *QI
 func NewQImageWriterWithFileName(fileName string) *QImageWriter {
 	rt.CheckThread("NewQImageWriterWithFileName")
 	p := C.qute_QImageWriter_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QImageWriter", rt.NewOwned)
+	h := rt.WrapNew[QImageWriter](p, "QImageWriter", rt.NewOwned)
 	return rt.View[QImageWriter](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQImageWriterWithFileName(fileName string) *QImageWriter {
 func NewQImageWriterWithFileNameFull(fileName string, format []byte) *QImageWriter {
 	rt.CheckThread("NewQImageWriterWithFileNameFull")
 	p := C.qute_QImageWriter_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
-	h := rt.WrapClass(p, "QImageWriter", rt.NewOwned)
+	h := rt.WrapNew[QImageWriter](p, "QImageWriter", rt.NewOwned)
 	return rt.View[QImageWriter](h, p)
 }
 

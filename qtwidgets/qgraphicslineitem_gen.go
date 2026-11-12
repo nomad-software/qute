@@ -53,7 +53,7 @@ func NewQGraphicsLineItem(parent QGraphicsItemLike) *QGraphicsLineItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLineItem", mode)
+	h := rt.WrapNew[QGraphicsLineItem](p, "QGraphicsLineItem", mode)
 	return rt.View[QGraphicsLineItem](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQGraphicsLineItemWithLineF(line *qtcore.QLineF, parent QGraphicsItemLike
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLineItem", mode)
+	h := rt.WrapNew[QGraphicsLineItem](p, "QGraphicsLineItem", mode)
 	return rt.View[QGraphicsLineItem](h, p)
 }
 
@@ -1028,7 +1028,7 @@ func NewQGraphicsLineItemWith(v QGraphicsLineItemSubclass, parent QGraphicsItemL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLineItem", mode)
+	h := rt.WrapNew[QGraphicsLineItem](p, "QGraphicsLineItem", mode)
 	base.QGraphicsLineItem = rt.View[QGraphicsLineItem](h, p)
 	id := h.SetSelf(v, qGraphicsLineItemVTable)
 	mask := rt.Mask(v, qGraphicsLineItemVTable)
@@ -1061,7 +1061,7 @@ func NewQGraphicsLineItemWithLineFWith(v QGraphicsLineItemSubclass, line *qtcore
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsLineItem", mode)
+	h := rt.WrapNew[QGraphicsLineItem](p, "QGraphicsLineItem", mode)
 	base.QGraphicsLineItem = rt.View[QGraphicsLineItem](h, p)
 	id := h.SetSelf(v, qGraphicsLineItemVTable)
 	mask := rt.Mask(v, qGraphicsLineItemVTable)

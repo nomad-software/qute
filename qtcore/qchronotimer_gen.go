@@ -67,7 +67,7 @@ func NewQChronoTimer(parent QObjectLike) *QChronoTimer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QChronoTimer", mode)
+	h := rt.WrapNew[QChronoTimer](p, "QChronoTimer", mode)
 	return rt.View[QChronoTimer](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQChronoTimerWithDuration(nsec time.Duration, parent QObjectLike) *QChron
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QChronoTimer", mode)
+	h := rt.WrapNew[QChronoTimer](p, "QChronoTimer", mode)
 	return rt.View[QChronoTimer](h, p)
 }
 
@@ -397,7 +397,7 @@ func NewQChronoTimerWith(v QChronoTimerSubclass, parent QObjectLike) *QChronoTim
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QChronoTimer", mode)
+	h := rt.WrapNew[QChronoTimer](p, "QChronoTimer", mode)
 	base.QChronoTimer = rt.View[QChronoTimer](h, p)
 	id := h.SetSelf(v, qChronoTimerVTable)
 	mask := rt.Mask(v, qChronoTimerVTable)
@@ -429,7 +429,7 @@ func NewQChronoTimerWithDurationWith(v QChronoTimerSubclass, nsec time.Duration,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QChronoTimer", mode)
+	h := rt.WrapNew[QChronoTimer](p, "QChronoTimer", mode)
 	base.QChronoTimer = rt.View[QChronoTimer](h, p)
 	id := h.SetSelf(v, qChronoTimerVTable)
 	mask := rt.Mask(v, qChronoTimerVTable)

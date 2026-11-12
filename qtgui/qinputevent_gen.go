@@ -73,7 +73,7 @@ func NewQInputEventWithType(typeArg qtcore.QEventType, m_dev QInputDeviceLike) *
 	}
 	p := C.qute_QInputEvent_new(C.int64_t(typeArg), m_devPtr)
 	runtime.KeepAlive(m_dev)
-	h := rt.WrapClass(p, "QInputEvent", rt.NewOwned)
+	h := rt.WrapNew[QInputEvent](p, "QInputEvent", rt.NewOwned)
 	rt.KeepArg(h, "QInputEvent.m_dev", m_devH, true)
 	return rt.View[QInputEvent](h, p)
 }
@@ -98,7 +98,7 @@ func NewQInputEventWithTypeFull(typeArg qtcore.QEventType, m_dev QInputDeviceLik
 	}
 	p := C.qute_QInputEvent_new_1(C.int64_t(typeArg), m_devPtr, C.int64_t(modifiers))
 	runtime.KeepAlive(m_dev)
-	h := rt.WrapClass(p, "QInputEvent", rt.NewOwned)
+	h := rt.WrapNew[QInputEvent](p, "QInputEvent", rt.NewOwned)
 	rt.KeepArg(h, "QInputEvent.m_dev", m_devH, true)
 	return rt.View[QInputEvent](h, p)
 }

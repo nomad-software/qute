@@ -68,7 +68,7 @@ func NewQGroupBox(parent QWidgetLike) *QGroupBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGroupBox", mode)
+	h := rt.WrapNew[QGroupBox](p, "QGroupBox", mode)
 	return rt.View[QGroupBox](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQGroupBoxWithTitle(title string, parent QWidgetLike) *QGroupBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGroupBox", mode)
+	h := rt.WrapNew[QGroupBox](p, "QGroupBox", mode)
 	return rt.View[QGroupBox](h, p)
 }
 
@@ -1144,7 +1144,7 @@ func NewQGroupBoxWith(v QGroupBoxSubclass, parent QWidgetLike) *QGroupBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGroupBox", mode)
+	h := rt.WrapNew[QGroupBox](p, "QGroupBox", mode)
 	base.QGroupBox = rt.View[QGroupBox](h, p)
 	id := h.SetSelf(v, qGroupBoxVTable)
 	mask := rt.Mask(v, qGroupBoxVTable)
@@ -1176,7 +1176,7 @@ func NewQGroupBoxWithTitleWith(v QGroupBoxSubclass, title string, parent QWidget
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGroupBox", mode)
+	h := rt.WrapNew[QGroupBox](p, "QGroupBox", mode)
 	base.QGroupBox = rt.View[QGroupBox](h, p)
 	id := h.SetSelf(v, qGroupBoxVTable)
 	mask := rt.Mask(v, qGroupBoxVTable)

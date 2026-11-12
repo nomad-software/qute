@@ -94,7 +94,7 @@ func (this *QTextBlock) Unkeep() {
 func NewQTextBlock() *QTextBlock {
 	rt.CheckThread("NewQTextBlock")
 	p := C.qute_QTextBlock_new()
-	h := rt.WrapClass(p, "QTextBlock", rt.NewOwned)
+	h := rt.WrapNew[QTextBlock](p, "QTextBlock", rt.NewOwned)
 	return rt.View[QTextBlock](h, p)
 }
 

@@ -72,7 +72,7 @@ func NewQGraphicsColorizeEffect(parent qtcore.QObjectLike) *QGraphicsColorizeEff
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsColorizeEffect", mode)
+	h := rt.WrapNew[QGraphicsColorizeEffect](p, "QGraphicsColorizeEffect", mode)
 	return rt.View[QGraphicsColorizeEffect](h, p)
 }
 
@@ -460,7 +460,7 @@ func NewQGraphicsColorizeEffectWith(v QGraphicsColorizeEffectSubclass, parent qt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsColorizeEffect", mode)
+	h := rt.WrapNew[QGraphicsColorizeEffect](p, "QGraphicsColorizeEffect", mode)
 	base.QGraphicsColorizeEffect = rt.View[QGraphicsColorizeEffect](h, p)
 	id := h.SetSelf(v, qGraphicsColorizeEffectVTable)
 	mask := rt.Mask(v, qGraphicsColorizeEffectVTable)

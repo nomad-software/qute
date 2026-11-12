@@ -86,7 +86,7 @@ func (this *QCameraFormat) Unkeep() {
 func NewQCameraFormat() *QCameraFormat {
 	rt.CheckThread("NewQCameraFormat")
 	p := C.qute_QCameraFormat_new()
-	h := rt.WrapClass(p, "QCameraFormat", rt.NewOwned)
+	h := rt.WrapNew[QCameraFormat](p, "QCameraFormat", rt.NewOwned)
 	return rt.View[QCameraFormat](h, p)
 }
 

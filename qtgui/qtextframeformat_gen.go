@@ -42,7 +42,7 @@ func QTextFrameFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextFrame
 func NewQTextFrameFormat() *QTextFrameFormat {
 	rt.CheckThread("NewQTextFrameFormat")
 	p := C.qute_QTextFrameFormat_new()
-	h := rt.WrapClass(p, "QTextFrameFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextFrameFormat](p, "QTextFrameFormat", rt.NewOwned)
 	return rt.View[QTextFrameFormat](h, p)
 }
 

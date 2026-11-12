@@ -92,7 +92,7 @@ func (this *QWebEngineRegisterProtocolHandlerRequest) Unkeep() {
 func NewQWebEngineRegisterProtocolHandlerRequest() *QWebEngineRegisterProtocolHandlerRequest {
 	rt.CheckThread("NewQWebEngineRegisterProtocolHandlerRequest")
 	p := C.qute_QWebEngineRegisterProtocolHandlerRequest_new()
-	h := rt.WrapClass(p, "QWebEngineRegisterProtocolHandlerRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineRegisterProtocolHandlerRequest](p, "QWebEngineRegisterProtocolHandlerRequest", rt.NewOwned)
 	return rt.View[QWebEngineRegisterProtocolHandlerRequest](h, p)
 }
 

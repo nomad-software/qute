@@ -96,7 +96,7 @@ func (this *QStandardItem) Unkeep() {
 func NewQStandardItem() *QStandardItem {
 	rt.CheckThread("NewQStandardItem")
 	p := C.qute_QStandardItem_new()
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -108,7 +108,7 @@ func NewQStandardItem() *QStandardItem {
 func NewQStandardItemWithText(text string) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithText")
 	p := C.qute_QStandardItem_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithIcon")
 	p := C.qute_QStandardItem_new_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIcon"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQStandardItemWithIcon(icon *QIcon, text string) *QStandardItem {
 func NewQStandardItemWithRows(rows int) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithRows")
 	p := C.qute_QStandardItem_new_3(C.int(rows))
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -149,7 +149,7 @@ func NewQStandardItemWithRows(rows int) *QStandardItem {
 func NewQStandardItemWithRowsFull(rows int, columns int) *QStandardItem {
 	rt.CheckThread("NewQStandardItemWithRowsFull")
 	p := C.qute_QStandardItem_new_4(C.int(rows), C.int(columns))
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	return rt.View[QStandardItem](h, p)
 }
 
@@ -1477,7 +1477,7 @@ func NewQStandardItemWith(v QStandardItemSubclass) *QStandardItem {
 		panic("NewQStandardItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim()
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1500,7 +1500,7 @@ func NewQStandardItemWithTextWith(v QStandardItemSubclass, text string) *QStanda
 		panic("NewQStandardItemWithTextWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1524,7 +1524,7 @@ func NewQStandardItemWithIconWith(v QStandardItemSubclass, icon *QIcon, text str
 	}
 	p := C.qute_QStandardItem_new_shim_2(rt.UseArg(unsafe.Pointer(icon), "NewQStandardItemWithIconWith"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	runtime.KeepAlive(icon)
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)
@@ -1547,7 +1547,7 @@ func NewQStandardItemWithRowsWith(v QStandardItemSubclass, rows int) *QStandardI
 		panic("NewQStandardItemWithRowsWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QStandardItem_new_shim_3(C.int(rows))
-	h := rt.WrapClass(p, "QStandardItem", rt.NewOwned)
+	h := rt.WrapNew[QStandardItem](p, "QStandardItem", rt.NewOwned)
 	base.QStandardItem = rt.View[QStandardItem](h, p)
 	id := h.SetSelf(v, qStandardItemVTable)
 	mask := rt.Mask(v, qStandardItemVTable)

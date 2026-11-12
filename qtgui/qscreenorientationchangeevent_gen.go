@@ -75,7 +75,7 @@ func NewQScreenOrientationChangeEventWithScreen(screen QScreenLike, orientation 
 	}
 	p := C.qute_QScreenOrientationChangeEvent_new(screenPtr, C.int64_t(orientation))
 	runtime.KeepAlive(screen)
-	h := rt.WrapClass(p, "QScreenOrientationChangeEvent", rt.NewOwned)
+	h := rt.WrapNew[QScreenOrientationChangeEvent](p, "QScreenOrientationChangeEvent", rt.NewOwned)
 	rt.KeepArg(h, "QScreenOrientationChangeEvent.screen", screenH, true)
 	return rt.View[QScreenOrientationChangeEvent](h, p)
 }

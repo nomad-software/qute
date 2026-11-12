@@ -42,7 +42,7 @@ func QRadialGradientFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QRadialGrad
 func NewQRadialGradient() *QRadialGradient {
 	rt.CheckThread("NewQRadialGradient")
 	p := C.qute_QRadialGradient_new()
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQRadialGradient() *QRadialGradient {
 func NewQRadialGradientWithFocal(center qtcore.QPointF, radius float64, focalPoint qtcore.QPointF) *QRadialGradient {
 	rt.CheckThread("NewQRadialGradientWithFocal")
 	p := C.qute_QRadialGradient_new_1(cQPointF(center), C.double(radius), cQPointF(focalPoint))
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 
@@ -66,7 +66,7 @@ func NewQRadialGradientWithFocal(center qtcore.QPointF, radius float64, focalPoi
 func NewQRadialGradientWithCx(cx float64, cy float64, radius float64, fx float64, fy float64) *QRadialGradient {
 	rt.CheckThread("NewQRadialGradientWithCx")
 	p := C.qute_QRadialGradient_new_2(C.double(cx), C.double(cy), C.double(radius), C.double(fx), C.double(fy))
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 
@@ -78,7 +78,7 @@ func NewQRadialGradientWithCx(cx float64, cy float64, radius float64, fx float64
 func NewQRadialGradientAt(center qtcore.QPointF, radius float64) *QRadialGradient {
 	rt.CheckThread("NewQRadialGradientAt")
 	p := C.qute_QRadialGradient_new_3(cQPointF(center), C.double(radius))
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 
@@ -90,7 +90,7 @@ func NewQRadialGradientAt(center qtcore.QPointF, radius float64) *QRadialGradien
 func NewQRadialGradientExtended(center qtcore.QPointF, centerRadius float64, focalPoint qtcore.QPointF, focalRadius float64) *QRadialGradient {
 	rt.CheckThread("NewQRadialGradientExtended")
 	p := C.qute_QRadialGradient_new_4(cQPointF(center), C.double(centerRadius), cQPointF(focalPoint), C.double(focalRadius))
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 
@@ -102,7 +102,7 @@ func NewQRadialGradientExtended(center qtcore.QPointF, centerRadius float64, foc
 func NewQRadialGradientWithCxFocalRadius(cx float64, cy float64, centerRadius float64, fx float64, fy float64, focalRadius float64) *QRadialGradient {
 	rt.CheckThread("NewQRadialGradientWithCxFocalRadius")
 	p := C.qute_QRadialGradient_new_5(C.double(cx), C.double(cy), C.double(centerRadius), C.double(fx), C.double(fy), C.double(focalRadius))
-	h := rt.WrapClass(p, "QRadialGradient", rt.NewOwned)
+	h := rt.WrapNew[QRadialGradient](p, "QRadialGradient", rt.NewOwned)
 	return rt.View[QRadialGradient](h, p)
 }
 

@@ -92,7 +92,7 @@ func (this *QWebEngineFileSystemAccessRequest) Unkeep() {
 func NewQWebEngineFileSystemAccessRequest() *QWebEngineFileSystemAccessRequest {
 	rt.CheckThread("NewQWebEngineFileSystemAccessRequest")
 	p := C.qute_QWebEngineFileSystemAccessRequest_new()
-	h := rt.WrapClass(p, "QWebEngineFileSystemAccessRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineFileSystemAccessRequest](p, "QWebEngineFileSystemAccessRequest", rt.NewOwned)
 	return rt.View[QWebEngineFileSystemAccessRequest](h, p)
 }
 

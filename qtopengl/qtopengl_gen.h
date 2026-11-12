@@ -108,6 +108,7 @@ void * qute_QOpenGLFramebufferObject_toImage(void *self);
 void * qute_QOpenGLFramebufferObject_toImage_1(void *self, bool a0, int a1);
 int64_t qute_QOpenGLFramebufferObject_attachment(void *self);
 void qute_QOpenGLFramebufferObject_setAttachment(void *self, int64_t a0);
+unsigned int qute_QOpenGLFramebufferObject_handle(void *self);
 void qute_QOpenGLFramebufferObject_addColorAttachment_1(void *self, qute_size a0, unsigned int a1);
 void * qute_QOpenGLFramebufferObject_toImage_2(void *self, bool a0);
 bool qute_QOpenGLFramebufferObject_bindDefault(void);

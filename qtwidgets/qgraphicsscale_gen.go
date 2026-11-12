@@ -68,7 +68,7 @@ func NewQGraphicsScale(parent qtcore.QObjectLike) *QGraphicsScale {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScale", mode)
+	h := rt.WrapNew[QGraphicsScale](p, "QGraphicsScale", mode)
 	return rt.View[QGraphicsScale](h, p)
 }
 
@@ -494,7 +494,7 @@ func NewQGraphicsScaleWith(v QGraphicsScaleSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsScale", mode)
+	h := rt.WrapNew[QGraphicsScale](p, "QGraphicsScale", mode)
 	base.QGraphicsScale = rt.View[QGraphicsScale](h, p)
 	id := h.SetSelf(v, qGraphicsScaleVTable)
 	mask := rt.Mask(v, qGraphicsScaleVTable)

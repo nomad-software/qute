@@ -66,7 +66,7 @@ func NewQTimeLineWithDuration(duration int, parent QObjectLike) *QTimeLine {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeLine", mode)
+	h := rt.WrapNew[QTimeLine](p, "QTimeLine", mode)
 	return rt.View[QTimeLine](h, p)
 }
 
@@ -623,7 +623,7 @@ func NewQTimeLineWith(v QTimeLineSubclass, duration int, parent QObjectLike) *QT
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTimeLine", mode)
+	h := rt.WrapNew[QTimeLine](p, "QTimeLine", mode)
 	base.QTimeLine = rt.View[QTimeLine](h, p)
 	id := h.SetSelf(v, qTimeLineVTable)
 	mask := rt.Mask(v, qTimeLineVTable)

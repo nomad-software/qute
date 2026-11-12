@@ -57,7 +57,7 @@ func QItemSelectionModelCast(o QObjectLike) *QItemSelectionModel {
 func NewQItemSelectionModel() *QItemSelectionModel {
 	rt.CheckThread("NewQItemSelectionModel")
 	p := C.qute_QItemSelectionModel_new()
-	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionModel](p, "QItemSelectionModel", rt.NewOwned)
 	return rt.View[QItemSelectionModel](h, p)
 }
 
@@ -86,7 +86,7 @@ func NewQItemSelectionModelWithAbstractItemModel(model QAbstractItemModelLike, p
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QItemSelectionModel", mode)
+	h := rt.WrapNew[QItemSelectionModel](p, "QItemSelectionModel", mode)
 	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QItemSelectionModel](h, p)
 }
@@ -109,7 +109,7 @@ func NewQItemSelectionModelFull(model QAbstractItemModelLike) *QItemSelectionMod
 	}
 	p := C.qute_QItemSelectionModel_new_2(modelPtr)
 	runtime.KeepAlive(model)
-	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionModel](p, "QItemSelectionModel", rt.NewOwned)
 	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QItemSelectionModel](h, p)
 }
@@ -887,7 +887,7 @@ func NewQItemSelectionModelWith(v QItemSelectionModelSubclass) *QItemSelectionMo
 		panic("NewQItemSelectionModelWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QItemSelectionModel_new_shim()
-	h := rt.WrapClass(p, "QItemSelectionModel", rt.NewOwned)
+	h := rt.WrapNew[QItemSelectionModel](p, "QItemSelectionModel", rt.NewOwned)
 	base.QItemSelectionModel = rt.View[QItemSelectionModel](h, p)
 	id := h.SetSelf(v, qItemSelectionModelVTable)
 	mask := rt.Mask(v, qItemSelectionModelVTable)
@@ -925,7 +925,7 @@ func NewQItemSelectionModelWithAbstractItemModelWith(v QItemSelectionModelSubcla
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QItemSelectionModel", mode)
+	h := rt.WrapNew[QItemSelectionModel](p, "QItemSelectionModel", mode)
 	rt.KeepArg(h, "model", modelH, false)
 	base.QItemSelectionModel = rt.View[QItemSelectionModel](h, p)
 	id := h.SetSelf(v, qItemSelectionModelVTable)

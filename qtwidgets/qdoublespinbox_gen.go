@@ -68,7 +68,7 @@ func NewQDoubleSpinBox(parent QWidgetLike) *QDoubleSpinBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleSpinBox", mode)
+	h := rt.WrapNew[QDoubleSpinBox](p, "QDoubleSpinBox", mode)
 	return rt.View[QDoubleSpinBox](h, p)
 }
 
@@ -1399,7 +1399,7 @@ func NewQDoubleSpinBoxWith(v QDoubleSpinBoxSubclass, parent QWidgetLike) *QDoubl
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDoubleSpinBox", mode)
+	h := rt.WrapNew[QDoubleSpinBox](p, "QDoubleSpinBox", mode)
 	base.QDoubleSpinBox = rt.View[QDoubleSpinBox](h, p)
 	id := h.SetSelf(v, qDoubleSpinBoxVTable)
 	mask := rt.Mask(v, qDoubleSpinBoxVTable)

@@ -66,7 +66,7 @@ func NewQBuffer(parent QObjectLike) *QBuffer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QBuffer", mode)
+	h := rt.WrapNew[QBuffer](p, "QBuffer", mode)
 	return rt.View[QBuffer](h, p)
 }
 
@@ -491,7 +491,7 @@ func NewQBufferWith(v QBufferSubclass, parent QObjectLike) *QBuffer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QBuffer", mode)
+	h := rt.WrapNew[QBuffer](p, "QBuffer", mode)
 	base.QBuffer = rt.View[QBuffer](h, p)
 	id := h.SetSelf(v, qBufferVTable)
 	mask := rt.Mask(v, qBufferVTable)

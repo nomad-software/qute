@@ -67,7 +67,7 @@ func NewQHBoxLayout(parent QWidgetLike) *QHBoxLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QHBoxLayout", mode)
+	h := rt.WrapNew[QHBoxLayout](p, "QHBoxLayout", mode)
 	return rt.View[QHBoxLayout](h, p)
 }
 
@@ -689,7 +689,7 @@ func NewQHBoxLayoutWith(v QHBoxLayoutSubclass, parent QWidgetLike) *QHBoxLayout 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QHBoxLayout", mode)
+	h := rt.WrapNew[QHBoxLayout](p, "QHBoxLayout", mode)
 	base.QHBoxLayout = rt.View[QHBoxLayout](h, p)
 	id := h.SetSelf(v, qHBoxLayoutVTable)
 	mask := rt.Mask(v, qHBoxLayoutVTable)

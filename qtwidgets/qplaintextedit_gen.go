@@ -68,7 +68,7 @@ func NewQPlainTextEdit(parent QWidgetLike) *QPlainTextEdit {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPlainTextEdit", mode)
+	h := rt.WrapNew[QPlainTextEdit](p, "QPlainTextEdit", mode)
 	return rt.View[QPlainTextEdit](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQPlainTextEditWithText(text string, parent QWidgetLike) *QPlainTextEdit 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPlainTextEdit", mode)
+	h := rt.WrapNew[QPlainTextEdit](p, "QPlainTextEdit", mode)
 	return rt.View[QPlainTextEdit](h, p)
 }
 
@@ -2342,7 +2342,7 @@ func NewQPlainTextEditWith(v QPlainTextEditSubclass, parent QWidgetLike) *QPlain
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPlainTextEdit", mode)
+	h := rt.WrapNew[QPlainTextEdit](p, "QPlainTextEdit", mode)
 	base.QPlainTextEdit = rt.View[QPlainTextEdit](h, p)
 	id := h.SetSelf(v, qPlainTextEditVTable)
 	mask := rt.Mask(v, qPlainTextEditVTable)
@@ -2374,7 +2374,7 @@ func NewQPlainTextEditWithTextWith(v QPlainTextEditSubclass, text string, parent
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPlainTextEdit", mode)
+	h := rt.WrapNew[QPlainTextEdit](p, "QPlainTextEdit", mode)
 	base.QPlainTextEdit = rt.View[QPlainTextEdit](h, p)
 	id := h.SetSelf(v, qPlainTextEditVTable)
 	mask := rt.Mask(v, qPlainTextEditVTable)

@@ -73,7 +73,7 @@ func NewQDropEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions, dat
 	}
 	p := C.qute_QDropEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
 	runtime.KeepAlive(data)
-	h := rt.WrapClass(p, "QDropEvent", rt.NewOwned)
+	h := rt.WrapNew[QDropEvent](p, "QDropEvent", rt.NewOwned)
 	rt.KeepArg(h, "QDropEvent.data", dataH, true)
 	return rt.View[QDropEvent](h, p)
 }
@@ -98,7 +98,7 @@ func NewQDropEventWithPointFFull(pos qtcore.QPointF, actions qtcore.DropActions,
 	}
 	p := C.qute_QDropEvent_new_1(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(typeArg))
 	runtime.KeepAlive(data)
-	h := rt.WrapClass(p, "QDropEvent", rt.NewOwned)
+	h := rt.WrapNew[QDropEvent](p, "QDropEvent", rt.NewOwned)
 	rt.KeepArg(h, "QDropEvent.data", dataH, true)
 	return rt.View[QDropEvent](h, p)
 }

@@ -85,7 +85,7 @@ func (this *QLineF) Unkeep() {
 func NewQLineF() *QLineF {
 	rt.CheckThread("NewQLineF")
 	p := C.qute_QLineF_new()
-	h := rt.WrapClass(p, "QLineF", rt.NewOwned)
+	h := rt.WrapNew[QLineF](p, "QLineF", rt.NewOwned)
 	return rt.View[QLineF](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQLineF() *QLineF {
 func NewQLineFWithPointF(pt1 QPointF, pt2 QPointF) *QLineF {
 	rt.CheckThread("NewQLineFWithPointF")
 	p := C.qute_QLineF_new_1(cQPointF(pt1), cQPointF(pt2))
-	h := rt.WrapClass(p, "QLineF", rt.NewOwned)
+	h := rt.WrapNew[QLineF](p, "QLineF", rt.NewOwned)
 	return rt.View[QLineF](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQLineFWithLine(line *QLine) *QLineF {
 	rt.CheckThread("NewQLineFWithLine")
 	p := C.qute_QLineF_new_2(rt.UseArg(unsafe.Pointer(line), "NewQLineFWithLine"))
 	runtime.KeepAlive(line)
-	h := rt.WrapClass(p, "QLineF", rt.NewOwned)
+	h := rt.WrapNew[QLineF](p, "QLineF", rt.NewOwned)
 	return rt.View[QLineF](h, p)
 }
 

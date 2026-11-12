@@ -68,7 +68,7 @@ func NewQSvgRenderer(parent qtcore.QObjectLike) *QSvgRenderer {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	return rt.View[QSvgRenderer](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQSvgRendererWithFilename(filename string, parent qtcore.QObjectLike) *QS
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	return rt.View[QSvgRenderer](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQSvgRendererWithBytes(contents []byte, parent qtcore.QObjectLike) *QSvgR
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	return rt.View[QSvgRenderer](h, p)
 }
 
@@ -142,7 +142,7 @@ func NewQSvgRendererWithXmlStreamReader(contents qtcore.QXmlStreamReaderLike, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	return rt.View[QSvgRenderer](h, p)
 }
 
@@ -714,7 +714,7 @@ func NewQSvgRendererWith(v QSvgRendererSubclass, parent qtcore.QObjectLike) *QSv
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
 	id := h.SetSelf(v, qSvgRendererVTable)
 	mask := rt.Mask(v, qSvgRendererVTable)
@@ -746,7 +746,7 @@ func NewQSvgRendererWithFilenameWith(v QSvgRendererSubclass, filename string, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
 	id := h.SetSelf(v, qSvgRendererVTable)
 	mask := rt.Mask(v, qSvgRendererVTable)
@@ -778,7 +778,7 @@ func NewQSvgRendererWithBytesWith(v QSvgRendererSubclass, contents []byte, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
 	id := h.SetSelf(v, qSvgRendererVTable)
 	mask := rt.Mask(v, qSvgRendererVTable)
@@ -815,7 +815,7 @@ func NewQSvgRendererWithXmlStreamReaderWith(v QSvgRendererSubclass, contents qtc
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSvgRenderer", mode)
+	h := rt.WrapNew[QSvgRenderer](p, "QSvgRenderer", mode)
 	base.QSvgRenderer = rt.View[QSvgRenderer](h, p)
 	id := h.SetSelf(v, qSvgRendererVTable)
 	mask := rt.Mask(v, qSvgRendererVTable)

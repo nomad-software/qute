@@ -86,7 +86,7 @@ func (this *QGradient) Unkeep() {
 func NewQGradient() *QGradient {
 	rt.CheckThread("NewQGradient")
 	p := C.qute_QGradient_new()
-	h := rt.WrapClass(p, "QGradient", rt.NewOwned)
+	h := rt.WrapNew[QGradient](p, "QGradient", rt.NewOwned)
 	return rt.View[QGradient](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQGradient() *QGradient {
 func NewQGradientWithPreset(preset QGradientPreset) *QGradient {
 	rt.CheckThread("NewQGradientWithPreset")
 	p := C.qute_QGradient_new_1(C.int64_t(preset))
-	h := rt.WrapClass(p, "QGradient", rt.NewOwned)
+	h := rt.WrapNew[QGradient](p, "QGradient", rt.NewOwned)
 	return rt.View[QGradient](h, p)
 }
 

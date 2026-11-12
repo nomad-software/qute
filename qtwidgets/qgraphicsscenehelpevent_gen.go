@@ -67,7 +67,7 @@ func QGraphicsSceneHelpEventCast(e qtcore.QEventLike) *QGraphicsSceneHelpEvent {
 func NewQGraphicsSceneHelpEvent() *QGraphicsSceneHelpEvent {
 	rt.CheckThread("NewQGraphicsSceneHelpEvent")
 	p := C.qute_QGraphicsSceneHelpEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneHelpEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneHelpEvent](p, "QGraphicsSceneHelpEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneHelpEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneHelpEvent() *QGraphicsSceneHelpEvent {
 func NewQGraphicsSceneHelpEventFull(typeArg qtcore.QEventType) *QGraphicsSceneHelpEvent {
 	rt.CheckThread("NewQGraphicsSceneHelpEventFull")
 	p := C.qute_QGraphicsSceneHelpEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneHelpEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneHelpEvent](p, "QGraphicsSceneHelpEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneHelpEvent](h, p)
 }
 

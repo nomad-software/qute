@@ -86,7 +86,7 @@ func (this *QAudioFormat) Unkeep() {
 func NewQAudioFormat() *QAudioFormat {
 	rt.CheckThread("NewQAudioFormat")
 	p := C.qute_QAudioFormat_new()
-	h := rt.WrapClass(p, "QAudioFormat", rt.NewOwned)
+	h := rt.WrapNew[QAudioFormat](p, "QAudioFormat", rt.NewOwned)
 	return rt.View[QAudioFormat](h, p)
 }
 

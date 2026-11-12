@@ -96,7 +96,7 @@ func (this *QLockFile) Unkeep() {
 func NewQLockFileWithFileName(fileName string) *QLockFile {
 	rt.CheckThread("NewQLockFileWithFileName")
 	p := C.qute_QLockFile_new((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QLockFile", rt.NewOwned)
+	h := rt.WrapNew[QLockFile](p, "QLockFile", rt.NewOwned)
 	return rt.View[QLockFile](h, p)
 }
 

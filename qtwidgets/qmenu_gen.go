@@ -68,7 +68,7 @@ func NewQMenu(parent QWidgetLike) *QMenu {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenu", mode)
+	h := rt.WrapNew[QMenu](p, "QMenu", mode)
 	return rt.View[QMenu](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQMenuWithTitle(title string, parent QWidgetLike) *QMenu {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenu", mode)
+	h := rt.WrapNew[QMenu](p, "QMenu", mode)
 	return rt.View[QMenu](h, p)
 }
 
@@ -1751,7 +1751,7 @@ func NewQMenuWith(v QMenuSubclass, parent QWidgetLike) *QMenu {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenu", mode)
+	h := rt.WrapNew[QMenu](p, "QMenu", mode)
 	base.QMenu = rt.View[QMenu](h, p)
 	id := h.SetSelf(v, qMenuVTable)
 	mask := rt.Mask(v, qMenuVTable)
@@ -1783,7 +1783,7 @@ func NewQMenuWithTitleWith(v QMenuSubclass, title string, parent QWidgetLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMenu", mode)
+	h := rt.WrapNew[QMenu](p, "QMenu", mode)
 	base.QMenu = rt.View[QMenu](h, p)
 	id := h.SetSelf(v, qMenuVTable)
 	mask := rt.Mask(v, qMenuVTable)

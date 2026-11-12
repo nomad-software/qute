@@ -67,7 +67,7 @@ func NewQDataWidgetMapper(parent qtcore.QObjectLike) *QDataWidgetMapper {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDataWidgetMapper", mode)
+	h := rt.WrapNew[QDataWidgetMapper](p, "QDataWidgetMapper", mode)
 	return rt.View[QDataWidgetMapper](h, p)
 }
 
@@ -632,7 +632,7 @@ func NewQDataWidgetMapperWith(v QDataWidgetMapperSubclass, parent qtcore.QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDataWidgetMapper", mode)
+	h := rt.WrapNew[QDataWidgetMapper](p, "QDataWidgetMapper", mode)
 	base.QDataWidgetMapper = rt.View[QDataWidgetMapper](h, p)
 	id := h.SetSelf(v, qDataWidgetMapperVTable)
 	mask := rt.Mask(v, qDataWidgetMapperVTable)

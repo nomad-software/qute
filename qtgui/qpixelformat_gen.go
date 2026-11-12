@@ -86,7 +86,7 @@ func (this *QPixelFormat) Unkeep() {
 func NewQPixelFormat() *QPixelFormat {
 	rt.CheckThread("NewQPixelFormat")
 	p := C.qute_QPixelFormat_new()
-	h := rt.WrapClass(p, "QPixelFormat", rt.NewOwned)
+	h := rt.WrapNew[QPixelFormat](p, "QPixelFormat", rt.NewOwned)
 	return rt.View[QPixelFormat](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQPixelFormat() *QPixelFormat {
 func NewQPixelFormatWithColorModel(colorModel QPixelFormatColorModel, firstSize uint8, secondSize uint8, thirdSize uint8, fourthSize uint8, fifthSize uint8, alphaSize uint8, alphaUsage QPixelFormatAlphaUsage, alphaPosition QPixelFormatAlphaPosition, premultiplied QPixelFormatAlphaPremultiplied, typeInterpretation QPixelFormatTypeInterpretation) *QPixelFormat {
 	rt.CheckThread("NewQPixelFormatWithColorModel")
 	p := C.qute_QPixelFormat_new_1(C.int64_t(colorModel), C.uchar(firstSize), C.uchar(secondSize), C.uchar(thirdSize), C.uchar(fourthSize), C.uchar(fifthSize), C.uchar(alphaSize), C.int64_t(alphaUsage), C.int64_t(alphaPosition), C.int64_t(premultiplied), C.int64_t(typeInterpretation))
-	h := rt.WrapClass(p, "QPixelFormat", rt.NewOwned)
+	h := rt.WrapNew[QPixelFormat](p, "QPixelFormat", rt.NewOwned)
 	return rt.View[QPixelFormat](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQPixelFormatWithColorModel(colorModel QPixelFormatColorModel, firstSize 
 func NewQPixelFormatWithColorModelFull(colorModel QPixelFormatColorModel, firstSize uint8, secondSize uint8, thirdSize uint8, fourthSize uint8, fifthSize uint8, alphaSize uint8, alphaUsage QPixelFormatAlphaUsage, alphaPosition QPixelFormatAlphaPosition, premultiplied QPixelFormatAlphaPremultiplied, typeInterpretation QPixelFormatTypeInterpretation, byteOrder QPixelFormatByteOrder, subEnum uint8) *QPixelFormat {
 	rt.CheckThread("NewQPixelFormatWithColorModelFull")
 	p := C.qute_QPixelFormat_new_2(C.int64_t(colorModel), C.uchar(firstSize), C.uchar(secondSize), C.uchar(thirdSize), C.uchar(fourthSize), C.uchar(fifthSize), C.uchar(alphaSize), C.int64_t(alphaUsage), C.int64_t(alphaPosition), C.int64_t(premultiplied), C.int64_t(typeInterpretation), C.int64_t(byteOrder), C.uchar(subEnum))
-	h := rt.WrapClass(p, "QPixelFormat", rt.NewOwned)
+	h := rt.WrapNew[QPixelFormat](p, "QPixelFormat", rt.NewOwned)
 	return rt.View[QPixelFormat](h, p)
 }
 

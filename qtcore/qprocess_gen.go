@@ -66,7 +66,7 @@ func NewQProcess(parent QObjectLike) *QProcess {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProcess", mode)
+	h := rt.WrapNew[QProcess](p, "QProcess", mode)
 	return rt.View[QProcess](h, p)
 }
 
@@ -1287,7 +1287,7 @@ func NewQProcessWith(v QProcessSubclass, parent QObjectLike) *QProcess {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QProcess", mode)
+	h := rt.WrapNew[QProcess](p, "QProcess", mode)
 	base.QProcess = rt.View[QProcess](h, p)
 	id := h.SetSelf(v, qProcessVTable)
 	mask := rt.Mask(v, qProcessVTable)

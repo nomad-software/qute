@@ -86,7 +86,7 @@ func (this *QTextOption) Unkeep() {
 func NewQTextOption() *QTextOption {
 	rt.CheckThread("NewQTextOption")
 	p := C.qute_QTextOption_new()
-	h := rt.WrapClass(p, "QTextOption", rt.NewOwned)
+	h := rt.WrapNew[QTextOption](p, "QTextOption", rt.NewOwned)
 	return rt.View[QTextOption](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQTextOption() *QTextOption {
 func NewQTextOptionWithAlignmentFlag(alignment qtcore.Alignment) *QTextOption {
 	rt.CheckThread("NewQTextOptionWithAlignmentFlag")
 	p := C.qute_QTextOption_new_1(C.int64_t(alignment))
-	h := rt.WrapClass(p, "QTextOption", rt.NewOwned)
+	h := rt.WrapNew[QTextOption](p, "QTextOption", rt.NewOwned)
 	return rt.View[QTextOption](h, p)
 }
 

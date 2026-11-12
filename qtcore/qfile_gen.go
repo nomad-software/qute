@@ -66,7 +66,7 @@ func NewQFile(parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFile", mode)
+	h := rt.WrapNew[QFile](p, "QFile", mode)
 	return rt.View[QFile](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQFileWithName(name string, parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFile", mode)
+	h := rt.WrapNew[QFile](p, "QFile", mode)
 	return rt.View[QFile](h, p)
 }
 
@@ -874,7 +874,7 @@ func NewQFileWith(v QFileSubclass, parent QObjectLike) *QFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFile", mode)
+	h := rt.WrapNew[QFile](p, "QFile", mode)
 	base.QFile = rt.View[QFile](h, p)
 	id := h.SetSelf(v, qFileVTable)
 	mask := rt.Mask(v, qFileVTable)
@@ -906,7 +906,7 @@ func NewQFileWithNameWith(v QFileSubclass, name string, parent QObjectLike) *QFi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFile", mode)
+	h := rt.WrapNew[QFile](p, "QFile", mode)
 	base.QFile = rt.View[QFile](h, p)
 	id := h.SetSelf(v, qFileVTable)
 	mask := rt.Mask(v, qFileVTable)

@@ -68,7 +68,7 @@ func NewQComboBox(parent QWidgetLike) *QComboBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QComboBox", mode)
+	h := rt.WrapNew[QComboBox](p, "QComboBox", mode)
 	return rt.View[QComboBox](h, p)
 }
 
@@ -2173,7 +2173,7 @@ func NewQComboBoxWith(v QComboBoxSubclass, parent QWidgetLike) *QComboBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QComboBox", mode)
+	h := rt.WrapNew[QComboBox](p, "QComboBox", mode)
 	base.QComboBox = rt.View[QComboBox](h, p)
 	id := h.SetSelf(v, qComboBoxVTable)
 	mask := rt.Mask(v, qComboBoxVTable)

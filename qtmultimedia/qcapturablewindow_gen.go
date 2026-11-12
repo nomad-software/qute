@@ -87,7 +87,7 @@ func (this *QCapturableWindow) Unkeep() {
 func NewQCapturableWindow() *QCapturableWindow {
 	rt.CheckThread("NewQCapturableWindow")
 	p := C.qute_QCapturableWindow_new()
-	h := rt.WrapClass(p, "QCapturableWindow", rt.NewOwned)
+	h := rt.WrapNew[QCapturableWindow](p, "QCapturableWindow", rt.NewOwned)
 	return rt.View[QCapturableWindow](h, p)
 }
 
@@ -106,7 +106,7 @@ func NewQCapturableWindowWithWindow(window qtgui.QWindowLike) *QCapturableWindow
 	}
 	p := C.qute_QCapturableWindow_new_1(windowPtr)
 	runtime.KeepAlive(window)
-	h := rt.WrapClass(p, "QCapturableWindow", rt.NewOwned)
+	h := rt.WrapNew[QCapturableWindow](p, "QCapturableWindow", rt.NewOwned)
 	return rt.View[QCapturableWindow](h, p)
 }
 

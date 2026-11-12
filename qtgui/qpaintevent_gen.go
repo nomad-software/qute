@@ -62,7 +62,7 @@ func NewQPaintEventWithRegion(paintRegion *QRegion) *QPaintEvent {
 	rt.CheckThread("NewQPaintEventWithRegion")
 	p := C.qute_QPaintEvent_new(rt.UseArg(unsafe.Pointer(paintRegion), "NewQPaintEventWithRegion"))
 	runtime.KeepAlive(paintRegion)
-	h := rt.WrapClass(p, "QPaintEvent", rt.NewOwned)
+	h := rt.WrapNew[QPaintEvent](p, "QPaintEvent", rt.NewOwned)
 	return rt.View[QPaintEvent](h, p)
 }
 
@@ -74,7 +74,7 @@ func NewQPaintEventWithRegion(paintRegion *QRegion) *QPaintEvent {
 func NewQPaintEventWithRect(paintRect qtcore.QRect) *QPaintEvent {
 	rt.CheckThread("NewQPaintEventWithRect")
 	p := C.qute_QPaintEvent_new_1(cQRect(paintRect))
-	h := rt.WrapClass(p, "QPaintEvent", rt.NewOwned)
+	h := rt.WrapNew[QPaintEvent](p, "QPaintEvent", rt.NewOwned)
 	return rt.View[QPaintEvent](h, p)
 }
 

@@ -59,7 +59,7 @@ func QProxyStyleCast(o qtcore.QObjectLike) *QProxyStyle {
 func NewQProxyStyle() *QProxyStyle {
 	rt.CheckThread("NewQProxyStyle")
 	p := C.qute_QProxyStyle_new()
-	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	h := rt.WrapNew[QProxyStyle](p, "QProxyStyle", rt.NewOwned)
 	return rt.View[QProxyStyle](h, p)
 }
 
@@ -71,7 +71,7 @@ func NewQProxyStyle() *QProxyStyle {
 func NewQProxyStyleWithKey(key string) *QProxyStyle {
 	rt.CheckThread("NewQProxyStyleWithKey")
 	p := C.qute_QProxyStyle_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
-	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	h := rt.WrapNew[QProxyStyle](p, "QProxyStyle", rt.NewOwned)
 	return rt.View[QProxyStyle](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQProxyStyleFull(style QStyleLike) *QProxyStyle {
 	}
 	p := C.qute_QProxyStyle_new_2(stylePtr)
 	runtime.KeepAlive(style)
-	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	h := rt.WrapNew[QProxyStyle](p, "QProxyStyle", rt.NewOwned)
 	rt.TransferTo(h, styleH)
 	return rt.View[QProxyStyle](h, p)
 }
@@ -949,7 +949,7 @@ func NewQProxyStyleWith(v QProxyStyleSubclass) *QProxyStyle {
 		panic("NewQProxyStyleWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QProxyStyle_new_shim()
-	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	h := rt.WrapNew[QProxyStyle](p, "QProxyStyle", rt.NewOwned)
 	base.QProxyStyle = rt.View[QProxyStyle](h, p)
 	id := h.SetSelf(v, qProxyStyleVTable)
 	mask := rt.Mask(v, qProxyStyleVTable)
@@ -972,7 +972,7 @@ func NewQProxyStyleWithKeyWith(v QProxyStyleSubclass, key string) *QProxyStyle {
 		panic("NewQProxyStyleWithKeyWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QProxyStyle_new_shim_1((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
-	h := rt.WrapClass(p, "QProxyStyle", rt.NewOwned)
+	h := rt.WrapNew[QProxyStyle](p, "QProxyStyle", rt.NewOwned)
 	base.QProxyStyle = rt.View[QProxyStyle](h, p)
 	id := h.SetSelf(v, qProxyStyleVTable)
 	mask := rt.Mask(v, qProxyStyleVTable)

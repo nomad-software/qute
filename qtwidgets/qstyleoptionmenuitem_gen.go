@@ -62,7 +62,7 @@ func QStyleOptionMenuItemCast(o QStyleOptionLike) *QStyleOptionMenuItem {
 func NewQStyleOptionMenuItem() *QStyleOptionMenuItem {
 	rt.CheckThread("NewQStyleOptionMenuItem")
 	p := C.qute_QStyleOptionMenuItem_new()
-	h := rt.WrapClass(p, "QStyleOptionMenuItem", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionMenuItem](p, "QStyleOptionMenuItem", rt.NewOwned)
 	return rt.View[QStyleOptionMenuItem](h, p)
 }
 

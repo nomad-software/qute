@@ -119,10 +119,10 @@ func wakeDeferred() {
 func freeNode(a cleanupArg) {
 	if a.registered {
 		regMu.Lock()
-		e := registry[a.key]
-		ok := e != nil && e.serial == a.serial
+		e, found := registry[a.key]
+		ok := found && e.serial == a.serial
 		var revived *Handle
-		if e != nil && !ok && e.prevSerial == a.serial {
+		if found && !ok && e.prevSerial == a.serial {
 			revived = e.w.Value()
 		}
 		regMu.Unlock()

@@ -86,7 +86,7 @@ func (this *QPainterPathStroker) Unkeep() {
 func NewQPainterPathStroker() *QPainterPathStroker {
 	rt.CheckThread("NewQPainterPathStroker")
 	p := C.qute_QPainterPathStroker_new()
-	h := rt.WrapClass(p, "QPainterPathStroker", rt.NewOwned)
+	h := rt.WrapNew[QPainterPathStroker](p, "QPainterPathStroker", rt.NewOwned)
 	return rt.View[QPainterPathStroker](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQPainterPathStrokerWithPen(pen *QPen) *QPainterPathStroker {
 	rt.CheckThread("NewQPainterPathStrokerWithPen")
 	p := C.qute_QPainterPathStroker_new_1(rt.UseArg(unsafe.Pointer(pen), "NewQPainterPathStrokerWithPen"))
 	runtime.KeepAlive(pen)
-	h := rt.WrapClass(p, "QPainterPathStroker", rt.NewOwned)
+	h := rt.WrapNew[QPainterPathStroker](p, "QPainterPathStroker", rt.NewOwned)
 	return rt.View[QPainterPathStroker](h, p)
 }
 

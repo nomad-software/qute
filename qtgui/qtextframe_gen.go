@@ -69,7 +69,7 @@ func NewQTextFrame(doc QTextDocumentLike) *QTextFrame {
 	if docPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextFrame", mode)
+	h := rt.WrapNew[QTextFrame](p, "QTextFrame", mode)
 	return rt.View[QTextFrame](h, p)
 }
 
@@ -355,7 +355,7 @@ func NewQTextFrameWith(v QTextFrameSubclass, doc QTextDocumentLike) *QTextFrame 
 	if docPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTextFrame", mode)
+	h := rt.WrapNew[QTextFrame](p, "QTextFrame", mode)
 	base.QTextFrame = rt.View[QTextFrame](h, p)
 	id := h.SetSelf(v, qTextFrameVTable)
 	mask := rt.Mask(v, qTextFrameVTable)

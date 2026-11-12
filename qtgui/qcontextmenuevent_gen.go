@@ -63,7 +63,7 @@ func QContextMenuEventCast(e qtcore.QEventLike) *QContextMenuEvent {
 func NewQContextMenuEventWithReason(reason QContextMenuEventReason, pos qtcore.QPoint, globalPos qtcore.QPoint) *QContextMenuEvent {
 	rt.CheckThread("NewQContextMenuEventWithReason")
 	p := C.qute_QContextMenuEvent_new(C.int64_t(reason), cQPoint(pos), cQPoint(globalPos))
-	h := rt.WrapClass(p, "QContextMenuEvent", rt.NewOwned)
+	h := rt.WrapNew[QContextMenuEvent](p, "QContextMenuEvent", rt.NewOwned)
 	return rt.View[QContextMenuEvent](h, p)
 }
 
@@ -77,7 +77,7 @@ func NewQContextMenuEventWithReason(reason QContextMenuEventReason, pos qtcore.Q
 func NewQContextMenuEventWithReasonFull(reason QContextMenuEventReason, pos qtcore.QPoint, globalPos qtcore.QPoint, modifiers qtcore.KeyboardModifiers) *QContextMenuEvent {
 	rt.CheckThread("NewQContextMenuEventWithReasonFull")
 	p := C.qute_QContextMenuEvent_new_1(C.int64_t(reason), cQPoint(pos), cQPoint(globalPos), C.int64_t(modifiers))
-	h := rt.WrapClass(p, "QContextMenuEvent", rt.NewOwned)
+	h := rt.WrapNew[QContextMenuEvent](p, "QContextMenuEvent", rt.NewOwned)
 	return rt.View[QContextMenuEvent](h, p)
 }
 

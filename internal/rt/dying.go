@@ -91,6 +91,6 @@ func wrapDyingLocked(key unsafe.Pointer, class string) *Handle {
 		}
 	}
 	h := newHandle(key, class, KindQObject, Dead, DeleteQObject)
-	h.x().deathNote = "wrapped while Qt was destroying it"
+	h.note = noteDying
 	return h
 }

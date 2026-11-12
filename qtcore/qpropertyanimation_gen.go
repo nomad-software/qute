@@ -66,7 +66,7 @@ func NewQPropertyAnimation(parent QObjectLike) *QPropertyAnimation {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPropertyAnimation", mode)
+	h := rt.WrapNew[QPropertyAnimation](p, "QPropertyAnimation", mode)
 	return rt.View[QPropertyAnimation](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQPropertyAnimationWithObject(target QObjectLike, propertyName []byte, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPropertyAnimation", mode)
+	h := rt.WrapNew[QPropertyAnimation](p, "QPropertyAnimation", mode)
 	rt.KeepArg(h, "target", targetH, false)
 	return rt.View[QPropertyAnimation](h, p)
 }
@@ -429,7 +429,7 @@ func NewQPropertyAnimationWith(v QPropertyAnimationSubclass, parent QObjectLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPropertyAnimation", mode)
+	h := rt.WrapNew[QPropertyAnimation](p, "QPropertyAnimation", mode)
 	base.QPropertyAnimation = rt.View[QPropertyAnimation](h, p)
 	id := h.SetSelf(v, qPropertyAnimationVTable)
 	mask := rt.Mask(v, qPropertyAnimationVTable)
@@ -467,7 +467,7 @@ func NewQPropertyAnimationWithObjectWith(v QPropertyAnimationSubclass, target QO
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPropertyAnimation", mode)
+	h := rt.WrapNew[QPropertyAnimation](p, "QPropertyAnimation", mode)
 	rt.KeepArg(h, "target", targetH, false)
 	base.QPropertyAnimation = rt.View[QPropertyAnimation](h, p)
 	id := h.SetSelf(v, qPropertyAnimationVTable)

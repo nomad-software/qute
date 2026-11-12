@@ -97,7 +97,7 @@ func (this *QOpenGLTextureBlitter) Unkeep() {
 func NewQOpenGLTextureBlitter() *QOpenGLTextureBlitter {
 	rt.CheckThread("NewQOpenGLTextureBlitter")
 	p := C.qute_QOpenGLTextureBlitter_new()
-	h := rt.WrapClass(p, "QOpenGLTextureBlitter", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLTextureBlitter](p, "QOpenGLTextureBlitter", rt.NewOwned)
 	return rt.View[QOpenGLTextureBlitter](h, p)
 }
 

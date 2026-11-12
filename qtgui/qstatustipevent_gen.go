@@ -61,7 +61,7 @@ func QStatusTipEventCast(e qtcore.QEventLike) *QStatusTipEvent {
 func NewQStatusTipEventWithTip(tip string) *QStatusTipEvent {
 	rt.CheckThread("NewQStatusTipEventWithTip")
 	p := C.qute_QStatusTipEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(tip))), C.ptrdiff_t(len(tip)))
-	h := rt.WrapClass(p, "QStatusTipEvent", rt.NewOwned)
+	h := rt.WrapNew[QStatusTipEvent](p, "QStatusTipEvent", rt.NewOwned)
 	return rt.View[QStatusTipEvent](h, p)
 }
 

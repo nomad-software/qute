@@ -66,7 +66,7 @@ func NewQSettings(parent QObjectLike) *QSettings {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQSettingsWithOrganization(organization string, application string, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQSettingsWithScope(scope QSettingsScope, organization string, applicatio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQSettingsWithFormat(format QSettingsFormat, scope QSettingsScope, organi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -158,7 +158,7 @@ func NewQSettingsWithFileName(fileName string, format QSettingsFormat, parent QO
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -181,7 +181,7 @@ func NewQSettingsWithScopeOnly(scope QSettingsScope, parent QObjectLike) *QSetti
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	return rt.View[QSettings](h, p)
 }
 
@@ -720,7 +720,7 @@ func NewQSettingsWith(v QSettingsSubclass, parent QObjectLike) *QSettings {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)
@@ -752,7 +752,7 @@ func NewQSettingsWithOrganizationWith(v QSettingsSubclass, organization string, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)
@@ -784,7 +784,7 @@ func NewQSettingsWithScopeWith(v QSettingsSubclass, scope QSettingsScope, organi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)
@@ -816,7 +816,7 @@ func NewQSettingsWithFormatWith(v QSettingsSubclass, format QSettingsFormat, sco
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)
@@ -848,7 +848,7 @@ func NewQSettingsWithFileNameWith(v QSettingsSubclass, fileName string, format Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)
@@ -880,7 +880,7 @@ func NewQSettingsWithScopeOnlyWith(v QSettingsSubclass, scope QSettingsScope, pa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSettings", mode)
+	h := rt.WrapNew[QSettings](p, "QSettings", mode)
 	base.QSettings = rt.View[QSettings](h, p)
 	id := h.SetSelf(v, qSettingsVTable)
 	mask := rt.Mask(v, qSettingsVTable)

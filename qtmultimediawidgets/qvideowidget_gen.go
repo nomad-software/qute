@@ -70,7 +70,7 @@ func NewQVideoWidget(parent qtwidgets.QWidgetLike) *QVideoWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoWidget", mode)
+	h := rt.WrapNew[QVideoWidget](p, "QVideoWidget", mode)
 	return rt.View[QVideoWidget](h, p)
 }
 
@@ -1043,7 +1043,7 @@ func NewQVideoWidgetWith(v QVideoWidgetSubclass, parent qtwidgets.QWidgetLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVideoWidget", mode)
+	h := rt.WrapNew[QVideoWidget](p, "QVideoWidget", mode)
 	base.QVideoWidget = rt.View[QVideoWidget](h, p)
 	id := h.SetSelf(v, qVideoWidgetVTable)
 	mask := rt.Mask(v, qVideoWidgetVTable)

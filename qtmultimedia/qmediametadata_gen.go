@@ -86,7 +86,7 @@ func (this *QMediaMetaData) Unkeep() {
 func NewQMediaMetaData() *QMediaMetaData {
 	rt.CheckThread("NewQMediaMetaData")
 	p := C.qute_QMediaMetaData_new()
-	h := rt.WrapClass(p, "QMediaMetaData", rt.NewOwned)
+	h := rt.WrapNew[QMediaMetaData](p, "QMediaMetaData", rt.NewOwned)
 	return rt.View[QMediaMetaData](h, p)
 }
 

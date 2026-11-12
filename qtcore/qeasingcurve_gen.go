@@ -87,7 +87,7 @@ func (this *QEasingCurve) Unkeep() {
 func NewQEasingCurve() *QEasingCurve {
 	rt.CheckThread("NewQEasingCurve")
 	p := C.qute_QEasingCurve_new()
-	h := rt.WrapClass(p, "QEasingCurve", rt.NewOwned)
+	h := rt.WrapNew[QEasingCurve](p, "QEasingCurve", rt.NewOwned)
 	return rt.View[QEasingCurve](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQEasingCurve() *QEasingCurve {
 func NewQEasingCurveFull(typeArg QEasingCurveType) *QEasingCurve {
 	rt.CheckThread("NewQEasingCurveFull")
 	p := C.qute_QEasingCurve_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QEasingCurve", rt.NewOwned)
+	h := rt.WrapNew[QEasingCurve](p, "QEasingCurve", rt.NewOwned)
 	return rt.View[QEasingCurve](h, p)
 }
 

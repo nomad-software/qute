@@ -68,7 +68,7 @@ func NewQColumnView(parent QWidgetLike) *QColumnView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColumnView", mode)
+	h := rt.WrapNew[QColumnView](p, "QColumnView", mode)
 	return rt.View[QColumnView](h, p)
 }
 
@@ -2050,7 +2050,7 @@ func NewQColumnViewWith(v QColumnViewSubclass, parent QWidgetLike) *QColumnView 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QColumnView", mode)
+	h := rt.WrapNew[QColumnView](p, "QColumnView", mode)
 	base.QColumnView = rt.View[QColumnView](h, p)
 	id := h.SetSelf(v, qColumnViewVTable)
 	mask := rt.Mask(v, qColumnViewVTable)

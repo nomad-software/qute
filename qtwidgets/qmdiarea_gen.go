@@ -68,7 +68,7 @@ func NewQMdiArea(parent QWidgetLike) *QMdiArea {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMdiArea", mode)
+	h := rt.WrapNew[QMdiArea](p, "QMdiArea", mode)
 	return rt.View[QMdiArea](h, p)
 }
 
@@ -1519,7 +1519,7 @@ func NewQMdiAreaWith(v QMdiAreaSubclass, parent QWidgetLike) *QMdiArea {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMdiArea", mode)
+	h := rt.WrapNew[QMdiArea](p, "QMdiArea", mode)
 	base.QMdiArea = rt.View[QMdiArea](h, p)
 	id := h.SetSelf(v, qMdiAreaVTable)
 	mask := rt.Mask(v, qMdiAreaVTable)

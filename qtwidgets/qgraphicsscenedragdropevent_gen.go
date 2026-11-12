@@ -67,7 +67,7 @@ func QGraphicsSceneDragDropEventCast(e qtcore.QEventLike) *QGraphicsSceneDragDro
 func NewQGraphicsSceneDragDropEvent() *QGraphicsSceneDragDropEvent {
 	rt.CheckThread("NewQGraphicsSceneDragDropEvent")
 	p := C.qute_QGraphicsSceneDragDropEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneDragDropEvent](p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneDragDropEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneDragDropEvent() *QGraphicsSceneDragDropEvent {
 func NewQGraphicsSceneDragDropEventFull(typeArg qtcore.QEventType) *QGraphicsSceneDragDropEvent {
 	rt.CheckThread("NewQGraphicsSceneDragDropEventFull")
 	p := C.qute_QGraphicsSceneDragDropEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneDragDropEvent](p, "QGraphicsSceneDragDropEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneDragDropEvent](h, p)
 }
 

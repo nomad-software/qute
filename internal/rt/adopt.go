@@ -53,8 +53,8 @@ func orphaned(key unsafe.Pointer) {
 	adoptMu.Unlock()
 	for _, a := range list {
 		regMu.Lock()
-		e := registry[a.child]
-		alive := e != nil && e.serial == a.serial
+		e, found := registry[a.child]
+		alive := found && e.serial == a.serial
 		var h *Handle
 		if alive {
 			h = e.w.Value()

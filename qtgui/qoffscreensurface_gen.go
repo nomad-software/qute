@@ -79,7 +79,7 @@ func NewQOffscreenSurfaceWithScreen(screen QScreenLike, parent qtcore.QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOffscreenSurface", mode)
+	h := rt.WrapNew[QOffscreenSurface](p, "QOffscreenSurface", mode)
 	return rt.View[QOffscreenSurface](h, p)
 }
 
@@ -469,7 +469,7 @@ func NewQOffscreenSurfaceWith(v QOffscreenSurfaceSubclass, screen QScreenLike, p
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOffscreenSurface", mode)
+	h := rt.WrapNew[QOffscreenSurface](p, "QOffscreenSurface", mode)
 	base.QOffscreenSurface = rt.View[QOffscreenSurface](h, p)
 	id := h.SetSelf(v, qOffscreenSurfaceVTable)
 	mask := rt.Mask(v, qOffscreenSurfaceVTable)

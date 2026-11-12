@@ -54,7 +54,7 @@ func NewQGraphicsGridLayout(parent QGraphicsLayoutItemLike) *QGraphicsGridLayout
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsGridLayout", mode)
+	h := rt.WrapNew[QGraphicsGridLayout](p, "QGraphicsGridLayout", mode)
 	return rt.View[QGraphicsGridLayout](h, p)
 }
 
@@ -893,7 +893,7 @@ func NewQGraphicsGridLayoutWith(v QGraphicsGridLayoutSubclass, parent QGraphicsL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsGridLayout", mode)
+	h := rt.WrapNew[QGraphicsGridLayout](p, "QGraphicsGridLayout", mode)
 	base.QGraphicsGridLayout = rt.View[QGraphicsGridLayout](h, p)
 	id := h.SetSelf(v, qGraphicsGridLayoutVTable)
 	mask := rt.Mask(v, qGraphicsGridLayoutVTable)

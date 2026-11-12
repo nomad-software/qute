@@ -85,7 +85,7 @@ func (this *QDir) Unkeep() {
 func NewQDir() *QDir {
 	rt.CheckThread("NewQDir")
 	p := C.qute_QDir_new()
-	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	h := rt.WrapNew[QDir](p, "QDir", rt.NewOwned)
 	return rt.View[QDir](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQDir() *QDir {
 func NewQDirWithPath(path string, nameFilter string) *QDir {
 	rt.CheckThread("NewQDirWithPath")
 	p := C.qute_QDir_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)))
-	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	h := rt.WrapNew[QDir](p, "QDir", rt.NewOwned)
 	return rt.View[QDir](h, p)
 }
 
@@ -113,7 +113,7 @@ func NewQDirWithPath(path string, nameFilter string) *QDir {
 func NewQDirFull(path string) *QDir {
 	rt.CheckThread("NewQDirFull")
 	p := C.qute_QDir_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
-	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	h := rt.WrapNew[QDir](p, "QDir", rt.NewOwned)
 	return rt.View[QDir](h, p)
 }
 
@@ -127,7 +127,7 @@ func NewQDirFull(path string) *QDir {
 func NewQDirWithPathFull(path string, nameFilter string, sort QDirSortFlags, filter QDirFilters) *QDir {
 	rt.CheckThread("NewQDirWithPathFull")
 	p := C.qute_QDir_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.StringData(nameFilter))), C.ptrdiff_t(len(nameFilter)), C.int64_t(sort), C.int64_t(filter))
-	h := rt.WrapClass(p, "QDir", rt.NewOwned)
+	h := rt.WrapNew[QDir](p, "QDir", rt.NewOwned)
 	return rt.View[QDir](h, p)
 }
 

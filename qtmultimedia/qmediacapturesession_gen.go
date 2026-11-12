@@ -67,7 +67,7 @@ func NewQMediaCaptureSession(parent qtcore.QObjectLike) *QMediaCaptureSession {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaCaptureSession", mode)
+	h := rt.WrapNew[QMediaCaptureSession](p, "QMediaCaptureSession", mode)
 	return rt.View[QMediaCaptureSession](h, p)
 }
 
@@ -969,7 +969,7 @@ func NewQMediaCaptureSessionWith(v QMediaCaptureSessionSubclass, parent qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaCaptureSession", mode)
+	h := rt.WrapNew[QMediaCaptureSession](p, "QMediaCaptureSession", mode)
 	base.QMediaCaptureSession = rt.View[QMediaCaptureSession](h, p)
 	id := h.SetSelf(v, qMediaCaptureSessionVTable)
 	mask := rt.Mask(v, qMediaCaptureSessionVTable)

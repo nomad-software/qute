@@ -70,7 +70,7 @@ func NewQWebEngineView(parent qtwidgets.QWidgetLike) *QWebEngineView {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	return rt.View[QWebEngineView](h, p)
 }
 
@@ -101,7 +101,7 @@ func NewQWebEngineViewWithProfile(profile qtwebenginecore.QWebEngineProfileLike,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	rt.KeepArg(h, "profile", profileH, true)
 	return rt.View[QWebEngineView](h, p)
 }
@@ -133,7 +133,7 @@ func NewQWebEngineViewWithPage(page qtwebenginecore.QWebEnginePageLike, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	rt.KeepArg(h, "page", pageH, false)
 	return rt.View[QWebEngineView](h, p)
 }
@@ -1853,7 +1853,7 @@ func NewQWebEngineViewWith(v QWebEngineViewSubclass, parent qtwidgets.QWidgetLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)
 	mask := rt.Mask(v, qWebEngineViewVTable)
@@ -1891,7 +1891,7 @@ func NewQWebEngineViewWithProfileWith(v QWebEngineViewSubclass, profile qtwebeng
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	rt.KeepArg(h, "profile", profileH, true)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)
@@ -1930,7 +1930,7 @@ func NewQWebEngineViewWithPageWith(v QWebEngineViewSubclass, page qtwebenginecor
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineView", mode)
+	h := rt.WrapNew[QWebEngineView](p, "QWebEngineView", mode)
 	rt.KeepArg(h, "page", pageH, false)
 	base.QWebEngineView = rt.View[QWebEngineView](h, p)
 	id := h.SetSelf(v, qWebEngineViewVTable)

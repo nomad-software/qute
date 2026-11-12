@@ -122,7 +122,7 @@ func NewQObject(parent QObjectLike) *QObject {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QObject", mode)
+	h := rt.WrapNew[QObject](p, "QObject", mode)
 	return rt.View[QObject](h, p)
 }
 
@@ -702,7 +702,7 @@ func NewQObjectWith(v QObjectSubclass, parent QObjectLike) *QObject {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QObject", mode)
+	h := rt.WrapNew[QObject](p, "QObject", mode)
 	base.QObject = rt.View[QObject](h, p)
 	id := h.SetSelf(v, qObjectVTable)
 	mask := rt.Mask(v, qObjectVTable)

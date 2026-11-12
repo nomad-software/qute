@@ -456,7 +456,7 @@ func fakeQObject(t *testing.T, st State) *Handle {
 	b := make([]byte, 8)
 	h := newHandle(unsafe.Pointer(&b[0]), "QObject", KindQObject, st, nil)
 	regMu.Lock()
-	registry[h.ptr] = &regEntry{w: weak.Make(h), serial: h.serial}
+	registry[h.ptr] = regEntry{w: weak.Make(h), serial: h.serial}
 	regMu.Unlock()
 	t.Cleanup(func() {
 		regMu.Lock()
@@ -551,8 +551,8 @@ func TestSelfSlotDroppedWithCollectedHandle(t *testing.T) {
 	root := newHandle(rootP, "QObject", KindQObject, Owned, nil)
 	child := newHandle(childP, "QObject", KindQObject, Parented, nil)
 	regMu.Lock()
-	registry[rootP] = &regEntry{w: weak.Make(root), serial: root.serial}
-	registry[childP] = &regEntry{w: weak.Make(child), serial: child.serial}
+	registry[rootP] = regEntry{w: weak.Make(root), serial: root.serial}
+	registry[childP] = regEntry{w: weak.Make(child), serial: child.serial}
 	regMu.Unlock()
 	oldRoot := rootOfC
 	rootOfC = func(unsafe.Pointer) unsafe.Pointer { return rootP }
@@ -668,7 +668,7 @@ func TestQueuedFreeOfRewrappedObject(t *testing.T) {
 	key := fakePtr(3)
 	old := serialCounter.Add(1) // the collected Owned handle, whose free is queued
 	regMu.Lock()
-	registry[key] = &regEntry{serial: old} // its weak pointer is empty: collected
+	registry[key] = regEntry{serial: old} // its weak pointer is empty: collected
 	regMu.Unlock()
 	h := Wrap(key, "Obj", KindNotify, KeepOrBorrow, func(unsafe.Pointer) { t.Error("object deleted under its new handle") })
 	defer Destroyed(key, "test")
@@ -782,7 +782,7 @@ func TestTransferToSelf(t *testing.T) {
 func registerFakeQObject(key unsafe.Pointer) *Handle {
 	h := newHandle(key, "QObject", KindQObject, Borrowed, nil)
 	regMu.Lock()
-	registry[key] = &regEntry{w: weak.Make(h), serial: h.serial, watched: true}
+	registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: true}
 	regMu.Unlock()
 	return h
 }
@@ -1011,7 +1011,9 @@ func TestDeathReleasesHoldsOfEarlierHandle(t *testing.T) {
 	kept := &Handle{ptr: fakePtr(7), class: "Model", kind: KindPlain, serial: serialCounter.Add(1)}
 	KeepArg(first, "model", kept, false)
 	regMu.Lock()
-	registry[key].w = weak.Pointer[Handle]{} // as if the first handle were collected
+	e := registry[key]
+	e.w = weak.Pointer[Handle]{} // as if the first handle were collected
+	registry[key] = e
 	regMu.Unlock()
 	second := Wrap(key, "View", KindNotify, KeepOrBorrow, nil)
 	if second == first {
@@ -1088,4 +1090,80 @@ func TestUseBeforeApplication(t *testing.T) {
 	}
 	CheckThread("Early.Method")
 	GUIOnly("Early.Method")
+}
+
+// Handles of objects with no other state (list rows) make no extension,
+// neither when Go takes them nor when they die, and still say why they died:
+// Delete's reason stands over the death notice that follows it, and an
+// uncommon reason is kept too.
+func TestDeathMakesNoExtension(t *testing.T) {
+	if debugEnabled {
+		t.Skip("debug builds record call sites in the extension")
+	}
+	key := fakePtr(3)
+	h := Wrap(key, "Row", KindNotify, TakeOwned, func(unsafe.Pointer) {})
+	v := Wrap(fakePtr(4), "Value", KindValue, TakeOwned, func(unsafe.Pointer) {})
+	Destroyed(key, "destroyed by Qt")
+	v.markDead("freed by GC")
+	for _, x := range []*Handle{h, v} {
+		if x.ext.Load() != nil {
+			t.Errorf("%s: dying made an extension", x.class)
+		}
+	}
+	if msg := deadMessage(h, "Row.Text"); !strings.Contains(msg, "destroyed by Qt") {
+		t.Errorf("dead message %q does not name the reason", msg)
+	}
+
+	key = fakePtr(5)
+	d := Wrap(key, "Row", KindNotify, TakeOwned, func(p unsafe.Pointer) { Destroyed(p, "destroyed by Qt") })
+	d.Delete("Row.Delete")
+	if msg := deadMessage(d, "Row.Text"); !strings.Contains(msg, "deleted by Delete()") {
+		t.Errorf("dead message %q, want Delete's reason", msg)
+	}
+
+	o := newPlain("Other")
+	o.markDead("ended with its handler")
+	o.markDead("freed by GC")
+	if why := deathNote(o); why != "ended with its handler" {
+		t.Errorf("death note %q, want the uncommon reason kept", why)
+	}
+}
+
+// A constructor's handle and wrapper are made together and View finds the
+// wrapper; the state follows the mode. An address that already has a live
+// handle (only a plain object's own: it is never registered) keeps it, and
+// View makes the wrapper as usual.
+func TestWrapNew(t *testing.T) {
+	type wrapper struct{ Ref }
+	RegisterClass("NewRow", KindNotify, func(p unsafe.Pointer) { Destroyed(p, "destroyed by Qt") })
+	if WrapNew[wrapper](nil, "NewRow", NewOwned) != nil {
+		t.Error("a nil pointer was wrapped")
+	}
+	key := fakePtr(1)
+	h := WrapNew[wrapper](key, "NewRow", NewOwned)
+	defer h.Delete("NewRow.Delete")
+	if h.State() != Owned || Lookup(key) != h {
+		t.Fatalf("state %v, registered %v; want an Owned registered handle", h.State(), Lookup(key) == h)
+	}
+	w := View[wrapper](h, key)
+	if pair := (*viewPair[wrapper])(unsafe.Pointer(h)); w != &pair.v || w.H != h || w.P != key {
+		t.Error("the wrapper is not the one made with the handle")
+	}
+	if WrapClass(key, "NewRow", KeepOrBorrow) != h {
+		t.Error("wrapping the object again gave another handle")
+	}
+
+	pkey := fakePtr(2)
+	ph := WrapNew[wrapper](pkey, "NewRow", NewParented)
+	if ph.State() != Parented || ph.hasCleanupNow() {
+		t.Errorf("parented constructor: %v, cleanup %v; want Parented without cleanup", ph.State(), ph.hasCleanupNow())
+	}
+	Destroyed(pkey, "destroyed by Qt")
+
+	// already registered and alive: that handle stands, with its own wrapper
+	reg := Wrap(fakePtr(3), "NewRow", KindNotify, KeepOrBorrow, nil)
+	defer Destroyed(reg.ptr, "test")
+	if got := WrapNew[wrapper](reg.ptr, "NewRow", NewParented); got != reg || View[wrapper](got, reg.ptr) == nil {
+		t.Error("an existing handle was replaced")
+	}
 }

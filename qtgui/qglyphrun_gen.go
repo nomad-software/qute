@@ -86,7 +86,7 @@ func (this *QGlyphRun) Unkeep() {
 func NewQGlyphRun() *QGlyphRun {
 	rt.CheckThread("NewQGlyphRun")
 	p := C.qute_QGlyphRun_new()
-	h := rt.WrapClass(p, "QGlyphRun", rt.NewOwned)
+	h := rt.WrapNew[QGlyphRun](p, "QGlyphRun", rt.NewOwned)
 	return rt.View[QGlyphRun](h, p)
 }
 

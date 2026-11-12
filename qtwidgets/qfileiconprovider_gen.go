@@ -44,7 +44,7 @@ func QFileIconProviderFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QFileIcon
 func NewQFileIconProvider() *QFileIconProvider {
 	rt.CheckThread("NewQFileIconProvider")
 	p := C.qute_QFileIconProvider_new()
-	h := rt.WrapClass(p, "QFileIconProvider", rt.NewOwned)
+	h := rt.WrapNew[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned)
 	return rt.View[QFileIconProvider](h, p)
 }
 
@@ -193,7 +193,7 @@ func NewQFileIconProviderWith(v QFileIconProviderSubclass) *QFileIconProvider {
 		panic("NewQFileIconProviderWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QFileIconProvider_new_shim()
-	h := rt.WrapClass(p, "QFileIconProvider", rt.NewOwned)
+	h := rt.WrapNew[QFileIconProvider](p, "QFileIconProvider", rt.NewOwned)
 	base.QFileIconProvider = rt.View[QFileIconProvider](h, p)
 	id := h.SetSelf(v, qFileIconProviderVTable)
 	mask := rt.Mask(v, qFileIconProviderVTable)

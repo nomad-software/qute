@@ -85,7 +85,7 @@ func (this *QJsonParseError) Unkeep() {
 func NewQJsonParseError() *QJsonParseError {
 	rt.CheckThread("NewQJsonParseError")
 	p := C.qute_QJsonParseError_new()
-	h := rt.WrapClass(p, "QJsonParseError", rt.NewOwned)
+	h := rt.WrapNew[QJsonParseError](p, "QJsonParseError", rt.NewOwned)
 	return rt.View[QJsonParseError](h, p)
 }
 

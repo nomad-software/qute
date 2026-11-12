@@ -85,7 +85,7 @@ func (this *QMetaClassInfo) Unkeep() {
 func NewQMetaClassInfo() *QMetaClassInfo {
 	rt.CheckThread("NewQMetaClassInfo")
 	p := C.qute_QMetaClassInfo_new()
-	h := rt.WrapClass(p, "QMetaClassInfo", rt.NewOwned)
+	h := rt.WrapNew[QMetaClassInfo](p, "QMetaClassInfo", rt.NewOwned)
 	return rt.View[QMetaClassInfo](h, p)
 }
 

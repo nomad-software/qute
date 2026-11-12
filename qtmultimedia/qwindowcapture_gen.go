@@ -67,7 +67,7 @@ func NewQWindowCapture(parent qtcore.QObjectLike) *QWindowCapture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWindowCapture", mode)
+	h := rt.WrapNew[QWindowCapture](p, "QWindowCapture", mode)
 	return rt.View[QWindowCapture](h, p)
 }
 
@@ -500,7 +500,7 @@ func NewQWindowCaptureWith(v QWindowCaptureSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWindowCapture", mode)
+	h := rt.WrapNew[QWindowCapture](p, "QWindowCapture", mode)
 	base.QWindowCapture = rt.View[QWindowCapture](h, p)
 	id := h.SetSelf(v, qWindowCaptureVTable)
 	mask := rt.Mask(v, qWindowCaptureVTable)

@@ -87,7 +87,7 @@ func NewQFontMetricsWithFont(font *QFont) *QFontMetrics {
 	rt.CheckThread("NewQFontMetricsWithFont")
 	p := C.qute_QFontMetrics_new(rt.UseArg(unsafe.Pointer(font), "NewQFontMetricsWithFont"))
 	runtime.KeepAlive(font)
-	h := rt.WrapClass(p, "QFontMetrics", rt.NewOwned)
+	h := rt.WrapNew[QFontMetrics](p, "QFontMetrics", rt.NewOwned)
 	return rt.View[QFontMetrics](h, p)
 }
 
@@ -105,7 +105,7 @@ func NewQFontMetricsFor(font *QFont, pd QPaintDeviceLike) *QFontMetrics {
 	p := C.qute_QFontMetrics_new_1(rt.UseArg(unsafe.Pointer(font), "NewQFontMetricsFor"), pdPtr)
 	runtime.KeepAlive(font)
 	runtime.KeepAlive(pd)
-	h := rt.WrapClass(p, "QFontMetrics", rt.NewOwned)
+	h := rt.WrapNew[QFontMetrics](p, "QFontMetrics", rt.NewOwned)
 	return rt.View[QFontMetrics](h, p)
 }
 

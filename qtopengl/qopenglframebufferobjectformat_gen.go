@@ -92,7 +92,7 @@ func (this *QOpenGLFramebufferObjectFormat) Unkeep() {
 func NewQOpenGLFramebufferObjectFormat() *QOpenGLFramebufferObjectFormat {
 	rt.CheckThread("NewQOpenGLFramebufferObjectFormat")
 	p := C.qute_QOpenGLFramebufferObjectFormat_new()
-	h := rt.WrapClass(p, "QOpenGLFramebufferObjectFormat", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFramebufferObjectFormat](p, "QOpenGLFramebufferObjectFormat", rt.NewOwned)
 	return rt.View[QOpenGLFramebufferObjectFormat](h, p)
 }
 

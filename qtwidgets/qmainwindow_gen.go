@@ -70,7 +70,7 @@ func NewQMainWindow(parent QWidgetLike) *QMainWindow {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMainWindow", mode)
+	h := rt.WrapNew[QMainWindow](p, "QMainWindow", mode)
 	return rt.View[QMainWindow](h, p)
 }
 
@@ -95,7 +95,7 @@ func NewQMainWindowFull(parent QWidgetLike, flags qtcore.WindowFlags) *QMainWind
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMainWindow", mode)
+	h := rt.WrapNew[QMainWindow](p, "QMainWindow", mode)
 	return rt.View[QMainWindow](h, p)
 }
 
@@ -1892,7 +1892,7 @@ func NewQMainWindowWith(v QMainWindowSubclass, parent QWidgetLike) *QMainWindow 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMainWindow", mode)
+	h := rt.WrapNew[QMainWindow](p, "QMainWindow", mode)
 	base.QMainWindow = rt.View[QMainWindow](h, p)
 	id := h.SetSelf(v, qMainWindowVTable)
 	mask := rt.Mask(v, qMainWindowVTable)

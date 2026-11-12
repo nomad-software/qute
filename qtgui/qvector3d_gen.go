@@ -86,7 +86,7 @@ func (this *QVector3D) Unkeep() {
 func NewQVector3D() *QVector3D {
 	rt.CheckThread("NewQVector3D")
 	p := C.qute_QVector3D_new()
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQVector3D() *QVector3D {
 func NewQVector3DWithInitialization(initialization qtcore.Initialization) *QVector3D {
 	rt.CheckThread("NewQVector3DWithInitialization")
 	p := C.qute_QVector3D_new_1(C.int64_t(initialization))
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQVector3DWithInitialization(initialization qtcore.Initialization) *QVect
 func NewQVector3DWithXpos(xpos float32, ypos float32, zpos float32) *QVector3D {
 	rt.CheckThread("NewQVector3DWithXpos")
 	p := C.qute_QVector3D_new_2(C.float(xpos), C.float(ypos), C.float(zpos))
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -122,7 +122,7 @@ func NewQVector3DWithXpos(xpos float32, ypos float32, zpos float32) *QVector3D {
 func NewQVector3DWithPoint(point qtcore.QPoint) *QVector3D {
 	rt.CheckThread("NewQVector3DWithPoint")
 	p := C.qute_QVector3D_new_3(cQPoint(point))
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -134,7 +134,7 @@ func NewQVector3DWithPoint(point qtcore.QPoint) *QVector3D {
 func NewQVector3DWithPointF(point qtcore.QPointF) *QVector3D {
 	rt.CheckThread("NewQVector3DWithPointF")
 	p := C.qute_QVector3D_new_4(cQPointF(point))
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -147,7 +147,7 @@ func NewQVector3DWithVector2D(vector *QVector2D) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector2D")
 	p := C.qute_QVector3D_new_5(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector2D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -160,7 +160,7 @@ func NewQVector3DWithVector2DZpos(vector *QVector2D, zpos float32) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector2DZpos")
 	p := C.qute_QVector3D_new_6(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector2DZpos"), C.float(zpos))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 
@@ -173,7 +173,7 @@ func NewQVector3DWithVector4D(vector *QVector4D) *QVector3D {
 	rt.CheckThread("NewQVector3DWithVector4D")
 	p := C.qute_QVector3D_new_7(rt.UseArg(unsafe.Pointer(vector), "NewQVector3DWithVector4D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QVector3D", rt.NewOwned)
+	h := rt.WrapNew[QVector3D](p, "QVector3D", rt.NewOwned)
 	return rt.View[QVector3D](h, p)
 }
 

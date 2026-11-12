@@ -68,7 +68,7 @@ func NewQSplitter(parent QWidgetLike) *QSplitter {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitter", mode)
+	h := rt.WrapNew[QSplitter](p, "QSplitter", mode)
 	return rt.View[QSplitter](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQSplitterWithOrientation(orientation qtcore.Orientations, parent QWidget
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitter", mode)
+	h := rt.WrapNew[QSplitter](p, "QSplitter", mode)
 	return rt.View[QSplitter](h, p)
 }
 
@@ -392,6 +392,22 @@ func (this *QSplitter) GetRange(index int) (int, int) {
 	C.qute_QSplitter_getRange(self, C.int(index), &arg1Out, &arg2Out)
 	runtime.KeepAlive(this)
 	return int(arg1Out), int(arg2Out)
+}
+
+// Handle wraps QSplitter::handle.
+//
+//	C++: QSplitterHandle * QSplitter::handle(int index) const
+//
+// Ownership: the result is Borrowed: Go never frees it.
+//
+// The splitter owns its handles and does not notice one being deleted, so Go may not delete it.
+//
+// Qt docs: https://doc.qt.io/qt-6/qsplitter.html#handle
+func (this *QSplitter) Handle(index int) *QSplitterHandle {
+	self := rt.Use(unsafe.Pointer(this), "QSplitter.Handle")
+	r := C.qute_QSplitter_handle(self, C.int(index))
+	runtime.KeepAlive(this)
+	return rt.View[QSplitterHandle](rt.WrapClass(r, "QSplitterHandle", rt.KeepOrBorrow), r)
 }
 
 // SetStretchFactor wraps QSplitter::setStretchFactor.
@@ -1380,7 +1396,7 @@ func NewQSplitterWith(v QSplitterSubclass, parent QWidgetLike) *QSplitter {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitter", mode)
+	h := rt.WrapNew[QSplitter](p, "QSplitter", mode)
 	base.QSplitter = rt.View[QSplitter](h, p)
 	id := h.SetSelf(v, qSplitterVTable)
 	mask := rt.Mask(v, qSplitterVTable)
@@ -1412,7 +1428,7 @@ func NewQSplitterWithOrientationWith(v QSplitterSubclass, orientation qtcore.Ori
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSplitter", mode)
+	h := rt.WrapNew[QSplitter](p, "QSplitter", mode)
 	base.QSplitter = rt.View[QSplitter](h, p)
 	id := h.SetSelf(v, qSplitterVTable)
 	mask := rt.Mask(v, qSplitterVTable)

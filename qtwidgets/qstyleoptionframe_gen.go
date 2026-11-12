@@ -61,7 +61,7 @@ func QStyleOptionFrameCast(o QStyleOptionLike) *QStyleOptionFrame {
 func NewQStyleOptionFrame() *QStyleOptionFrame {
 	rt.CheckThread("NewQStyleOptionFrame")
 	p := C.qute_QStyleOptionFrame_new()
-	h := rt.WrapClass(p, "QStyleOptionFrame", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionFrame](p, "QStyleOptionFrame", rt.NewOwned)
 	return rt.View[QStyleOptionFrame](h, p)
 }
 

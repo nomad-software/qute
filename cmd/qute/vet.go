@@ -495,18 +495,14 @@ func (v *vetter) checkLeaks(f *ast.File) {
 				}
 			case *ast.ReturnStmt:
 				for _, r := range x.Results {
-					if id, ok := r.(*ast.Ident); ok {
-						if c := cands[v.pkg.TypesInfo.Uses[id]]; c != nil {
-							c.released = true
-						}
+					if c := cands[v.objectOf(r)]; c != nil {
+						c.released = true
 					}
 				}
 			case *ast.AssignStmt:
 				for _, r := range x.Rhs {
-					if id, ok := r.(*ast.Ident); ok {
-						if c := cands[v.pkg.TypesInfo.Uses[id]]; c != nil {
-							c.released = true
-						}
+					if c := cands[v.objectOf(r)]; c != nil {
+						c.released = true
 					}
 				}
 			case *ast.CompositeLit:
@@ -514,10 +510,8 @@ func (v *vetter) checkLeaks(f *ast.File) {
 					if kv, ok := e.(*ast.KeyValueExpr); ok {
 						e = kv.Value
 					}
-					if id, ok := e.(*ast.Ident); ok {
-						if c := cands[v.pkg.TypesInfo.Uses[id]]; c != nil {
-							c.released = true
-						}
+					if c := cands[v.objectOf(e)]; c != nil {
+						c.released = true
 					}
 				}
 			}
@@ -534,6 +528,37 @@ func (v *vetter) checkLeaks(f *ast.File) {
 		}
 		return true
 	})
+}
+
+// objectOf returns the variable an expression hands on: x, &x, (x), or one
+// of x's embedded fields, which is x seen as one of its classes (a Go
+// subclass's wrapper, return s.QSplitter, d.list = l.QTreeWidget). Nil for
+// anything else.
+func (v *vetter) objectOf(e ast.Expr) types.Object {
+	for {
+		switch x := e.(type) {
+		case *ast.ParenExpr:
+			e = x.X
+		case *ast.UnaryExpr:
+			if x.Op != token.AND {
+				return nil
+			}
+			e = x.X
+		case *ast.SelectorExpr:
+			sel := v.pkg.TypesInfo.Selections[x]
+			if sel == nil || sel.Kind() != types.FieldVal {
+				return nil
+			}
+			if f, ok := sel.Obj().(*types.Var); !ok || !f.Embedded() {
+				return nil
+			}
+			e = x.X
+		case *ast.Ident:
+			return v.pkg.TypesInfo.Uses[x]
+		default:
+			return nil
+		}
+	}
 }
 
 // newOwned reports whether call is a generated constructor that makes an

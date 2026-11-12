@@ -88,7 +88,7 @@ func (this *QWebEngineHttpRequest) Unkeep() {
 func NewQWebEngineHttpRequest() *QWebEngineHttpRequest {
 	rt.CheckThread("NewQWebEngineHttpRequest")
 	p := C.qute_QWebEngineHttpRequest_new()
-	h := rt.WrapClass(p, "QWebEngineHttpRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineHttpRequest](p, "QWebEngineHttpRequest", rt.NewOwned)
 	return rt.View[QWebEngineHttpRequest](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQWebEngineHttpRequestFull(url *qtcore.QUrl, method QWebEngineHttpRequest
 	rt.CheckThread("NewQWebEngineHttpRequestFull")
 	p := C.qute_QWebEngineHttpRequest_new_1(rt.UseArg(unsafe.Pointer(url), "NewQWebEngineHttpRequestFull"), C.int64_t(method))
 	runtime.KeepAlive(url)
-	h := rt.WrapClass(p, "QWebEngineHttpRequest", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineHttpRequest](p, "QWebEngineHttpRequest", rt.NewOwned)
 	return rt.View[QWebEngineHttpRequest](h, p)
 }
 

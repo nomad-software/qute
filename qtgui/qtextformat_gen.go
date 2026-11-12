@@ -86,7 +86,7 @@ func (this *QTextFormat) Unkeep() {
 func NewQTextFormat() *QTextFormat {
 	rt.CheckThread("NewQTextFormat")
 	p := C.qute_QTextFormat_new()
-	h := rt.WrapClass(p, "QTextFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextFormat](p, "QTextFormat", rt.NewOwned)
 	return rt.View[QTextFormat](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQTextFormat() *QTextFormat {
 func NewQTextFormatWithType(typeArg int) *QTextFormat {
 	rt.CheckThread("NewQTextFormatWithType")
 	p := C.qute_QTextFormat_new_1(C.int(typeArg))
-	h := rt.WrapClass(p, "QTextFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextFormat](p, "QTextFormat", rt.NewOwned)
 	return rt.View[QTextFormat](h, p)
 }
 

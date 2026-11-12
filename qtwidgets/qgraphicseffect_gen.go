@@ -401,7 +401,7 @@ func NewQGraphicsEffectWith(v QGraphicsEffectSubclass, parent qtcore.QObjectLike
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsEffect", mode)
+	h := rt.WrapNew[QGraphicsEffect](p, "QGraphicsEffect", mode)
 	base.QGraphicsEffect = rt.View[QGraphicsEffect](h, p)
 	id := h.SetSelf(v, qGraphicsEffectVTable)
 	mask := rt.Mask(v, qGraphicsEffectVTable)

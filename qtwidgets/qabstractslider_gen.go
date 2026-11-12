@@ -68,7 +68,7 @@ func NewQAbstractSlider(parent QWidgetLike) *QAbstractSlider {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractSlider", mode)
+	h := rt.WrapNew[QAbstractSlider](p, "QAbstractSlider", mode)
 	return rt.View[QAbstractSlider](h, p)
 }
 
@@ -1414,7 +1414,7 @@ func NewQAbstractSliderWith(v QAbstractSliderSubclass, parent QWidgetLike) *QAbs
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractSlider", mode)
+	h := rt.WrapNew[QAbstractSlider](p, "QAbstractSlider", mode)
 	base.QAbstractSlider = rt.View[QAbstractSlider](h, p)
 	id := h.SetSelf(v, qAbstractSliderVTable)
 	mask := rt.Mask(v, qAbstractSliderVTable)

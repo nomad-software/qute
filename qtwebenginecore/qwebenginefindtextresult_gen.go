@@ -90,7 +90,7 @@ func (this *QWebEngineFindTextResult) Unkeep() {
 func NewQWebEngineFindTextResult() *QWebEngineFindTextResult {
 	rt.CheckThread("NewQWebEngineFindTextResult")
 	p := C.qute_QWebEngineFindTextResult_new()
-	h := rt.WrapClass(p, "QWebEngineFindTextResult", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineFindTextResult](p, "QWebEngineFindTextResult", rt.NewOwned)
 	return rt.View[QWebEngineFindTextResult](h, p)
 }
 

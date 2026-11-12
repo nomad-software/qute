@@ -1316,7 +1316,7 @@ func NewQLayoutWith(v QLayoutSubclass, parent QWidgetLike) *QLayout {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLayout", mode)
+	h := rt.WrapNew[QLayout](p, "QLayout", mode)
 	base.QLayout = rt.View[QLayout](h, p)
 	id := h.SetSelf(v, qLayoutVTable)
 	mask := rt.Mask(v, qLayoutVTable)

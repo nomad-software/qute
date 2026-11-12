@@ -85,7 +85,7 @@ func (this *QCborValue) Unkeep() {
 func NewQCborValue() *QCborValue {
 	rt.CheckThread("NewQCborValue")
 	p := C.qute_QCborValue_new()
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQCborValue() *QCborValue {
 func NewQCborValueWithType(t_ QCborValueType) *QCborValue {
 	rt.CheckThread("NewQCborValueWithType")
 	p := C.qute_QCborValue_new_1(C.int64_t(t_))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -109,7 +109,7 @@ func NewQCborValueWithType(t_ QCborValueType) *QCborValue {
 func NewQCborValueWithBool(b_ bool) *QCborValue {
 	rt.CheckThread("NewQCborValueWithBool")
 	p := C.qute_QCborValue_new_2(C.bool(b_))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -121,7 +121,7 @@ func NewQCborValueWithBool(b_ bool) *QCborValue {
 func NewQCborValueWithInt(iArg int) *QCborValue {
 	rt.CheckThread("NewQCborValueWithInt")
 	p := C.qute_QCborValue_new_3(C.int(iArg))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -133,7 +133,7 @@ func NewQCborValueWithInt(iArg int) *QCborValue {
 func NewQCborValueWithUint(u uint) *QCborValue {
 	rt.CheckThread("NewQCborValueWithUint")
 	p := C.qute_QCborValue_new_4(C.uint(u))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQCborValueWithUint(u uint) *QCborValue {
 func NewQCborValueWithInt64(iArg int64) *QCborValue {
 	rt.CheckThread("NewQCborValueWithInt64")
 	p := C.qute_QCborValue_new_5(C.longlong(iArg))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -157,7 +157,7 @@ func NewQCborValueWithInt64(iArg int64) *QCborValue {
 func NewQCborValueWithFloat64(vArg float64) *QCborValue {
 	rt.CheckThread("NewQCborValueWithFloat64")
 	p := C.qute_QCborValue_new_6(C.double(vArg))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -169,7 +169,7 @@ func NewQCborValueWithFloat64(vArg float64) *QCborValue {
 func NewQCborValueWithBytes(ba []byte) *QCborValue {
 	rt.CheckThread("NewQCborValueWithBytes")
 	p := C.qute_QCborValue_new_7((*C.char)(unsafe.Pointer(unsafe.SliceData(ba))), C.ptrdiff_t(len(ba)))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -181,7 +181,7 @@ func NewQCborValueWithBytes(ba []byte) *QCborValue {
 func NewQCborValueWithString(sArg string) *QCborValue {
 	rt.CheckThread("NewQCborValueWithString")
 	p := C.qute_QCborValue_new_8((*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -194,7 +194,7 @@ func NewQCborValueWithCborArray(aArg *QCborArray) *QCborValue {
 	rt.CheckThread("NewQCborValueWithCborArray")
 	p := C.qute_QCborValue_new_9(rt.UseArg(unsafe.Pointer(aArg), "NewQCborValueWithCborArray"))
 	runtime.KeepAlive(aArg)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -207,7 +207,7 @@ func NewQCborValueWithCborMap(m *QCborMap) *QCborValue {
 	rt.CheckThread("NewQCborValueWithCborMap")
 	p := C.qute_QCborValue_new_10(rt.UseArg(unsafe.Pointer(m), "NewQCborValueWithCborMap"))
 	runtime.KeepAlive(m)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -220,7 +220,7 @@ func NewQCborValueWithDateTime(dt *QDateTime) *QCborValue {
 	rt.CheckThread("NewQCborValueWithDateTime")
 	p := C.qute_QCborValue_new_11(rt.UseArg(unsafe.Pointer(dt), "NewQCborValueWithDateTime"))
 	runtime.KeepAlive(dt)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -233,7 +233,7 @@ func NewQCborValueWithUrl(url *QUrl) *QCborValue {
 	rt.CheckThread("NewQCborValueWithUrl")
 	p := C.qute_QCborValue_new_12(rt.UseArg(unsafe.Pointer(url), "NewQCborValueWithUrl"))
 	runtime.KeepAlive(url)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -246,7 +246,7 @@ func NewQCborValueWithRegularExpression(rx *QRegularExpression) *QCborValue {
 	rt.CheckThread("NewQCborValueWithRegularExpression")
 	p := C.qute_QCborValue_new_13(rt.UseArg(unsafe.Pointer(rx), "NewQCborValueWithRegularExpression"))
 	runtime.KeepAlive(rx)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 
@@ -259,7 +259,7 @@ func NewQCborValueWithUuid(uuid *QUuid) *QCborValue {
 	rt.CheckThread("NewQCborValueWithUuid")
 	p := C.qute_QCborValue_new_14(rt.UseArg(unsafe.Pointer(uuid), "NewQCborValueWithUuid"))
 	runtime.KeepAlive(uuid)
-	h := rt.WrapClass(p, "QCborValue", rt.NewOwned)
+	h := rt.WrapNew[QCborValue](p, "QCborValue", rt.NewOwned)
 	return rt.View[QCborValue](h, p)
 }
 

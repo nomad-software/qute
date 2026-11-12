@@ -68,7 +68,7 @@ func NewQLCDNumber(parent QWidgetLike) *QLCDNumber {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLCDNumber", mode)
+	h := rt.WrapNew[QLCDNumber](p, "QLCDNumber", mode)
 	return rt.View[QLCDNumber](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQLCDNumberWithNumDigits(numDigits uint, parent QWidgetLike) *QLCDNumber 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLCDNumber", mode)
+	h := rt.WrapNew[QLCDNumber](p, "QLCDNumber", mode)
 	return rt.View[QLCDNumber](h, p)
 }
 
@@ -1230,7 +1230,7 @@ func NewQLCDNumberWith(v QLCDNumberSubclass, parent QWidgetLike) *QLCDNumber {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLCDNumber", mode)
+	h := rt.WrapNew[QLCDNumber](p, "QLCDNumber", mode)
 	base.QLCDNumber = rt.View[QLCDNumber](h, p)
 	id := h.SetSelf(v, qLCDNumberVTable)
 	mask := rt.Mask(v, qLCDNumberVTable)
@@ -1262,7 +1262,7 @@ func NewQLCDNumberWithNumDigitsWith(v QLCDNumberSubclass, numDigits uint, parent
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QLCDNumber", mode)
+	h := rt.WrapNew[QLCDNumber](p, "QLCDNumber", mode)
 	base.QLCDNumber = rt.View[QLCDNumber](h, p)
 	id := h.SetSelf(v, qLCDNumberVTable)
 	mask := rt.Mask(v, qLCDNumberVTable)

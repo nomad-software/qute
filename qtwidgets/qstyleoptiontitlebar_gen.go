@@ -62,7 +62,7 @@ func QStyleOptionTitleBarCast(o QStyleOptionLike) *QStyleOptionTitleBar {
 func NewQStyleOptionTitleBar() *QStyleOptionTitleBar {
 	rt.CheckThread("NewQStyleOptionTitleBar")
 	p := C.qute_QStyleOptionTitleBar_new()
-	h := rt.WrapClass(p, "QStyleOptionTitleBar", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionTitleBar](p, "QStyleOptionTitleBar", rt.NewOwned)
 	return rt.View[QStyleOptionTitleBar](h, p)
 }
 

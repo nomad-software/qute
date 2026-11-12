@@ -1408,7 +1408,7 @@ func NewQGraphicsObjectWith(v QGraphicsObjectSubclass, parent QGraphicsItemLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsObject", mode)
+	h := rt.WrapNew[QGraphicsObject](p, "QGraphicsObject", mode)
 	base.QGraphicsObject = rt.View[QGraphicsObject](h, p)
 	id := h.SetSelf(v, qGraphicsObjectVTable)
 	mask := rt.Mask(v, qGraphicsObjectVTable)

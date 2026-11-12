@@ -67,7 +67,7 @@ func NewQPointingDevice(parent qtcore.QObjectLike) *QPointingDevice {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPointingDevice", mode)
+	h := rt.WrapNew[QPointingDevice](p, "QPointingDevice", mode)
 	return rt.View[QPointingDevice](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQPointingDeviceWithName(name string, systemId int64, devType QInputDevic
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPointingDevice", mode)
+	h := rt.WrapNew[QPointingDevice](p, "QPointingDevice", mode)
 	return rt.View[QPointingDevice](h, p)
 }
 
@@ -389,7 +389,7 @@ func NewQPointingDeviceWith(v QPointingDeviceSubclass, parent qtcore.QObjectLike
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPointingDevice", mode)
+	h := rt.WrapNew[QPointingDevice](p, "QPointingDevice", mode)
 	base.QPointingDevice = rt.View[QPointingDevice](h, p)
 	id := h.SetSelf(v, qPointingDeviceVTable)
 	mask := rt.Mask(v, qPointingDeviceVTable)
@@ -422,7 +422,7 @@ func NewQPointingDeviceWithNameWith(v QPointingDeviceSubclass, name string, syst
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPointingDevice", mode)
+	h := rt.WrapNew[QPointingDevice](p, "QPointingDevice", mode)
 	base.QPointingDevice = rt.View[QPointingDevice](h, p)
 	id := h.SetSelf(v, qPointingDeviceVTable)
 	mask := rt.Mask(v, qPointingDeviceVTable)

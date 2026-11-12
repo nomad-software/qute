@@ -16,10 +16,10 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12219 |
+| Bound constructors, methods and functions | 12222 |
 | of which Full forms (every argument, defaults included) | 776 |
 | Plain-object results that depend on their receiver | 100 |
-| Skipped on purpose (with reasons below) | 836 |
+| Skipped on purpose (with reasons below) | 841 |
 | Classes Go can subclass | 237 |
 | Classes Go cannot subclass (with reasons below) | 31 |
 | Virtuals Go cannot override (with reasons below) | 21 |
@@ -50,7 +50,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (836)
+## Skipped on purpose (841)
 
 
 ### QAbstractAnimation
@@ -747,10 +747,15 @@ These bind once the generator learns the type. Counts by type:
 - `QBindingStorage * QObject::bindingStorage()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `const QBindingStorage * QObject::bindingStorage() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
+### QOffscreenSurface
+
+- `QPlatformOffscreenSurface * QOffscreenSurface::handle() const`: return: on purpose: private platform API
+
 ### QOpenGLContext
 
 - `QFunctionPointer QOpenGLContext::getProcAddress(const QByteArray & procName) const`: return: on purpose: C function pointer; a Go closure cannot become one
 - `QFunctionPointer QOpenGLContext::getProcAddress(const char * procName) const`: return: on purpose: C function pointer; a Go closure cannot become one
+- `QPlatformOpenGLContext * QOpenGLContext::handle() const`: return: on purpose: private platform API
 - `QPlatformOpenGLContext * QOpenGLContext::shareHandle() const`: return: on purpose: private platform API
 
 ### QOpenGLExtraFunctions
@@ -993,6 +998,7 @@ These bind once the generator learns the type. Counts by type:
 - `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
 - `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
+- `QPlatformPixmap * QPixmap::handle() const`: return: on purpose: private platform API
 - `bool QPixmap::loadFromData(const QByteArray & data, const char * format = …, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QPlainTextEdit
@@ -1055,6 +1061,10 @@ These bind once the generator learns the type. Counts by type:
 - `QString QRegularExpression::escape(QStringView str)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QRegularExpression::wildcardToRegularExpression(QStringView str, WildcardConversionOptions options = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QRegularExpression::anchoredPattern(QStringView expression)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QScreen
+
+- `QPlatformScreen * QScreen::handle() const`: return: on purpose: private platform API
 
 ### QScreenCapture
 
@@ -1359,6 +1369,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QWindow
 
+- `QPlatformWindow * QWindow::handle() const`: return: on purpose: private platform API
 - `QAccessibleInterface * QWindow::accessibleRoot() const`: return: on purpose: the accessibility API is not bound
 - `void QWindow::setVulkanInstance(QVulkanInstance * instance)`: on purpose: Vulkan is not bound
 - `QVulkanInstance * QWindow::vulkanInstance() const`: return: on purpose: Vulkan is not bound

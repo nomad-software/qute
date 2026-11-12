@@ -86,7 +86,7 @@ func (this *QStaticText) Unkeep() {
 func NewQStaticText() *QStaticText {
 	rt.CheckThread("NewQStaticText")
 	p := C.qute_QStaticText_new()
-	h := rt.WrapClass(p, "QStaticText", rt.NewOwned)
+	h := rt.WrapNew[QStaticText](p, "QStaticText", rt.NewOwned)
 	return rt.View[QStaticText](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQStaticText() *QStaticText {
 func NewQStaticTextWithText(text string) *QStaticText {
 	rt.CheckThread("NewQStaticTextWithText")
 	p := C.qute_QStaticText_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
-	h := rt.WrapClass(p, "QStaticText", rt.NewOwned)
+	h := rt.WrapNew[QStaticText](p, "QStaticText", rt.NewOwned)
 	return rt.View[QStaticText](h, p)
 }
 

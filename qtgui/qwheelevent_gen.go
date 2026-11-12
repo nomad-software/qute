@@ -65,7 +65,7 @@ func QWheelEventCast(e qtcore.QEventLike) *QWheelEvent {
 func NewQWheelEvent(pos qtcore.QPointF, globalPos qtcore.QPointF, pixelDelta qtcore.QPoint, angleDelta qtcore.QPoint, buttons qtcore.MouseButtons, modifiers qtcore.KeyboardModifiers, phase qtcore.ScrollPhase, inverted bool) *QWheelEvent {
 	rt.CheckThread("NewQWheelEvent")
 	p := C.qute_QWheelEvent_new(cQPointF(pos), cQPointF(globalPos), cQPoint(pixelDelta), cQPoint(angleDelta), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(phase), C.bool(inverted))
-	h := rt.WrapClass(p, "QWheelEvent", rt.NewOwned)
+	h := rt.WrapNew[QWheelEvent](p, "QWheelEvent", rt.NewOwned)
 	return rt.View[QWheelEvent](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQWheelEventFull(pos qtcore.QPointF, globalPos qtcore.QPointF, pixelDelta
 	}
 	p := C.qute_QWheelEvent_new_1(cQPointF(pos), cQPointF(globalPos), cQPoint(pixelDelta), cQPoint(angleDelta), C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(phase), C.bool(inverted), C.int64_t(source), devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QWheelEvent", rt.NewOwned)
+	h := rt.WrapNew[QWheelEvent](p, "QWheelEvent", rt.NewOwned)
 	rt.KeepArg(h, "QWheelEvent.device", deviceH, true)
 	return rt.View[QWheelEvent](h, p)
 }

@@ -61,7 +61,7 @@ func QScrollPrepareEventCast(e qtcore.QEventLike) *QScrollPrepareEvent {
 func NewQScrollPrepareEventWithPointF(startPos qtcore.QPointF) *QScrollPrepareEvent {
 	rt.CheckThread("NewQScrollPrepareEventWithPointF")
 	p := C.qute_QScrollPrepareEvent_new(cQPointF(startPos))
-	h := rt.WrapClass(p, "QScrollPrepareEvent", rt.NewOwned)
+	h := rt.WrapNew[QScrollPrepareEvent](p, "QScrollPrepareEvent", rt.NewOwned)
 	return rt.View[QScrollPrepareEvent](h, p)
 }
 

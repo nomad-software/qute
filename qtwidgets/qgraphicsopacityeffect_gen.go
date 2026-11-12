@@ -70,7 +70,7 @@ func NewQGraphicsOpacityEffect(parent qtcore.QObjectLike) *QGraphicsOpacityEffec
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsOpacityEffect", mode)
+	h := rt.WrapNew[QGraphicsOpacityEffect](p, "QGraphicsOpacityEffect", mode)
 	return rt.View[QGraphicsOpacityEffect](h, p)
 }
 
@@ -462,7 +462,7 @@ func NewQGraphicsOpacityEffectWith(v QGraphicsOpacityEffectSubclass, parent qtco
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsOpacityEffect", mode)
+	h := rt.WrapNew[QGraphicsOpacityEffect](p, "QGraphicsOpacityEffect", mode)
 	base.QGraphicsOpacityEffect = rt.View[QGraphicsOpacityEffect](h, p)
 	id := h.SetSelf(v, qGraphicsOpacityEffectVTable)
 	mask := rt.Mask(v, qGraphicsOpacityEffectVTable)

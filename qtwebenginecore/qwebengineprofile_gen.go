@@ -68,7 +68,7 @@ func NewQWebEngineProfile(parent qtcore.QObjectLike) *QWebEngineProfile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineProfile", mode)
+	h := rt.WrapNew[QWebEngineProfile](p, "QWebEngineProfile", mode)
 	return rt.View[QWebEngineProfile](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQWebEngineProfileWithName(name string, parent qtcore.QObjectLike) *QWebE
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineProfile", mode)
+	h := rt.WrapNew[QWebEngineProfile](p, "QWebEngineProfile", mode)
 	return rt.View[QWebEngineProfile](h, p)
 }
 
@@ -988,7 +988,7 @@ func NewQWebEngineProfileWith(v QWebEngineProfileSubclass, parent qtcore.QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineProfile", mode)
+	h := rt.WrapNew[QWebEngineProfile](p, "QWebEngineProfile", mode)
 	base.QWebEngineProfile = rt.View[QWebEngineProfile](h, p)
 	id := h.SetSelf(v, qWebEngineProfileVTable)
 	mask := rt.Mask(v, qWebEngineProfileVTable)
@@ -1020,7 +1020,7 @@ func NewQWebEngineProfileWithNameWith(v QWebEngineProfileSubclass, name string, 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineProfile", mode)
+	h := rt.WrapNew[QWebEngineProfile](p, "QWebEngineProfile", mode)
 	base.QWebEngineProfile = rt.View[QWebEngineProfile](h, p)
 	id := h.SetSelf(v, qWebEngineProfileVTable)
 	mask := rt.Mask(v, qWebEngineProfileVTable)

@@ -91,7 +91,7 @@ func (this *QRegularExpressionMatchIterator) Unkeep() {
 func NewQRegularExpressionMatchIterator() *QRegularExpressionMatchIterator {
 	rt.CheckThread("NewQRegularExpressionMatchIterator")
 	p := C.qute_QRegularExpressionMatchIterator_new()
-	h := rt.WrapClass(p, "QRegularExpressionMatchIterator", rt.NewOwned)
+	h := rt.WrapNew[QRegularExpressionMatchIterator](p, "QRegularExpressionMatchIterator", rt.NewOwned)
 	return rt.View[QRegularExpressionMatchIterator](h, p)
 }
 

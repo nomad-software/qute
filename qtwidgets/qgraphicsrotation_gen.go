@@ -68,7 +68,7 @@ func NewQGraphicsRotation(parent qtcore.QObjectLike) *QGraphicsRotation {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRotation", mode)
+	h := rt.WrapNew[QGraphicsRotation](p, "QGraphicsRotation", mode)
 	return rt.View[QGraphicsRotation](h, p)
 }
 
@@ -431,7 +431,7 @@ func NewQGraphicsRotationWith(v QGraphicsRotationSubclass, parent qtcore.QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRotation", mode)
+	h := rt.WrapNew[QGraphicsRotation](p, "QGraphicsRotation", mode)
 	base.QGraphicsRotation = rt.View[QGraphicsRotation](h, p)
 	id := h.SetSelf(v, qGraphicsRotationVTable)
 	mask := rt.Mask(v, qGraphicsRotationVTable)

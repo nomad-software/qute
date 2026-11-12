@@ -343,7 +343,7 @@ func NewQValidatorWith(v QValidatorSubclass, parent qtcore.QObjectLike) *QValida
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QValidator", mode)
+	h := rt.WrapNew[QValidator](p, "QValidator", mode)
 	base.QValidator = rt.View[QValidator](h, p)
 	id := h.SetSelf(v, qValidatorVTable)
 	mask := rt.Mask(v, qValidatorVTable)

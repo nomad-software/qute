@@ -61,7 +61,7 @@ func QPlatformSurfaceEventCast(e qtcore.QEventLike) *QPlatformSurfaceEvent {
 func NewQPlatformSurfaceEventWithSurfaceEventType(surfaceEventType QPlatformSurfaceEventSurfaceEventType) *QPlatformSurfaceEvent {
 	rt.CheckThread("NewQPlatformSurfaceEventWithSurfaceEventType")
 	p := C.qute_QPlatformSurfaceEvent_new(C.int64_t(surfaceEventType))
-	h := rt.WrapClass(p, "QPlatformSurfaceEvent", rt.NewOwned)
+	h := rt.WrapNew[QPlatformSurfaceEvent](p, "QPlatformSurfaceEvent", rt.NewOwned)
 	return rt.View[QPlatformSurfaceEvent](h, p)
 }
 

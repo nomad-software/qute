@@ -62,7 +62,7 @@ func QStyleOptionToolBoxCast(o QStyleOptionLike) *QStyleOptionToolBox {
 func NewQStyleOptionToolBox() *QStyleOptionToolBox {
 	rt.CheckThread("NewQStyleOptionToolBox")
 	p := C.qute_QStyleOptionToolBox_new()
-	h := rt.WrapClass(p, "QStyleOptionToolBox", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionToolBox](p, "QStyleOptionToolBox", rt.NewOwned)
 	return rt.View[QStyleOptionToolBox](h, p)
 }
 

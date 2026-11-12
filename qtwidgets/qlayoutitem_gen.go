@@ -509,7 +509,7 @@ func NewQLayoutItemWith(v QLayoutItemSubclass) *QLayoutItem {
 		panic("NewQLayoutItemWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QLayoutItem_new_shim()
-	h := rt.WrapClass(p, "QLayoutItem", rt.NewOwned)
+	h := rt.WrapNew[QLayoutItem](p, "QLayoutItem", rt.NewOwned)
 	base.QLayoutItem = rt.View[QLayoutItem](h, p)
 	id := h.SetSelf(v, qLayoutItemVTable)
 	mask := rt.Mask(v, qLayoutItemVTable)

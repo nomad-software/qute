@@ -42,7 +42,7 @@ func QTextImageFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextImage
 func NewQTextImageFormat() *QTextImageFormat {
 	rt.CheckThread("NewQTextImageFormat")
 	p := C.qute_QTextImageFormat_new()
-	h := rt.WrapClass(p, "QTextImageFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextImageFormat](p, "QTextImageFormat", rt.NewOwned)
 	return rt.View[QTextImageFormat](h, p)
 }
 

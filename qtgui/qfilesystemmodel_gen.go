@@ -67,7 +67,7 @@ func NewQFileSystemModel(parent qtcore.QObjectLike) *QFileSystemModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemModel", mode)
+	h := rt.WrapNew[QFileSystemModel](p, "QFileSystemModel", mode)
 	return rt.View[QFileSystemModel](h, p)
 }
 
@@ -1828,7 +1828,7 @@ func NewQFileSystemModelWith(v QFileSystemModelSubclass, parent qtcore.QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFileSystemModel", mode)
+	h := rt.WrapNew[QFileSystemModel](p, "QFileSystemModel", mode)
 	base.QFileSystemModel = rt.View[QFileSystemModel](h, p)
 	id := h.SetSelf(v, qFileSystemModelVTable)
 	mask := rt.Mask(v, qFileSystemModelVTable)

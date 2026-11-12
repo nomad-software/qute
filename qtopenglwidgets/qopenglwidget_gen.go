@@ -71,7 +71,7 @@ func NewQOpenGLWidget(parent qtwidgets.QWidgetLike) *QOpenGLWidget {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWidget", mode)
+	h := rt.WrapNew[QOpenGLWidget](p, "QOpenGLWidget", mode)
 	return rt.View[QOpenGLWidget](h, p)
 }
 
@@ -96,7 +96,7 @@ func NewQOpenGLWidgetFull(parent qtwidgets.QWidgetLike, fArg qtcore.WindowFlags)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWidget", mode)
+	h := rt.WrapNew[QOpenGLWidget](p, "QOpenGLWidget", mode)
 	return rt.View[QOpenGLWidget](h, p)
 }
 
@@ -1304,7 +1304,7 @@ func NewQOpenGLWidgetWith(v QOpenGLWidgetSubclass, parent qtwidgets.QWidgetLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWidget", mode)
+	h := rt.WrapNew[QOpenGLWidget](p, "QOpenGLWidget", mode)
 	base.QOpenGLWidget = rt.View[QOpenGLWidget](h, p)
 	id := h.SetSelf(v, qOpenGLWidgetVTable)
 	mask := rt.Mask(v, qOpenGLWidgetVTable)

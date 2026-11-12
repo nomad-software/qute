@@ -86,7 +86,7 @@ func (this *QCameraDevice) Unkeep() {
 func NewQCameraDevice() *QCameraDevice {
 	rt.CheckThread("NewQCameraDevice")
 	p := C.qute_QCameraDevice_new()
-	h := rt.WrapClass(p, "QCameraDevice", rt.NewOwned)
+	h := rt.WrapNew[QCameraDevice](p, "QCameraDevice", rt.NewOwned)
 	return rt.View[QCameraDevice](h, p)
 }
 

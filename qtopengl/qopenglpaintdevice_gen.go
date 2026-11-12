@@ -42,7 +42,7 @@ func QOpenGLPaintDeviceFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QOpenGLP
 func NewQOpenGLPaintDevice() *QOpenGLPaintDevice {
 	rt.CheckThread("NewQOpenGLPaintDevice")
 	p := C.qute_QOpenGLPaintDevice_new()
-	h := rt.WrapClass(p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
 	return rt.View[QOpenGLPaintDevice](h, p)
 }
 
@@ -54,7 +54,7 @@ func NewQOpenGLPaintDevice() *QOpenGLPaintDevice {
 func NewQOpenGLPaintDeviceWithSize(size qtcore.QSize) *QOpenGLPaintDevice {
 	rt.CheckThread("NewQOpenGLPaintDeviceWithSize")
 	p := C.qute_QOpenGLPaintDevice_new_1(cQSize(size))
-	h := rt.WrapClass(p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
 	return rt.View[QOpenGLPaintDevice](h, p)
 }
 
@@ -245,7 +245,7 @@ func NewQOpenGLPaintDeviceWith(v QOpenGLPaintDeviceSubclass) *QOpenGLPaintDevice
 		panic("NewQOpenGLPaintDeviceWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLPaintDevice_new_shim()
-	h := rt.WrapClass(p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
 	base.QOpenGLPaintDevice = rt.View[QOpenGLPaintDevice](h, p)
 	id := h.SetSelf(v, qOpenGLPaintDeviceVTable)
 	mask := rt.Mask(v, qOpenGLPaintDeviceVTable)
@@ -268,7 +268,7 @@ func NewQOpenGLPaintDeviceWithSizeWith(v QOpenGLPaintDeviceSubclass, size qtcore
 		panic("NewQOpenGLPaintDeviceWithSizeWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QOpenGLPaintDevice_new_shim_1(cQSize(size))
-	h := rt.WrapClass(p, "QOpenGLPaintDevice", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLPaintDevice](p, "QOpenGLPaintDevice", rt.NewOwned)
 	base.QOpenGLPaintDevice = rt.View[QOpenGLPaintDevice](h, p)
 	id := h.SetSelf(v, qOpenGLPaintDeviceVTable)
 	mask := rt.Mask(v, qOpenGLPaintDeviceVTable)

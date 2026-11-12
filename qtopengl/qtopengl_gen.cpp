@@ -1136,6 +1136,10 @@ void qute_QOpenGLFramebufferObject_setAttachment(void *self, int64_t a0) {
 	qute_gui_only();
 	static_cast<QOpenGLFramebufferObject *>(self)->setAttachment(static_cast<QOpenGLFramebufferObject::Attachment>(a0));
 }
+unsigned int qute_QOpenGLFramebufferObject_handle(void *self) {
+	qute_gui_only();
+	return static_cast<unsigned int>(static_cast<QOpenGLFramebufferObject *>(self)->handle());
+}
 void qute_QOpenGLFramebufferObject_addColorAttachment_1(void *self, qute_size a0, unsigned int a1) {
 	qute_gui_only();
 	static_cast<QOpenGLFramebufferObject *>(self)->addColorAttachment(qute_to_QSize(a0), static_cast<unsigned int>(a1));

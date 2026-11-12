@@ -86,7 +86,7 @@ func (this *QColorSpace) Unkeep() {
 func NewQColorSpace() *QColorSpace {
 	rt.CheckThread("NewQColorSpace")
 	p := C.qute_QColorSpace_new()
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQColorSpace() *QColorSpace {
 func NewQColorSpaceWithNamedColorSpace(namedColorSpace QColorSpaceNamedColorSpace) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithNamedColorSpace")
 	p := C.qute_QColorSpace_new_1(C.int64_t(namedColorSpace))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQColorSpaceWithNamedColorSpace(namedColorSpace QColorSpaceNamedColorSpac
 func NewQColorSpaceWithPointF(whitePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointF")
 	p := C.qute_QColorSpace_new_2(cQPointF(whitePoint), C.int64_t(transferFunction))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -128,7 +128,7 @@ func NewQColorSpaceWithPointFTransferFunctionTables(whitePoint qtcore.QPointF, t
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
 	p := C.qute_QColorSpace_new_3(cQPointF(whitePoint), unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -142,7 +142,7 @@ func NewQColorSpaceWithPointFTransferFunctionTables(whitePoint qtcore.QPointF, t
 func NewQColorSpaceWithPrimaries(primaries QColorSpacePrimaries, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPrimaries")
 	p := C.qute_QColorSpace_new_4(C.int64_t(primaries), C.int64_t(transferFunction))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -154,7 +154,7 @@ func NewQColorSpaceWithPrimaries(primaries QColorSpacePrimaries, transferFunctio
 func NewQColorSpaceWithPrimariesGamma(primaries QColorSpacePrimaries, gamma float32) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPrimariesGamma")
 	p := C.qute_QColorSpace_new_5(C.int64_t(primaries), C.float(gamma))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -170,7 +170,7 @@ func NewQColorSpaceWithPrimariesTransferFunctionTables(primaries QColorSpacePrim
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
 	p := C.qute_QColorSpace_new_6(C.int64_t(primaries), unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -184,7 +184,7 @@ func NewQColorSpaceWithPrimariesTransferFunctionTables(primaries QColorSpacePrim
 func NewQColorSpaceWithPointFPointF(whitePoint qtcore.QPointF, redPoint qtcore.QPointF, greenPoint qtcore.QPointF, bluePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointFPointF")
 	p := C.qute_QColorSpace_new_7(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), C.int64_t(transferFunction))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -199,7 +199,7 @@ func NewQColorSpaceWithColorSpacePrimaryPoints(primaryPoints *QColorSpacePrimary
 	rt.CheckThread("NewQColorSpaceWithColorSpacePrimaryPoints")
 	p := C.qute_QColorSpace_new_8(rt.UseArg(unsafe.Pointer(primaryPoints), "NewQColorSpaceWithColorSpacePrimaryPoints"), C.int64_t(transferFunction))
 	runtime.KeepAlive(primaryPoints)
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -215,7 +215,7 @@ func NewQColorSpaceWithPointFPointFPointF(whitePoint qtcore.QPointF, redPoint qt
 		transferFunctionTableC[i] = C.ushort(transferFunctionTable[i])
 	}
 	p := C.qute_QColorSpace_new_9(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(transferFunctionTableC)), C.ptrdiff_t(len(transferFunctionTable)))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -239,7 +239,7 @@ func NewQColorSpaceWithPointFPointFPointFPointF(whitePoint qtcore.QPointF, redPo
 		blueTransferFunctionTableC[i] = C.ushort(blueTransferFunctionTable[i])
 	}
 	p := C.qute_QColorSpace_new_10(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), unsafe.Pointer(unsafe.SliceData(redTransferFunctionTableC)), C.ptrdiff_t(len(redTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(greenTransferFunctionTableC)), C.ptrdiff_t(len(greenTransferFunctionTable)), unsafe.Pointer(unsafe.SliceData(blueTransferFunctionTableC)), C.ptrdiff_t(len(blueTransferFunctionTable)))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -253,7 +253,7 @@ func NewQColorSpaceWithPointFPointFPointFPointF(whitePoint qtcore.QPointF, redPo
 func NewQColorSpaceWithPointFFull(whitePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointFFull")
 	p := C.qute_QColorSpace_new_11(cQPointF(whitePoint), C.int64_t(transferFunction), C.float(gamma))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -267,7 +267,7 @@ func NewQColorSpaceWithPointFFull(whitePoint qtcore.QPointF, transferFunction QC
 func NewQColorSpaceWithPrimariesFull(primaries QColorSpacePrimaries, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPrimariesFull")
 	p := C.qute_QColorSpace_new_12(C.int64_t(primaries), C.int64_t(transferFunction), C.float(gamma))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -281,7 +281,7 @@ func NewQColorSpaceWithPrimariesFull(primaries QColorSpacePrimaries, transferFun
 func NewQColorSpaceWithPointFPointFFull(whitePoint qtcore.QPointF, redPoint qtcore.QPointF, greenPoint qtcore.QPointF, bluePoint qtcore.QPointF, transferFunction QColorSpaceTransferFunction, gamma float32) *QColorSpace {
 	rt.CheckThread("NewQColorSpaceWithPointFPointFFull")
 	p := C.qute_QColorSpace_new_13(cQPointF(whitePoint), cQPointF(redPoint), cQPointF(greenPoint), cQPointF(bluePoint), C.int64_t(transferFunction), C.float(gamma))
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 
@@ -296,7 +296,7 @@ func NewQColorSpaceWithColorSpacePrimaryPointsFull(primaryPoints *QColorSpacePri
 	rt.CheckThread("NewQColorSpaceWithColorSpacePrimaryPointsFull")
 	p := C.qute_QColorSpace_new_14(rt.UseArg(unsafe.Pointer(primaryPoints), "NewQColorSpaceWithColorSpacePrimaryPointsFull"), C.int64_t(transferFunction), C.float(gamma))
 	runtime.KeepAlive(primaryPoints)
-	h := rt.WrapClass(p, "QColorSpace", rt.NewOwned)
+	h := rt.WrapNew[QColorSpace](p, "QColorSpace", rt.NewOwned)
 	return rt.View[QColorSpace](h, p)
 }
 

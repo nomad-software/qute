@@ -85,7 +85,7 @@ func (this *QVariant) Unkeep() {
 func NewQVariant() *QVariant {
 	rt.CheckThread("NewQVariant")
 	p := C.qute_QVariant_new()
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQVariantWithMetaType(typeArg *QMetaType) *QVariant {
 	rt.CheckThread("NewQVariantWithMetaType")
 	p := C.qute_QVariant_new_1(rt.UseArg(unsafe.Pointer(typeArg), "NewQVariantWithMetaType"))
 	runtime.KeepAlive(typeArg)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQVariantWithMetaType(typeArg *QMetaType) *QVariant {
 func NewQVariantWithInt(iArg int) *QVariant {
 	rt.CheckThread("NewQVariantWithInt")
 	p := C.qute_QVariant_new_2(C.int(iArg))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -124,7 +124,7 @@ func NewQVariantWithInt(iArg int) *QVariant {
 func NewQVariantWithUint(ui uint) *QVariant {
 	rt.CheckThread("NewQVariantWithUint")
 	p := C.qute_QVariant_new_3(C.uint(ui))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -136,7 +136,7 @@ func NewQVariantWithUint(ui uint) *QVariant {
 func NewQVariantWithInt64(ll int64) *QVariant {
 	rt.CheckThread("NewQVariantWithInt64")
 	p := C.qute_QVariant_new_4(C.longlong(ll))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -148,7 +148,7 @@ func NewQVariantWithInt64(ll int64) *QVariant {
 func NewQVariantWithUll(ull uint64) *QVariant {
 	rt.CheckThread("NewQVariantWithUll")
 	p := C.qute_QVariant_new_5(C.ulonglong(ull))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -160,7 +160,7 @@ func NewQVariantWithUll(ull uint64) *QVariant {
 func NewQVariantWithBool(bArg bool) *QVariant {
 	rt.CheckThread("NewQVariantWithBool")
 	p := C.qute_QVariant_new_6(C.bool(bArg))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -172,7 +172,7 @@ func NewQVariantWithBool(bArg bool) *QVariant {
 func NewQVariantWithFloat64(d float64) *QVariant {
 	rt.CheckThread("NewQVariantWithFloat64")
 	p := C.qute_QVariant_new_7(C.double(d))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -184,7 +184,7 @@ func NewQVariantWithFloat64(d float64) *QVariant {
 func NewQVariantWithFloat32(fArg float32) *QVariant {
 	rt.CheckThread("NewQVariantWithFloat32")
 	p := C.qute_QVariant_new_8(C.float(fArg))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -196,7 +196,7 @@ func NewQVariantWithFloat32(fArg float32) *QVariant {
 func NewQVariantWithRune(qchar rune) *QVariant {
 	rt.CheckThread("NewQVariantWithRune")
 	p := C.qute_QVariant_new_9(C.uint(qchar))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -209,7 +209,7 @@ func NewQVariantWithDate(date *QDate) *QVariant {
 	rt.CheckThread("NewQVariantWithDate")
 	p := C.qute_QVariant_new_10(rt.UseArg(unsafe.Pointer(date), "NewQVariantWithDate"))
 	runtime.KeepAlive(date)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -222,7 +222,7 @@ func NewQVariantWithTime(time *QTime) *QVariant {
 	rt.CheckThread("NewQVariantWithTime")
 	p := C.qute_QVariant_new_11(rt.UseArg(unsafe.Pointer(time), "NewQVariantWithTime"))
 	runtime.KeepAlive(time)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -235,7 +235,7 @@ func NewQVariantWithBitArray(bitarray *QBitArray) *QVariant {
 	rt.CheckThread("NewQVariantWithBitArray")
 	p := C.qute_QVariant_new_12(rt.UseArg(unsafe.Pointer(bitarray), "NewQVariantWithBitArray"))
 	runtime.KeepAlive(bitarray)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -247,7 +247,7 @@ func NewQVariantWithBitArray(bitarray *QBitArray) *QVariant {
 func NewQVariantWithBytes(bytearray []byte) *QVariant {
 	rt.CheckThread("NewQVariantWithBytes")
 	p := C.qute_QVariant_new_13((*C.char)(unsafe.Pointer(unsafe.SliceData(bytearray))), C.ptrdiff_t(len(bytearray)))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -260,7 +260,7 @@ func NewQVariantWithDateTime(datetime *QDateTime) *QVariant {
 	rt.CheckThread("NewQVariantWithDateTime")
 	p := C.qute_QVariant_new_14(rt.UseArg(unsafe.Pointer(datetime), "NewQVariantWithDateTime"))
 	runtime.KeepAlive(datetime)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -280,7 +280,7 @@ func NewQVariantWithMap(hash map[string]*QVariant) *QVariant {
 	defer quteFreeStrs(hashK)
 	p := C.qute_QVariant_new_15(unsafe.Pointer(unsafe.SliceData(hashK)), unsafe.Pointer(unsafe.SliceData(hashV)), C.ptrdiff_t(len(hash)))
 	runtime.KeepAlive(hash)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -293,7 +293,7 @@ func NewQVariantWithJsonArray(jsonArray *QJsonArray) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonArray")
 	p := C.qute_QVariant_new_16(rt.UseArg(unsafe.Pointer(jsonArray), "NewQVariantWithJsonArray"))
 	runtime.KeepAlive(jsonArray)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -306,7 +306,7 @@ func NewQVariantWithJsonObject(jsonObject *QJsonObject) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonObject")
 	p := C.qute_QVariant_new_17(rt.UseArg(unsafe.Pointer(jsonObject), "NewQVariantWithJsonObject"))
 	runtime.KeepAlive(jsonObject)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -323,7 +323,7 @@ func NewQVariantWithVariants(list []*QVariant) *QVariant {
 	}
 	p := C.qute_QVariant_new_18(unsafe.Pointer(unsafe.SliceData(listC)), C.ptrdiff_t(len(list)))
 	runtime.KeepAlive(list)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -336,7 +336,7 @@ func NewQVariantWithLocale(locale *QLocale) *QVariant {
 	rt.CheckThread("NewQVariantWithLocale")
 	p := C.qute_QVariant_new_19(rt.UseArg(unsafe.Pointer(locale), "NewQVariantWithLocale"))
 	runtime.KeepAlive(locale)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -349,7 +349,7 @@ func NewQVariantWithRegularExpression(re *QRegularExpression) *QVariant {
 	rt.CheckThread("NewQVariantWithRegularExpression")
 	p := C.qute_QVariant_new_20(rt.UseArg(unsafe.Pointer(re), "NewQVariantWithRegularExpression"))
 	runtime.KeepAlive(re)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -361,7 +361,7 @@ func NewQVariantWithRegularExpression(re *QRegularExpression) *QVariant {
 func NewQVariantWithString(stringArg string) *QVariant {
 	rt.CheckThread("NewQVariantWithString")
 	p := C.qute_QVariant_new_21((*C.char)(unsafe.Pointer(unsafe.StringData(stringArg))), C.ptrdiff_t(len(stringArg)))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -374,7 +374,7 @@ func NewQVariantWithStrings(stringlist []string) *QVariant {
 	rt.CheckThread("NewQVariantWithStrings")
 	stringlistData, stringlistLens := quteStrListArg(stringlist)
 	p := C.qute_QVariant_new_22((*C.char)(unsafe.Pointer(unsafe.SliceData(stringlistData))), (*C.ptrdiff_t)(unsafe.SliceData(stringlistLens)), C.ptrdiff_t(len(stringlist)))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -387,7 +387,7 @@ func NewQVariantWithUrl(url *QUrl) *QVariant {
 	rt.CheckThread("NewQVariantWithUrl")
 	p := C.qute_QVariant_new_23(rt.UseArg(unsafe.Pointer(url), "NewQVariantWithUrl"))
 	runtime.KeepAlive(url)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -400,7 +400,7 @@ func NewQVariantWithJsonValue(jsonValue *QJsonValue) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonValue")
 	p := C.qute_QVariant_new_24(rt.UseArg(unsafe.Pointer(jsonValue), "NewQVariantWithJsonValue"))
 	runtime.KeepAlive(jsonValue)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -413,7 +413,7 @@ func NewQVariantWithModelIndex(modelIndex *QModelIndex) *QVariant {
 	rt.CheckThread("NewQVariantWithModelIndex")
 	p := C.qute_QVariant_new_25(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithModelIndex"))
 	runtime.KeepAlive(modelIndex)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -426,7 +426,7 @@ func NewQVariantWithUuid(uuid *QUuid) *QVariant {
 	rt.CheckThread("NewQVariantWithUuid")
 	p := C.qute_QVariant_new_26(rt.UseArg(unsafe.Pointer(uuid), "NewQVariantWithUuid"))
 	runtime.KeepAlive(uuid)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -438,7 +438,7 @@ func NewQVariantWithUuid(uuid *QUuid) *QVariant {
 func NewQVariantWithSize(size QSize) *QVariant {
 	rt.CheckThread("NewQVariantWithSize")
 	p := C.qute_QVariant_new_27(cQSize(size))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -450,7 +450,7 @@ func NewQVariantWithSize(size QSize) *QVariant {
 func NewQVariantWithSizeF(size QSizeF) *QVariant {
 	rt.CheckThread("NewQVariantWithSizeF")
 	p := C.qute_QVariant_new_28(cQSizeF(size))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -462,7 +462,7 @@ func NewQVariantWithSizeF(size QSizeF) *QVariant {
 func NewQVariantWithPoint(pt QPoint) *QVariant {
 	rt.CheckThread("NewQVariantWithPoint")
 	p := C.qute_QVariant_new_29(cQPoint(pt))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -474,7 +474,7 @@ func NewQVariantWithPoint(pt QPoint) *QVariant {
 func NewQVariantWithPointF(pt QPointF) *QVariant {
 	rt.CheckThread("NewQVariantWithPointF")
 	p := C.qute_QVariant_new_30(cQPointF(pt))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -487,7 +487,7 @@ func NewQVariantWithLine(line *QLine) *QVariant {
 	rt.CheckThread("NewQVariantWithLine")
 	p := C.qute_QVariant_new_31(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLine"))
 	runtime.KeepAlive(line)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -500,7 +500,7 @@ func NewQVariantWithLineF(line *QLineF) *QVariant {
 	rt.CheckThread("NewQVariantWithLineF")
 	p := C.qute_QVariant_new_32(rt.UseArg(unsafe.Pointer(line), "NewQVariantWithLineF"))
 	runtime.KeepAlive(line)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -512,7 +512,7 @@ func NewQVariantWithLineF(line *QLineF) *QVariant {
 func NewQVariantWithRect(rect QRect) *QVariant {
 	rt.CheckThread("NewQVariantWithRect")
 	p := C.qute_QVariant_new_33(cQRect(rect))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -524,7 +524,7 @@ func NewQVariantWithRect(rect QRect) *QVariant {
 func NewQVariantWithRectF(rect QRectF) *QVariant {
 	rt.CheckThread("NewQVariantWithRectF")
 	p := C.qute_QVariant_new_34(cQRectF(rect))
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -537,7 +537,7 @@ func NewQVariantWithEasingCurve(easing *QEasingCurve) *QVariant {
 	rt.CheckThread("NewQVariantWithEasingCurve")
 	p := C.qute_QVariant_new_35(rt.UseArg(unsafe.Pointer(easing), "NewQVariantWithEasingCurve"))
 	runtime.KeepAlive(easing)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -550,7 +550,7 @@ func NewQVariantWithJsonDocument(jsonDocument *QJsonDocument) *QVariant {
 	rt.CheckThread("NewQVariantWithJsonDocument")
 	p := C.qute_QVariant_new_36(rt.UseArg(unsafe.Pointer(jsonDocument), "NewQVariantWithJsonDocument"))
 	runtime.KeepAlive(jsonDocument)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -563,7 +563,7 @@ func NewQVariantWithPersistentIndex(modelIndex *QPersistentModelIndex) *QVariant
 	rt.CheckThread("NewQVariantWithPersistentIndex")
 	p := C.qute_QVariant_new_37(rt.UseArg(unsafe.Pointer(modelIndex), "NewQVariantWithPersistentIndex"))
 	runtime.KeepAlive(modelIndex)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 
@@ -578,7 +578,7 @@ func NewQVariantWithMetaTypeFull(typeArg *QMetaType, copy unsafe.Pointer) *QVari
 	rt.CheckThread("NewQVariantWithMetaTypeFull")
 	p := C.qute_QVariant_new_38(rt.UseArg(unsafe.Pointer(typeArg), "NewQVariantWithMetaTypeFull"), copy)
 	runtime.KeepAlive(typeArg)
-	h := rt.WrapClass(p, "QVariant", rt.NewOwned)
+	h := rt.WrapNew[QVariant](p, "QVariant", rt.NewOwned)
 	return rt.View[QVariant](h, p)
 }
 

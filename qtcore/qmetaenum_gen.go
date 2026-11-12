@@ -85,7 +85,7 @@ func (this *QMetaEnum) Unkeep() {
 func NewQMetaEnum() *QMetaEnum {
 	rt.CheckThread("NewQMetaEnum")
 	p := C.qute_QMetaEnum_new()
-	h := rt.WrapClass(p, "QMetaEnum", rt.NewOwned)
+	h := rt.WrapNew[QMetaEnum](p, "QMetaEnum", rt.NewOwned)
 	return rt.View[QMetaEnum](h, p)
 }
 

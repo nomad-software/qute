@@ -91,7 +91,7 @@ func (this *QXmlStreamNamespaceDeclaration) Unkeep() {
 func NewQXmlStreamNamespaceDeclaration() *QXmlStreamNamespaceDeclaration {
 	rt.CheckThread("NewQXmlStreamNamespaceDeclaration")
 	p := C.qute_QXmlStreamNamespaceDeclaration_new()
-	h := rt.WrapClass(p, "QXmlStreamNamespaceDeclaration", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamNamespaceDeclaration](p, "QXmlStreamNamespaceDeclaration", rt.NewOwned)
 	return rt.View[QXmlStreamNamespaceDeclaration](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQXmlStreamNamespaceDeclaration() *QXmlStreamNamespaceDeclaration {
 func NewQXmlStreamNamespaceDeclarationWithPrefix(prefix string, namespaceUri string) *QXmlStreamNamespaceDeclaration {
 	rt.CheckThread("NewQXmlStreamNamespaceDeclarationWithPrefix")
 	p := C.qute_QXmlStreamNamespaceDeclaration_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(prefix))), C.ptrdiff_t(len(prefix)), (*C.char)(unsafe.Pointer(unsafe.StringData(namespaceUri))), C.ptrdiff_t(len(namespaceUri)))
-	h := rt.WrapClass(p, "QXmlStreamNamespaceDeclaration", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamNamespaceDeclaration](p, "QXmlStreamNamespaceDeclaration", rt.NewOwned)
 	return rt.View[QXmlStreamNamespaceDeclaration](h, p)
 }
 

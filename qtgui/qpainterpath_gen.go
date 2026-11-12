@@ -86,7 +86,7 @@ func (this *QPainterPath) Unkeep() {
 func NewQPainterPath() *QPainterPath {
 	rt.CheckThread("NewQPainterPath")
 	p := C.qute_QPainterPath_new()
-	h := rt.WrapClass(p, "QPainterPath", rt.NewOwned)
+	h := rt.WrapNew[QPainterPath](p, "QPainterPath", rt.NewOwned)
 	return rt.View[QPainterPath](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQPainterPath() *QPainterPath {
 func NewQPainterPathWithPointF(startPoint qtcore.QPointF) *QPainterPath {
 	rt.CheckThread("NewQPainterPathWithPointF")
 	p := C.qute_QPainterPath_new_1(cQPointF(startPoint))
-	h := rt.WrapClass(p, "QPainterPath", rt.NewOwned)
+	h := rt.WrapNew[QPainterPath](p, "QPainterPath", rt.NewOwned)
 	return rt.View[QPainterPath](h, p)
 }
 

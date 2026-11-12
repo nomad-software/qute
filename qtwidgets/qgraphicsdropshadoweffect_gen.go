@@ -72,7 +72,7 @@ func NewQGraphicsDropShadowEffect(parent qtcore.QObjectLike) *QGraphicsDropShado
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsDropShadowEffect", mode)
+	h := rt.WrapNew[QGraphicsDropShadowEffect](p, "QGraphicsDropShadowEffect", mode)
 	return rt.View[QGraphicsDropShadowEffect](h, p)
 }
 
@@ -568,7 +568,7 @@ func NewQGraphicsDropShadowEffectWith(v QGraphicsDropShadowEffectSubclass, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsDropShadowEffect", mode)
+	h := rt.WrapNew[QGraphicsDropShadowEffect](p, "QGraphicsDropShadowEffect", mode)
 	base.QGraphicsDropShadowEffect = rt.View[QGraphicsDropShadowEffect](h, p)
 	id := h.SetSelf(v, qGraphicsDropShadowEffectVTable)
 	mask := rt.Mask(v, qGraphicsDropShadowEffectVTable)

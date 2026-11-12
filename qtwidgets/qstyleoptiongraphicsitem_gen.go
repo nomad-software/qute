@@ -66,7 +66,7 @@ func QStyleOptionGraphicsItemCast(o QStyleOptionLike) *QStyleOptionGraphicsItem 
 func NewQStyleOptionGraphicsItem() *QStyleOptionGraphicsItem {
 	rt.CheckThread("NewQStyleOptionGraphicsItem")
 	p := C.qute_QStyleOptionGraphicsItem_new()
-	h := rt.WrapClass(p, "QStyleOptionGraphicsItem", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionGraphicsItem](p, "QStyleOptionGraphicsItem", rt.NewOwned)
 	return rt.View[QStyleOptionGraphicsItem](h, p)
 }
 

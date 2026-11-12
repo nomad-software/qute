@@ -85,7 +85,7 @@ func (this *QProcessEnvironment) Unkeep() {
 func NewQProcessEnvironment() *QProcessEnvironment {
 	rt.CheckThread("NewQProcessEnvironment")
 	p := C.qute_QProcessEnvironment_new()
-	h := rt.WrapClass(p, "QProcessEnvironment", rt.NewOwned)
+	h := rt.WrapNew[QProcessEnvironment](p, "QProcessEnvironment", rt.NewOwned)
 	return rt.View[QProcessEnvironment](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQProcessEnvironment() *QProcessEnvironment {
 func NewQProcessEnvironmentWithInitialization(initialization QProcessEnvironmentInitialization) *QProcessEnvironment {
 	rt.CheckThread("NewQProcessEnvironmentWithInitialization")
 	p := C.qute_QProcessEnvironment_new_1(C.int64_t(initialization))
-	h := rt.WrapClass(p, "QProcessEnvironment", rt.NewOwned)
+	h := rt.WrapNew[QProcessEnvironment](p, "QProcessEnvironment", rt.NewOwned)
 	return rt.View[QProcessEnvironment](h, p)
 }
 

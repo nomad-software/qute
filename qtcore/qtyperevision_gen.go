@@ -85,7 +85,7 @@ func (this *QTypeRevision) Unkeep() {
 func NewQTypeRevision() *QTypeRevision {
 	rt.CheckThread("NewQTypeRevision")
 	p := C.qute_QTypeRevision_new()
-	h := rt.WrapClass(p, "QTypeRevision", rt.NewOwned)
+	h := rt.WrapNew[QTypeRevision](p, "QTypeRevision", rt.NewOwned)
 	return rt.View[QTypeRevision](h, p)
 }
 

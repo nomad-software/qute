@@ -53,7 +53,7 @@ func NewQGraphicsRectItem(parent QGraphicsItemLike) *QGraphicsRectItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
+	h := rt.WrapNew[QGraphicsRectItem](p, "QGraphicsRectItem", mode)
 	return rt.View[QGraphicsRectItem](h, p)
 }
 
@@ -76,7 +76,7 @@ func NewQGraphicsRectItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLike)
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
+	h := rt.WrapNew[QGraphicsRectItem](p, "QGraphicsRectItem", mode)
 	return rt.View[QGraphicsRectItem](h, p)
 }
 
@@ -998,7 +998,7 @@ func NewQGraphicsRectItemWith(v QGraphicsRectItemSubclass, parent QGraphicsItemL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
+	h := rt.WrapNew[QGraphicsRectItem](p, "QGraphicsRectItem", mode)
 	base.QGraphicsRectItem = rt.View[QGraphicsRectItem](h, p)
 	id := h.SetSelf(v, qGraphicsRectItemVTable)
 	mask := rt.Mask(v, qGraphicsRectItemVTable)
@@ -1030,7 +1030,7 @@ func NewQGraphicsRectItemWithRectFWith(v QGraphicsRectItemSubclass, rect qtcore.
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsRectItem", mode)
+	h := rt.WrapNew[QGraphicsRectItem](p, "QGraphicsRectItem", mode)
 	base.QGraphicsRectItem = rt.View[QGraphicsRectItem](h, p)
 	id := h.SetSelf(v, qGraphicsRectItemVTable)
 	mask := rt.Mask(v, qGraphicsRectItemVTable)

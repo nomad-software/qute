@@ -61,6 +61,6 @@ func QCloseEventCast(e qtcore.QEventLike) *QCloseEvent {
 func NewQCloseEvent() *QCloseEvent {
 	rt.CheckThread("NewQCloseEvent")
 	p := C.qute_QCloseEvent_new()
-	h := rt.WrapClass(p, "QCloseEvent", rt.NewOwned)
+	h := rt.WrapNew[QCloseEvent](p, "QCloseEvent", rt.NewOwned)
 	return rt.View[QCloseEvent](h, p)
 }

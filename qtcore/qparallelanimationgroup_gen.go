@@ -70,7 +70,7 @@ func NewQParallelAnimationGroup(parent QObjectLike) *QParallelAnimationGroup {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QParallelAnimationGroup", mode)
+	h := rt.WrapNew[QParallelAnimationGroup](p, "QParallelAnimationGroup", mode)
 	return rt.View[QParallelAnimationGroup](h, p)
 }
 
@@ -306,7 +306,7 @@ func NewQParallelAnimationGroupWith(v QParallelAnimationGroupSubclass, parent QO
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QParallelAnimationGroup", mode)
+	h := rt.WrapNew[QParallelAnimationGroup](p, "QParallelAnimationGroup", mode)
 	base.QParallelAnimationGroup = rt.View[QParallelAnimationGroup](h, p)
 	id := h.SetSelf(v, qParallelAnimationGroupVTable)
 	mask := rt.Mask(v, qParallelAnimationGroupVTable)

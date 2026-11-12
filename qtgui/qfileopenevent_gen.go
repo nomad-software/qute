@@ -61,7 +61,7 @@ func QFileOpenEventCast(e qtcore.QEventLike) *QFileOpenEvent {
 func NewQFileOpenEventWithFile(file string) *QFileOpenEvent {
 	rt.CheckThread("NewQFileOpenEventWithFile")
 	p := C.qute_QFileOpenEvent_new((*C.char)(unsafe.Pointer(unsafe.StringData(file))), C.ptrdiff_t(len(file)))
-	h := rt.WrapClass(p, "QFileOpenEvent", rt.NewOwned)
+	h := rt.WrapNew[QFileOpenEvent](p, "QFileOpenEvent", rt.NewOwned)
 	return rt.View[QFileOpenEvent](h, p)
 }
 
@@ -74,7 +74,7 @@ func NewQFileOpenEventWithUrl(url *qtcore.QUrl) *QFileOpenEvent {
 	rt.CheckThread("NewQFileOpenEventWithUrl")
 	p := C.qute_QFileOpenEvent_new_1(rt.UseArg(unsafe.Pointer(url), "NewQFileOpenEventWithUrl"))
 	runtime.KeepAlive(url)
-	h := rt.WrapClass(p, "QFileOpenEvent", rt.NewOwned)
+	h := rt.WrapNew[QFileOpenEvent](p, "QFileOpenEvent", rt.NewOwned)
 	return rt.View[QFileOpenEvent](h, p)
 }
 

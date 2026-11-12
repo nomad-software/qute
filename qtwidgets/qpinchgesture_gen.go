@@ -67,7 +67,7 @@ func NewQPinchGesture(parent qtcore.QObjectLike) *QPinchGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPinchGesture", mode)
+	h := rt.WrapNew[QPinchGesture](p, "QPinchGesture", mode)
 	return rt.View[QPinchGesture](h, p)
 }
 
@@ -491,7 +491,7 @@ func NewQPinchGestureWith(v QPinchGestureSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPinchGesture", mode)
+	h := rt.WrapNew[QPinchGesture](p, "QPinchGesture", mode)
 	base.QPinchGesture = rt.View[QPinchGesture](h, p)
 	id := h.SetSelf(v, qPinchGestureVTable)
 	mask := rt.Mask(v, qPinchGestureVTable)

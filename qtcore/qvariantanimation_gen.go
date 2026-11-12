@@ -66,7 +66,7 @@ func NewQVariantAnimation(parent QObjectLike) *QVariantAnimation {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVariantAnimation", mode)
+	h := rt.WrapNew[QVariantAnimation](p, "QVariantAnimation", mode)
 	return rt.View[QVariantAnimation](h, p)
 }
 
@@ -531,7 +531,7 @@ func NewQVariantAnimationWith(v QVariantAnimationSubclass, parent QObjectLike) *
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QVariantAnimation", mode)
+	h := rt.WrapNew[QVariantAnimation](p, "QVariantAnimation", mode)
 	base.QVariantAnimation = rt.View[QVariantAnimation](h, p)
 	id := h.SetSelf(v, qVariantAnimationVTable)
 	mask := rt.Mask(v, qVariantAnimationVTable)

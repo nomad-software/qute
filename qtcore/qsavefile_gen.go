@@ -66,7 +66,7 @@ func NewQSaveFile(parent QObjectLike) *QSaveFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSaveFile", mode)
+	h := rt.WrapNew[QSaveFile](p, "QSaveFile", mode)
 	return rt.View[QSaveFile](h, p)
 }
 
@@ -89,7 +89,7 @@ func NewQSaveFileWithName(name string, parent QObjectLike) *QSaveFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSaveFile", mode)
+	h := rt.WrapNew[QSaveFile](p, "QSaveFile", mode)
 	return rt.View[QSaveFile](h, p)
 }
 
@@ -613,7 +613,7 @@ func NewQSaveFileWith(v QSaveFileSubclass, parent QObjectLike) *QSaveFile {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSaveFile", mode)
+	h := rt.WrapNew[QSaveFile](p, "QSaveFile", mode)
 	base.QSaveFile = rt.View[QSaveFile](h, p)
 	id := h.SetSelf(v, qSaveFileVTable)
 	mask := rt.Mask(v, qSaveFileVTable)
@@ -645,7 +645,7 @@ func NewQSaveFileWithNameWith(v QSaveFileSubclass, name string, parent QObjectLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSaveFile", mode)
+	h := rt.WrapNew[QSaveFile](p, "QSaveFile", mode)
 	base.QSaveFile = rt.View[QSaveFile](h, p)
 	id := h.SetSelf(v, qSaveFileVTable)
 	mask := rt.Mask(v, qSaveFileVTable)

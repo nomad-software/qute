@@ -62,7 +62,7 @@ func QStyleOptionFocusRectCast(o QStyleOptionLike) *QStyleOptionFocusRect {
 func NewQStyleOptionFocusRect() *QStyleOptionFocusRect {
 	rt.CheckThread("NewQStyleOptionFocusRect")
 	p := C.qute_QStyleOptionFocusRect_new()
-	h := rt.WrapClass(p, "QStyleOptionFocusRect", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionFocusRect](p, "QStyleOptionFocusRect", rt.NewOwned)
 	return rt.View[QStyleOptionFocusRect](h, p)
 }
 

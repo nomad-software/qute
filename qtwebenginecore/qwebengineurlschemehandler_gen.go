@@ -254,7 +254,7 @@ func NewQWebEngineUrlSchemeHandlerWith(v QWebEngineUrlSchemeHandlerSubclass, par
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QWebEngineUrlSchemeHandler", mode)
+	h := rt.WrapNew[QWebEngineUrlSchemeHandler](p, "QWebEngineUrlSchemeHandler", mode)
 	base.QWebEngineUrlSchemeHandler = rt.View[QWebEngineUrlSchemeHandler](h, p)
 	id := h.SetSelf(v, qWebEngineUrlSchemeHandlerVTable)
 	mask := rt.Mask(v, qWebEngineUrlSchemeHandlerVTable)

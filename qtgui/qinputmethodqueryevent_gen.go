@@ -63,7 +63,7 @@ func QInputMethodQueryEventCast(e qtcore.QEventLike) *QInputMethodQueryEvent {
 func NewQInputMethodQueryEventWithInputMethodQuery(queries qtcore.InputMethodQueries) *QInputMethodQueryEvent {
 	rt.CheckThread("NewQInputMethodQueryEventWithInputMethodQuery")
 	p := C.qute_QInputMethodQueryEvent_new(C.int64_t(queries))
-	h := rt.WrapClass(p, "QInputMethodQueryEvent", rt.NewOwned)
+	h := rt.WrapNew[QInputMethodQueryEvent](p, "QInputMethodQueryEvent", rt.NewOwned)
 	return rt.View[QInputMethodQueryEvent](h, p)
 }
 

@@ -89,7 +89,7 @@ func (this *QStyleOption) Unkeep() {
 func NewQStyleOption() *QStyleOption {
 	rt.CheckThread("NewQStyleOption")
 	p := C.qute_QStyleOption_new()
-	h := rt.WrapClass(p, "QStyleOption", rt.NewOwned)
+	h := rt.WrapNew[QStyleOption](p, "QStyleOption", rt.NewOwned)
 	return rt.View[QStyleOption](h, p)
 }
 
@@ -103,7 +103,7 @@ func NewQStyleOption() *QStyleOption {
 func NewQStyleOptionFull(version int, typeArg int) *QStyleOption {
 	rt.CheckThread("NewQStyleOptionFull")
 	p := C.qute_QStyleOption_new_1(C.int(version), C.int(typeArg))
-	h := rt.WrapClass(p, "QStyleOption", rt.NewOwned)
+	h := rt.WrapNew[QStyleOption](p, "QStyleOption", rt.NewOwned)
 	return rt.View[QStyleOption](h, p)
 }
 

@@ -66,7 +66,7 @@ func NewQEventLoop(parent QObjectLike) *QEventLoop {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QEventLoop", mode)
+	h := rt.WrapNew[QEventLoop](p, "QEventLoop", mode)
 	return rt.View[QEventLoop](h, p)
 }
 
@@ -367,7 +367,7 @@ func NewQEventLoopWith(v QEventLoopSubclass, parent QObjectLike) *QEventLoop {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QEventLoop", mode)
+	h := rt.WrapNew[QEventLoop](p, "QEventLoop", mode)
 	base.QEventLoop = rt.View[QEventLoop](h, p)
 	id := h.SetSelf(v, qEventLoopVTable)
 	mask := rt.Mask(v, qEventLoopVTable)

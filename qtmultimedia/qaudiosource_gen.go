@@ -68,7 +68,7 @@ func NewQAudioSourceWithAudioFormat(format *QAudioFormat, parent qtcore.QObjectL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSource", mode)
+	h := rt.WrapNew[QAudioSource](p, "QAudioSource", mode)
 	return rt.View[QAudioSource](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQAudioSourceWithAudioDevice(audioDeviceInfo *QAudioDevice, format *QAudi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSource", mode)
+	h := rt.WrapNew[QAudioSource](p, "QAudioSource", mode)
 	return rt.View[QAudioSource](h, p)
 }
 
@@ -565,7 +565,7 @@ func NewQAudioSourceWith(v QAudioSourceSubclass, format *QAudioFormat, parent qt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSource", mode)
+	h := rt.WrapNew[QAudioSource](p, "QAudioSource", mode)
 	base.QAudioSource = rt.View[QAudioSource](h, p)
 	id := h.SetSelf(v, qAudioSourceVTable)
 	mask := rt.Mask(v, qAudioSourceVTable)
@@ -599,7 +599,7 @@ func NewQAudioSourceWithAudioDeviceWith(v QAudioSourceSubclass, audioDeviceInfo 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioSource", mode)
+	h := rt.WrapNew[QAudioSource](p, "QAudioSource", mode)
 	base.QAudioSource = rt.View[QAudioSource](h, p)
 	id := h.SetSelf(v, qAudioSourceVTable)
 	mask := rt.Mask(v, qAudioSourceVTable)

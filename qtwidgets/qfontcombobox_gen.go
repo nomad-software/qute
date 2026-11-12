@@ -68,7 +68,7 @@ func NewQFontComboBox(parent QWidgetLike) *QFontComboBox {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontComboBox", mode)
+	h := rt.WrapNew[QFontComboBox](p, "QFontComboBox", mode)
 	return rt.View[QFontComboBox](h, p)
 }
 
@@ -1172,7 +1172,7 @@ func NewQFontComboBoxWith(v QFontComboBoxSubclass, parent QWidgetLike) *QFontCom
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QFontComboBox", mode)
+	h := rt.WrapNew[QFontComboBox](p, "QFontComboBox", mode)
 	base.QFontComboBox = rt.View[QFontComboBox](h, p)
 	id := h.SetSelf(v, qFontComboBoxVTable)
 	mask := rt.Mask(v, qFontComboBoxVTable)

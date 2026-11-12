@@ -66,7 +66,7 @@ func NewQIdentityProxyModel(parent QObjectLike) *QIdentityProxyModel {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIdentityProxyModel", mode)
+	h := rt.WrapNew[QIdentityProxyModel](p, "QIdentityProxyModel", mode)
 	return rt.View[QIdentityProxyModel](h, p)
 }
 
@@ -1355,7 +1355,7 @@ func NewQIdentityProxyModelWith(v QIdentityProxyModelSubclass, parent QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QIdentityProxyModel", mode)
+	h := rt.WrapNew[QIdentityProxyModel](p, "QIdentityProxyModel", mode)
 	base.QIdentityProxyModel = rt.View[QIdentityProxyModel](h, p)
 	id := h.SetSelf(v, qIdentityProxyModelVTable)
 	mask := rt.Mask(v, qIdentityProxyModelVTable)

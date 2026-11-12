@@ -86,7 +86,7 @@ func (this *QTimeZone) Unkeep() {
 func NewQTimeZone() *QTimeZone {
 	rt.CheckThread("NewQTimeZone")
 	p := C.qute_QTimeZone_new()
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQTimeZone() *QTimeZone {
 func NewQTimeZoneWithInitialization(spec QTimeZoneInitialization) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithInitialization")
 	p := C.qute_QTimeZone_new_1(C.int64_t(spec))
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQTimeZoneWithInitialization(spec QTimeZoneInitialization) *QTimeZone {
 func NewQTimeZoneWithOffsetSeconds(offsetSeconds int) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithOffsetSeconds")
 	p := C.qute_QTimeZone_new_2(C.int(offsetSeconds))
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
@@ -122,7 +122,7 @@ func NewQTimeZoneWithOffsetSeconds(offsetSeconds int) *QTimeZone {
 func NewQTimeZoneWithBytes(ianaId []byte) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithBytes")
 	p := C.qute_QTimeZone_new_3((*C.char)(unsafe.Pointer(unsafe.SliceData(ianaId))), C.ptrdiff_t(len(ianaId)))
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
@@ -136,7 +136,7 @@ func NewQTimeZoneWithBytes(ianaId []byte) *QTimeZone {
 func NewQTimeZoneWithBytesOffsetSeconds(zoneId []byte, offsetSeconds int, name string, abbreviation string) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithBytesOffsetSeconds")
 	p := C.qute_QTimeZone_new_4((*C.char)(unsafe.Pointer(unsafe.SliceData(zoneId))), C.ptrdiff_t(len(zoneId)), C.int(offsetSeconds), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)))
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 
@@ -150,7 +150,7 @@ func NewQTimeZoneWithBytesOffsetSeconds(zoneId []byte, offsetSeconds int, name s
 func NewQTimeZoneWithBytesOffsetSecondsFull(zoneId []byte, offsetSeconds int, name string, abbreviation string, territory QLocaleCountry, comment string) *QTimeZone {
 	rt.CheckThread("NewQTimeZoneWithBytesOffsetSecondsFull")
 	p := C.qute_QTimeZone_new_5((*C.char)(unsafe.Pointer(unsafe.SliceData(zoneId))), C.ptrdiff_t(len(zoneId)), C.int(offsetSeconds), (*C.char)(unsafe.Pointer(unsafe.StringData(name))), C.ptrdiff_t(len(name)), (*C.char)(unsafe.Pointer(unsafe.StringData(abbreviation))), C.ptrdiff_t(len(abbreviation)), C.int64_t(territory), (*C.char)(unsafe.Pointer(unsafe.StringData(comment))), C.ptrdiff_t(len(comment)))
-	h := rt.WrapClass(p, "QTimeZone", rt.NewOwned)
+	h := rt.WrapNew[QTimeZone](p, "QTimeZone", rt.NewOwned)
 	return rt.View[QTimeZone](h, p)
 }
 

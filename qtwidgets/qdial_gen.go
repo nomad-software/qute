@@ -68,7 +68,7 @@ func NewQDial(parent QWidgetLike) *QDial {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDial", mode)
+	h := rt.WrapNew[QDial](p, "QDial", mode)
 	return rt.View[QDial](h, p)
 }
 
@@ -1068,7 +1068,7 @@ func NewQDialWith(v QDialSubclass, parent QWidgetLike) *QDial {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QDial", mode)
+	h := rt.WrapNew[QDial](p, "QDial", mode)
 	base.QDial = rt.View[QDial](h, p)
 	id := h.SetSelf(v, qDialVTable)
 	mask := rt.Mask(v, qDialVTable)

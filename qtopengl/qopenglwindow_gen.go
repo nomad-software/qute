@@ -68,7 +68,7 @@ func NewQOpenGLWindowWithUpdateBehavior(updateBehavior QOpenGLWindowUpdateBehavi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
 	return rt.View[QOpenGLWindow](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQOpenGLWindowShared(shareContext qtgui.QOpenGLContextLike, updateBehavio
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
 	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
 	return rt.View[QOpenGLWindow](h, p)
 }
@@ -919,7 +919,7 @@ func NewQOpenGLWindowWith(v QOpenGLWindowSubclass, updateBehavior QOpenGLWindowU
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
 	base.QOpenGLWindow = rt.View[QOpenGLWindow](h, p)
 	id := h.SetSelf(v, qOpenGLWindowVTable)
 	mask := rt.Mask(v, qOpenGLWindowVTable)
@@ -957,7 +957,7 @@ func NewQOpenGLWindowSharedWith(v QOpenGLWindowSubclass, shareContext qtgui.QOpe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLWindow", mode)
+	h := rt.WrapNew[QOpenGLWindow](p, "QOpenGLWindow", mode)
 	rt.KeepArg(h, "QOpenGLWindow.shareContext", shareContextH, false)
 	base.QOpenGLWindow = rt.View[QOpenGLWindow](h, p)
 	id := h.SetSelf(v, qOpenGLWindowVTable)

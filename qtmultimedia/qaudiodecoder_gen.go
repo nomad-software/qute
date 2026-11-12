@@ -67,7 +67,7 @@ func NewQAudioDecoder(parent qtcore.QObjectLike) *QAudioDecoder {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioDecoder", mode)
+	h := rt.WrapNew[QAudioDecoder](p, "QAudioDecoder", mode)
 	return rt.View[QAudioDecoder](h, p)
 }
 
@@ -696,7 +696,7 @@ func NewQAudioDecoderWith(v QAudioDecoderSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioDecoder", mode)
+	h := rt.WrapNew[QAudioDecoder](p, "QAudioDecoder", mode)
 	base.QAudioDecoder = rt.View[QAudioDecoder](h, p)
 	id := h.SetSelf(v, qAudioDecoderVTable)
 	mask := rt.Mask(v, qAudioDecoderVTable)

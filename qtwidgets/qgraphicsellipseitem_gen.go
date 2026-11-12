@@ -53,7 +53,7 @@ func NewQGraphicsEllipseItem(parent QGraphicsItemLike) *QGraphicsEllipseItem {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
+	h := rt.WrapNew[QGraphicsEllipseItem](p, "QGraphicsEllipseItem", mode)
 	return rt.View[QGraphicsEllipseItem](h, p)
 }
 
@@ -76,7 +76,7 @@ func NewQGraphicsEllipseItemWithRectF(rect qtcore.QRectF, parent QGraphicsItemLi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
+	h := rt.WrapNew[QGraphicsEllipseItem](p, "QGraphicsEllipseItem", mode)
 	return rt.View[QGraphicsEllipseItem](h, p)
 }
 
@@ -1046,7 +1046,7 @@ func NewQGraphicsEllipseItemWith(v QGraphicsEllipseItemSubclass, parent QGraphic
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
+	h := rt.WrapNew[QGraphicsEllipseItem](p, "QGraphicsEllipseItem", mode)
 	base.QGraphicsEllipseItem = rt.View[QGraphicsEllipseItem](h, p)
 	id := h.SetSelf(v, qGraphicsEllipseItemVTable)
 	mask := rt.Mask(v, qGraphicsEllipseItemVTable)
@@ -1078,7 +1078,7 @@ func NewQGraphicsEllipseItemWithRectFWith(v QGraphicsEllipseItemSubclass, rect q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsEllipseItem", mode)
+	h := rt.WrapNew[QGraphicsEllipseItem](p, "QGraphicsEllipseItem", mode)
 	base.QGraphicsEllipseItem = rt.View[QGraphicsEllipseItem](h, p)
 	id := h.SetSelf(v, qGraphicsEllipseItemVTable)
 	mask := rt.Mask(v, qGraphicsEllipseItemVTable)

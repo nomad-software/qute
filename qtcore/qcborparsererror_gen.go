@@ -85,7 +85,7 @@ func (this *QCborParserError) Unkeep() {
 func NewQCborParserError() *QCborParserError {
 	rt.CheckThread("NewQCborParserError")
 	p := C.qute_QCborParserError_new()
-	h := rt.WrapClass(p, "QCborParserError", rt.NewOwned)
+	h := rt.WrapNew[QCborParserError](p, "QCborParserError", rt.NewOwned)
 	return rt.View[QCborParserError](h, p)
 }
 

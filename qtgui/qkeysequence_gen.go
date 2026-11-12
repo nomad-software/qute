@@ -86,7 +86,7 @@ func (this *QKeySequence) Unkeep() {
 func NewQKeySequence() *QKeySequence {
 	rt.CheckThread("NewQKeySequence")
 	p := C.qute_QKeySequence_new()
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQKeySequence() *QKeySequence {
 func NewQKeySequenceWithKey(key string) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKey")
 	p := C.qute_QKeySequence_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)))
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQKeySequenceWithKey(key string) *QKeySequence {
 func NewQKeySequenceWithKeyCode(k1 int) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKeyCode")
 	p := C.qute_QKeySequence_new_2(C.int(k1))
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -129,7 +129,7 @@ func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence
 	rt.CheckThread("NewQKeySequenceWithKeyCombination")
 	p := C.qute_QKeySequence_new_3(rt.UseArg(unsafe.Pointer(k1), "NewQKeySequenceWithKeyCombination"))
 	runtime.KeepAlive(k1)
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -141,7 +141,7 @@ func NewQKeySequenceWithKeyCombination(k1 *qtcore.QKeyCombination) *QKeySequence
 func NewQKeySequenceStandard(key QKeySequenceStandardKey) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceStandard")
 	p := C.qute_QKeySequence_new_4(C.int64_t(key))
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -155,7 +155,7 @@ func NewQKeySequenceStandard(key QKeySequenceStandardKey) *QKeySequence {
 func NewQKeySequenceWithKeyFull(key string, format QKeySequenceSequenceFormat) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKeyFull")
 	p := C.qute_QKeySequence_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(key))), C.ptrdiff_t(len(key)), C.int64_t(format))
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -169,7 +169,7 @@ func NewQKeySequenceWithKeyFull(key string, format QKeySequenceSequenceFormat) *
 func NewQKeySequenceWithKeyCodeFull(k1 int, k2 int, k3 int, k4 int) *QKeySequence {
 	rt.CheckThread("NewQKeySequenceWithKeyCodeFull")
 	p := C.qute_QKeySequence_new_6(C.int(k1), C.int(k2), C.int(k3), C.int(k4))
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 
@@ -187,7 +187,7 @@ func NewQKeySequenceWithKeyCombinationFull(k1 *qtcore.QKeyCombination, k2 *qtcor
 	runtime.KeepAlive(k2)
 	runtime.KeepAlive(k3)
 	runtime.KeepAlive(k4)
-	h := rt.WrapClass(p, "QKeySequence", rt.NewOwned)
+	h := rt.WrapNew[QKeySequence](p, "QKeySequence", rt.NewOwned)
 	return rt.View[QKeySequence](h, p)
 }
 

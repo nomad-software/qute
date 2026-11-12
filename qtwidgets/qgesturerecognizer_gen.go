@@ -289,7 +289,7 @@ func NewQGestureRecognizerWith(v QGestureRecognizerSubclass) *QGestureRecognizer
 		panic("NewQGestureRecognizerWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QGestureRecognizer_new_shim()
-	h := rt.WrapClass(p, "QGestureRecognizer", rt.NewOwned)
+	h := rt.WrapNew[QGestureRecognizer](p, "QGestureRecognizer", rt.NewOwned)
 	base.QGestureRecognizer = rt.View[QGestureRecognizer](h, p)
 	id := h.SetSelf(v, qGestureRecognizerVTable)
 	mask := rt.Mask(v, qGestureRecognizerVTable)

@@ -87,7 +87,7 @@ func (this *QPlaybackOptions) Unkeep() {
 func NewQPlaybackOptions() *QPlaybackOptions {
 	rt.CheckThread("NewQPlaybackOptions")
 	p := C.qute_QPlaybackOptions_new()
-	h := rt.WrapClass(p, "QPlaybackOptions", rt.NewOwned)
+	h := rt.WrapNew[QPlaybackOptions](p, "QPlaybackOptions", rt.NewOwned)
 	return rt.View[QPlaybackOptions](h, p)
 }
 

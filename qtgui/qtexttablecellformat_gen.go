@@ -42,7 +42,7 @@ func QTextTableCellFormatFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QTextT
 func NewQTextTableCellFormat() *QTextTableCellFormat {
 	rt.CheckThread("NewQTextTableCellFormat")
 	p := C.qute_QTextTableCellFormat_new()
-	h := rt.WrapClass(p, "QTextTableCellFormat", rt.NewOwned)
+	h := rt.WrapNew[QTextTableCellFormat](p, "QTextTableCellFormat", rt.NewOwned)
 	return rt.View[QTextTableCellFormat](h, p)
 }
 

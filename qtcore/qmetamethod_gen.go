@@ -85,7 +85,7 @@ func (this *QMetaMethod) Unkeep() {
 func NewQMetaMethod() *QMetaMethod {
 	rt.CheckThread("NewQMetaMethod")
 	p := C.qute_QMetaMethod_new()
-	h := rt.WrapClass(p, "QMetaMethod", rt.NewOwned)
+	h := rt.WrapNew[QMetaMethod](p, "QMetaMethod", rt.NewOwned)
 	return rt.View[QMetaMethod](h, p)
 }
 

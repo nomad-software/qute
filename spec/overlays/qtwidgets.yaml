@@ -281,6 +281,21 @@ QToolBox:
 
 QSplitter:
   createHandle: { return: parented } # the handle is created with the splitter as parent
+  handle:
+    return: borrowed
+    doc: "The splitter owns its handles and does not notice one being deleted, so Go may not delete it."
+    test: |
+      sp := qtwidgets.NewQSplitter(nil)
+      defer sp.Delete()
+      sp.AddWidget(qtwidgets.NewQLabelWithText("a", nil))
+      sp.AddWidget(qtwidgets.NewQLabelWithText("b", nil))
+      h := sp.Handle(1)
+      if h == nil || h.Ownership() != qtcore.Borrowed || h.ParentWidget() != sp.AsQWidget() {
+        t.Errorf("Handle(1) = %v, want a Borrowed handle whose parent is the splitter", h)
+      }
+      if sp.Handle(5) != nil {
+        t.Error("Handle(5) of two widgets is not nil")
+      }
   QSplitter(Qt::Orientation, QWidget*): { name: NewQSplitterWithOrientation }
   addWidget: { args: { widget: transfer-to-cpp } }
   insertWidget: { args: { widget: transfer-to-cpp } }

@@ -86,7 +86,7 @@ func (this *QSizePolicy) Unkeep() {
 func NewQSizePolicy() *QSizePolicy {
 	rt.CheckThread("NewQSizePolicy")
 	p := C.qute_QSizePolicy_new()
-	h := rt.WrapClass(p, "QSizePolicy", rt.NewOwned)
+	h := rt.WrapNew[QSizePolicy](p, "QSizePolicy", rt.NewOwned)
 	return rt.View[QSizePolicy](h, p)
 }
 
@@ -100,7 +100,7 @@ func NewQSizePolicy() *QSizePolicy {
 func NewQSizePolicyWithPolicy(horizontal QSizePolicyPolicy, vertical QSizePolicyPolicy) *QSizePolicy {
 	rt.CheckThread("NewQSizePolicyWithPolicy")
 	p := C.qute_QSizePolicy_new_1(C.int64_t(horizontal), C.int64_t(vertical))
-	h := rt.WrapClass(p, "QSizePolicy", rt.NewOwned)
+	h := rt.WrapNew[QSizePolicy](p, "QSizePolicy", rt.NewOwned)
 	return rt.View[QSizePolicy](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQSizePolicyWithPolicy(horizontal QSizePolicyPolicy, vertical QSizePolicy
 func NewQSizePolicyWithPolicyFull(horizontal QSizePolicyPolicy, vertical QSizePolicyPolicy, typeArg QSizePolicyControlTypes) *QSizePolicy {
 	rt.CheckThread("NewQSizePolicyWithPolicyFull")
 	p := C.qute_QSizePolicy_new_2(C.int64_t(horizontal), C.int64_t(vertical), C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QSizePolicy", rt.NewOwned)
+	h := rt.WrapNew[QSizePolicy](p, "QSizePolicy", rt.NewOwned)
 	return rt.View[QSizePolicy](h, p)
 }
 

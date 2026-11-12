@@ -54,7 +54,7 @@ func NewQGraphicsAnchorLayout(parent QGraphicsLayoutItemLike) *QGraphicsAnchorLa
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsAnchorLayout", mode)
+	h := rt.WrapNew[QGraphicsAnchorLayout](p, "QGraphicsAnchorLayout", mode)
 	return rt.View[QGraphicsAnchorLayout](h, p)
 }
 
@@ -525,7 +525,7 @@ func NewQGraphicsAnchorLayoutWith(v QGraphicsAnchorLayoutSubclass, parent QGraph
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsAnchorLayout", mode)
+	h := rt.WrapNew[QGraphicsAnchorLayout](p, "QGraphicsAnchorLayout", mode)
 	base.QGraphicsAnchorLayout = rt.View[QGraphicsAnchorLayout](h, p)
 	id := h.SetSelf(v, qGraphicsAnchorLayoutVTable)
 	mask := rt.Mask(v, qGraphicsAnchorLayoutVTable)

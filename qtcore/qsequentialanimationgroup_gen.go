@@ -70,7 +70,7 @@ func NewQSequentialAnimationGroup(parent QObjectLike) *QSequentialAnimationGroup
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSequentialAnimationGroup", mode)
+	h := rt.WrapNew[QSequentialAnimationGroup](p, "QSequentialAnimationGroup", mode)
 	return rt.View[QSequentialAnimationGroup](h, p)
 }
 
@@ -385,7 +385,7 @@ func NewQSequentialAnimationGroupWith(v QSequentialAnimationGroupSubclass, paren
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSequentialAnimationGroup", mode)
+	h := rt.WrapNew[QSequentialAnimationGroup](p, "QSequentialAnimationGroup", mode)
 	base.QSequentialAnimationGroup = rt.View[QSequentialAnimationGroup](h, p)
 	id := h.SetSelf(v, qSequentialAnimationGroupVTable)
 	mask := rt.Mask(v, qSequentialAnimationGroupVTable)

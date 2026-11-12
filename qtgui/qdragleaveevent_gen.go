@@ -61,6 +61,6 @@ func QDragLeaveEventCast(e qtcore.QEventLike) *QDragLeaveEvent {
 func NewQDragLeaveEvent() *QDragLeaveEvent {
 	rt.CheckThread("NewQDragLeaveEvent")
 	p := C.qute_QDragLeaveEvent_new()
-	h := rt.WrapClass(p, "QDragLeaveEvent", rt.NewOwned)
+	h := rt.WrapNew[QDragLeaveEvent](p, "QDragLeaveEvent", rt.NewOwned)
 	return rt.View[QDragLeaveEvent](h, p)
 }

@@ -67,7 +67,7 @@ func NewQCompleter(parent qtcore.QObjectLike) *QCompleter {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -96,7 +96,7 @@ func NewQCompleterWithModel(model qtcore.QAbstractItemModelLike, parent qtcore.Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	rt.KeepArg(h, "model", modelH, false)
 	return rt.View[QCompleter](h, p)
 }
@@ -121,7 +121,7 @@ func NewQCompleterWithCompletions(completions []string, parent qtcore.QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	return rt.View[QCompleter](h, p)
 }
 
@@ -874,7 +874,7 @@ func NewQCompleterWith(v QCompleterSubclass, parent qtcore.QObjectLike) *QComple
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
 	mask := rt.Mask(v, qCompleterVTable)
@@ -912,7 +912,7 @@ func NewQCompleterWithModelWith(v QCompleterSubclass, model qtcore.QAbstractItem
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	rt.KeepArg(h, "model", modelH, false)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
@@ -946,7 +946,7 @@ func NewQCompleterWithCompletionsWith(v QCompleterSubclass, completions []string
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QCompleter", mode)
+	h := rt.WrapNew[QCompleter](p, "QCompleter", mode)
 	base.QCompleter = rt.View[QCompleter](h, p)
 	id := h.SetSelf(v, qCompleterVTable)
 	mask := rt.Mask(v, qCompleterVTable)

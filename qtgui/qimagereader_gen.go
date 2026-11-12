@@ -96,7 +96,7 @@ func (this *QImageReader) Unkeep() {
 func NewQImageReader() *QImageReader {
 	rt.CheckThread("NewQImageReader")
 	p := C.qute_QImageReader_new()
-	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	h := rt.WrapNew[QImageReader](p, "QImageReader", rt.NewOwned)
 	return rt.View[QImageReader](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 	}
 	p := C.qute_QImageReader_new_1(devicePtr)
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	h := rt.WrapNew[QImageReader](p, "QImageReader", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QImageReader](h, p)
 }
@@ -133,7 +133,7 @@ func NewQImageReaderWithIODevice(device qtcore.QIODeviceLike) *QImageReader {
 func NewQImageReaderWithFileName(fileName string) *QImageReader {
 	rt.CheckThread("NewQImageReaderWithFileName")
 	p := C.qute_QImageReader_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)))
-	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	h := rt.WrapNew[QImageReader](p, "QImageReader", rt.NewOwned)
 	return rt.View[QImageReader](h, p)
 }
 
@@ -155,7 +155,7 @@ func NewQImageReaderWithIODeviceFull(device qtcore.QIODeviceLike, format []byte)
 	}
 	p := C.qute_QImageReader_new_3(devicePtr, (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
 	runtime.KeepAlive(device)
-	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	h := rt.WrapNew[QImageReader](p, "QImageReader", rt.NewOwned)
 	rt.KeepArg(h, "device", deviceH, true)
 	return rt.View[QImageReader](h, p)
 }
@@ -170,7 +170,7 @@ func NewQImageReaderWithIODeviceFull(device qtcore.QIODeviceLike, format []byte)
 func NewQImageReaderWithFileNameFull(fileName string, format []byte) *QImageReader {
 	rt.CheckThread("NewQImageReaderWithFileNameFull")
 	p := C.qute_QImageReader_new_4((*C.char)(unsafe.Pointer(unsafe.StringData(fileName))), C.ptrdiff_t(len(fileName)), (*C.char)(unsafe.Pointer(unsafe.SliceData(format))), C.ptrdiff_t(len(format)))
-	h := rt.WrapClass(p, "QImageReader", rt.NewOwned)
+	h := rt.WrapNew[QImageReader](p, "QImageReader", rt.NewOwned)
 	return rt.View[QImageReader](h, p)
 }
 

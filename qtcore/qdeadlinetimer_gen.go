@@ -86,7 +86,7 @@ func (this *QDeadlineTimer) Unkeep() {
 func NewQDeadlineTimer() *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimer")
 	p := C.qute_QDeadlineTimer_new()
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQDeadlineTimer() *QDeadlineTimer {
 func NewQDeadlineTimerWithTimerType(type_ TimerType) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithTimerType")
 	p := C.qute_QDeadlineTimer_new_1(C.int64_t(type_))
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQDeadlineTimerWithTimerType(type_ TimerType) *QDeadlineTimer {
 func NewQDeadlineTimerWithForeverConstant(foreverConstant QDeadlineTimerForeverConstant) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithForeverConstant")
 	p := C.qute_QDeadlineTimer_new_2(C.int64_t(foreverConstant))
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 
@@ -126,7 +126,7 @@ func NewQDeadlineTimerWithForeverConstant(foreverConstant QDeadlineTimerForeverC
 func NewQDeadlineTimerWithMsecs(msecs int64) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithMsecs")
 	p := C.qute_QDeadlineTimer_new_3(C.longlong(msecs))
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 
@@ -140,7 +140,7 @@ func NewQDeadlineTimerWithMsecs(msecs int64) *QDeadlineTimer {
 func NewQDeadlineTimerWithForeverConstantFull(foreverConstant QDeadlineTimerForeverConstant, type_ TimerType) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithForeverConstantFull")
 	p := C.qute_QDeadlineTimer_new_4(C.int64_t(foreverConstant), C.int64_t(type_))
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 
@@ -154,7 +154,7 @@ func NewQDeadlineTimerWithForeverConstantFull(foreverConstant QDeadlineTimerFore
 func NewQDeadlineTimerWithMsecsFull(msecs int64, typeArg TimerType) *QDeadlineTimer {
 	rt.CheckThread("NewQDeadlineTimerWithMsecsFull")
 	p := C.qute_QDeadlineTimer_new_5(C.longlong(msecs), C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QDeadlineTimer", rt.NewOwned)
+	h := rt.WrapNew[QDeadlineTimer](p, "QDeadlineTimer", rt.NewOwned)
 	return rt.View[QDeadlineTimer](h, p)
 }
 

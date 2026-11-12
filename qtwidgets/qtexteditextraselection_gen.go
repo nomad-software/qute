@@ -91,7 +91,7 @@ func (this *QTextEditExtraSelection) Unkeep() {
 func NewQTextEditExtraSelection() *QTextEditExtraSelection {
 	rt.CheckThread("NewQTextEditExtraSelection")
 	p := C.qute_QTextEditExtraSelection_new()
-	h := rt.WrapClass(p, "QTextEditExtraSelection", rt.NewOwned)
+	h := rt.WrapNew[QTextEditExtraSelection](p, "QTextEditExtraSelection", rt.NewOwned)
 	return rt.View[QTextEditExtraSelection](h, p)
 }
 

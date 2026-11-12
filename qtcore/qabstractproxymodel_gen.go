@@ -1350,7 +1350,7 @@ func NewQAbstractProxyModelWith(v QAbstractProxyModelSubclass, parent QObjectLik
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractProxyModel", mode)
+	h := rt.WrapNew[QAbstractProxyModel](p, "QAbstractProxyModel", mode)
 	base.QAbstractProxyModel = rt.View[QAbstractProxyModel](h, p)
 	id := h.SetSelf(v, qAbstractProxyModelVTable)
 	mask := rt.Mask(v, qAbstractProxyModelVTable)

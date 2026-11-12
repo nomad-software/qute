@@ -68,7 +68,7 @@ func NewQSizeGrip(parent QWidgetLike) *QSizeGrip {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSizeGrip", mode)
+	h := rt.WrapNew[QSizeGrip](p, "QSizeGrip", mode)
 	return rt.View[QSizeGrip](h, p)
 }
 
@@ -933,7 +933,7 @@ func NewQSizeGripWith(v QSizeGripSubclass, parent QWidgetLike) *QSizeGrip {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSizeGrip", mode)
+	h := rt.WrapNew[QSizeGrip](p, "QSizeGrip", mode)
 	base.QSizeGrip = rt.View[QSizeGrip](h, p)
 	id := h.SetSelf(v, qSizeGripVTable)
 	mask := rt.Mask(v, qSizeGripVTable)

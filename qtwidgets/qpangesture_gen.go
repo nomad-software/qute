@@ -67,7 +67,7 @@ func NewQPanGesture(parent qtcore.QObjectLike) *QPanGesture {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPanGesture", mode)
+	h := rt.WrapNew[QPanGesture](p, "QPanGesture", mode)
 	return rt.View[QPanGesture](h, p)
 }
 
@@ -317,7 +317,7 @@ func NewQPanGestureWith(v QPanGestureSubclass, parent qtcore.QObjectLike) *QPanG
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QPanGesture", mode)
+	h := rt.WrapNew[QPanGesture](p, "QPanGesture", mode)
 	base.QPanGesture = rt.View[QPanGesture](h, p)
 	id := h.SetSelf(v, qPanGestureVTable)
 	mask := rt.Mask(v, qPanGestureVTable)

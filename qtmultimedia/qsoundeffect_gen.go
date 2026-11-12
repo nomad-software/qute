@@ -67,7 +67,7 @@ func NewQSoundEffect(parent qtcore.QObjectLike) *QSoundEffect {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSoundEffect", mode)
+	h := rt.WrapNew[QSoundEffect](p, "QSoundEffect", mode)
 	return rt.View[QSoundEffect](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQSoundEffectWithAudioDevice(audioDevice *QAudioDevice, parent qtcore.QOb
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSoundEffect", mode)
+	h := rt.WrapNew[QSoundEffect](p, "QSoundEffect", mode)
 	return rt.View[QSoundEffect](h, p)
 }
 
@@ -707,7 +707,7 @@ func NewQSoundEffectWith(v QSoundEffectSubclass, parent qtcore.QObjectLike) *QSo
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSoundEffect", mode)
+	h := rt.WrapNew[QSoundEffect](p, "QSoundEffect", mode)
 	base.QSoundEffect = rt.View[QSoundEffect](h, p)
 	id := h.SetSelf(v, qSoundEffectVTable)
 	mask := rt.Mask(v, qSoundEffectVTable)
@@ -740,7 +740,7 @@ func NewQSoundEffectWithAudioDeviceWith(v QSoundEffectSubclass, audioDevice *QAu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QSoundEffect", mode)
+	h := rt.WrapNew[QSoundEffect](p, "QSoundEffect", mode)
 	base.QSoundEffect = rt.View[QSoundEffect](h, p)
 	id := h.SetSelf(v, qSoundEffectVTable)
 	mask := rt.Mask(v, qSoundEffectVTable)

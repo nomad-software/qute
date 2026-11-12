@@ -617,7 +617,7 @@ func NewQIconEngineWith(v QIconEngineSubclass) *QIconEngine {
 	}
 	rt.RequireOverride(v, qIconEngineVTable, "NewQIconEngineWith", "Clone", "it clones the engine when a copy of its icon is changed, and uses the result unchecked")
 	p := C.qute_QIconEngine_new_shim()
-	h := rt.WrapClass(p, "QIconEngine", rt.NewOwned)
+	h := rt.WrapNew[QIconEngine](p, "QIconEngine", rt.NewOwned)
 	base.QIconEngine = rt.View[QIconEngine](h, p)
 	id := h.SetSelf(v, qIconEngineVTable)
 	mask := rt.Mask(v, qIconEngineVTable)

@@ -86,7 +86,7 @@ func (this *QQuaternion) Unkeep() {
 func NewQQuaternion() *QQuaternion {
 	rt.CheckThread("NewQQuaternion")
 	p := C.qute_QQuaternion_new()
-	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
+	h := rt.WrapNew[QQuaternion](p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQQuaternion() *QQuaternion {
 func NewQQuaternionWithInitialization(initialization qtcore.Initialization) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithInitialization")
 	p := C.qute_QQuaternion_new_1(C.int64_t(initialization))
-	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
+	h := rt.WrapNew[QQuaternion](p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQQuaternionWithInitialization(initialization qtcore.Initialization) *QQu
 func NewQQuaternionWithScalar(scalar float32, xpos float32, ypos float32, zpos float32) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithScalar")
 	p := C.qute_QQuaternion_new_2(C.float(scalar), C.float(xpos), C.float(ypos), C.float(zpos))
-	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
+	h := rt.WrapNew[QQuaternion](p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
 
@@ -123,7 +123,7 @@ func NewQQuaternionWithScalarVector3D(scalar float32, vector *QVector3D) *QQuate
 	rt.CheckThread("NewQQuaternionWithScalarVector3D")
 	p := C.qute_QQuaternion_new_3(C.float(scalar), rt.UseArg(unsafe.Pointer(vector), "NewQQuaternionWithScalarVector3D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
+	h := rt.WrapNew[QQuaternion](p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
 
@@ -136,7 +136,7 @@ func NewQQuaternionWithVector4D(vector *QVector4D) *QQuaternion {
 	rt.CheckThread("NewQQuaternionWithVector4D")
 	p := C.qute_QQuaternion_new_4(rt.UseArg(unsafe.Pointer(vector), "NewQQuaternionWithVector4D"))
 	runtime.KeepAlive(vector)
-	h := rt.WrapClass(p, "QQuaternion", rt.NewOwned)
+	h := rt.WrapNew[QQuaternion](p, "QQuaternion", rt.NewOwned)
 	return rt.View[QQuaternion](h, p)
 }
 

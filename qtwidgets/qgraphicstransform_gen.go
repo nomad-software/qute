@@ -247,7 +247,7 @@ func NewQGraphicsTransformWith(v QGraphicsTransformSubclass, parent qtcore.QObje
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsTransform", mode)
+	h := rt.WrapNew[QGraphicsTransform](p, "QGraphicsTransform", mode)
 	base.QGraphicsTransform = rt.View[QGraphicsTransform](h, p)
 	id := h.SetSelf(v, qGraphicsTransformVTable)
 	mask := rt.Mask(v, qGraphicsTransformVTable)

@@ -67,7 +67,7 @@ func NewQMediaDevices(parent qtcore.QObjectLike) *QMediaDevices {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaDevices", mode)
+	h := rt.WrapNew[QMediaDevices](p, "QMediaDevices", mode)
 	return rt.View[QMediaDevices](h, p)
 }
 
@@ -397,7 +397,7 @@ func NewQMediaDevicesWith(v QMediaDevicesSubclass, parent qtcore.QObjectLike) *Q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaDevices", mode)
+	h := rt.WrapNew[QMediaDevices](p, "QMediaDevices", mode)
 	base.QMediaDevices = rt.View[QMediaDevices](h, p)
 	id := h.SetSelf(v, qMediaDevicesVTable)
 	mask := rt.Mask(v, qMediaDevicesVTable)

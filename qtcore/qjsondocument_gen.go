@@ -85,7 +85,7 @@ func (this *QJsonDocument) Unkeep() {
 func NewQJsonDocument() *QJsonDocument {
 	rt.CheckThread("NewQJsonDocument")
 	p := C.qute_QJsonDocument_new()
-	h := rt.WrapClass(p, "QJsonDocument", rt.NewOwned)
+	h := rt.WrapNew[QJsonDocument](p, "QJsonDocument", rt.NewOwned)
 	return rt.View[QJsonDocument](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQJsonDocumentWithJsonObject(object *QJsonObject) *QJsonDocument {
 	rt.CheckThread("NewQJsonDocumentWithJsonObject")
 	p := C.qute_QJsonDocument_new_1(rt.UseArg(unsafe.Pointer(object), "NewQJsonDocumentWithJsonObject"))
 	runtime.KeepAlive(object)
-	h := rt.WrapClass(p, "QJsonDocument", rt.NewOwned)
+	h := rt.WrapNew[QJsonDocument](p, "QJsonDocument", rt.NewOwned)
 	return rt.View[QJsonDocument](h, p)
 }
 
@@ -111,7 +111,7 @@ func NewQJsonDocumentWithJsonArray(array *QJsonArray) *QJsonDocument {
 	rt.CheckThread("NewQJsonDocumentWithJsonArray")
 	p := C.qute_QJsonDocument_new_2(rt.UseArg(unsafe.Pointer(array), "NewQJsonDocumentWithJsonArray"))
 	runtime.KeepAlive(array)
-	h := rt.WrapClass(p, "QJsonDocument", rt.NewOwned)
+	h := rt.WrapNew[QJsonDocument](p, "QJsonDocument", rt.NewOwned)
 	return rt.View[QJsonDocument](h, p)
 }
 

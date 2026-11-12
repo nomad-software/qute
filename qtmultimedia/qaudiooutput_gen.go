@@ -67,7 +67,7 @@ func NewQAudioOutput(parent qtcore.QObjectLike) *QAudioOutput {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioOutput", mode)
+	h := rt.WrapNew[QAudioOutput](p, "QAudioOutput", mode)
 	return rt.View[QAudioOutput](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQAudioOutputWithAudioDevice(device *QAudioDevice, parent qtcore.QObjectL
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioOutput", mode)
+	h := rt.WrapNew[QAudioOutput](p, "QAudioOutput", mode)
 	return rt.View[QAudioOutput](h, p)
 }
 
@@ -417,7 +417,7 @@ func NewQAudioOutputWith(v QAudioOutputSubclass, parent qtcore.QObjectLike) *QAu
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioOutput", mode)
+	h := rt.WrapNew[QAudioOutput](p, "QAudioOutput", mode)
 	base.QAudioOutput = rt.View[QAudioOutput](h, p)
 	id := h.SetSelf(v, qAudioOutputVTable)
 	mask := rt.Mask(v, qAudioOutputVTable)
@@ -450,7 +450,7 @@ func NewQAudioOutputWithAudioDeviceWith(v QAudioOutputSubclass, device *QAudioDe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAudioOutput", mode)
+	h := rt.WrapNew[QAudioOutput](p, "QAudioOutput", mode)
 	base.QAudioOutput = rt.View[QAudioOutput](h, p)
 	id := h.SetSelf(v, qAudioOutputVTable)
 	mask := rt.Mask(v, qAudioOutputVTable)

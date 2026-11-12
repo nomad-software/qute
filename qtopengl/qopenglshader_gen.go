@@ -68,7 +68,7 @@ func NewQOpenGLShaderWithShaderTypeBit(typeArg QOpenGLShaderShaderType, parent q
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLShader", mode)
+	h := rt.WrapNew[QOpenGLShader](p, "QOpenGLShader", mode)
 	return rt.View[QOpenGLShader](h, p)
 }
 
@@ -368,7 +368,7 @@ func NewQOpenGLShaderWith(v QOpenGLShaderSubclass, typeArg QOpenGLShaderShaderTy
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QOpenGLShader", mode)
+	h := rt.WrapNew[QOpenGLShader](p, "QOpenGLShader", mode)
 	base.QOpenGLShader = rt.View[QOpenGLShader](h, p)
 	id := h.SetSelf(v, qOpenGLShaderVTable)
 	mask := rt.Mask(v, qOpenGLShaderVTable)

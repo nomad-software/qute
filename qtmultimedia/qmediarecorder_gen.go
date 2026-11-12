@@ -67,7 +67,7 @@ func NewQMediaRecorder(parent qtcore.QObjectLike) *QMediaRecorder {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaRecorder", mode)
+	h := rt.WrapNew[QMediaRecorder](p, "QMediaRecorder", mode)
 	return rt.View[QMediaRecorder](h, p)
 }
 
@@ -1130,7 +1130,7 @@ func NewQMediaRecorderWith(v QMediaRecorderSubclass, parent qtcore.QObjectLike) 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMediaRecorder", mode)
+	h := rt.WrapNew[QMediaRecorder](p, "QMediaRecorder", mode)
 	base.QMediaRecorder = rt.View[QMediaRecorder](h, p)
 	id := h.SetSelf(v, qMediaRecorderVTable)
 	mask := rt.Mask(v, qMediaRecorderVTable)

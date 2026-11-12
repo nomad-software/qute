@@ -61,7 +61,7 @@ func QResizeEventCast(e qtcore.QEventLike) *QResizeEvent {
 func NewQResizeEventWithSize(size qtcore.QSize, oldSize qtcore.QSize) *QResizeEvent {
 	rt.CheckThread("NewQResizeEventWithSize")
 	p := C.qute_QResizeEvent_new(cQSize(size), cQSize(oldSize))
-	h := rt.WrapClass(p, "QResizeEvent", rt.NewOwned)
+	h := rt.WrapNew[QResizeEvent](p, "QResizeEvent", rt.NewOwned)
 	return rt.View[QResizeEvent](h, p)
 }
 

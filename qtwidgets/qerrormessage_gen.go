@@ -68,7 +68,7 @@ func NewQErrorMessage(parent QWidgetLike) *QErrorMessage {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QErrorMessage", mode)
+	h := rt.WrapNew[QErrorMessage](p, "QErrorMessage", mode)
 	return rt.View[QErrorMessage](h, p)
 }
 
@@ -1048,7 +1048,7 @@ func NewQErrorMessageWith(v QErrorMessageSubclass, parent QWidgetLike) *QErrorMe
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QErrorMessage", mode)
+	h := rt.WrapNew[QErrorMessage](p, "QErrorMessage", mode)
 	base.QErrorMessage = rt.View[QErrorMessage](h, p)
 	id := h.SetSelf(v, qErrorMessageVTable)
 	mask := rt.Mask(v, qErrorMessageVTable)

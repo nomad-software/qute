@@ -100,7 +100,7 @@ func (this *QWebEngineProfileBuilder) Unkeep() {
 func NewQWebEngineProfileBuilder() *QWebEngineProfileBuilder {
 	rt.CheckThread("NewQWebEngineProfileBuilder")
 	p := C.qute_QWebEngineProfileBuilder_new()
-	h := rt.WrapClass(p, "QWebEngineProfileBuilder", rt.NewOwned)
+	h := rt.WrapNew[QWebEngineProfileBuilder](p, "QWebEngineProfileBuilder", rt.NewOwned)
 	return rt.View[QWebEngineProfileBuilder](h, p)
 }
 

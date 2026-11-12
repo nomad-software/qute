@@ -95,7 +95,7 @@ func (this *QTextBlockUserData) Unkeep() {
 func NewQTextBlockUserData() *QTextBlockUserData {
 	rt.CheckThread("NewQTextBlockUserData")
 	p := C.qute_QTextBlockUserData_new()
-	h := rt.WrapClass(p, "QTextBlockUserData", rt.NewOwned)
+	h := rt.WrapNew[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned)
 	return rt.View[QTextBlockUserData](h, p)
 }
 
@@ -136,7 +136,7 @@ func NewQTextBlockUserDataWith(v QTextBlockUserDataSubclass) *QTextBlockUserData
 		panic("NewQTextBlockUserDataWith: value is already constructed; use a fresh value")
 	}
 	p := C.qute_QTextBlockUserData_new_shim()
-	h := rt.WrapClass(p, "QTextBlockUserData", rt.NewOwned)
+	h := rt.WrapNew[QTextBlockUserData](p, "QTextBlockUserData", rt.NewOwned)
 	base.QTextBlockUserData = rt.View[QTextBlockUserData](h, p)
 	id := h.SetSelf(v, qTextBlockUserDataVTable)
 	mask := rt.Mask(v, qTextBlockUserDataVTable)

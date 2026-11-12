@@ -67,7 +67,7 @@ func NewQMovie(parent qtcore.QObjectLike) *QMovie {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	return rt.View[QMovie](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQMovieWithDevice(device qtcore.QIODeviceLike, format []byte, parent qtco
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	rt.KeepArg(h, "device", deviceH, false)
 	return rt.View[QMovie](h, p)
 }
@@ -122,7 +122,7 @@ func NewQMovieWithFileName(fileName string, format []byte, parent qtcore.QObject
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	return rt.View[QMovie](h, p)
 }
 
@@ -861,7 +861,7 @@ func NewQMovieWith(v QMovieSubclass, parent qtcore.QObjectLike) *QMovie {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	base.QMovie = rt.View[QMovie](h, p)
 	id := h.SetSelf(v, qMovieVTable)
 	mask := rt.Mask(v, qMovieVTable)
@@ -899,7 +899,7 @@ func NewQMovieWithDeviceWith(v QMovieSubclass, device qtcore.QIODeviceLike, form
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	rt.KeepArg(h, "device", deviceH, false)
 	base.QMovie = rt.View[QMovie](h, p)
 	id := h.SetSelf(v, qMovieVTable)
@@ -932,7 +932,7 @@ func NewQMovieWithFileNameWith(v QMovieSubclass, fileName string, format []byte,
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QMovie", mode)
+	h := rt.WrapNew[QMovie](p, "QMovie", mode)
 	base.QMovie = rt.View[QMovie](h, p)
 	id := h.SetSelf(v, qMovieVTable)
 	mask := rt.Mask(v, qMovieVTable)

@@ -85,7 +85,7 @@ func (this *QXmlStreamAttributes) Unkeep() {
 func NewQXmlStreamAttributes() *QXmlStreamAttributes {
 	rt.CheckThread("NewQXmlStreamAttributes")
 	p := C.qute_QXmlStreamAttributes_new()
-	h := rt.WrapClass(p, "QXmlStreamAttributes", rt.NewOwned)
+	h := rt.WrapNew[QXmlStreamAttributes](p, "QXmlStreamAttributes", rt.NewOwned)
 	return rt.View[QXmlStreamAttributes](h, p)
 }
 

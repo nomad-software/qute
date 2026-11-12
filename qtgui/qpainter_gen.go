@@ -96,7 +96,7 @@ func (this *QPainter) Unkeep() {
 func NewQPainter() *QPainter {
 	rt.CheckThread("NewQPainter")
 	p := C.qute_QPainter_new()
-	h := rt.WrapClass(p, "QPainter", rt.NewOwned)
+	h := rt.WrapNew[QPainter](p, "QPainter", rt.NewOwned)
 	return rt.View[QPainter](h, p)
 }
 
@@ -118,7 +118,7 @@ func NewQPainterOn(paintDevice QPaintDeviceLike) *QPainter {
 	}
 	p := C.qute_QPainter_new_1(paintDevicePtr)
 	runtime.KeepAlive(paintDevice)
-	h := rt.WrapClass(p, "QPainter", rt.NewOwned)
+	h := rt.WrapNew[QPainter](p, "QPainter", rt.NewOwned)
 	rt.KeepArg(h, "device", paintDeviceH, true)
 	return rt.View[QPainter](h, p)
 }

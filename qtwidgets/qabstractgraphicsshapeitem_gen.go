@@ -963,7 +963,7 @@ func NewQAbstractGraphicsShapeItemWith(v QAbstractGraphicsShapeItemSubclass, par
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QAbstractGraphicsShapeItem", mode)
+	h := rt.WrapNew[QAbstractGraphicsShapeItem](p, "QAbstractGraphicsShapeItem", mode)
 	base.QAbstractGraphicsShapeItem = rt.View[QAbstractGraphicsShapeItem](h, p)
 	id := h.SetSelf(v, qAbstractGraphicsShapeItemVTable)
 	mask := rt.Mask(v, qAbstractGraphicsShapeItemVTable)

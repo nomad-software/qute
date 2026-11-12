@@ -67,7 +67,7 @@ func QGraphicsSceneMouseEventCast(e qtcore.QEventLike) *QGraphicsSceneMouseEvent
 func NewQGraphicsSceneMouseEvent() *QGraphicsSceneMouseEvent {
 	rt.CheckThread("NewQGraphicsSceneMouseEvent")
 	p := C.qute_QGraphicsSceneMouseEvent_new()
-	h := rt.WrapClass(p, "QGraphicsSceneMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneMouseEvent](p, "QGraphicsSceneMouseEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneMouseEvent](h, p)
 }
 
@@ -81,7 +81,7 @@ func NewQGraphicsSceneMouseEvent() *QGraphicsSceneMouseEvent {
 func NewQGraphicsSceneMouseEventFull(typeArg qtcore.QEventType) *QGraphicsSceneMouseEvent {
 	rt.CheckThread("NewQGraphicsSceneMouseEventFull")
 	p := C.qute_QGraphicsSceneMouseEvent_new_1(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QGraphicsSceneMouseEvent", rt.NewOwned)
+	h := rt.WrapNew[QGraphicsSceneMouseEvent](p, "QGraphicsSceneMouseEvent", rt.NewOwned)
 	return rt.View[QGraphicsSceneMouseEvent](h, p)
 }
 

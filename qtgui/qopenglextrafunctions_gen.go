@@ -41,7 +41,7 @@ func QOpenGLExtraFunctionsFromPtr(p unsafe.Pointer, own qtcore.Ownership) *QOpen
 func NewQOpenGLExtraFunctions() *QOpenGLExtraFunctions {
 	rt.CheckThread("NewQOpenGLExtraFunctions")
 	p := C.qute_QOpenGLExtraFunctions_new()
-	h := rt.WrapClass(p, "QOpenGLExtraFunctions", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLExtraFunctions](p, "QOpenGLExtraFunctions", rt.NewOwned)
 	return rt.View[QOpenGLExtraFunctions](h, p)
 }
 
@@ -61,7 +61,7 @@ func NewQOpenGLExtraFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpe
 	}
 	p := C.qute_QOpenGLExtraFunctions_new_1(contextPtr)
 	runtime.KeepAlive(context)
-	h := rt.WrapClass(p, "QOpenGLExtraFunctions", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLExtraFunctions](p, "QOpenGLExtraFunctions", rt.NewOwned)
 	rt.KeepArg(h, "QOpenGLExtraFunctions.context", contextH, true)
 	return rt.View[QOpenGLExtraFunctions](h, p)
 }

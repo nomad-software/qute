@@ -87,7 +87,7 @@ func (this *QJsonValue) Unkeep() {
 func NewQJsonValue() *QJsonValue {
 	rt.CheckThread("NewQJsonValue")
 	p := C.qute_QJsonValue_new()
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -99,7 +99,7 @@ func NewQJsonValue() *QJsonValue {
 func NewQJsonValueWithBool(bArg bool) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithBool")
 	p := C.qute_QJsonValue_new_1(C.bool(bArg))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -111,7 +111,7 @@ func NewQJsonValueWithBool(bArg bool) *QJsonValue {
 func NewQJsonValueWithFloat64(n float64) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithFloat64")
 	p := C.qute_QJsonValue_new_2(C.double(n))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -123,7 +123,7 @@ func NewQJsonValueWithFloat64(n float64) *QJsonValue {
 func NewQJsonValueWithInt(n int) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithInt")
 	p := C.qute_QJsonValue_new_3(C.int(n))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -135,7 +135,7 @@ func NewQJsonValueWithInt(n int) *QJsonValue {
 func NewQJsonValueWithInt64(vArg int64) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithInt64")
 	p := C.qute_QJsonValue_new_4(C.longlong(vArg))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -147,7 +147,7 @@ func NewQJsonValueWithInt64(vArg int64) *QJsonValue {
 func NewQJsonValueWithString(sArg string) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithString")
 	p := C.qute_QJsonValue_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(sArg))), C.ptrdiff_t(len(sArg)))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -160,7 +160,7 @@ func NewQJsonValueWithJsonArray(aArg *QJsonArray) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithJsonArray")
 	p := C.qute_QJsonValue_new_6(rt.UseArg(unsafe.Pointer(aArg), "NewQJsonValueWithJsonArray"))
 	runtime.KeepAlive(aArg)
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -173,7 +173,7 @@ func NewQJsonValueWithJsonObject(o *QJsonObject) *QJsonValue {
 	rt.CheckThread("NewQJsonValueWithJsonObject")
 	p := C.qute_QJsonValue_new_7(rt.UseArg(unsafe.Pointer(o), "NewQJsonValueWithJsonObject"))
 	runtime.KeepAlive(o)
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 
@@ -187,7 +187,7 @@ func NewQJsonValueWithJsonObject(o *QJsonObject) *QJsonValue {
 func NewQJsonValueFull(typeArg QJsonValueType) *QJsonValue {
 	rt.CheckThread("NewQJsonValueFull")
 	p := C.qute_QJsonValue_new_8(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QJsonValue", rt.NewOwned)
+	h := rt.WrapNew[QJsonValue](p, "QJsonValue", rt.NewOwned)
 	return rt.View[QJsonValue](h, p)
 }
 

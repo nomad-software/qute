@@ -86,7 +86,7 @@ func (this *QRgba64) Unkeep() {
 func NewQRgba64() *QRgba64 {
 	rt.CheckThread("NewQRgba64")
 	p := C.qute_QRgba64_new()
-	h := rt.WrapClass(p, "QRgba64", rt.NewOwned)
+	h := rt.WrapNew[QRgba64](p, "QRgba64", rt.NewOwned)
 	return rt.View[QRgba64](h, p)
 }
 

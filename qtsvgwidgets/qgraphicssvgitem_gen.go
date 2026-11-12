@@ -70,7 +70,7 @@ func NewQGraphicsSvgItem(parentItem qtwidgets.QGraphicsItemLike) *QGraphicsSvgIt
 	if parentItemPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSvgItem", mode)
+	h := rt.WrapNew[QGraphicsSvgItem](p, "QGraphicsSvgItem", mode)
 	return rt.View[QGraphicsSvgItem](h, p)
 }
 
@@ -93,7 +93,7 @@ func NewQGraphicsSvgItemWithFileName(fileName string, parentItem qtwidgets.QGrap
 	if parentItemPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSvgItem", mode)
+	h := rt.WrapNew[QGraphicsSvgItem](p, "QGraphicsSvgItem", mode)
 	return rt.View[QGraphicsSvgItem](h, p)
 }
 
@@ -1293,7 +1293,7 @@ func NewQGraphicsSvgItemWith(v QGraphicsSvgItemSubclass, parentItem qtwidgets.QG
 	if parentItemPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSvgItem", mode)
+	h := rt.WrapNew[QGraphicsSvgItem](p, "QGraphicsSvgItem", mode)
 	base.QGraphicsSvgItem = rt.View[QGraphicsSvgItem](h, p)
 	id := h.SetSelf(v, qGraphicsSvgItemVTable)
 	mask := rt.Mask(v, qGraphicsSvgItemVTable)
@@ -1325,7 +1325,7 @@ func NewQGraphicsSvgItemWithFileNameWith(v QGraphicsSvgItemSubclass, fileName st
 	if parentItemPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QGraphicsSvgItem", mode)
+	h := rt.WrapNew[QGraphicsSvgItem](p, "QGraphicsSvgItem", mode)
 	base.QGraphicsSvgItem = rt.View[QGraphicsSvgItem](h, p)
 	id := h.SetSelf(v, qGraphicsSvgItemVTable)
 	mask := rt.Mask(v, qGraphicsSvgItemVTable)

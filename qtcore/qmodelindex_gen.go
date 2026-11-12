@@ -98,7 +98,7 @@ func (this *QModelIndex) Unkeep() {
 func NewQModelIndex() *QModelIndex {
 	rt.CheckThread("NewQModelIndex")
 	p := C.qute_QModelIndex_new()
-	h := rt.WrapClass(p, "QModelIndex", rt.NewOwned)
+	h := rt.WrapNew[QModelIndex](p, "QModelIndex", rt.NewOwned)
 	return rt.View[QModelIndex](h, p)
 }
 

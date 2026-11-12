@@ -86,7 +86,7 @@ func (this *QCursor) Unkeep() {
 func NewQCursor() *QCursor {
 	rt.CheckThread("NewQCursor")
 	p := C.qute_QCursor_new()
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQCursor() *QCursor {
 func NewQCursorWithCursorShape(shape qtcore.CursorShape) *QCursor {
 	rt.CheckThread("NewQCursorWithCursorShape")
 	p := C.qute_QCursor_new_1(C.int64_t(shape))
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 
@@ -114,7 +114,7 @@ func NewQCursorWithBitmap(bitmap *QBitmap, maskArg *QBitmap) *QCursor {
 	p := C.qute_QCursor_new_2(rt.UseArg(unsafe.Pointer(bitmap), "NewQCursorWithBitmap"), rt.UseArg(unsafe.Pointer(maskArg), "NewQCursorWithBitmap"))
 	runtime.KeepAlive(bitmap)
 	runtime.KeepAlive(maskArg)
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 
@@ -129,7 +129,7 @@ func NewQCursorWithPixmap(pixmap *QPixmap) *QCursor {
 	rt.CheckThread("NewQCursorWithPixmap")
 	p := C.qute_QCursor_new_3(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmap"))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 
@@ -145,7 +145,7 @@ func NewQCursorWithBitmapFull(bitmap *QBitmap, maskArg *QBitmap, hotX int, hotY 
 	p := C.qute_QCursor_new_4(rt.UseArg(unsafe.Pointer(bitmap), "NewQCursorWithBitmapFull"), rt.UseArg(unsafe.Pointer(maskArg), "NewQCursorWithBitmapFull"), C.int(hotX), C.int(hotY))
 	runtime.KeepAlive(bitmap)
 	runtime.KeepAlive(maskArg)
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 
@@ -160,7 +160,7 @@ func NewQCursorWithPixmapFull(pixmap *QPixmap, hotX int, hotY int) *QCursor {
 	rt.CheckThread("NewQCursorWithPixmapFull")
 	p := C.qute_QCursor_new_5(rt.UseArg(unsafe.Pointer(pixmap), "NewQCursorWithPixmapFull"), C.int(hotX), C.int(hotY))
 	runtime.KeepAlive(pixmap)
-	h := rt.WrapClass(p, "QCursor", rt.NewOwned)
+	h := rt.WrapNew[QCursor](p, "QCursor", rt.NewOwned)
 	return rt.View[QCursor](h, p)
 }
 

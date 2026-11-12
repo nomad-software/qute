@@ -86,7 +86,7 @@ func (this *QMediaTimeRange) Unkeep() {
 func NewQMediaTimeRange() *QMediaTimeRange {
 	rt.CheckThread("NewQMediaTimeRange")
 	p := C.qute_QMediaTimeRange_new()
-	h := rt.WrapClass(p, "QMediaTimeRange", rt.NewOwned)
+	h := rt.WrapNew[QMediaTimeRange](p, "QMediaTimeRange", rt.NewOwned)
 	return rt.View[QMediaTimeRange](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQMediaTimeRange() *QMediaTimeRange {
 func NewQMediaTimeRangeWithStart(start int64, end int64) *QMediaTimeRange {
 	rt.CheckThread("NewQMediaTimeRangeWithStart")
 	p := C.qute_QMediaTimeRange_new_1(C.longlong(start), C.longlong(end))
-	h := rt.WrapClass(p, "QMediaTimeRange", rt.NewOwned)
+	h := rt.WrapNew[QMediaTimeRange](p, "QMediaTimeRange", rt.NewOwned)
 	return rt.View[QMediaTimeRange](h, p)
 }
 
@@ -111,7 +111,7 @@ func NewQMediaTimeRangeWithMediaTimeRangeInterval(interval *QMediaTimeRangeInter
 	rt.CheckThread("NewQMediaTimeRangeWithMediaTimeRangeInterval")
 	p := C.qute_QMediaTimeRange_new_2(rt.UseArg(unsafe.Pointer(interval), "NewQMediaTimeRangeWithMediaTimeRangeInterval"))
 	runtime.KeepAlive(interval)
-	h := rt.WrapClass(p, "QMediaTimeRange", rt.NewOwned)
+	h := rt.WrapNew[QMediaTimeRange](p, "QMediaTimeRange", rt.NewOwned)
 	return rt.View[QMediaTimeRange](h, p)
 }
 

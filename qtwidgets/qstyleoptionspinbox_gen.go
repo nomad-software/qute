@@ -61,7 +61,7 @@ func QStyleOptionSpinBoxCast(o QStyleOptionLike) *QStyleOptionSpinBox {
 func NewQStyleOptionSpinBox() *QStyleOptionSpinBox {
 	rt.CheckThread("NewQStyleOptionSpinBox")
 	p := C.qute_QStyleOptionSpinBox_new()
-	h := rt.WrapClass(p, "QStyleOptionSpinBox", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionSpinBox](p, "QStyleOptionSpinBox", rt.NewOwned)
 	return rt.View[QStyleOptionSpinBox](h, p)
 }
 

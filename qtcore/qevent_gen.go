@@ -98,7 +98,7 @@ func (this *QEvent) Unkeep() {
 func NewQEvent(typeArg QEventType) *QEvent {
 	rt.CheckThread("NewQEvent")
 	p := C.qute_QEvent_new(C.int64_t(typeArg))
-	h := rt.WrapClass(p, "QEvent", rt.NewOwned)
+	h := rt.WrapNew[QEvent](p, "QEvent", rt.NewOwned)
 	return rt.View[QEvent](h, p)
 }
 

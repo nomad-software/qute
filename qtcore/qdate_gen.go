@@ -85,7 +85,7 @@ func (this *QDate) Unkeep() {
 func NewQDate() *QDate {
 	rt.CheckThread("NewQDate")
 	p := C.qute_QDate_new()
-	h := rt.WrapClass(p, "QDate", rt.NewOwned)
+	h := rt.WrapNew[QDate](p, "QDate", rt.NewOwned)
 	return rt.View[QDate](h, p)
 }
 
@@ -97,7 +97,7 @@ func NewQDate() *QDate {
 func NewQDateWithY(y int, m int, d int) *QDate {
 	rt.CheckThread("NewQDateWithY")
 	p := C.qute_QDate_new_1(C.int(y), C.int(m), C.int(d))
-	h := rt.WrapClass(p, "QDate", rt.NewOwned)
+	h := rt.WrapNew[QDate](p, "QDate", rt.NewOwned)
 	return rt.View[QDate](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQDateWithYCalendar(y int, m int, d int, cal *QCalendar) *QDate {
 	rt.CheckThread("NewQDateWithYCalendar")
 	p := C.qute_QDate_new_2(C.int(y), C.int(m), C.int(d), rt.UseArg(unsafe.Pointer(cal), "NewQDateWithYCalendar"))
 	runtime.KeepAlive(cal)
-	h := rt.WrapClass(p, "QDate", rt.NewOwned)
+	h := rt.WrapNew[QDate](p, "QDate", rt.NewOwned)
 	return rt.View[QDate](h, p)
 }
 

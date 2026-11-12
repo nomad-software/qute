@@ -98,7 +98,7 @@ func NewQDirIteratorWithDir(dir *QDir) *QDirIterator {
 	rt.CheckThread("NewQDirIteratorWithDir")
 	p := C.qute_QDirIterator_new(rt.UseArg(unsafe.Pointer(dir), "NewQDirIteratorWithDir"))
 	runtime.KeepAlive(dir)
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -112,7 +112,7 @@ func NewQDirIteratorWithDir(dir *QDir) *QDirIterator {
 func NewQDirIteratorWithPath(path string) *QDirIterator {
 	rt.CheckThread("NewQDirIteratorWithPath")
 	p := C.qute_QDirIterator_new_1((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -126,7 +126,7 @@ func NewQDirIteratorWithPath(path string) *QDirIterator {
 func NewQDirIteratorWithPathFilter(path string, filter QDirFilters) *QDirIterator {
 	rt.CheckThread("NewQDirIteratorWithPathFilter")
 	p := C.qute_QDirIterator_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), C.int64_t(filter))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -141,7 +141,7 @@ func NewQDirIteratorWithPathNameFilters(path string, nameFilters []string) *QDir
 	rt.CheckThread("NewQDirIteratorWithPathNameFilters")
 	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
 	p := C.qute_QDirIterator_new_3((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -156,7 +156,7 @@ func NewQDirIteratorWithDirFull(dir *QDir, flags QDirIteratorIteratorFlags) *QDi
 	rt.CheckThread("NewQDirIteratorWithDirFull")
 	p := C.qute_QDirIterator_new_4(rt.UseArg(unsafe.Pointer(dir), "NewQDirIteratorWithDirFull"), C.int64_t(flags))
 	runtime.KeepAlive(dir)
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -170,7 +170,7 @@ func NewQDirIteratorWithDirFull(dir *QDir, flags QDirIteratorIteratorFlags) *QDi
 func NewQDirIteratorWithPathFull(path string, flags QDirIteratorIteratorFlags) *QDirIterator {
 	rt.CheckThread("NewQDirIteratorWithPathFull")
 	p := C.qute_QDirIterator_new_5((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), C.int64_t(flags))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -184,7 +184,7 @@ func NewQDirIteratorWithPathFull(path string, flags QDirIteratorIteratorFlags) *
 func NewQDirIteratorWithPathFilterFull(path string, filter QDirFilters, flags QDirIteratorIteratorFlags) *QDirIterator {
 	rt.CheckThread("NewQDirIteratorWithPathFilterFull")
 	p := C.qute_QDirIterator_new_6((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), C.int64_t(filter), C.int64_t(flags))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 
@@ -199,7 +199,7 @@ func NewQDirIteratorWithPathNameFiltersFull(path string, nameFilters []string, f
 	rt.CheckThread("NewQDirIteratorWithPathNameFiltersFull")
 	nameFiltersData, nameFiltersLens := quteStrListArg(nameFilters)
 	p := C.qute_QDirIterator_new_7((*C.char)(unsafe.Pointer(unsafe.StringData(path))), C.ptrdiff_t(len(path)), (*C.char)(unsafe.Pointer(unsafe.SliceData(nameFiltersData))), (*C.ptrdiff_t)(unsafe.SliceData(nameFiltersLens)), C.ptrdiff_t(len(nameFilters)), C.int64_t(filters), C.int64_t(flags))
-	h := rt.WrapClass(p, "QDirIterator", rt.NewOwned)
+	h := rt.WrapNew[QDirIterator](p, "QDirIterator", rt.NewOwned)
 	return rt.View[QDirIterator](h, p)
 }
 

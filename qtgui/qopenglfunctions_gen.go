@@ -96,7 +96,7 @@ func (this *QOpenGLFunctions) Unkeep() {
 func NewQOpenGLFunctions() *QOpenGLFunctions {
 	rt.CheckThread("NewQOpenGLFunctions")
 	p := C.qute_QOpenGLFunctions_new()
-	h := rt.WrapClass(p, "QOpenGLFunctions", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFunctions](p, "QOpenGLFunctions", rt.NewOwned)
 	return rt.View[QOpenGLFunctions](h, p)
 }
 
@@ -116,7 +116,7 @@ func NewQOpenGLFunctionsWithOpenGLContext(context QOpenGLContextLike) *QOpenGLFu
 	}
 	p := C.qute_QOpenGLFunctions_new_1(contextPtr)
 	runtime.KeepAlive(context)
-	h := rt.WrapClass(p, "QOpenGLFunctions", rt.NewOwned)
+	h := rt.WrapNew[QOpenGLFunctions](p, "QOpenGLFunctions", rt.NewOwned)
 	rt.KeepArg(h, "QOpenGLFunctions.context", contextH, true)
 	return rt.View[QOpenGLFunctions](h, p)
 }

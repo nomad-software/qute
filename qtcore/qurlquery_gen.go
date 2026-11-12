@@ -85,7 +85,7 @@ func (this *QUrlQuery) Unkeep() {
 func NewQUrlQuery() *QUrlQuery {
 	rt.CheckThread("NewQUrlQuery")
 	p := C.qute_QUrlQuery_new()
-	h := rt.WrapClass(p, "QUrlQuery", rt.NewOwned)
+	h := rt.WrapNew[QUrlQuery](p, "QUrlQuery", rt.NewOwned)
 	return rt.View[QUrlQuery](h, p)
 }
 
@@ -98,7 +98,7 @@ func NewQUrlQueryWithUrl(url *QUrl) *QUrlQuery {
 	rt.CheckThread("NewQUrlQueryWithUrl")
 	p := C.qute_QUrlQuery_new_1(rt.UseArg(unsafe.Pointer(url), "NewQUrlQueryWithUrl"))
 	runtime.KeepAlive(url)
-	h := rt.WrapClass(p, "QUrlQuery", rt.NewOwned)
+	h := rt.WrapNew[QUrlQuery](p, "QUrlQuery", rt.NewOwned)
 	return rt.View[QUrlQuery](h, p)
 }
 
@@ -110,7 +110,7 @@ func NewQUrlQueryWithUrl(url *QUrl) *QUrlQuery {
 func NewQUrlQueryWithQueryString(queryString string) *QUrlQuery {
 	rt.CheckThread("NewQUrlQueryWithQueryString")
 	p := C.qute_QUrlQuery_new_2((*C.char)(unsafe.Pointer(unsafe.StringData(queryString))), C.ptrdiff_t(len(queryString)))
-	h := rt.WrapClass(p, "QUrlQuery", rt.NewOwned)
+	h := rt.WrapNew[QUrlQuery](p, "QUrlQuery", rt.NewOwned)
 	return rt.View[QUrlQuery](h, p)
 }
 

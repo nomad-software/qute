@@ -70,7 +70,7 @@ func NewQGestureEventWithGestures(gestures []*QGesture) *QGestureEvent {
 	}
 	p := C.qute_QGestureEvent_new(unsafe.Pointer(unsafe.SliceData(gesturesC)), C.ptrdiff_t(len(gestures)))
 	runtime.KeepAlive(gestures)
-	h := rt.WrapClass(p, "QGestureEvent", rt.NewOwned)
+	h := rt.WrapNew[QGestureEvent](p, "QGestureEvent", rt.NewOwned)
 	return rt.View[QGestureEvent](h, p)
 }
 

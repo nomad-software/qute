@@ -85,7 +85,7 @@ func (this *QMimeType) Unkeep() {
 func NewQMimeType() *QMimeType {
 	rt.CheckThread("NewQMimeType")
 	p := C.qute_QMimeType_new()
-	h := rt.WrapClass(p, "QMimeType", rt.NewOwned)
+	h := rt.WrapNew[QMimeType](p, "QMimeType", rt.NewOwned)
 	return rt.View[QMimeType](h, p)
 }
 

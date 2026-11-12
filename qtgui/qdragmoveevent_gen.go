@@ -73,7 +73,7 @@ func NewQDragMoveEventWithPointF(pos qtcore.QPointF, actions qtcore.DropActions,
 	}
 	p := C.qute_QDragMoveEvent_new(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers))
 	runtime.KeepAlive(data)
-	h := rt.WrapClass(p, "QDragMoveEvent", rt.NewOwned)
+	h := rt.WrapNew[QDragMoveEvent](p, "QDragMoveEvent", rt.NewOwned)
 	rt.KeepArg(h, "QDragMoveEvent.data", dataH, true)
 	return rt.View[QDragMoveEvent](h, p)
 }
@@ -98,7 +98,7 @@ func NewQDragMoveEventWithPointFFull(pos qtcore.QPointF, actions qtcore.DropActi
 	}
 	p := C.qute_QDragMoveEvent_new_1(cQPointF(pos), C.int64_t(actions), dataPtr, C.int64_t(buttons), C.int64_t(modifiers), C.int64_t(typeArg))
 	runtime.KeepAlive(data)
-	h := rt.WrapClass(p, "QDragMoveEvent", rt.NewOwned)
+	h := rt.WrapNew[QDragMoveEvent](p, "QDragMoveEvent", rt.NewOwned)
 	rt.KeepArg(h, "QDragMoveEvent.data", dataH, true)
 	return rt.View[QDragMoveEvent](h, p)
 }

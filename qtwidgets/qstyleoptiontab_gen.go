@@ -62,7 +62,7 @@ func QStyleOptionTabCast(o QStyleOptionLike) *QStyleOptionTab {
 func NewQStyleOptionTab() *QStyleOptionTab {
 	rt.CheckThread("NewQStyleOptionTab")
 	p := C.qute_QStyleOptionTab_new()
-	h := rt.WrapClass(p, "QStyleOptionTab", rt.NewOwned)
+	h := rt.WrapNew[QStyleOptionTab](p, "QStyleOptionTab", rt.NewOwned)
 	return rt.View[QStyleOptionTab](h, p)
 }
 

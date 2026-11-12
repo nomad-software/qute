@@ -62,6 +62,6 @@ func NewQExposeEventWithRegion(m_region *QRegion) *QExposeEvent {
 	rt.CheckThread("NewQExposeEventWithRegion")
 	p := C.qute_QExposeEvent_new(rt.UseArg(unsafe.Pointer(m_region), "NewQExposeEventWithRegion"))
 	runtime.KeepAlive(m_region)
-	h := rt.WrapClass(p, "QExposeEvent", rt.NewOwned)
+	h := rt.WrapNew[QExposeEvent](p, "QExposeEvent", rt.NewOwned)
 	return rt.View[QExposeEvent](h, p)
 }

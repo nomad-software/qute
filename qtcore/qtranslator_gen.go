@@ -66,7 +66,7 @@ func NewQTranslator(parent QObjectLike) *QTranslator {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTranslator", mode)
+	h := rt.WrapNew[QTranslator](p, "QTranslator", mode)
 	return rt.View[QTranslator](h, p)
 }
 
@@ -417,7 +417,7 @@ func NewQTranslatorWith(v QTranslatorSubclass, parent QObjectLike) *QTranslator 
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QTranslator", mode)
+	h := rt.WrapNew[QTranslator](p, "QTranslator", mode)
 	base.QTranslator = rt.View[QTranslator](h, p)
 	id := h.SetSelf(v, qTranslatorVTable)
 	mask := rt.Mask(v, qTranslatorVTable)

@@ -68,7 +68,7 @@ func NewQRadioButton(parent QWidgetLike) *QRadioButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRadioButton", mode)
+	h := rt.WrapNew[QRadioButton](p, "QRadioButton", mode)
 	return rt.View[QRadioButton](h, p)
 }
 
@@ -91,7 +91,7 @@ func NewQRadioButtonWithText(text string, parent QWidgetLike) *QRadioButton {
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRadioButton", mode)
+	h := rt.WrapNew[QRadioButton](p, "QRadioButton", mode)
 	return rt.View[QRadioButton](h, p)
 }
 
@@ -1014,7 +1014,7 @@ func NewQRadioButtonWith(v QRadioButtonSubclass, parent QWidgetLike) *QRadioButt
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRadioButton", mode)
+	h := rt.WrapNew[QRadioButton](p, "QRadioButton", mode)
 	base.QRadioButton = rt.View[QRadioButton](h, p)
 	id := h.SetSelf(v, qRadioButtonVTable)
 	mask := rt.Mask(v, qRadioButtonVTable)
@@ -1046,7 +1046,7 @@ func NewQRadioButtonWithTextWith(v QRadioButtonSubclass, text string, parent QWi
 	if parentPtr != nil {
 		mode = rt.NewParented
 	}
-	h := rt.WrapClass(p, "QRadioButton", mode)
+	h := rt.WrapNew[QRadioButton](p, "QRadioButton", mode)
 	base.QRadioButton = rt.View[QRadioButton](h, p)
 	id := h.SetSelf(v, qRadioButtonVTable)
 	mask := rt.Mask(v, qRadioButtonVTable)
