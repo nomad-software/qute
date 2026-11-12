@@ -289,6 +289,20 @@ var qFontComboBoxVTable = []rt.Virtual{
 			_ = args
 			v.(interface{ HidePopup() }).HidePopup()
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QFontComboBox.InputMethodQuery")
+		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -565,6 +579,38 @@ var qFontComboBoxVTable = []rt.Virtual{
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
 			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -616,6 +662,18 @@ var qFontComboBoxVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -696,6 +754,14 @@ func (s *QFontComboBoxSuper) HidePopup() {
 	runtime.KeepAlive(s.this)
 }
 
+// InputMethodQuery calls QComboBox::inputMethodQuery.
+func (s *QFontComboBoxSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.InputMethodQuery")
+	r := C.qute_QFontComboBox_super_6(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // FocusInEvent calls QComboBox::focusInEvent.
 func (s *QFontComboBoxSuper) FocusInEvent(eArg *qtgui.QFocusEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.FocusInEvent")
@@ -703,7 +769,7 @@ func (s *QFontComboBoxSuper) FocusInEvent(eArg *qtgui.QFocusEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QFontComboBox.Super.FocusInEvent")
 	}
-	C.qute_QFontComboBox_super_6(self, eArgPtr)
+	C.qute_QFontComboBox_super_7(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -715,7 +781,7 @@ func (s *QFontComboBoxSuper) FocusOutEvent(eArg *qtgui.QFocusEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QFontComboBox.Super.FocusOutEvent")
 	}
-	C.qute_QFontComboBox_super_7(self, eArgPtr)
+	C.qute_QFontComboBox_super_8(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -727,7 +793,7 @@ func (s *QFontComboBoxSuper) ChangeEvent(eArg *qtcore.QEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QFontComboBox.Super.ChangeEvent")
 	}
-	C.qute_QFontComboBox_super_8(self, eArgPtr)
+	C.qute_QFontComboBox_super_9(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -739,7 +805,7 @@ func (s *QFontComboBoxSuper) ResizeEvent(eArg *qtgui.QResizeEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQResizeEvent()), "QFontComboBox.Super.ResizeEvent")
 	}
-	C.qute_QFontComboBox_super_9(self, eArgPtr)
+	C.qute_QFontComboBox_super_10(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -751,7 +817,7 @@ func (s *QFontComboBoxSuper) PaintEvent(eArg *qtgui.QPaintEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQPaintEvent()), "QFontComboBox.Super.PaintEvent")
 	}
-	C.qute_QFontComboBox_super_10(self, eArgPtr)
+	C.qute_QFontComboBox_super_11(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -763,7 +829,7 @@ func (s *QFontComboBoxSuper) ShowEvent(eArg *qtgui.QShowEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQShowEvent()), "QFontComboBox.Super.ShowEvent")
 	}
-	C.qute_QFontComboBox_super_11(self, eArgPtr)
+	C.qute_QFontComboBox_super_12(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -775,7 +841,7 @@ func (s *QFontComboBoxSuper) HideEvent(eArg *qtgui.QHideEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQHideEvent()), "QFontComboBox.Super.HideEvent")
 	}
-	C.qute_QFontComboBox_super_12(self, eArgPtr)
+	C.qute_QFontComboBox_super_13(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -787,7 +853,7 @@ func (s *QFontComboBoxSuper) MousePressEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QFontComboBox.Super.MousePressEvent")
 	}
-	C.qute_QFontComboBox_super_13(self, eArgPtr)
+	C.qute_QFontComboBox_super_14(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -799,7 +865,7 @@ func (s *QFontComboBoxSuper) MouseReleaseEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QFontComboBox.Super.MouseReleaseEvent")
 	}
-	C.qute_QFontComboBox_super_14(self, eArgPtr)
+	C.qute_QFontComboBox_super_15(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -811,7 +877,7 @@ func (s *QFontComboBoxSuper) KeyPressEvent(eArg *qtgui.QKeyEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QFontComboBox.Super.KeyPressEvent")
 	}
-	C.qute_QFontComboBox_super_15(self, eArgPtr)
+	C.qute_QFontComboBox_super_16(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -823,7 +889,7 @@ func (s *QFontComboBoxSuper) KeyReleaseEvent(eArg *qtgui.QKeyEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QFontComboBox.Super.KeyReleaseEvent")
 	}
-	C.qute_QFontComboBox_super_16(self, eArgPtr)
+	C.qute_QFontComboBox_super_17(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -835,7 +901,7 @@ func (s *QFontComboBoxSuper) WheelEvent(eArg *qtgui.QWheelEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQWheelEvent()), "QFontComboBox.Super.WheelEvent")
 	}
-	C.qute_QFontComboBox_super_17(self, eArgPtr)
+	C.qute_QFontComboBox_super_18(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -847,7 +913,7 @@ func (s *QFontComboBoxSuper) ContextMenuEvent(eArg *qtgui.QContextMenuEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQContextMenuEvent()), "QFontComboBox.Super.ContextMenuEvent")
 	}
-	C.qute_QFontComboBox_super_18(self, eArgPtr)
+	C.qute_QFontComboBox_super_19(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -859,7 +925,7 @@ func (s *QFontComboBoxSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMeth
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QFontComboBox.Super.InputMethodEvent")
 	}
-	C.qute_QFontComboBox_super_19(self, inputMethodEventPtr)
+	C.qute_QFontComboBox_super_20(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
 }
@@ -867,7 +933,7 @@ func (s *QFontComboBoxSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMeth
 // InitStyleOption calls QComboBox::initStyleOption.
 func (s *QFontComboBoxSuper) InitStyleOption(option *QStyleOptionComboBox) {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.InitStyleOption")
-	C.qute_QFontComboBox_super_20(self, rt.UseArg(unsafe.Pointer(option), "QFontComboBox.Super.InitStyleOption"))
+	C.qute_QFontComboBox_super_21(self, rt.UseArg(unsafe.Pointer(option), "QFontComboBox.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -875,14 +941,14 @@ func (s *QFontComboBoxSuper) InitStyleOption(option *QStyleOptionComboBox) {
 // SetVisible calls QWidget::setVisible.
 func (s *QFontComboBoxSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.SetVisible")
-	C.qute_QFontComboBox_super_21(self, C.bool(visible))
+	C.qute_QFontComboBox_super_22(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QFontComboBoxSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.HeightForWidth")
-	r := C.qute_QFontComboBox_super_22(self, C.int(arg0))
+	r := C.qute_QFontComboBox_super_23(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -890,7 +956,7 @@ func (s *QFontComboBoxSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QFontComboBoxSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.HasHeightForWidth")
-	r := C.qute_QFontComboBox_super_23(self)
+	r := C.qute_QFontComboBox_super_24(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -902,7 +968,7 @@ func (s *QFontComboBoxSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFontComboBox.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QFontComboBox_super_24(self, eventPtr)
+	C.qute_QFontComboBox_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -914,7 +980,7 @@ func (s *QFontComboBoxSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QFontComboBox.Super.MouseMoveEvent")
 	}
-	C.qute_QFontComboBox_super_25(self, eventPtr)
+	C.qute_QFontComboBox_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -926,7 +992,7 @@ func (s *QFontComboBoxSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QFontComboBox.Super.EnterEvent")
 	}
-	C.qute_QFontComboBox_super_26(self, eventPtr)
+	C.qute_QFontComboBox_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -938,7 +1004,7 @@ func (s *QFontComboBoxSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFontComboBox.Super.LeaveEvent")
 	}
-	C.qute_QFontComboBox_super_27(self, eventPtr)
+	C.qute_QFontComboBox_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -950,7 +1016,7 @@ func (s *QFontComboBoxSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QFontComboBox.Super.MoveEvent")
 	}
-	C.qute_QFontComboBox_super_28(self, eventPtr)
+	C.qute_QFontComboBox_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -962,7 +1028,7 @@ func (s *QFontComboBoxSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QFontComboBox.Super.CloseEvent")
 	}
-	C.qute_QFontComboBox_super_29(self, eventPtr)
+	C.qute_QFontComboBox_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -974,7 +1040,7 @@ func (s *QFontComboBoxSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QFontComboBox.Super.TabletEvent")
 	}
-	C.qute_QFontComboBox_super_30(self, eventPtr)
+	C.qute_QFontComboBox_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -986,7 +1052,7 @@ func (s *QFontComboBoxSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QFontComboBox.Super.ActionEvent")
 	}
-	C.qute_QFontComboBox_super_31(self, eventPtr)
+	C.qute_QFontComboBox_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -998,7 +1064,7 @@ func (s *QFontComboBoxSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QFontComboBox.Super.DragEnterEvent")
 	}
-	C.qute_QFontComboBox_super_32(self, eventPtr)
+	C.qute_QFontComboBox_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1010,7 +1076,7 @@ func (s *QFontComboBoxSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QFontComboBox.Super.DragMoveEvent")
 	}
-	C.qute_QFontComboBox_super_33(self, eventPtr)
+	C.qute_QFontComboBox_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1022,7 +1088,7 @@ func (s *QFontComboBoxSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QFontComboBox.Super.DragLeaveEvent")
 	}
-	C.qute_QFontComboBox_super_34(self, eventPtr)
+	C.qute_QFontComboBox_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1034,15 +1100,32 @@ func (s *QFontComboBoxSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QFontComboBox.Super.DropEvent")
 	}
-	C.qute_QFontComboBox_super_35(self, eventPtr)
+	C.qute_QFontComboBox_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QFontComboBoxSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QFontComboBox_super_37(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QFontComboBoxSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.Metric")
+	r := C.qute_QFontComboBox_super_38(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QFontComboBoxSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.FocusNextPrevChild")
-	r := C.qute_QFontComboBox_super_36(self, C.bool(next))
+	r := C.qute_QFontComboBox_super_39(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1058,7 +1141,7 @@ func (s *QFontComboBoxSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFontComboBox.Super.EventFilter")
 	}
-	r := C.qute_QFontComboBox_super_37(self, watchedPtr, eventPtr)
+	r := C.qute_QFontComboBox_super_40(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1072,7 +1155,7 @@ func (s *QFontComboBoxSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QFontComboBox.Super.TimerEvent")
 	}
-	C.qute_QFontComboBox_super_38(self, eventPtr)
+	C.qute_QFontComboBox_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1084,7 +1167,7 @@ func (s *QFontComboBoxSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QFontComboBox.Super.ChildEvent")
 	}
-	C.qute_QFontComboBox_super_39(self, eventPtr)
+	C.qute_QFontComboBox_super_42(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1096,9 +1179,25 @@ func (s *QFontComboBoxSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QFontComboBox.Super.CustomEvent")
 	}
-	C.qute_QFontComboBox_super_40(self, eventPtr)
+	C.qute_QFontComboBox_super_43(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QFontComboBoxSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.ConnectNotify")
+	C.qute_QFontComboBox_super_44(self, rt.UseArg(unsafe.Pointer(signal), "QFontComboBox.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QFontComboBoxSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFontComboBox.Super.DisconnectNotify")
+	C.qute_QFontComboBox_super_45(self, rt.UseArg(unsafe.Pointer(signal), "QFontComboBox.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
@@ -1140,6 +1239,16 @@ func (b *QFontComboBoxBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.FocusPreviousChild")
 	r := C.qute_QFontComboBox_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QFontComboBoxBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QFontComboBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFontComboBox.IsSignalConnected")
+	r := C.qute_QFontComboBox_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QFontComboBox.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

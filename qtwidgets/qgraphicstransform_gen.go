@@ -126,6 +126,18 @@ var qGraphicsTransformVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsTransformBase is embedded in Go types that subclass QGraphicsTransform:
@@ -219,12 +231,38 @@ func (s *QGraphicsTransformSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsTransformSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTransform.Super.ConnectNotify")
+	C.qute_QGraphicsTransform_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTransform.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsTransformSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTransform.Super.DisconnectNotify")
+	C.qute_QGraphicsTransform_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTransform.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // Update wraps the protected QGraphicsTransform::update for subclasses.
 func (b *QGraphicsTransformBase) Update() {
 	this := b.QGraphicsTransform // the receiver the ownership code below acts on
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTransform.Update")
 	C.qute_QGraphicsTransform_prot_update(self)
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsTransformBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsTransform // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTransform.IsSignalConnected")
+	r := C.qute_QGraphicsTransform_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTransform.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsTransformWith constructs a QGraphicsTransform whose virtual methods dispatch to v. The

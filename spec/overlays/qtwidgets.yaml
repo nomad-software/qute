@@ -28,6 +28,12 @@ QApplication:
   alert: { reviewed: true }
 
 QWidget:
+  devType: { skip: "on purpose: paint-device internals (the QInternal device type)" }
+  paintEngine: { skip: "on purpose: paint-engine internals; QPaintEngine is not bound" }
+  initPainter: { skip: "on purpose: paint-device internals; set the painter up in the paint handler" }
+  redirected: { skip: "on purpose: paint-device internals (painter redirection)" }
+  sharedPainter: { skip: "on purpose: paint-device internals (shared painters of widget backing stores)" }
+  nativeEvent: { args: { result: out } }
   setGraphicsEffect: { args: { effect: transfer-to-cpp }, doc: "The widget takes ownership of the effect." }
   graphicsEffect: { return: borrowed }
   graphicsProxyWidget: { return: borrowed }
@@ -159,6 +165,7 @@ QButtonGroup:
   checkedButton: { return: borrowed }
 
 QLineEdit:
+  inputMethodQuery(Qt::InputMethodQuery, QVariant): { name: InputMethodQueryWithArgument }
   timerEvent: { reviewed: true }
   QLineEdit(const QString&, QWidget*): { name: NewQLineEditWithText }
   setValidator: { args: { 0: keep }, reviewed: true, doc: "The line edit does not take ownership of the validator." }
@@ -171,6 +178,7 @@ QLineEdit:
   createStandardContextMenu: { return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QTextEdit:
+  inputMethodQuery(Qt::InputMethodQuery, QVariant): { name: InputMethodQueryWithArgument }
   createMimeDataFromSelection: { return: transfer-to-go }
   print: { reviewed: true }
   setDocument: { args: { document: keep }, reviewed: true, doc: "The text edit does not take ownership of the document." }
@@ -179,6 +187,7 @@ QTextEdit:
   createStandardContextMenu(const QPoint&): { name: CreateStandardContextMenuAt, return: parented, doc: "Qt makes the menu a child of the widget and leaves it to the caller to delete (Qt docs): Delete() it when done, or it lives until the widget dies." }
 
 QPlainTextEdit:
+  inputMethodQuery(Qt::InputMethodQuery, QVariant): { name: InputMethodQueryWithArgument }
   createMimeDataFromSelection: { return: transfer-to-go }
   getPaintContext: { skip: "on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound" }
   print: { reviewed: true }
@@ -230,6 +239,7 @@ QDateTimeEdit:
   calendarWidget: { return: borrowed }
 
 QComboBox:
+  inputMethodQuery(Qt::InputMethodQuery, const QVariant&): { name: InputMethodQueryWithArgument }
   setLineEdit: { args: { edit: transfer-to-cpp } }
   lineEdit: { return: borrowed }
   setValidator: { args: { v: keep }, reviewed: true }

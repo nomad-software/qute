@@ -622,6 +622,38 @@ var qLCDNumberVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
 			InputMethodEvent(*qtgui.QInputMethodEvent)
@@ -637,6 +669,20 @@ var qLCDNumberVTable = []rt.Virtual{
 			v.(interface {
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLCDNumber.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -689,6 +735,18 @@ var qLCDNumberVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1072,6 +1130,23 @@ func (s *QLCDNumberSuper) HideEvent(event *qtgui.QHideEvent) {
 	runtime.KeepAlive(event)
 }
 
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QLCDNumberSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QLCDNumber_super_32(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QLCDNumberSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.Metric")
+	r := C.qute_QLCDNumber_super_33(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
 // InputMethodEvent calls QWidget::inputMethodEvent.
 func (s *QLCDNumberSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.InputMethodEvent")
@@ -1079,15 +1154,23 @@ func (s *QLCDNumberSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodE
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QLCDNumber.Super.InputMethodEvent")
 	}
-	C.qute_QLCDNumber_super_32(self, inputMethodEventPtr)
+	C.qute_QLCDNumber_super_34(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
+}
+
+// InputMethodQuery calls QWidget::inputMethodQuery.
+func (s *QLCDNumberSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.InputMethodQuery")
+	r := C.qute_QLCDNumber_super_35(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QLCDNumberSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.FocusNextPrevChild")
-	r := C.qute_QLCDNumber_super_33(self, C.bool(next))
+	r := C.qute_QLCDNumber_super_36(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1103,7 +1186,7 @@ func (s *QLCDNumberSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLCDNumber.Super.EventFilter")
 	}
-	r := C.qute_QLCDNumber_super_34(self, watchedPtr, eventPtr)
+	r := C.qute_QLCDNumber_super_37(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1117,7 +1200,7 @@ func (s *QLCDNumberSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QLCDNumber.Super.TimerEvent")
 	}
-	C.qute_QLCDNumber_super_35(self, eventPtr)
+	C.qute_QLCDNumber_super_38(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1129,7 +1212,7 @@ func (s *QLCDNumberSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QLCDNumber.Super.ChildEvent")
 	}
-	C.qute_QLCDNumber_super_36(self, eventPtr)
+	C.qute_QLCDNumber_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1141,9 +1224,25 @@ func (s *QLCDNumberSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QLCDNumber.Super.CustomEvent")
 	}
-	C.qute_QLCDNumber_super_37(self, eventPtr)
+	C.qute_QLCDNumber_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QLCDNumberSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.ConnectNotify")
+	C.qute_QLCDNumber_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QLCDNumber.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QLCDNumberSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QLCDNumber.Super.DisconnectNotify")
+	C.qute_QLCDNumber_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QLCDNumber.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // DrawFrame wraps the protected QFrame::drawFrame for subclasses.
@@ -1198,6 +1297,16 @@ func (b *QLCDNumberBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.FocusPreviousChild")
 	r := C.qute_QLCDNumber_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QLCDNumberBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QLCDNumber // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QLCDNumber.IsSignalConnected")
+	r := C.qute_QLCDNumber_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QLCDNumber.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

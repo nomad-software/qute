@@ -355,6 +355,24 @@ var qSizeGripVTable = []rt.Virtual{
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
 			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -363,6 +381,20 @@ var qSizeGripVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -379,6 +411,20 @@ var qSizeGripVTable = []rt.Virtual{
 			v.(interface {
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QSizeGrip.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -413,6 +459,18 @@ var qSizeGripVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -794,6 +852,15 @@ func (s *QSizeGripSuper) DropEvent(event *qtgui.QDropEvent) {
 	runtime.KeepAlive(event)
 }
 
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QSizeGripSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QSizeGrip_super_31(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
 // ChangeEvent calls QWidget::changeEvent.
 func (s *QSizeGripSuper) ChangeEvent(event *qtcore.QEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.ChangeEvent")
@@ -801,9 +868,17 @@ func (s *QSizeGripSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QSizeGrip.Super.ChangeEvent")
 	}
-	C.qute_QSizeGrip_super_31(self, eventPtr)
+	C.qute_QSizeGrip_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// Metric calls QWidget::metric.
+func (s *QSizeGripSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.Metric")
+	r := C.qute_QSizeGrip_super_33(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // InputMethodEvent calls QWidget::inputMethodEvent.
@@ -813,15 +888,23 @@ func (s *QSizeGripSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEv
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QSizeGrip.Super.InputMethodEvent")
 	}
-	C.qute_QSizeGrip_super_32(self, inputMethodEventPtr)
+	C.qute_QSizeGrip_super_34(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
+}
+
+// InputMethodQuery calls QWidget::inputMethodQuery.
+func (s *QSizeGripSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.InputMethodQuery")
+	r := C.qute_QSizeGrip_super_35(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QSizeGripSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.FocusNextPrevChild")
-	r := C.qute_QSizeGrip_super_33(self, C.bool(next))
+	r := C.qute_QSizeGrip_super_36(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -833,7 +916,7 @@ func (s *QSizeGripSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QSizeGrip.Super.TimerEvent")
 	}
-	C.qute_QSizeGrip_super_34(self, eventPtr)
+	C.qute_QSizeGrip_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -845,7 +928,7 @@ func (s *QSizeGripSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QSizeGrip.Super.ChildEvent")
 	}
-	C.qute_QSizeGrip_super_35(self, eventPtr)
+	C.qute_QSizeGrip_super_38(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -857,9 +940,25 @@ func (s *QSizeGripSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QSizeGrip.Super.CustomEvent")
 	}
-	C.qute_QSizeGrip_super_36(self, eventPtr)
+	C.qute_QSizeGrip_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSizeGripSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.ConnectNotify")
+	C.qute_QSizeGrip_super_40(self, rt.UseArg(unsafe.Pointer(signal), "QSizeGrip.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSizeGripSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSizeGrip.Super.DisconnectNotify")
+	C.qute_QSizeGrip_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QSizeGrip.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
@@ -901,6 +1000,16 @@ func (b *QSizeGripBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QSizeGrip.FocusPreviousChild")
 	r := C.qute_QSizeGrip_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSizeGripBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QSizeGrip // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSizeGrip.IsSignalConnected")
+	r := C.qute_QSizeGrip_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSizeGrip.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

@@ -506,6 +506,18 @@ var qTimeLineVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QTimeLineBase is embedded in Go types that subclass QTimeLine:
@@ -601,6 +613,32 @@ func (s *QTimeLineSuper) CustomEvent(event *QEvent) {
 	C.qute_QTimeLine_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QTimeLineSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimeLine.Super.ConnectNotify")
+	C.qute_QTimeLine_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QTimeLine.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QTimeLineSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTimeLine.Super.DisconnectNotify")
+	C.qute_QTimeLine_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QTimeLine.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QTimeLineBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QTimeLine // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTimeLine.IsSignalConnected")
+	r := C.qute_QTimeLine_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QTimeLine.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQTimeLineWith constructs a QTimeLine whose virtual methods dispatch to v. The

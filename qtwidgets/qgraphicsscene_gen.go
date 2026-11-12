@@ -753,6 +753,20 @@ func (this *QGraphicsScene) SetForegroundBrush(brush *qtgui.QBrush) {
 	runtime.KeepAlive(brush)
 }
 
+// InputMethodQuery wraps QGraphicsScene::inputMethodQuery.
+//
+//	C++: QVariant QGraphicsScene::inputMethodQuery(Qt::InputMethodQuery query) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qgraphicsscene.html#inputMethodQuery
+func (this *QGraphicsScene) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.InputMethodQuery")
+	r := C.qute_QGraphicsScene_inputMethodQuery(self, C.int64_t(query))
+	runtime.KeepAlive(this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Views wraps QGraphicsScene::views.
 //
 //	C++: QList<QGraphicsView *> QGraphicsScene::views() const
@@ -1430,6 +1444,20 @@ func (this *QGraphicsScene) OnFocusItemChanged(f func(newFocus *QGraphicsItem, o
 }
 
 var qGraphicsSceneVTable = []rt.Virtual{
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsScene.InputMethodQuery")
+		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1754,6 +1782,18 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsSceneBase is embedded in Go types that subclass QGraphicsScene:
@@ -1778,6 +1818,14 @@ func (b *QGraphicsSceneBase) Super() *QGraphicsSceneSuper {
 // QGraphicsSceneSuper calls the C++ base implementations of QGraphicsScene's virtuals.
 type QGraphicsSceneSuper struct{ this *QGraphicsScene }
 
+// InputMethodQuery calls QGraphicsScene::inputMethodQuery.
+func (s *QGraphicsSceneSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScene.Super.InputMethodQuery")
+	r := C.qute_QGraphicsScene_super_0(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Event calls QGraphicsScene::event.
 func (s *QGraphicsSceneSuper) Event(event *qtcore.QEvent) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScene.Super.Event")
@@ -1785,7 +1833,7 @@ func (s *QGraphicsSceneSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsScene.Super.Event")
 	}
-	r := C.qute_QGraphicsScene_super_0(self, eventPtr)
+	r := C.qute_QGraphicsScene_super_1(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1802,7 +1850,7 @@ func (s *QGraphicsSceneSuper) EventFilter(watched *qtcore.QObject, event *qtcore
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsScene.Super.EventFilter")
 	}
-	r := C.qute_QGraphicsScene_super_1(self, watchedPtr, eventPtr)
+	r := C.qute_QGraphicsScene_super_2(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1816,7 +1864,7 @@ func (s *QGraphicsSceneSuper) ContextMenuEvent(event *QGraphicsSceneContextMenuE
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneContextMenuEvent()), "QGraphicsScene.Super.ContextMenuEvent")
 	}
-	C.qute_QGraphicsScene_super_2(self, eventPtr)
+	C.qute_QGraphicsScene_super_3(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1828,7 +1876,7 @@ func (s *QGraphicsSceneSuper) DragEnterEvent(event *QGraphicsSceneDragDropEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsScene.Super.DragEnterEvent")
 	}
-	C.qute_QGraphicsScene_super_3(self, eventPtr)
+	C.qute_QGraphicsScene_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1840,7 +1888,7 @@ func (s *QGraphicsSceneSuper) DragMoveEvent(event *QGraphicsSceneDragDropEvent) 
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsScene.Super.DragMoveEvent")
 	}
-	C.qute_QGraphicsScene_super_4(self, eventPtr)
+	C.qute_QGraphicsScene_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1852,7 +1900,7 @@ func (s *QGraphicsSceneSuper) DragLeaveEvent(event *QGraphicsSceneDragDropEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsScene.Super.DragLeaveEvent")
 	}
-	C.qute_QGraphicsScene_super_5(self, eventPtr)
+	C.qute_QGraphicsScene_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1864,7 +1912,7 @@ func (s *QGraphicsSceneSuper) DropEvent(event *QGraphicsSceneDragDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsScene.Super.DropEvent")
 	}
-	C.qute_QGraphicsScene_super_6(self, eventPtr)
+	C.qute_QGraphicsScene_super_7(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1876,7 +1924,7 @@ func (s *QGraphicsSceneSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsScene.Super.FocusInEvent")
 	}
-	C.qute_QGraphicsScene_super_7(self, eventPtr)
+	C.qute_QGraphicsScene_super_8(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1888,7 +1936,7 @@ func (s *QGraphicsSceneSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsScene.Super.FocusOutEvent")
 	}
-	C.qute_QGraphicsScene_super_8(self, eventPtr)
+	C.qute_QGraphicsScene_super_9(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1900,7 +1948,7 @@ func (s *QGraphicsSceneSuper) HelpEvent(event *QGraphicsSceneHelpEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHelpEvent()), "QGraphicsScene.Super.HelpEvent")
 	}
-	C.qute_QGraphicsScene_super_9(self, eventPtr)
+	C.qute_QGraphicsScene_super_10(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1912,7 +1960,7 @@ func (s *QGraphicsSceneSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsScene.Super.KeyPressEvent")
 	}
-	C.qute_QGraphicsScene_super_10(self, eventPtr)
+	C.qute_QGraphicsScene_super_11(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1924,7 +1972,7 @@ func (s *QGraphicsSceneSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsScene.Super.KeyReleaseEvent")
 	}
-	C.qute_QGraphicsScene_super_11(self, eventPtr)
+	C.qute_QGraphicsScene_super_12(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1936,7 +1984,7 @@ func (s *QGraphicsSceneSuper) MousePressEvent(event *QGraphicsSceneMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsScene.Super.MousePressEvent")
 	}
-	C.qute_QGraphicsScene_super_12(self, eventPtr)
+	C.qute_QGraphicsScene_super_13(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1948,7 +1996,7 @@ func (s *QGraphicsSceneSuper) MouseMoveEvent(event *QGraphicsSceneMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsScene.Super.MouseMoveEvent")
 	}
-	C.qute_QGraphicsScene_super_13(self, eventPtr)
+	C.qute_QGraphicsScene_super_14(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1960,7 +2008,7 @@ func (s *QGraphicsSceneSuper) MouseReleaseEvent(event *QGraphicsSceneMouseEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsScene.Super.MouseReleaseEvent")
 	}
-	C.qute_QGraphicsScene_super_14(self, eventPtr)
+	C.qute_QGraphicsScene_super_15(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1972,7 +2020,7 @@ func (s *QGraphicsSceneSuper) MouseDoubleClickEvent(event *QGraphicsSceneMouseEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsScene.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QGraphicsScene_super_15(self, eventPtr)
+	C.qute_QGraphicsScene_super_16(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1984,7 +2032,7 @@ func (s *QGraphicsSceneSuper) WheelEvent(event *QGraphicsSceneWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneWheelEvent()), "QGraphicsScene.Super.WheelEvent")
 	}
-	C.qute_QGraphicsScene_super_16(self, eventPtr)
+	C.qute_QGraphicsScene_super_17(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1996,7 +2044,7 @@ func (s *QGraphicsSceneSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QGraphicsScene.Super.InputMethodEvent")
 	}
-	C.qute_QGraphicsScene_super_17(self, eventPtr)
+	C.qute_QGraphicsScene_super_18(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2008,7 +2056,7 @@ func (s *QGraphicsSceneSuper) DrawBackground(painter *qtgui.QPainter, rect qtcor
 	if painter != nil {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsScene.Super.DrawBackground")
 	}
-	C.qute_QGraphicsScene_super_18(self, painterPtr, cQRectF(rect))
+	C.qute_QGraphicsScene_super_19(self, painterPtr, cQRectF(rect))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(painter)
 }
@@ -2020,7 +2068,7 @@ func (s *QGraphicsSceneSuper) DrawForeground(painter *qtgui.QPainter, rect qtcor
 	if painter != nil {
 		painterPtr = rt.UseArg(unsafe.Pointer(painter.AsQPainter()), "QGraphicsScene.Super.DrawForeground")
 	}
-	C.qute_QGraphicsScene_super_19(self, painterPtr, cQRectF(rect))
+	C.qute_QGraphicsScene_super_20(self, painterPtr, cQRectF(rect))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(painter)
 }
@@ -2028,7 +2076,7 @@ func (s *QGraphicsSceneSuper) DrawForeground(painter *qtgui.QPainter, rect qtcor
 // FocusNextPrevChild calls QGraphicsScene::focusNextPrevChild.
 func (s *QGraphicsSceneSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScene.Super.FocusNextPrevChild")
-	r := C.qute_QGraphicsScene_super_20(self, C.bool(next))
+	r := C.qute_QGraphicsScene_super_21(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2040,7 +2088,7 @@ func (s *QGraphicsSceneSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsScene.Super.TimerEvent")
 	}
-	C.qute_QGraphicsScene_super_21(self, eventPtr)
+	C.qute_QGraphicsScene_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2052,7 +2100,7 @@ func (s *QGraphicsSceneSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsScene.Super.ChildEvent")
 	}
-	C.qute_QGraphicsScene_super_22(self, eventPtr)
+	C.qute_QGraphicsScene_super_23(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2064,9 +2112,35 @@ func (s *QGraphicsSceneSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsScene.Super.CustomEvent")
 	}
-	C.qute_QGraphicsScene_super_23(self, eventPtr)
+	C.qute_QGraphicsScene_super_24(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsSceneSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScene.Super.ConnectNotify")
+	C.qute_QGraphicsScene_super_25(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScene.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsSceneSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScene.Super.DisconnectNotify")
+	C.qute_QGraphicsScene_super_26(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScene.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsSceneBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsScene // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScene.IsSignalConnected")
+	r := C.qute_QGraphicsScene_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScene.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsSceneWith constructs a QGraphicsScene whose virtual methods dispatch to v. The

@@ -346,6 +346,18 @@ var qInputDeviceVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QInputDeviceBase is embedded in Go types that subclass QInputDevice:
@@ -435,6 +447,32 @@ func (s *QInputDeviceSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QInputDevice_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QInputDeviceSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QInputDevice.Super.ConnectNotify")
+	C.qute_QInputDevice_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QInputDevice.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QInputDeviceSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QInputDevice.Super.DisconnectNotify")
+	C.qute_QInputDevice_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QInputDevice.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QInputDeviceBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QInputDevice // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QInputDevice.IsSignalConnected")
+	r := C.qute_QInputDevice_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QInputDevice.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQInputDeviceWith constructs a QInputDevice whose virtual methods dispatch to v. The

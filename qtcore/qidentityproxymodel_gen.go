@@ -633,6 +633,18 @@ var qIdentityProxyModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QIdentityProxyModelBase is embedded in Go types that subclass QIdentityProxyModel:
@@ -1109,6 +1121,22 @@ func (s *QIdentityProxyModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QIdentityProxyModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QIdentityProxyModel.Super.ConnectNotify")
+	C.qute_QIdentityProxyModel_super_46(self, rt.UseArg(unsafe.Pointer(signal), "QIdentityProxyModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QIdentityProxyModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QIdentityProxyModel.Super.DisconnectNotify")
+	C.qute_QIdentityProxyModel_super_47(self, rt.UseArg(unsafe.Pointer(signal), "QIdentityProxyModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetHandleSourceLayoutChanges wraps the protected QIdentityProxyModel::setHandleSourceLayoutChanges for subclasses.
 func (b *QIdentityProxyModelBase) SetHandleSourceLayoutChanges(handleSourceLayoutChanges bool) {
 	this := b.QIdentityProxyModel // the receiver the ownership code below acts on
@@ -1333,6 +1361,16 @@ func (b *QIdentityProxyModelBase) PersistentIndexList() []*QModelIndex {
 	r := C.qute_QIdentityProxyModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QIdentityProxyModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QIdentityProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QIdentityProxyModel.IsSignalConnected")
+	r := C.qute_QIdentityProxyModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QIdentityProxyModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQIdentityProxyModelWith constructs a QIdentityProxyModel whose virtual methods dispatch to v. The

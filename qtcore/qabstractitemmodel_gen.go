@@ -1838,6 +1838,18 @@ var qAbstractItemModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QAbstractItemModelBase is embedded in Go types that subclass QAbstractItemModel:
@@ -2221,6 +2233,22 @@ func (s *QAbstractItemModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAbstractItemModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemModel.Super.ConnectNotify")
+	C.qute_QAbstractItemModel_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAbstractItemModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemModel.Super.DisconnectNotify")
+	C.qute_QAbstractItemModel_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QAbstractItemModelBase) CreateIndex(row int, column int) *QModelIndex {
 	this := b.QAbstractItemModel // the receiver the ownership code below acts on
@@ -2420,6 +2448,16 @@ func (b *QAbstractItemModelBase) PersistentIndexList() []*QModelIndex {
 	r := C.qute_QAbstractItemModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAbstractItemModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QAbstractItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemModel.IsSignalConnected")
+	r := C.qute_QAbstractItemModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQAbstractItemModelWith constructs a QAbstractItemModel whose virtual methods dispatch to v. The

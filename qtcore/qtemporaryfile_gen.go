@@ -395,6 +395,18 @@ var qTemporaryFileVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QTemporaryFileBase is embedded in Go types that subclass QTemporaryFile:
@@ -639,6 +651,22 @@ func (s *QTemporaryFileSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QTemporaryFileSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTemporaryFile.Super.ConnectNotify")
+	C.qute_QTemporaryFile_super_24(self, rt.UseArg(unsafe.Pointer(signal), "QTemporaryFile.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QTemporaryFileSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTemporaryFile.Super.DisconnectNotify")
+	C.qute_QTemporaryFile_super_25(self, rt.UseArg(unsafe.Pointer(signal), "QTemporaryFile.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetOpenMode wraps the protected QIODevice::setOpenMode for subclasses.
 func (b *QTemporaryFileBase) SetOpenMode(openMode QIODeviceBaseOpenMode) {
 	this := b.QTemporaryFile // the receiver the ownership code below acts on
@@ -653,6 +681,16 @@ func (b *QTemporaryFileBase) SetErrorString(errorString string) {
 	self := rt.Use(unsafe.Pointer(this), "QTemporaryFile.SetErrorString")
 	C.qute_QTemporaryFile_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QTemporaryFileBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QTemporaryFile // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTemporaryFile.IsSignalConnected")
+	r := C.qute_QTemporaryFile_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QTemporaryFile.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQTemporaryFileWith constructs a QTemporaryFile whose virtual methods dispatch to v. The

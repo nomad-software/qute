@@ -231,6 +231,12 @@ func (this *QMediaDevices) OnVideoInputsChanged(f func()) qtcore.Connection {
 }
 
 var qMediaDevicesVTable = []rt.Virtual{
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -286,6 +292,12 @@ var qMediaDevicesVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QMediaDevicesBase is embedded in Go types that subclass QMediaDevices:
@@ -310,6 +322,14 @@ func (b *QMediaDevicesBase) Super() *QMediaDevicesSuper {
 // QMediaDevicesSuper calls the C++ base implementations of QMediaDevices's virtuals.
 type QMediaDevicesSuper struct{ this *QMediaDevices }
 
+// ConnectNotify calls QMediaDevices::connectNotify.
+func (s *QMediaDevicesSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaDevices.Super.ConnectNotify")
+	C.qute_QMediaDevices_super_0(self, rt.UseArg(unsafe.Pointer(signal), "QMediaDevices.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // Event calls QObject::event.
 func (s *QMediaDevicesSuper) Event(event *qtcore.QEvent) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QMediaDevices.Super.Event")
@@ -317,7 +337,7 @@ func (s *QMediaDevicesSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaDevices.Super.Event")
 	}
-	r := C.qute_QMediaDevices_super_0(self, eventPtr)
+	r := C.qute_QMediaDevices_super_1(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -334,7 +354,7 @@ func (s *QMediaDevicesSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaDevices.Super.EventFilter")
 	}
-	r := C.qute_QMediaDevices_super_1(self, watchedPtr, eventPtr)
+	r := C.qute_QMediaDevices_super_2(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -348,7 +368,7 @@ func (s *QMediaDevicesSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QMediaDevices.Super.TimerEvent")
 	}
-	C.qute_QMediaDevices_super_2(self, eventPtr)
+	C.qute_QMediaDevices_super_3(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -360,7 +380,7 @@ func (s *QMediaDevicesSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QMediaDevices.Super.ChildEvent")
 	}
-	C.qute_QMediaDevices_super_3(self, eventPtr)
+	C.qute_QMediaDevices_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -372,9 +392,27 @@ func (s *QMediaDevicesSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QMediaDevices.Super.CustomEvent")
 	}
-	C.qute_QMediaDevices_super_4(self, eventPtr)
+	C.qute_QMediaDevices_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QMediaDevicesSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QMediaDevices.Super.DisconnectNotify")
+	C.qute_QMediaDevices_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QMediaDevices.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QMediaDevicesBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QMediaDevices // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QMediaDevices.IsSignalConnected")
+	r := C.qute_QMediaDevices_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QMediaDevices.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQMediaDevicesWith constructs a QMediaDevices whose virtual methods dispatch to v. The

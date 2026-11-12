@@ -200,6 +200,18 @@ var qOpenGLVertexArrayObjectVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QOpenGLVertexArrayObjectBase is embedded in Go types that subclass QOpenGLVertexArrayObject:
@@ -293,6 +305,32 @@ func (s *QOpenGLVertexArrayObjectSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QOpenGLVertexArrayObject_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QOpenGLVertexArrayObjectSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.ConnectNotify")
+	C.qute_QOpenGLVertexArrayObject_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLVertexArrayObject.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QOpenGLVertexArrayObjectSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLVertexArrayObject.Super.DisconnectNotify")
+	C.qute_QOpenGLVertexArrayObject_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLVertexArrayObject.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QOpenGLVertexArrayObjectBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QOpenGLVertexArrayObject // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLVertexArrayObject.IsSignalConnected")
+	r := C.qute_QOpenGLVertexArrayObject_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLVertexArrayObject.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQOpenGLVertexArrayObjectWith constructs a QOpenGLVertexArrayObject whose virtual methods dispatch to v. The

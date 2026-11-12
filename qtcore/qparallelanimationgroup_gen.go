@@ -162,6 +162,18 @@ var qParallelAnimationGroupVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QParallelAnimationGroupBase is embedded in Go types that subclass QParallelAnimationGroup:
@@ -284,6 +296,32 @@ func (s *QParallelAnimationGroupSuper) CustomEvent(event *QEvent) {
 	C.qute_QParallelAnimationGroup_super_8(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QParallelAnimationGroupSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QParallelAnimationGroup.Super.ConnectNotify")
+	C.qute_QParallelAnimationGroup_super_9(self, rt.UseArg(unsafe.Pointer(signal), "QParallelAnimationGroup.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QParallelAnimationGroupSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QParallelAnimationGroup.Super.DisconnectNotify")
+	C.qute_QParallelAnimationGroup_super_10(self, rt.UseArg(unsafe.Pointer(signal), "QParallelAnimationGroup.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QParallelAnimationGroupBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QParallelAnimationGroup // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QParallelAnimationGroup.IsSignalConnected")
+	r := C.qute_QParallelAnimationGroup_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QParallelAnimationGroup.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQParallelAnimationGroupWith constructs a QParallelAnimationGroup whose virtual methods dispatch to v. The

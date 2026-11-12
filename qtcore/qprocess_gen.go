@@ -1033,6 +1033,18 @@ var qProcessVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QProcessBase is embedded in Go types that subclass QProcess:
@@ -1243,6 +1255,22 @@ func (s *QProcessSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QProcessSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QProcess.Super.ConnectNotify")
+	C.qute_QProcess_super_20(self, rt.UseArg(unsafe.Pointer(signal), "QProcess.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QProcessSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QProcess.Super.DisconnectNotify")
+	C.qute_QProcess_super_21(self, rt.UseArg(unsafe.Pointer(signal), "QProcess.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetProcessState wraps the protected QProcess::setProcessState for subclasses.
 func (b *QProcessBase) SetProcessState(state QProcessProcessState) {
 	this := b.QProcess // the receiver the ownership code below acts on
@@ -1265,6 +1293,16 @@ func (b *QProcessBase) SetErrorString(errorString string) {
 	self := rt.Use(unsafe.Pointer(this), "QProcess.SetErrorString")
 	C.qute_QProcess_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QProcessBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QProcess // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QProcess.IsSignalConnected")
+	r := C.qute_QProcess_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QProcess.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQProcessWith constructs a QProcess whose virtual methods dispatch to v. The

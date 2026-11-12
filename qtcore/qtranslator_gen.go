@@ -286,6 +286,18 @@ var qTranslatorVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QTranslatorBase is embedded in Go types that subclass QTranslator:
@@ -395,6 +407,32 @@ func (s *QTranslatorSuper) CustomEvent(event *QEvent) {
 	C.qute_QTranslator_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QTranslatorSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.ConnectNotify")
+	C.qute_QTranslator_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QTranslator.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QTranslatorSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTranslator.Super.DisconnectNotify")
+	C.qute_QTranslator_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QTranslator.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QTranslatorBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QTranslator // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTranslator.IsSignalConnected")
+	r := C.qute_QTranslator_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QTranslator.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQTranslatorWith constructs a QTranslator whose virtual methods dispatch to v. The

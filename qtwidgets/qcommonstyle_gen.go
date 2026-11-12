@@ -487,6 +487,18 @@ var qCommonStyleVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QCommonStyleBase is embedded in Go types that subclass QCommonStyle:
@@ -867,6 +879,32 @@ func (s *QCommonStyleSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QCommonStyle_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QCommonStyleSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCommonStyle.Super.ConnectNotify")
+	C.qute_QCommonStyle_super_27(self, rt.UseArg(unsafe.Pointer(signal), "QCommonStyle.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QCommonStyleSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QCommonStyle.Super.DisconnectNotify")
+	C.qute_QCommonStyle_super_28(self, rt.UseArg(unsafe.Pointer(signal), "QCommonStyle.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QCommonStyleBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QCommonStyle // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QCommonStyle.IsSignalConnected")
+	r := C.qute_QCommonStyle_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QCommonStyle.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQCommonStyleWith constructs a QCommonStyle whose virtual methods dispatch to v. The

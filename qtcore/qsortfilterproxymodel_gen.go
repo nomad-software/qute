@@ -1167,6 +1167,18 @@ var qSortFilterProxyModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QSortFilterProxyModelBase is embedded in Go types that subclass QSortFilterProxyModel:
@@ -1673,6 +1685,22 @@ func (s *QSortFilterProxyModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSortFilterProxyModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.ConnectNotify")
+	C.qute_QSortFilterProxyModel_super_49(self, rt.UseArg(unsafe.Pointer(signal), "QSortFilterProxyModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSortFilterProxyModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSortFilterProxyModel.Super.DisconnectNotify")
+	C.qute_QSortFilterProxyModel_super_50(self, rt.UseArg(unsafe.Pointer(signal), "QSortFilterProxyModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // DataChangeRelevanceFlags wraps the protected QSortFilterProxyModel::dataChangeRelevanceFlags for subclasses.
 func (b *QSortFilterProxyModelBase) DataChangeRelevanceFlags(sourceTopLeft *QModelIndex, sourceBottomRight *QModelIndex, roles []int) QSortFilterProxyModelDataChangeRelevanceFlags {
 	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
@@ -1912,6 +1940,16 @@ func (b *QSortFilterProxyModelBase) PersistentIndexList() []*QModelIndex {
 	r := C.qute_QSortFilterProxyModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSortFilterProxyModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QSortFilterProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSortFilterProxyModel.IsSignalConnected")
+	r := C.qute_QSortFilterProxyModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSortFilterProxyModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQSortFilterProxyModelWith constructs a QSortFilterProxyModel whose virtual methods dispatch to v. The

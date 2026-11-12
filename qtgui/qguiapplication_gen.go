@@ -715,6 +715,17 @@ func QGuiApplicationInputMethod() *QInputMethod {
 	return rt.View[QInputMethod](rt.WrapClass(r, "QInputMethod", rt.KeepOrBorrow), r)
 }
 
+// QGuiApplicationPlatformFunction wraps QGuiApplication::platformFunction.
+//
+//	C++: QFunctionPointer QGuiApplication::platformFunction(const QByteArray & function)
+//
+// Qt docs: https://doc.qt.io/qt-6/qguiapplication.html#platformFunction
+func QGuiApplicationPlatformFunction(function []byte) unsafe.Pointer {
+	rt.CheckThread("QGuiApplicationPlatformFunction")
+	r := C.qute_QGuiApplication_platformFunction((*C.char)(unsafe.Pointer(unsafe.SliceData(function))), C.ptrdiff_t(len(function)))
+	return r
+}
+
 // QGuiApplicationSetQuitOnLastWindowClosed wraps QGuiApplication::setQuitOnLastWindowClosed.
 //
 //	C++: void QGuiApplication::setQuitOnLastWindowClosed(bool quit)

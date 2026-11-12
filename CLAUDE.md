@@ -347,11 +347,16 @@ Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
   take every pointer-to-number argument as `unsafe.Pointer`, because GL
   decides the size from other arguments;
 - the integer `GL_*` macros become untyped constants in `qtgui/gl_gen.go`
-  (`irgen` reads them with libclang's macro records).
+  (`irgen` reads them with libclang's macro records);
+- a `QFunctionPointer` result (`QOpenGLContext::getProcAddress`,
+  `QGuiApplication::platformFunction`) to `unsafe.Pointer`: Go only hands it
+  on (to a GL loader such as go-gl's `InitWithProcAddrFunc`), so no Go
+  closure has to become a C function pointer.
 
 Deliberately unsupported (reported as "skipped on purpose", with the reason):
 C++ move overloads, `QBindable`, `QThread`, iterators, Qt's private and
-platform internals, C function pointers, returned `std::function`s,
+platform internals, C function pointer parameters (and results other than
+`QFunctionPointer`), returned `std::function`s,
 `std::initializer_list`, fixed-size C arrays, C++20 ordering types, template
 classes (`QGenericMatrix`, `QRgbaFloat`), printing page setup, accessibility,
 Vulkan and low-level font and text-layout internals.
@@ -514,6 +519,11 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   what a Go override returns (see Signals and subclassing). An unknown rule,
   or a return rule on a result that is not an object pointer, is a generator
   warning.
+  A `skip` on a virtual also keeps Go from overriding it, on the declaring
+  class and every subclass whose base chain reaches that entry (a class whose
+  chain does not, through a secondary base, needs its own: `QWidget` and
+  `QPaintDevice` both skip `redirected`); it is listed under the virtuals Go
+  cannot override.
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `no-full: <why>` (the
   method has no Full form on purpose: a defaulted input array), `error`,
   `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…; on a
@@ -651,7 +661,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `QT_FFMPEG_ENCODING_HW_DEVICE_TYPES=,` for `-asan`, and
   `QTWEBENGINE_DISABLE_SANDBOX=1` when running as root (a container).
 - `opengl_test.go` draws a triangle (shader program, buffer, VAO) and checks
-  the pixels; `scene_test.go` checks scene items die with the scene, with
+  the pixels, and resolves GL functions through `GetProcAddress` (for a GL
+  loader; an unknown name is not checked, GLX hands out a stub for any
+  name); `scene_test.go` checks scene items die with the scene, with
   `Clear()` and with their parent item.
 - `lifetime_test.go` covers object lifetimes that went wrong once: layout
   items and paint devices after their owner died, a QObject through its
@@ -785,8 +797,9 @@ Layout:
   `subclass_test.go` covers subclassing by default: a view's events and
   protected enums, in-out validator overrides and their Super, map results,
   a Go graphics item, a syntax highlighter's per-block Go state, `GoValue`,
-  an abstract class with no overrides, a required override left out, and
-  overrides reached through an embedded user type).
+  an abstract class with no overrides, a required override left out,
+  overrides reached through an embedded user type, `inputMethodQuery` answered
+  through a query event, `metric` and `connectNotify`/`IsSignalConnected`).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
   `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
@@ -857,8 +870,13 @@ Conventions:
   ownership).
 - Per-method decisions (ownership, names, skips) go in overlays, never in
   generator code; `deliberate` in `cmd/qutegen/types.go` holds only
-  type-wide reasons for leaving something out. A `skip:` string is the reason
-  shown in `COVERAGE.md`.
+  type-wide reasons for leaving something out, and `idiomSkip` in `model.go`
+  only the implicit-sharing idioms of value classes (`swap`, `detach`,
+  `isDetached`, `data_ptr`; a QObject's `detach` is real API). A `skip:`
+  string is the reason shown in `COVERAGE.md`. `globalSkip` hides a name on
+  every class without a word in the report, so it holds only what moc and
+  Qt's macros generate (`tr`, `qt_metacall`, `d_func`...); it once hid
+  `inputMethodQuery`, `metric` and `connectNotify` (`TestNoSilentSkips`).
 - Panic messages name the method, what happened and the fix; keep that style.
 - A new exported helper in the root package or a `*_manual.go` file gets a
   test (generated code is covered by `ownership_gen_test.go` and

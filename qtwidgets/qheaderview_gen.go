@@ -1491,6 +1491,20 @@ var qHeaderViewVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QHeaderView.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QHeaderView.InputMethodQuery")
+		}},
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1917,6 +1931,38 @@ var qHeaderViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1934,6 +1980,18 @@ var qHeaderViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -2282,10 +2340,18 @@ func (s *QHeaderViewSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbs
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QHeaderViewSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.InputMethodQuery")
+	r := C.qute_QHeaderView_super_35(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // SetRootIndex calls QAbstractItemView::setRootIndex.
 func (s *QHeaderViewSuper) SetRootIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.SetRootIndex")
-	C.qute_QHeaderView_super_35(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.SetRootIndex"))
+	C.qute_QHeaderView_super_36(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.SetRootIndex"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 }
@@ -2293,14 +2359,14 @@ func (s *QHeaderViewSuper) SetRootIndex(index *qtcore.QModelIndex) {
 // SelectAll calls QAbstractItemView::selectAll.
 func (s *QHeaderViewSuper) SelectAll() {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.SelectAll")
-	C.qute_QHeaderView_super_36(self)
+	C.qute_QHeaderView_super_37(self)
 	runtime.KeepAlive(s.this)
 }
 
 // RowsAboutToBeRemoved calls QAbstractItemView::rowsAboutToBeRemoved.
 func (s *QHeaderViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, start int, end int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.RowsAboutToBeRemoved")
-	C.qute_QHeaderView_super_37(self, rt.UseArg(unsafe.Pointer(parent), "QHeaderView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
+	C.qute_QHeaderView_super_38(self, rt.UseArg(unsafe.Pointer(parent), "QHeaderView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
 }
@@ -2308,7 +2374,7 @@ func (s *QHeaderViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, star
 // SelectionChanged calls QAbstractItemView::selectionChanged.
 func (s *QHeaderViewSuper) SelectionChanged(selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.SelectionChanged")
-	C.qute_QHeaderView_super_38(self, rt.Use(unsafe.Pointer(selected), "QHeaderView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QHeaderView.Super.SelectionChanged"))
+	C.qute_QHeaderView_super_39(self, rt.Use(unsafe.Pointer(selected), "QHeaderView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QHeaderView.Super.SelectionChanged"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(selected)
 	runtime.KeepAlive(deselected)
@@ -2317,42 +2383,42 @@ func (s *QHeaderViewSuper) SelectionChanged(selected *qtcore.QItemSelection, des
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QHeaderViewSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.UpdateEditorData")
-	C.qute_QHeaderView_super_39(self)
+	C.qute_QHeaderView_super_40(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QHeaderViewSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.UpdateEditorGeometries")
-	C.qute_QHeaderView_super_40(self)
+	C.qute_QHeaderView_super_41(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QHeaderViewSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.VerticalScrollbarAction")
-	C.qute_QHeaderView_super_41(self, C.int(action))
+	C.qute_QHeaderView_super_42(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarAction calls QAbstractItemView::horizontalScrollbarAction.
 func (s *QHeaderViewSuper) HorizontalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.HorizontalScrollbarAction")
-	C.qute_QHeaderView_super_42(self, C.int(action))
+	C.qute_QHeaderView_super_43(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarValueChanged calls QAbstractItemView::verticalScrollbarValueChanged.
 func (s *QHeaderViewSuper) VerticalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.VerticalScrollbarValueChanged")
-	C.qute_QHeaderView_super_43(self, C.int(value))
+	C.qute_QHeaderView_super_44(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QHeaderViewSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.HorizontalScrollbarValueChanged")
-	C.qute_QHeaderView_super_44(self, C.int(value))
+	C.qute_QHeaderView_super_45(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -2363,7 +2429,7 @@ func (s *QHeaderViewSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelega
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QHeaderView.Super.CloseEditor")
 	}
-	C.qute_QHeaderView_super_45(self, editorPtr, C.int64_t(hint))
+	C.qute_QHeaderView_super_46(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2375,7 +2441,7 @@ func (s *QHeaderViewSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QHeaderView.Super.CommitData")
 	}
-	C.qute_QHeaderView_super_46(self, editorPtr)
+	C.qute_QHeaderView_super_47(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2387,7 +2453,7 @@ func (s *QHeaderViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QHeaderView.Super.EditorDestroyed")
 	}
-	C.qute_QHeaderView_super_47(self, editorPtr)
+	C.qute_QHeaderView_super_48(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2395,7 +2461,7 @@ func (s *QHeaderViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 // SelectedIndexes calls QAbstractItemView::selectedIndexes.
 func (s *QHeaderViewSuper) SelectedIndexes() []*qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.SelectedIndexes")
-	r := C.qute_QHeaderView_super_48(self)
+	r := C.qute_QHeaderView_super_49(self)
 	runtime.KeepAlive(s.this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
 		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
@@ -2409,7 +2475,7 @@ func (s *QHeaderViewSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItem
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.Edit")
 	}
-	r := C.qute_QHeaderView_super_49(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QHeaderView_super_50(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2423,7 +2489,7 @@ func (s *QHeaderViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.SelectionCommand")
 	}
-	r := C.qute_QHeaderView_super_50(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QHeaderView_super_51(self, rt.UseArg(unsafe.Pointer(index), "QHeaderView.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2433,14 +2499,14 @@ func (s *QHeaderViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 // StartDrag calls QAbstractItemView::startDrag.
 func (s *QHeaderViewSuper) StartDrag(supportedActions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.StartDrag")
-	C.qute_QHeaderView_super_51(self, C.int64_t(supportedActions))
+	C.qute_QHeaderView_super_52(self, C.int64_t(supportedActions))
 	runtime.KeepAlive(s.this)
 }
 
 // InitViewItemOption calls QAbstractItemView::initViewItemOption.
 func (s *QHeaderViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.InitViewItemOption")
-	C.qute_QHeaderView_super_52(self, rt.UseArg(unsafe.Pointer(option), "QHeaderView.Super.InitViewItemOption"))
+	C.qute_QHeaderView_super_53(self, rt.UseArg(unsafe.Pointer(option), "QHeaderView.Super.InitViewItemOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2448,7 +2514,7 @@ func (s *QHeaderViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QHeaderViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.FocusNextPrevChild")
-	r := C.qute_QHeaderView_super_53(self, C.bool(next))
+	r := C.qute_QHeaderView_super_54(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2460,7 +2526,7 @@ func (s *QHeaderViewSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QHeaderView.Super.DragEnterEvent")
 	}
-	C.qute_QHeaderView_super_54(self, eventPtr)
+	C.qute_QHeaderView_super_55(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2472,7 +2538,7 @@ func (s *QHeaderViewSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QHeaderView.Super.DragMoveEvent")
 	}
-	C.qute_QHeaderView_super_55(self, eventPtr)
+	C.qute_QHeaderView_super_56(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2484,7 +2550,7 @@ func (s *QHeaderViewSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QHeaderView.Super.DragLeaveEvent")
 	}
-	C.qute_QHeaderView_super_56(self, eventPtr)
+	C.qute_QHeaderView_super_57(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2496,7 +2562,7 @@ func (s *QHeaderViewSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QHeaderView.Super.DropEvent")
 	}
-	C.qute_QHeaderView_super_57(self, eventPtr)
+	C.qute_QHeaderView_super_58(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2508,7 +2574,7 @@ func (s *QHeaderViewSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QHeaderView.Super.FocusInEvent")
 	}
-	C.qute_QHeaderView_super_58(self, eventPtr)
+	C.qute_QHeaderView_super_59(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2520,7 +2586,7 @@ func (s *QHeaderViewSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QHeaderView.Super.FocusOutEvent")
 	}
-	C.qute_QHeaderView_super_59(self, eventPtr)
+	C.qute_QHeaderView_super_60(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2532,7 +2598,7 @@ func (s *QHeaderViewSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QHeaderView.Super.KeyPressEvent")
 	}
-	C.qute_QHeaderView_super_60(self, eventPtr)
+	C.qute_QHeaderView_super_61(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2544,7 +2610,7 @@ func (s *QHeaderViewSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QHeaderView.Super.ResizeEvent")
 	}
-	C.qute_QHeaderView_super_61(self, eventPtr)
+	C.qute_QHeaderView_super_62(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2556,7 +2622,7 @@ func (s *QHeaderViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QHeaderView.Super.TimerEvent")
 	}
-	C.qute_QHeaderView_super_62(self, eventPtr)
+	C.qute_QHeaderView_super_63(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2568,7 +2634,7 @@ func (s *QHeaderViewSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QHeaderView.Super.InputMethodEvent")
 	}
-	C.qute_QHeaderView_super_63(self, eventPtr)
+	C.qute_QHeaderView_super_64(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2584,7 +2650,7 @@ func (s *QHeaderViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.EventFilter")
 	}
-	r := C.qute_QHeaderView_super_64(self, objectPtr, eventPtr)
+	r := C.qute_QHeaderView_super_65(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -2594,7 +2660,7 @@ func (s *QHeaderViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 // ViewportSizeHint calls QAbstractItemView::viewportSizeHint.
 func (s *QHeaderViewSuper) ViewportSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.ViewportSizeHint")
-	r := C.qute_QHeaderView_super_65(self)
+	r := C.qute_QHeaderView_super_66(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2602,7 +2668,7 @@ func (s *QHeaderViewSuper) ViewportSizeHint() qtcore.QSize {
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QHeaderViewSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.MinimumSizeHint")
-	r := C.qute_QHeaderView_super_66(self)
+	r := C.qute_QHeaderView_super_67(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2614,7 +2680,7 @@ func (s *QHeaderViewSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QHeaderView.Super.SetupViewport")
 	}
-	C.qute_QHeaderView_super_67(self, viewportPtr)
+	C.qute_QHeaderView_super_68(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -2626,7 +2692,7 @@ func (s *QHeaderViewSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
 	if wheelEvent != nil {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QHeaderView.Super.WheelEvent")
 	}
-	C.qute_QHeaderView_super_68(self, wheelEventPtr)
+	C.qute_QHeaderView_super_69(self, wheelEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(wheelEvent)
 }
@@ -2638,7 +2704,7 @@ func (s *QHeaderViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenu
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QHeaderView.Super.ContextMenuEvent")
 	}
-	C.qute_QHeaderView_super_69(self, contextMenuEventPtr)
+	C.qute_QHeaderView_super_70(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -2650,7 +2716,7 @@ func (s *QHeaderViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.ChangeEvent")
 	}
-	C.qute_QHeaderView_super_70(self, eventPtr)
+	C.qute_QHeaderView_super_71(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2658,7 +2724,7 @@ func (s *QHeaderViewSuper) ChangeEvent(event *qtcore.QEvent) {
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QHeaderViewSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.HeightForWidth")
-	r := C.qute_QHeaderView_super_71(self, C.int(arg0))
+	r := C.qute_QHeaderView_super_72(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -2666,7 +2732,7 @@ func (s *QHeaderViewSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QHeaderViewSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.HasHeightForWidth")
-	r := C.qute_QHeaderView_super_72(self)
+	r := C.qute_QHeaderView_super_73(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2678,7 +2744,7 @@ func (s *QHeaderViewSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QHeaderView.Super.KeyReleaseEvent")
 	}
-	C.qute_QHeaderView_super_73(self, eventPtr)
+	C.qute_QHeaderView_super_74(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2690,7 +2756,7 @@ func (s *QHeaderViewSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QHeaderView.Super.EnterEvent")
 	}
-	C.qute_QHeaderView_super_74(self, eventPtr)
+	C.qute_QHeaderView_super_75(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2702,7 +2768,7 @@ func (s *QHeaderViewSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.LeaveEvent")
 	}
-	C.qute_QHeaderView_super_75(self, eventPtr)
+	C.qute_QHeaderView_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2714,7 +2780,7 @@ func (s *QHeaderViewSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QHeaderView.Super.MoveEvent")
 	}
-	C.qute_QHeaderView_super_76(self, eventPtr)
+	C.qute_QHeaderView_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2726,7 +2792,7 @@ func (s *QHeaderViewSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QHeaderView.Super.CloseEvent")
 	}
-	C.qute_QHeaderView_super_77(self, eventPtr)
+	C.qute_QHeaderView_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2738,7 +2804,7 @@ func (s *QHeaderViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QHeaderView.Super.TabletEvent")
 	}
-	C.qute_QHeaderView_super_78(self, eventPtr)
+	C.qute_QHeaderView_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2750,7 +2816,7 @@ func (s *QHeaderViewSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QHeaderView.Super.ActionEvent")
 	}
-	C.qute_QHeaderView_super_79(self, eventPtr)
+	C.qute_QHeaderView_super_80(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2762,7 +2828,7 @@ func (s *QHeaderViewSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QHeaderView.Super.ShowEvent")
 	}
-	C.qute_QHeaderView_super_80(self, eventPtr)
+	C.qute_QHeaderView_super_81(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2774,9 +2840,26 @@ func (s *QHeaderViewSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QHeaderView.Super.HideEvent")
 	}
-	C.qute_QHeaderView_super_81(self, eventPtr)
+	C.qute_QHeaderView_super_82(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QHeaderViewSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QHeaderView_super_83(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QHeaderViewSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.Metric")
+	r := C.qute_QHeaderView_super_84(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -2786,7 +2869,7 @@ func (s *QHeaderViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QHeaderView.Super.ChildEvent")
 	}
-	C.qute_QHeaderView_super_82(self, eventPtr)
+	C.qute_QHeaderView_super_85(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2798,9 +2881,25 @@ func (s *QHeaderViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QHeaderView.Super.CustomEvent")
 	}
-	C.qute_QHeaderView_super_83(self, eventPtr)
+	C.qute_QHeaderView_super_86(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QHeaderViewSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.ConnectNotify")
+	C.qute_QHeaderView_super_87(self, rt.UseArg(unsafe.Pointer(signal), "QHeaderView.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QHeaderViewSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QHeaderView.Super.DisconnectNotify")
+	C.qute_QHeaderView_super_88(self, rt.UseArg(unsafe.Pointer(signal), "QHeaderView.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // UpdateSection wraps the protected QHeaderView::updateSection for subclasses.
@@ -3022,6 +3121,16 @@ func (b *QHeaderViewBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QHeaderView.FocusPreviousChild")
 	r := C.qute_QHeaderView_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QHeaderViewBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QHeaderView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QHeaderView.IsSignalConnected")
+	r := C.qute_QHeaderView_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QHeaderView.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

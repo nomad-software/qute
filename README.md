@@ -705,9 +705,10 @@ job exists only while Qt loads a URL, the user data only matters inside
 
 Not done yet:
 
-- About 840 methods are skipped on purpose, each with its reason in
+- About 970 methods are skipped on purpose, each with its reason in
   `COVERAGE.md`: C++ move overloads, `QBindable`, iterators, Qt's private
-  and platform internals, `QStringView` and plain-number twins, printing page
+  and platform internals, implicit-sharing plumbing (`swap`, `detach`),
+  string-based connections, `QStringView` and plain-number twins, printing page
   setup, accessibility, Vulkan and types from modules that aren't bound. About 620 operators, conversion
   operators and member templates are not in the IR at all; `COVERAGE.md`
   lists them too.

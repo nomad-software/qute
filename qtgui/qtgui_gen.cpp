@@ -71,6 +71,7 @@
 #include <QLinearGradient>
 #include <QLocale>
 #include <QMatrix4x4>
+#include <QMetaMethod>
 #include <QMetaObject>
 #include <QMimeData>
 #include <QModelIndex>
@@ -299,6 +300,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -357,6 +359,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QActionEvent : public QActionEvent {
@@ -374,6 +398,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -432,6 +457,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QApplicationStateChangeEvent : public QApplicationStateChangeEvent {
@@ -476,6 +523,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	QValidator::State validate(QString & a0, int & a1) const override {
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
@@ -563,6 +611,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QDrag : public QDrag {
@@ -571,6 +641,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -629,6 +700,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QDragEnterEvent : public QDragEnterEvent {
@@ -720,6 +813,7 @@ public:
 	using QAbstractItemModel::changePersistentIndex;
 	using QAbstractItemModel::changePersistentIndexList;
 	using QAbstractItemModel::persistentIndexList;
+	using QObject::isSignalConnected;
 	QModelIndex index(int a0, int a1, const QModelIndex & a2) const override {
 		if (qute_has(0)) {
 			int c0 = static_cast<int>(a0);
@@ -1234,6 +1328,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_40(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(41)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 41, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_41(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(42)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 42, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_42(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QFocusEvent : public QFocusEvent {
@@ -1467,6 +1583,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1525,6 +1642,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QInputEvent : public QInputEvent {
@@ -1560,6 +1699,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	QValidator::State validate(QString & a0, int & a1) const override {
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
@@ -1647,6 +1787,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QKeyEvent : public QKeyEvent {
@@ -1682,6 +1844,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1740,6 +1903,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QNativeGestureEvent : public QNativeGestureEvent {
@@ -1758,6 +1943,7 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	using QOffscreenSurface::resolveInterface;
+	using QObject::isSignalConnected;
 	QSurface::SurfaceType surfaceType() const override {
 		if (qute_has(0)) {
 			int64_t r{};
@@ -1846,6 +2032,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_7(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(9)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_9(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QOpenGLContext : public QOpenGLContext {
@@ -1855,6 +2063,7 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	using QOpenGLContext::resolveInterface;
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1913,6 +2122,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QPaintEvent : public QPaintEvent {
@@ -1930,6 +2161,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	using QPaintDevice::getDecodedMetricF;
 	bool newPage() override {
 		if (qute_has(0)) {
@@ -1941,43 +2173,44 @@ public:
 		return QPdfWriter::newPage();
 	}
 	bool qute_super_0() { return QPdfWriter::newPage(); }
-	bool event(QEvent * a0) override {
+	int metric(QPaintDevice::PaintDeviceMetric a0) const override {
 		if (qute_has(1)) {
-			void * c0 = (void *)(a0);
+			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			bool r{};
+			int r{};
 			if (qute_virtual(qute_id, 1, args, &r)) {
-				return static_cast<bool>(r);
+				return static_cast<int>(r);
 			}
 		}
-		return QObject::event(a0);
+		return QPdfWriter::metric(a0);
 	}
-	bool qute_super_1(QEvent * a0) { return QObject::event(a0); }
-	bool eventFilter(QObject * a0, QEvent * a1) override {
+	int qute_super_1(QPaintDevice::PaintDeviceMetric a0) const { return QPdfWriter::metric(a0); }
+	bool event(QEvent * a0) override {
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
-			void * c1 = (void *)(a1);
-			void *args[] = {&c0, &c1};
+			void *args[] = {&c0};
 			bool r{};
 			if (qute_virtual(qute_id, 2, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
-		return QObject::eventFilter(a0, a1);
+		return QObject::event(a0);
 	}
-	bool qute_super_2(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
-	void timerEvent(QTimerEvent * a0) override {
+	bool qute_super_2(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 3, args, nullptr)) {
-				return;
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_virtual(qute_id, 3, args, &r)) {
+				return static_cast<bool>(r);
 			}
 		}
-		QObject::timerEvent(a0);
+		return QObject::eventFilter(a0, a1);
 	}
-	void qute_super_3(QTimerEvent * a0) { return QObject::timerEvent(a0); }
-	void childEvent(QChildEvent * a0) override {
+	bool qute_super_3(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -1985,10 +2218,10 @@ public:
 				return;
 			}
 		}
-		QObject::childEvent(a0);
+		QObject::timerEvent(a0);
 	}
-	void qute_super_4(QChildEvent * a0) { return QObject::childEvent(a0); }
-	void customEvent(QEvent * a0) override {
+	void qute_super_4(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
 		if (qute_has(5)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -1996,9 +2229,42 @@ public:
 				return;
 			}
 		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_5(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(6)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QPlatformSurfaceEvent : public QPlatformSurfaceEvent {
@@ -2025,6 +2291,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -2083,6 +2350,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QRasterWindow : public QRasterWindow {
@@ -2092,19 +2381,21 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	using QWindow::resolveInterface;
+	using QObject::isSignalConnected;
 	using QPaintDevice::getDecodedMetricF;
-	void resizeEvent(QResizeEvent * a0) override {
+	int metric(QPaintDevice::PaintDeviceMetric a0) const override {
 		if (qute_has(0)) {
-			void * c0 = (void *)(a0);
+			int64_t c0 = static_cast<int64_t>(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 0, args, nullptr)) {
-				return;
+			int r{};
+			if (qute_virtual(qute_id, 0, args, &r)) {
+				return static_cast<int>(r);
 			}
 		}
-		QRasterWindow::resizeEvent(a0);
+		return QRasterWindow::metric(a0);
 	}
-	void qute_super_0(QResizeEvent * a0) { return QRasterWindow::resizeEvent(a0); }
-	void exposeEvent(QExposeEvent * a0) override {
+	int qute_super_0(QPaintDevice::PaintDeviceMetric a0) const { return QRasterWindow::metric(a0); }
+	void resizeEvent(QResizeEvent * a0) override {
 		if (qute_has(1)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2112,10 +2403,10 @@ public:
 				return;
 			}
 		}
-		QPaintDeviceWindow::exposeEvent(a0);
+		QRasterWindow::resizeEvent(a0);
 	}
-	void qute_super_1(QExposeEvent * a0) { return QPaintDeviceWindow::exposeEvent(a0); }
-	void paintEvent(QPaintEvent * a0) override {
+	void qute_super_1(QResizeEvent * a0) { return QRasterWindow::resizeEvent(a0); }
+	void exposeEvent(QExposeEvent * a0) override {
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2123,73 +2414,73 @@ public:
 				return;
 			}
 		}
-		QPaintDeviceWindow::paintEvent(a0);
+		QPaintDeviceWindow::exposeEvent(a0);
 	}
-	void qute_super_2(QPaintEvent * a0) { return QPaintDeviceWindow::paintEvent(a0); }
-	bool event(QEvent * a0) override {
+	void qute_super_2(QExposeEvent * a0) { return QPaintDeviceWindow::exposeEvent(a0); }
+	void paintEvent(QPaintEvent * a0) override {
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 3, args, nullptr)) {
+				return;
+			}
+		}
+		QPaintDeviceWindow::paintEvent(a0);
+	}
+	void qute_super_3(QPaintEvent * a0) { return QPaintDeviceWindow::paintEvent(a0); }
+	bool event(QEvent * a0) override {
+		if (qute_has(4)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
 			bool r{};
-			if (qute_virtual(qute_id, 3, args, &r)) {
+			if (qute_virtual(qute_id, 4, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QPaintDeviceWindow::event(a0);
 	}
-	bool qute_super_3(QEvent * a0) { return QPaintDeviceWindow::event(a0); }
+	bool qute_super_4(QEvent * a0) { return QPaintDeviceWindow::event(a0); }
 	QSurface::SurfaceType surfaceType() const override {
-		if (qute_has(4)) {
+		if (qute_has(5)) {
 			int64_t r{};
-			if (qute_virtual(qute_id, 4, nullptr, &r)) {
+			if (qute_virtual(qute_id, 5, nullptr, &r)) {
 				return static_cast<QSurface::SurfaceType>(r);
 			}
 		}
 		return QWindow::surfaceType();
 	}
-	QSurface::SurfaceType qute_super_4() const { return QWindow::surfaceType(); }
+	QSurface::SurfaceType qute_super_5() const { return QWindow::surfaceType(); }
 	QSurfaceFormat format() const override {
-		if (qute_has(5)) {
+		if (qute_has(6)) {
 			void * r = nullptr;
-			if (qute_virtual(qute_id, 5, nullptr, &r)) {
+			if (qute_virtual(qute_id, 6, nullptr, &r)) {
 				return (r ? *static_cast<QSurfaceFormat *>(r) : QSurfaceFormat());
 			}
 		}
 		return QWindow::format();
 	}
-	QSurfaceFormat qute_super_5() const { return QWindow::format(); }
+	QSurfaceFormat qute_super_6() const { return QWindow::format(); }
 	QSize size() const override {
-		if (qute_has(6)) {
+		if (qute_has(7)) {
 			qute_size r{};
-			if (qute_virtual(qute_id, 6, nullptr, &r)) {
+			if (qute_virtual(qute_id, 7, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
 		return QWindow::size();
 	}
-	QSize qute_super_6() const { return QWindow::size(); }
+	QSize qute_super_7() const { return QWindow::size(); }
 	QObject * focusObject() const override {
-		if (qute_has(7)) {
+		if (qute_has(8)) {
 			void * r = nullptr;
-			if (qute_virtual(qute_id, 7, nullptr, &r)) {
+			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return static_cast<QObject *>(r);
 			}
 		}
 		return QWindow::focusObject();
 	}
-	QObject * qute_super_7() const { return QWindow::focusObject(); }
+	QObject * qute_super_8() const { return QWindow::focusObject(); }
 	void moveEvent(QMoveEvent * a0) override {
-		if (qute_has(8)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 8, args, nullptr)) {
-				return;
-			}
-		}
-		QWindow::moveEvent(a0);
-	}
-	void qute_super_8(QMoveEvent * a0) { return QWindow::moveEvent(a0); }
-	void focusInEvent(QFocusEvent * a0) override {
 		if (qute_has(9)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2197,10 +2488,10 @@ public:
 				return;
 			}
 		}
-		QWindow::focusInEvent(a0);
+		QWindow::moveEvent(a0);
 	}
-	void qute_super_9(QFocusEvent * a0) { return QWindow::focusInEvent(a0); }
-	void focusOutEvent(QFocusEvent * a0) override {
+	void qute_super_9(QMoveEvent * a0) { return QWindow::moveEvent(a0); }
+	void focusInEvent(QFocusEvent * a0) override {
 		if (qute_has(10)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2208,10 +2499,10 @@ public:
 				return;
 			}
 		}
-		QWindow::focusOutEvent(a0);
+		QWindow::focusInEvent(a0);
 	}
-	void qute_super_10(QFocusEvent * a0) { return QWindow::focusOutEvent(a0); }
-	void showEvent(QShowEvent * a0) override {
+	void qute_super_10(QFocusEvent * a0) { return QWindow::focusInEvent(a0); }
+	void focusOutEvent(QFocusEvent * a0) override {
 		if (qute_has(11)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2219,10 +2510,10 @@ public:
 				return;
 			}
 		}
-		QWindow::showEvent(a0);
+		QWindow::focusOutEvent(a0);
 	}
-	void qute_super_11(QShowEvent * a0) { return QWindow::showEvent(a0); }
-	void hideEvent(QHideEvent * a0) override {
+	void qute_super_11(QFocusEvent * a0) { return QWindow::focusOutEvent(a0); }
+	void showEvent(QShowEvent * a0) override {
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2230,10 +2521,10 @@ public:
 				return;
 			}
 		}
-		QWindow::hideEvent(a0);
+		QWindow::showEvent(a0);
 	}
-	void qute_super_12(QHideEvent * a0) { return QWindow::hideEvent(a0); }
-	void closeEvent(QCloseEvent * a0) override {
+	void qute_super_12(QShowEvent * a0) { return QWindow::showEvent(a0); }
+	void hideEvent(QHideEvent * a0) override {
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2241,10 +2532,10 @@ public:
 				return;
 			}
 		}
-		QWindow::closeEvent(a0);
+		QWindow::hideEvent(a0);
 	}
-	void qute_super_13(QCloseEvent * a0) { return QWindow::closeEvent(a0); }
-	void keyPressEvent(QKeyEvent * a0) override {
+	void qute_super_13(QHideEvent * a0) { return QWindow::hideEvent(a0); }
+	void closeEvent(QCloseEvent * a0) override {
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2252,10 +2543,10 @@ public:
 				return;
 			}
 		}
-		QWindow::keyPressEvent(a0);
+		QWindow::closeEvent(a0);
 	}
-	void qute_super_14(QKeyEvent * a0) { return QWindow::keyPressEvent(a0); }
-	void keyReleaseEvent(QKeyEvent * a0) override {
+	void qute_super_14(QCloseEvent * a0) { return QWindow::closeEvent(a0); }
+	void keyPressEvent(QKeyEvent * a0) override {
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2263,10 +2554,10 @@ public:
 				return;
 			}
 		}
-		QWindow::keyReleaseEvent(a0);
+		QWindow::keyPressEvent(a0);
 	}
-	void qute_super_15(QKeyEvent * a0) { return QWindow::keyReleaseEvent(a0); }
-	void mousePressEvent(QMouseEvent * a0) override {
+	void qute_super_15(QKeyEvent * a0) { return QWindow::keyPressEvent(a0); }
+	void keyReleaseEvent(QKeyEvent * a0) override {
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2274,10 +2565,10 @@ public:
 				return;
 			}
 		}
-		QWindow::mousePressEvent(a0);
+		QWindow::keyReleaseEvent(a0);
 	}
-	void qute_super_16(QMouseEvent * a0) { return QWindow::mousePressEvent(a0); }
-	void mouseReleaseEvent(QMouseEvent * a0) override {
+	void qute_super_16(QKeyEvent * a0) { return QWindow::keyReleaseEvent(a0); }
+	void mousePressEvent(QMouseEvent * a0) override {
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2285,10 +2576,10 @@ public:
 				return;
 			}
 		}
-		QWindow::mouseReleaseEvent(a0);
+		QWindow::mousePressEvent(a0);
 	}
-	void qute_super_17(QMouseEvent * a0) { return QWindow::mouseReleaseEvent(a0); }
-	void mouseDoubleClickEvent(QMouseEvent * a0) override {
+	void qute_super_17(QMouseEvent * a0) { return QWindow::mousePressEvent(a0); }
+	void mouseReleaseEvent(QMouseEvent * a0) override {
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2296,10 +2587,10 @@ public:
 				return;
 			}
 		}
-		QWindow::mouseDoubleClickEvent(a0);
+		QWindow::mouseReleaseEvent(a0);
 	}
-	void qute_super_18(QMouseEvent * a0) { return QWindow::mouseDoubleClickEvent(a0); }
-	void mouseMoveEvent(QMouseEvent * a0) override {
+	void qute_super_18(QMouseEvent * a0) { return QWindow::mouseReleaseEvent(a0); }
+	void mouseDoubleClickEvent(QMouseEvent * a0) override {
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2307,10 +2598,10 @@ public:
 				return;
 			}
 		}
-		QWindow::mouseMoveEvent(a0);
+		QWindow::mouseDoubleClickEvent(a0);
 	}
-	void qute_super_19(QMouseEvent * a0) { return QWindow::mouseMoveEvent(a0); }
-	void wheelEvent(QWheelEvent * a0) override {
+	void qute_super_19(QMouseEvent * a0) { return QWindow::mouseDoubleClickEvent(a0); }
+	void mouseMoveEvent(QMouseEvent * a0) override {
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2318,10 +2609,10 @@ public:
 				return;
 			}
 		}
-		QWindow::wheelEvent(a0);
+		QWindow::mouseMoveEvent(a0);
 	}
-	void qute_super_20(QWheelEvent * a0) { return QWindow::wheelEvent(a0); }
-	void touchEvent(QTouchEvent * a0) override {
+	void qute_super_20(QMouseEvent * a0) { return QWindow::mouseMoveEvent(a0); }
+	void wheelEvent(QWheelEvent * a0) override {
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2329,10 +2620,10 @@ public:
 				return;
 			}
 		}
-		QWindow::touchEvent(a0);
+		QWindow::wheelEvent(a0);
 	}
-	void qute_super_21(QTouchEvent * a0) { return QWindow::touchEvent(a0); }
-	void tabletEvent(QTabletEvent * a0) override {
+	void qute_super_21(QWheelEvent * a0) { return QWindow::wheelEvent(a0); }
+	void touchEvent(QTouchEvent * a0) override {
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2340,45 +2631,51 @@ public:
 				return;
 			}
 		}
+		QWindow::touchEvent(a0);
+	}
+	void qute_super_22(QTouchEvent * a0) { return QWindow::touchEvent(a0); }
+	void tabletEvent(QTabletEvent * a0) override {
+		if (qute_has(23)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 23, args, nullptr)) {
+				return;
+			}
+		}
 		QWindow::tabletEvent(a0);
 	}
-	void qute_super_22(QTabletEvent * a0) { return QWindow::tabletEvent(a0); }
+	void qute_super_23(QTabletEvent * a0) { return QWindow::tabletEvent(a0); }
+	bool nativeEvent(const QByteArray & a0, void * a1, long long * a2) override {
+		if (qute_has(24)) {
+			qute_str c0 = qute_ret_bytes(a0);
+			void * c1 = (void *)(a1);
+			long long c2{};
+			void *args[] = {&c0, &c1, a2 ? static_cast<void *>(&c2) : nullptr};
+			bool r{};
+			if (qute_virtual(qute_id, 24, args, &r)) {
+				if (a2) {
+					*a2 = static_cast<long long>(c2);
+				}
+				return static_cast<bool>(r);
+			}
+		}
+		return QWindow::nativeEvent(a0, a1, a2);
+	}
+	bool qute_super_24(const QByteArray & a0, void * a1, long long * a2) { return QWindow::nativeEvent(a0, a1, a2); }
 	bool eventFilter(QObject * a0, QEvent * a1) override {
-		if (qute_has(23)) {
+		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 25, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
-	bool qute_super_23(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	bool qute_super_25(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
 	void timerEvent(QTimerEvent * a0) override {
-		if (qute_has(24)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 24, args, nullptr)) {
-				return;
-			}
-		}
-		QObject::timerEvent(a0);
-	}
-	void qute_super_24(QTimerEvent * a0) { return QObject::timerEvent(a0); }
-	void childEvent(QChildEvent * a0) override {
-		if (qute_has(25)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 25, args, nullptr)) {
-				return;
-			}
-		}
-		QObject::childEvent(a0);
-	}
-	void qute_super_25(QChildEvent * a0) { return QObject::childEvent(a0); }
-	void customEvent(QEvent * a0) override {
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -2386,9 +2683,53 @@ public:
 				return;
 			}
 		}
+		QObject::timerEvent(a0);
+	}
+	void qute_super_26(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
+		if (qute_has(27)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_27(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(28)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
+		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_26(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_28(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(29)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_29(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(30)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 30, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_30(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QRegularExpressionValidator : public QRegularExpressionValidator {
@@ -2397,6 +2738,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	QValidator::State validate(QString & a0, int & a1) const override {
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
@@ -2484,6 +2826,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QResizeEvent : public QResizeEvent {
@@ -2528,6 +2892,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -2586,6 +2951,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QShortcutEvent : public QShortcutEvent {
@@ -2708,6 +3095,7 @@ public:
 	using QAbstractItemModel::changePersistentIndex;
 	using QAbstractItemModel::changePersistentIndexList;
 	using QAbstractItemModel::persistentIndexList;
+	using QObject::isSignalConnected;
 	QHash<int, QByteArray> roleNames() const override {
 		if (qute_has(0)) {
 			qute_map r{};
@@ -3222,6 +3610,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_40(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(41)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 41, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_41(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(42)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 42, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_42(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QStatusTipEvent : public QStatusTipEvent {
@@ -3247,6 +3657,7 @@ public:
 	using QSyntaxHighlighter::setCurrentBlockUserData;
 	using QSyntaxHighlighter::currentBlockUserData;
 	using QSyntaxHighlighter::currentBlock;
+	using QObject::isSignalConnected;
 	void highlightBlock(const QString & a0) override {
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
@@ -3315,6 +3726,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QTabletEvent : public QTabletEvent {
@@ -3341,6 +3774,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	void clear() override {
 		if (qute_has(0)) {
 			if (qute_virtual(qute_id, 0, nullptr, nullptr)) {
@@ -3433,6 +3867,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_7(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(9)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 9, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_9(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QTextFrame : public QTextFrame {
@@ -3442,6 +3898,7 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	using QTextObject::setFormat;
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -3500,6 +3957,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QToolBarChangeEvent : public QToolBarChangeEvent {
@@ -3575,6 +4054,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -3633,6 +4113,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QUndoStack : public QUndoStack {
@@ -3641,6 +4143,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -3699,6 +4202,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QValidator : public QValidator {
@@ -3707,6 +4232,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	QValidator::State validate(QString & a0, int & a1) const override {
 		if (qute_has(0)) {
 			qute_str c0 = qute_ret_str(a0);
@@ -3793,6 +4319,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_6(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(8)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 8, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_8(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWhatsThisClickedEvent : public QWhatsThisClickedEvent {
@@ -3820,6 +4368,7 @@ public:
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	using QWindow::resolveInterface;
+	using QObject::isSignalConnected;
 	QSurface::SurfaceType surfaceType() const override {
 		if (qute_has(0)) {
 			int64_t r{};
@@ -4070,31 +4619,37 @@ public:
 		QWindow::tabletEvent(a0);
 	}
 	void qute_super_22(QTabletEvent * a0) { return QWindow::tabletEvent(a0); }
-	bool eventFilter(QObject * a0, QEvent * a1) override {
+	bool nativeEvent(const QByteArray & a0, void * a1, long long * a2) override {
 		if (qute_has(23)) {
+			qute_str c0 = qute_ret_bytes(a0);
+			void * c1 = (void *)(a1);
+			long long c2{};
+			void *args[] = {&c0, &c1, a2 ? static_cast<void *>(&c2) : nullptr};
+			bool r{};
+			if (qute_virtual(qute_id, 23, args, &r)) {
+				if (a2) {
+					*a2 = static_cast<long long>(c2);
+				}
+				return static_cast<bool>(r);
+			}
+		}
+		return QWindow::nativeEvent(a0, a1, a2);
+	}
+	bool qute_super_23(const QByteArray & a0, void * a1, long long * a2) { return QWindow::nativeEvent(a0, a1, a2); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
+		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_virtual(qute_id, 23, args, &r)) {
+			if (qute_virtual(qute_id, 24, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
-	bool qute_super_23(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	bool qute_super_24(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
 	void timerEvent(QTimerEvent * a0) override {
-		if (qute_has(24)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 24, args, nullptr)) {
-				return;
-			}
-		}
-		QObject::timerEvent(a0);
-	}
-	void qute_super_24(QTimerEvent * a0) { return QObject::timerEvent(a0); }
-	void childEvent(QChildEvent * a0) override {
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -4102,10 +4657,10 @@ public:
 				return;
 			}
 		}
-		QObject::childEvent(a0);
+		QObject::timerEvent(a0);
 	}
-	void qute_super_25(QChildEvent * a0) { return QObject::childEvent(a0); }
-	void customEvent(QEvent * a0) override {
+	void qute_super_25(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -4113,9 +4668,42 @@ public:
 				return;
 			}
 		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_26(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(27)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 27, args, nullptr)) {
+				return;
+			}
+		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_26(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_27(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(28)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 28, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_28(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(29)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 29, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_29(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWindowStateChangeEvent : public QWindowStateChangeEvent {
@@ -4356,6 +4944,18 @@ void qute_QAction_super_3(void *self, void * a0) {
 void qute_QAction_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAction *>(static_cast<QAction *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QAction_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAction *>(static_cast<QAction *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAction_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAction *>(static_cast<QAction *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAction_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAction *>(static_cast<QAction *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QAction_cast(void *obj) {
 	qute_gui_only();
@@ -4706,6 +5306,18 @@ void qute_QActionGroup_super_3(void *self, void * a0) {
 void qute_QActionGroup_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QActionGroup *>(static_cast<QActionGroup *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QActionGroup_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QActionGroup *>(static_cast<QActionGroup *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QActionGroup_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QActionGroup *>(static_cast<QActionGroup *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QActionGroup_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QActionGroup *>(static_cast<QActionGroup *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QActionGroup_cast(void *obj) {
 	qute_gui_only();
@@ -5592,6 +6204,18 @@ void qute_QDoubleValidator_super_6(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QDoubleValidator *>(static_cast<QDoubleValidator *>(self))->qute_super_6(static_cast<QEvent *>(a0));
 }
+void qute_QDoubleValidator_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QDoubleValidator *>(static_cast<QDoubleValidator *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QDoubleValidator_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QDoubleValidator *>(static_cast<QDoubleValidator *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QDoubleValidator_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QDoubleValidator *>(static_cast<QDoubleValidator *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QDoubleValidator_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QDoubleValidator *>(static_cast<QObject *>(obj)));
@@ -5709,6 +6333,18 @@ void qute_QDrag_super_3(void *self, void * a0) {
 void qute_QDrag_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QDrag *>(static_cast<QDrag *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QDrag_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QDrag *>(static_cast<QDrag *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QDrag_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QDrag *>(static_cast<QDrag *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QDrag_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QDrag *>(static_cast<QDrag *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QDrag_cast(void *obj) {
 	qute_gui_only();
@@ -6280,6 +6916,14 @@ void qute_QFileSystemModel_super_40(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->qute_super_40(static_cast<QEvent *>(a0));
 }
+void qute_QFileSystemModel_super_41(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->qute_super_41((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QFileSystemModel_super_42(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->qute_super_42((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void * qute_QFileSystemModel_prot_createIndex(void *self, int a0, int a1) {
 	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->createIndex(static_cast<int>(a0), static_cast<int>(a1))));
@@ -6363,6 +7007,10 @@ void qute_QFileSystemModel_prot_changePersistentIndexList(void *self, const void
 qute_list qute_QFileSystemModel_prot_persistentIndexList(void *self) {
 	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->persistentIndexList(), [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
+}
+bool qute_QFileSystemModel_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QFileSystemModel *>(static_cast<QFileSystemModel *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QFileSystemModel_cast(void *obj) {
 	qute_gui_only();
@@ -7858,6 +8506,10 @@ void * qute_QGuiApplication_inputMethod(void) {
 	qute_gui_only();
 	return (void *)(QGuiApplication::inputMethod());
 }
+void * qute_QGuiApplication_platformFunction(const char *a0, ptrdiff_t a0_len) {
+	qute_gui_only();
+	return (void *)(QGuiApplication::platformFunction(QByteArray(a0, a0_len)));
+}
 void qute_QGuiApplication_setQuitOnLastWindowClosed(bool a0) {
 	qute_gui_only();
 	QGuiApplication::setQuitOnLastWindowClosed(static_cast<bool>(a0));
@@ -9238,6 +9890,18 @@ void qute_QInputDevice_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QInputDevice *>(static_cast<QInputDevice *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QInputDevice_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QInputDevice *>(static_cast<QInputDevice *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QInputDevice_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QInputDevice *>(static_cast<QInputDevice *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QInputDevice_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QInputDevice *>(static_cast<QInputDevice *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QInputDevice_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QInputDevice *>(static_cast<QObject *>(obj)));
@@ -9688,6 +10352,18 @@ void qute_QIntValidator_super_5(void *self, void * a0) {
 void qute_QIntValidator_super_6(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QIntValidator *>(static_cast<QIntValidator *>(self))->qute_super_6(static_cast<QEvent *>(a0));
+}
+void qute_QIntValidator_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QIntValidator *>(static_cast<QIntValidator *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QIntValidator_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QIntValidator *>(static_cast<QIntValidator *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QIntValidator_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QIntValidator *>(static_cast<QIntValidator *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QIntValidator_cast(void *obj) {
 	qute_gui_only();
@@ -10254,6 +10930,18 @@ void qute_QMovie_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QMovie *>(static_cast<QMovie *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QMovie_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMovie *>(static_cast<QMovie *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QMovie_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMovie *>(static_cast<QMovie *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QMovie_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMovie *>(static_cast<QMovie *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QMovie_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMovie *>(static_cast<QObject *>(obj)));
@@ -10532,9 +11220,21 @@ void qute_QOffscreenSurface_super_7(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QOffscreenSurface *>(static_cast<QOffscreenSurface *>(self))->qute_super_7(static_cast<QEvent *>(a0));
 }
+void qute_QOffscreenSurface_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOffscreenSurface *>(static_cast<QOffscreenSurface *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QOffscreenSurface_super_9(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOffscreenSurface *>(static_cast<QOffscreenSurface *>(self))->qute_super_9((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void * qute_QOffscreenSurface_prot_resolveInterface(void *self, const char * a0, int a1) {
 	qute_gui_only();
 	return (void *)(static_cast<qute_QOffscreenSurface *>(static_cast<QOffscreenSurface *>(self))->resolveInterface(a0, static_cast<int>(a1)));
+}
+bool qute_QOffscreenSurface_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QOffscreenSurface *>(static_cast<QOffscreenSurface *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QOffscreenSurface_cast(void *obj) {
 	qute_gui_only();
@@ -10624,9 +11324,21 @@ void qute_QOpenGLContext_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QOpenGLContext *>(static_cast<QOpenGLContext *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QOpenGLContext_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLContext *>(static_cast<QOpenGLContext *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QOpenGLContext_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLContext *>(static_cast<QOpenGLContext *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void * qute_QOpenGLContext_prot_resolveInterface(void *self, const char * a0, int a1) {
 	qute_gui_only();
 	return (void *)(static_cast<qute_QOpenGLContext *>(static_cast<QOpenGLContext *>(self))->resolveInterface(a0, static_cast<int>(a1)));
+}
+bool qute_QOpenGLContext_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QOpenGLContext *>(static_cast<QOpenGLContext *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QOpenGLContext_cast(void *obj) {
 	qute_gui_only();
@@ -10683,6 +11395,10 @@ void qute_QOpenGLContext_doneCurrent(void *self) {
 void qute_QOpenGLContext_swapBuffers(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<QOpenGLContext *>(self)->swapBuffers(static_cast<QSurface *>(a0));
+}
+void * qute_QOpenGLContext_getProcAddress(void *self, const char * a0) {
+	qute_gui_only();
+	return (void *)(static_cast<QOpenGLContext *>(self)->getProcAddress(a0));
 }
 void * qute_QOpenGLContext_surface(void *self) {
 	qute_gui_only();
@@ -13702,25 +14418,41 @@ bool qute_QPdfWriter_super_0(void *self) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_0());
 }
-bool qute_QPdfWriter_super_1(void *self, void * a0) {
+int qute_QPdfWriter_super_1(void *self, int64_t a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_1(static_cast<QEvent *>(a0)));
+	return static_cast<int>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_1(static_cast<QPaintDevice::PaintDeviceMetric>(a0)));
 }
-bool qute_QPdfWriter_super_2(void *self, void * a0, void * a1) {
+bool qute_QPdfWriter_super_2(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_2(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_2(static_cast<QEvent *>(a0)));
 }
-void qute_QPdfWriter_super_3(void *self, void * a0) {
+bool qute_QPdfWriter_super_3(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_3(static_cast<QTimerEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_3(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QPdfWriter_super_4(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_4(static_cast<QChildEvent *>(a0));
+	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_4(static_cast<QTimerEvent *>(a0));
 }
 void qute_QPdfWriter_super_5(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_5(static_cast<QEvent *>(a0));
+	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_5(static_cast<QChildEvent *>(a0));
+}
+void qute_QPdfWriter_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_6(static_cast<QEvent *>(a0));
+}
+void qute_QPdfWriter_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QPdfWriter_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QPdfWriter_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QPdfWriter *>(static_cast<QPdfWriter *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 double qute_QPdfWriter_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
 	qute_gui_only();
@@ -14504,6 +15236,18 @@ void qute_QPointingDevice_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QPointingDevice *>(static_cast<QPointingDevice *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QPointingDevice_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QPointingDevice *>(static_cast<QPointingDevice *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QPointingDevice_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QPointingDevice *>(static_cast<QPointingDevice *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QPointingDevice_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QPointingDevice *>(static_cast<QPointingDevice *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QPointingDevice_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QPointingDevice *>(static_cast<QObject *>(obj)));
@@ -14820,45 +15564,45 @@ void qute_QRasterWindow_shim_init(void *self, uintptr_t id, const uint64_t *mask
 	qute_gui_only();
 	auto s = static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
-void qute_QRasterWindow_super_0(void *self, void * a0) {
+int qute_QRasterWindow_super_0(void *self, int64_t a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_0(static_cast<QResizeEvent *>(a0));
+	return static_cast<int>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_0(static_cast<QPaintDevice::PaintDeviceMetric>(a0)));
 }
 void qute_QRasterWindow_super_1(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_1(static_cast<QExposeEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_1(static_cast<QResizeEvent *>(a0));
 }
 void qute_QRasterWindow_super_2(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_2(static_cast<QPaintEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_2(static_cast<QExposeEvent *>(a0));
 }
-bool qute_QRasterWindow_super_3(void *self, void * a0) {
+void qute_QRasterWindow_super_3(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_3(static_cast<QEvent *>(a0)));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_3(static_cast<QPaintEvent *>(a0));
 }
-int64_t qute_QRasterWindow_super_4(void *self) {
+bool qute_QRasterWindow_super_4(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<int64_t>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_4());
+	return static_cast<bool>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_4(static_cast<QEvent *>(a0)));
 }
-void * qute_QRasterWindow_super_5(void *self) {
+int64_t qute_QRasterWindow_super_5(void *self) {
 	qute_gui_only();
-	return static_cast<void *>(new QSurfaceFormat(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_5()));
+	return static_cast<int64_t>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_5());
 }
-qute_size qute_QRasterWindow_super_6(void *self) {
+void * qute_QRasterWindow_super_6(void *self) {
 	qute_gui_only();
-	return qute_from_QSize(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_6());
+	return static_cast<void *>(new QSurfaceFormat(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_6()));
 }
-void * qute_QRasterWindow_super_7(void *self) {
+qute_size qute_QRasterWindow_super_7(void *self) {
 	qute_gui_only();
-	return (void *)(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_7());
+	return qute_from_QSize(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_7());
 }
-void qute_QRasterWindow_super_8(void *self, void * a0) {
+void * qute_QRasterWindow_super_8(void *self) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_8(static_cast<QMoveEvent *>(a0));
+	return (void *)(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_8());
 }
 void qute_QRasterWindow_super_9(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_9(static_cast<QFocusEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_9(static_cast<QMoveEvent *>(a0));
 }
 void qute_QRasterWindow_super_10(void *self, void * a0) {
 	qute_gui_only();
@@ -14866,19 +15610,19 @@ void qute_QRasterWindow_super_10(void *self, void * a0) {
 }
 void qute_QRasterWindow_super_11(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_11(static_cast<QShowEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_11(static_cast<QFocusEvent *>(a0));
 }
 void qute_QRasterWindow_super_12(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_12(static_cast<QHideEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_12(static_cast<QShowEvent *>(a0));
 }
 void qute_QRasterWindow_super_13(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_13(static_cast<QCloseEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_13(static_cast<QHideEvent *>(a0));
 }
 void qute_QRasterWindow_super_14(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_14(static_cast<QKeyEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_14(static_cast<QCloseEvent *>(a0));
 }
 void qute_QRasterWindow_super_15(void *self, void * a0) {
 	qute_gui_only();
@@ -14886,7 +15630,7 @@ void qute_QRasterWindow_super_15(void *self, void * a0) {
 }
 void qute_QRasterWindow_super_16(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_16(static_cast<QMouseEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_16(static_cast<QKeyEvent *>(a0));
 }
 void qute_QRasterWindow_super_17(void *self, void * a0) {
 	qute_gui_only();
@@ -14902,35 +15646,58 @@ void qute_QRasterWindow_super_19(void *self, void * a0) {
 }
 void qute_QRasterWindow_super_20(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_20(static_cast<QWheelEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_20(static_cast<QMouseEvent *>(a0));
 }
 void qute_QRasterWindow_super_21(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_21(static_cast<QTouchEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_21(static_cast<QWheelEvent *>(a0));
 }
 void qute_QRasterWindow_super_22(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_22(static_cast<QTabletEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_22(static_cast<QTouchEvent *>(a0));
 }
-bool qute_QRasterWindow_super_23(void *self, void * a0, void * a1) {
+void qute_QRasterWindow_super_23(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_23(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_23(static_cast<QTabletEvent *>(a0));
 }
-void qute_QRasterWindow_super_24(void *self, void * a0) {
+bool qute_QRasterWindow_super_24(void *self, const char *a0, ptrdiff_t a0_len, void * a1, long long *a2_out) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_24(static_cast<QTimerEvent *>(a0));
+	long long t2{};
+	auto &&r = static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_24(QByteArray(a0, a0_len), (void *)(a1), &t2);
+	*a2_out = static_cast<long long>(t2);
+	return static_cast<bool>(r);
 }
-void qute_QRasterWindow_super_25(void *self, void * a0) {
+bool qute_QRasterWindow_super_25(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_25(static_cast<QChildEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_25(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QRasterWindow_super_26(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_26(static_cast<QEvent *>(a0));
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_26(static_cast<QTimerEvent *>(a0));
+}
+void qute_QRasterWindow_super_27(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_27(static_cast<QChildEvent *>(a0));
+}
+void qute_QRasterWindow_super_28(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_28(static_cast<QEvent *>(a0));
+}
+void qute_QRasterWindow_super_29(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_29((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QRasterWindow_super_30(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->qute_super_30((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
 }
 void * qute_QRasterWindow_prot_resolveInterface(void *self, const char * a0, int a1) {
 	qute_gui_only();
 	return (void *)(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->resolveInterface(a0, static_cast<int>(a1)));
+}
+bool qute_QRasterWindow_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QRasterWindow *>(static_cast<QRasterWindow *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 double qute_QRasterWindow_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
 	qute_gui_only();
@@ -15099,6 +15866,18 @@ void qute_QRegularExpressionValidator_super_5(void *self, void * a0) {
 void qute_QRegularExpressionValidator_super_6(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QRegularExpressionValidator *>(static_cast<QRegularExpressionValidator *>(self))->qute_super_6(static_cast<QEvent *>(a0));
+}
+void qute_QRegularExpressionValidator_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRegularExpressionValidator *>(static_cast<QRegularExpressionValidator *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QRegularExpressionValidator_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QRegularExpressionValidator *>(static_cast<QRegularExpressionValidator *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QRegularExpressionValidator_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QRegularExpressionValidator *>(static_cast<QRegularExpressionValidator *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QRegularExpressionValidator_cast(void *obj) {
 	qute_gui_only();
@@ -15691,6 +16470,18 @@ void qute_QShortcut_super_3(void *self, void * a0) {
 void qute_QShortcut_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QShortcut *>(static_cast<QShortcut *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QShortcut_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QShortcut *>(static_cast<QShortcut *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QShortcut_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QShortcut *>(static_cast<QShortcut *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QShortcut_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QShortcut *>(static_cast<QShortcut *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QShortcut_cast(void *obj) {
 	qute_gui_only();
@@ -16466,6 +17257,14 @@ void qute_QStandardItemModel_super_40(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->qute_super_40(static_cast<QEvent *>(a0));
 }
+void qute_QStandardItemModel_super_41(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->qute_super_41((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QStandardItemModel_super_42(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->qute_super_42((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void * qute_QStandardItemModel_prot_createIndex(void *self, int a0, int a1) {
 	qute_gui_only();
 	return static_cast<void *>(new QModelIndex(static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->createIndex(static_cast<int>(a0), static_cast<int>(a1))));
@@ -16549,6 +17348,10 @@ void qute_QStandardItemModel_prot_changePersistentIndexList(void *self, const vo
 qute_list qute_QStandardItemModel_prot_persistentIndexList(void *self) {
 	qute_gui_only();
 	return qute_ret_list<void *>(static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->persistentIndexList(), [](const auto &v) { return static_cast<void *>(new QModelIndex(v)); });
+}
+bool qute_QStandardItemModel_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QStandardItemModel *>(static_cast<QStandardItemModel *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QStandardItemModel_cast(void *obj) {
 	qute_gui_only();
@@ -17352,6 +18155,14 @@ void qute_QSyntaxHighlighter_super_5(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->qute_super_5(static_cast<QEvent *>(a0));
 }
+void qute_QSyntaxHighlighter_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QSyntaxHighlighter_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void qute_QSyntaxHighlighter_prot_setFormat(void *self, int a0, int a1, void * a2) {
 	qute_gui_only();
 	static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->setFormat(static_cast<int>(a0), static_cast<int>(a1), (a2 ? *static_cast<QTextCharFormat *>(a2) : QTextCharFormat()));
@@ -17391,6 +18202,10 @@ void * qute_QSyntaxHighlighter_prot_currentBlockUserData(void *self) {
 void * qute_QSyntaxHighlighter_prot_currentBlock(void *self) {
 	qute_gui_only();
 	return static_cast<void *>(new QTextBlock(static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->currentBlock()));
+}
+bool qute_QSyntaxHighlighter_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QSyntaxHighlighter *>(static_cast<QSyntaxHighlighter *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QSyntaxHighlighter_cast(void *obj) {
 	qute_gui_only();
@@ -18360,6 +19175,18 @@ void qute_QTextDocument_super_7(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QTextDocument *>(static_cast<QTextDocument *>(self))->qute_super_7(static_cast<QEvent *>(a0));
 }
+void qute_QTextDocument_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QTextDocument *>(static_cast<QTextDocument *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QTextDocument_super_9(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QTextDocument *>(static_cast<QTextDocument *>(self))->qute_super_9((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QTextDocument_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QTextDocument *>(static_cast<QTextDocument *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QTextDocument_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QTextDocument *>(static_cast<QObject *>(obj)));
@@ -19204,9 +20031,21 @@ void qute_QTextFrame_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QTextFrame *>(static_cast<QTextFrame *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QTextFrame_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QTextFrame *>(static_cast<QTextFrame *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QTextFrame_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QTextFrame *>(static_cast<QTextFrame *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
 void qute_QTextFrame_prot_setFormat(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QTextFrame *>(static_cast<QTextFrame *>(self))->setFormat((a0 ? *static_cast<QTextFormat *>(a0) : QTextFormat()));
+}
+bool qute_QTextFrame_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QTextFrame *>(static_cast<QTextFrame *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QTextFrame_cast(void *obj) {
 	qute_gui_only();
@@ -20469,6 +21308,18 @@ void qute_QUndoGroup_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QUndoGroup *>(static_cast<QUndoGroup *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QUndoGroup_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QUndoGroup *>(static_cast<QUndoGroup *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QUndoGroup_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QUndoGroup *>(static_cast<QUndoGroup *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QUndoGroup_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QUndoGroup *>(static_cast<QUndoGroup *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QUndoGroup_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QUndoGroup *>(static_cast<QObject *>(obj)));
@@ -20640,6 +21491,18 @@ void qute_QUndoStack_super_3(void *self, void * a0) {
 void qute_QUndoStack_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QUndoStack *>(static_cast<QUndoStack *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QUndoStack_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QUndoStack *>(static_cast<QUndoStack *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QUndoStack_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QUndoStack *>(static_cast<QUndoStack *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QUndoStack_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QUndoStack *>(static_cast<QUndoStack *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QUndoStack_cast(void *obj) {
 	qute_gui_only();
@@ -20852,6 +21715,18 @@ void qute_QValidator_super_5(void *self, void * a0) {
 void qute_QValidator_super_6(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QValidator *>(static_cast<QValidator *>(self))->qute_super_6(static_cast<QEvent *>(a0));
+}
+void qute_QValidator_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QValidator *>(static_cast<QValidator *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QValidator_super_8(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QValidator *>(static_cast<QValidator *>(self))->qute_super_8((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QValidator_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QValidator *>(static_cast<QValidator *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QValidator_cast(void *obj) {
 	qute_gui_only();
@@ -21414,25 +22289,44 @@ void qute_QWindow_super_22(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_22(static_cast<QTabletEvent *>(a0));
 }
-bool qute_QWindow_super_23(void *self, void * a0, void * a1) {
+bool qute_QWindow_super_23(void *self, const char *a0, ptrdiff_t a0_len, void * a1, long long *a2_out) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_23(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	long long t2{};
+	auto &&r = static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_23(QByteArray(a0, a0_len), (void *)(a1), &t2);
+	*a2_out = static_cast<long long>(t2);
+	return static_cast<bool>(r);
 }
-void qute_QWindow_super_24(void *self, void * a0) {
+bool qute_QWindow_super_24(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_24(static_cast<QTimerEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_24(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QWindow_super_25(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_25(static_cast<QChildEvent *>(a0));
+	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_25(static_cast<QTimerEvent *>(a0));
 }
 void qute_QWindow_super_26(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_26(static_cast<QEvent *>(a0));
+	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_26(static_cast<QChildEvent *>(a0));
+}
+void qute_QWindow_super_27(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_27(static_cast<QEvent *>(a0));
+}
+void qute_QWindow_super_28(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_28((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWindow_super_29(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->qute_super_29((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
 }
 void * qute_QWindow_prot_resolveInterface(void *self, const char * a0, int a1) {
 	qute_gui_only();
 	return (void *)(static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->resolveInterface(a0, static_cast<int>(a1)));
+}
+bool qute_QWindow_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWindow *>(static_cast<QWindow *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QWindow_cast(void *obj) {
 	qute_gui_only();

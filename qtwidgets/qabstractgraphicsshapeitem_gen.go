@@ -471,6 +471,20 @@ var qAbstractGraphicsShapeItemVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractGraphicsShapeItem.InputMethodQuery")
+		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
 			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
@@ -877,10 +891,18 @@ func (s *QAbstractGraphicsShapeItemSuper) InputMethodEvent(event *qtgui.QInputMe
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QAbstractGraphicsShapeItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractGraphicsShapeItem.Super.InputMethodQuery")
+	r := C.qute_QAbstractGraphicsShapeItem_super_30(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QAbstractGraphicsShapeItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractGraphicsShapeItem.Super.ItemChange")
-	r := C.qute_QAbstractGraphicsShapeItem_super_30(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QAbstractGraphicsShapeItem.Super.ItemChange"))
+	r := C.qute_QAbstractGraphicsShapeItem_super_31(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QAbstractGraphicsShapeItem.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -889,7 +911,7 @@ func (s *QAbstractGraphicsShapeItemSuper) ItemChange(change QGraphicsItemGraphic
 // SupportsExtension calls QGraphicsItem::supportsExtension.
 func (s *QAbstractGraphicsShapeItemSuper) SupportsExtension(extension QGraphicsItemExtension) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractGraphicsShapeItem.Super.SupportsExtension")
-	r := C.qute_QAbstractGraphicsShapeItem_super_31(self, C.int64_t(extension))
+	r := C.qute_QAbstractGraphicsShapeItem_super_32(self, C.int64_t(extension))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -897,7 +919,7 @@ func (s *QAbstractGraphicsShapeItemSuper) SupportsExtension(extension QGraphicsI
 // SetExtension calls QGraphicsItem::setExtension.
 func (s *QAbstractGraphicsShapeItemSuper) SetExtension(extension QGraphicsItemExtension, variant *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractGraphicsShapeItem.Super.SetExtension")
-	C.qute_QAbstractGraphicsShapeItem_super_32(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QAbstractGraphicsShapeItem.Super.SetExtension"))
+	C.qute_QAbstractGraphicsShapeItem_super_33(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QAbstractGraphicsShapeItem.Super.SetExtension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 }
@@ -905,7 +927,7 @@ func (s *QAbstractGraphicsShapeItemSuper) SetExtension(extension QGraphicsItemEx
 // Extension calls QGraphicsItem::extension.
 func (s *QAbstractGraphicsShapeItemSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractGraphicsShapeItem.Super.Extension")
-	r := C.qute_QAbstractGraphicsShapeItem_super_33(self, rt.UseArg(unsafe.Pointer(variant), "QAbstractGraphicsShapeItem.Super.Extension"))
+	r := C.qute_QAbstractGraphicsShapeItem_super_34(self, rt.UseArg(unsafe.Pointer(variant), "QAbstractGraphicsShapeItem.Super.Extension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)

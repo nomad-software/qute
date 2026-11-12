@@ -2762,6 +2762,20 @@ var qGraphicsItemVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsItem.InputMethodQuery")
+		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
 			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
@@ -3164,10 +3178,18 @@ func (s *QGraphicsItemSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QGraphicsItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItem.Super.InputMethodQuery")
+	r := C.qute_QGraphicsItem_super_30(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QGraphicsItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItem.Super.ItemChange")
-	r := C.qute_QGraphicsItem_super_30(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsItem.Super.ItemChange"))
+	r := C.qute_QGraphicsItem_super_31(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsItem.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -3176,7 +3198,7 @@ func (s *QGraphicsItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, 
 // SupportsExtension calls QGraphicsItem::supportsExtension.
 func (s *QGraphicsItemSuper) SupportsExtension(extension QGraphicsItemExtension) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItem.Super.SupportsExtension")
-	r := C.qute_QGraphicsItem_super_31(self, C.int64_t(extension))
+	r := C.qute_QGraphicsItem_super_32(self, C.int64_t(extension))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -3184,7 +3206,7 @@ func (s *QGraphicsItemSuper) SupportsExtension(extension QGraphicsItemExtension)
 // SetExtension calls QGraphicsItem::setExtension.
 func (s *QGraphicsItemSuper) SetExtension(extension QGraphicsItemExtension, variant *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItem.Super.SetExtension")
-	C.qute_QGraphicsItem_super_32(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsItem.Super.SetExtension"))
+	C.qute_QGraphicsItem_super_33(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsItem.Super.SetExtension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 }
@@ -3192,7 +3214,7 @@ func (s *QGraphicsItemSuper) SetExtension(extension QGraphicsItemExtension, vari
 // Extension calls QGraphicsItem::extension.
 func (s *QGraphicsItemSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItem.Super.Extension")
-	r := C.qute_QGraphicsItem_super_33(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsItem.Super.Extension"))
+	r := C.qute_QGraphicsItem_super_34(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsItem.Super.Extension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)

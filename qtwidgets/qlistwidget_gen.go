@@ -1404,6 +1404,20 @@ var qListWidgetVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QListWidget.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QListWidget.InputMethodQuery")
+		}},
 	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
@@ -1763,6 +1777,38 @@ var qListWidgetVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1780,6 +1826,18 @@ var qListWidgetVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -2200,52 +2258,60 @@ func (s *QListWidgetSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbs
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QListWidgetSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.InputMethodQuery")
+	r := C.qute_QListWidget_super_42(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // SelectAll calls QAbstractItemView::selectAll.
 func (s *QListWidgetSuper) SelectAll() {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.SelectAll")
-	C.qute_QListWidget_super_42(self)
+	C.qute_QListWidget_super_43(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QListWidgetSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.UpdateEditorData")
-	C.qute_QListWidget_super_43(self)
+	C.qute_QListWidget_super_44(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QListWidgetSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.UpdateEditorGeometries")
-	C.qute_QListWidget_super_44(self)
+	C.qute_QListWidget_super_45(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QListWidgetSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.VerticalScrollbarAction")
-	C.qute_QListWidget_super_45(self, C.int(action))
+	C.qute_QListWidget_super_46(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarAction calls QAbstractItemView::horizontalScrollbarAction.
 func (s *QListWidgetSuper) HorizontalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.HorizontalScrollbarAction")
-	C.qute_QListWidget_super_46(self, C.int(action))
+	C.qute_QListWidget_super_47(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarValueChanged calls QAbstractItemView::verticalScrollbarValueChanged.
 func (s *QListWidgetSuper) VerticalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.VerticalScrollbarValueChanged")
-	C.qute_QListWidget_super_47(self, C.int(value))
+	C.qute_QListWidget_super_48(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QListWidgetSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.HorizontalScrollbarValueChanged")
-	C.qute_QListWidget_super_48(self, C.int(value))
+	C.qute_QListWidget_super_49(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -2256,7 +2322,7 @@ func (s *QListWidgetSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelega
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QListWidget.Super.CloseEditor")
 	}
-	C.qute_QListWidget_super_49(self, editorPtr, C.int64_t(hint))
+	C.qute_QListWidget_super_50(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2268,7 +2334,7 @@ func (s *QListWidgetSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QListWidget.Super.CommitData")
 	}
-	C.qute_QListWidget_super_50(self, editorPtr)
+	C.qute_QListWidget_super_51(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2280,7 +2346,7 @@ func (s *QListWidgetSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QListWidget.Super.EditorDestroyed")
 	}
-	C.qute_QListWidget_super_51(self, editorPtr)
+	C.qute_QListWidget_super_52(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2292,7 +2358,7 @@ func (s *QListWidgetSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItem
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.Edit")
 	}
-	r := C.qute_QListWidget_super_52(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QListWidget_super_53(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2306,7 +2372,7 @@ func (s *QListWidgetSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.SelectionCommand")
 	}
-	r := C.qute_QListWidget_super_53(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QListWidget_super_54(self, rt.UseArg(unsafe.Pointer(index), "QListWidget.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2316,7 +2382,7 @@ func (s *QListWidgetSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QListWidgetSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.FocusNextPrevChild")
-	r := C.qute_QListWidget_super_54(self, C.bool(next))
+	r := C.qute_QListWidget_super_55(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2328,7 +2394,7 @@ func (s *QListWidgetSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.ViewportEvent")
 	}
-	r := C.qute_QListWidget_super_55(self, eventPtr)
+	r := C.qute_QListWidget_super_56(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -2341,7 +2407,7 @@ func (s *QListWidgetSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QListWidget.Super.MousePressEvent")
 	}
-	C.qute_QListWidget_super_56(self, eventPtr)
+	C.qute_QListWidget_super_57(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2353,7 +2419,7 @@ func (s *QListWidgetSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QListWidget.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QListWidget_super_57(self, eventPtr)
+	C.qute_QListWidget_super_58(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2365,7 +2431,7 @@ func (s *QListWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QListWidget.Super.DragEnterEvent")
 	}
-	C.qute_QListWidget_super_58(self, eventPtr)
+	C.qute_QListWidget_super_59(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2377,7 +2443,7 @@ func (s *QListWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QListWidget.Super.FocusInEvent")
 	}
-	C.qute_QListWidget_super_59(self, eventPtr)
+	C.qute_QListWidget_super_60(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2389,7 +2455,7 @@ func (s *QListWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QListWidget.Super.FocusOutEvent")
 	}
-	C.qute_QListWidget_super_60(self, eventPtr)
+	C.qute_QListWidget_super_61(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2401,7 +2467,7 @@ func (s *QListWidgetSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QListWidget.Super.KeyPressEvent")
 	}
-	C.qute_QListWidget_super_61(self, eventPtr)
+	C.qute_QListWidget_super_62(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2413,7 +2479,7 @@ func (s *QListWidgetSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QListWidget.Super.InputMethodEvent")
 	}
-	C.qute_QListWidget_super_62(self, eventPtr)
+	C.qute_QListWidget_super_63(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2429,7 +2495,7 @@ func (s *QListWidgetSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.EventFilter")
 	}
-	r := C.qute_QListWidget_super_63(self, objectPtr, eventPtr)
+	r := C.qute_QListWidget_super_64(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -2439,7 +2505,7 @@ func (s *QListWidgetSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QListWidgetSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.MinimumSizeHint")
-	r := C.qute_QListWidget_super_64(self)
+	r := C.qute_QListWidget_super_65(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2447,7 +2513,7 @@ func (s *QListWidgetSuper) MinimumSizeHint() qtcore.QSize {
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QListWidgetSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.SizeHint")
-	r := C.qute_QListWidget_super_65(self)
+	r := C.qute_QListWidget_super_66(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2459,7 +2525,7 @@ func (s *QListWidgetSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QListWidget.Super.SetupViewport")
 	}
-	C.qute_QListWidget_super_66(self, viewportPtr)
+	C.qute_QListWidget_super_67(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -2471,7 +2537,7 @@ func (s *QListWidgetSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenu
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QListWidget.Super.ContextMenuEvent")
 	}
-	C.qute_QListWidget_super_67(self, contextMenuEventPtr)
+	C.qute_QListWidget_super_68(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -2483,7 +2549,7 @@ func (s *QListWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.ChangeEvent")
 	}
-	C.qute_QListWidget_super_68(self, eventPtr)
+	C.qute_QListWidget_super_69(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2491,7 +2557,7 @@ func (s *QListWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QListWidgetSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.InitStyleOption")
-	C.qute_QListWidget_super_69(self, rt.UseArg(unsafe.Pointer(option), "QListWidget.Super.InitStyleOption"))
+	C.qute_QListWidget_super_70(self, rt.UseArg(unsafe.Pointer(option), "QListWidget.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2499,14 +2565,14 @@ func (s *QListWidgetSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QListWidgetSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.SetVisible")
-	C.qute_QListWidget_super_70(self, C.bool(visible))
+	C.qute_QListWidget_super_71(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QListWidgetSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.HeightForWidth")
-	r := C.qute_QListWidget_super_71(self, C.int(arg0))
+	r := C.qute_QListWidget_super_72(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -2514,7 +2580,7 @@ func (s *QListWidgetSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QListWidgetSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.HasHeightForWidth")
-	r := C.qute_QListWidget_super_72(self)
+	r := C.qute_QListWidget_super_73(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2526,7 +2592,7 @@ func (s *QListWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QListWidget.Super.KeyReleaseEvent")
 	}
-	C.qute_QListWidget_super_73(self, eventPtr)
+	C.qute_QListWidget_super_74(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2538,7 +2604,7 @@ func (s *QListWidgetSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QListWidget.Super.EnterEvent")
 	}
-	C.qute_QListWidget_super_74(self, eventPtr)
+	C.qute_QListWidget_super_75(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2550,7 +2616,7 @@ func (s *QListWidgetSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.LeaveEvent")
 	}
-	C.qute_QListWidget_super_75(self, eventPtr)
+	C.qute_QListWidget_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2562,7 +2628,7 @@ func (s *QListWidgetSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QListWidget.Super.MoveEvent")
 	}
-	C.qute_QListWidget_super_76(self, eventPtr)
+	C.qute_QListWidget_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2574,7 +2640,7 @@ func (s *QListWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QListWidget.Super.CloseEvent")
 	}
-	C.qute_QListWidget_super_77(self, eventPtr)
+	C.qute_QListWidget_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2586,7 +2652,7 @@ func (s *QListWidgetSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QListWidget.Super.TabletEvent")
 	}
-	C.qute_QListWidget_super_78(self, eventPtr)
+	C.qute_QListWidget_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2598,7 +2664,7 @@ func (s *QListWidgetSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QListWidget.Super.ActionEvent")
 	}
-	C.qute_QListWidget_super_79(self, eventPtr)
+	C.qute_QListWidget_super_80(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2610,7 +2676,7 @@ func (s *QListWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QListWidget.Super.ShowEvent")
 	}
-	C.qute_QListWidget_super_80(self, eventPtr)
+	C.qute_QListWidget_super_81(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2622,9 +2688,26 @@ func (s *QListWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QListWidget.Super.HideEvent")
 	}
-	C.qute_QListWidget_super_81(self, eventPtr)
+	C.qute_QListWidget_super_82(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QListWidgetSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QListWidget_super_83(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QListWidgetSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.Metric")
+	r := C.qute_QListWidget_super_84(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -2634,7 +2717,7 @@ func (s *QListWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QListWidget.Super.ChildEvent")
 	}
-	C.qute_QListWidget_super_82(self, eventPtr)
+	C.qute_QListWidget_super_85(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2646,9 +2729,25 @@ func (s *QListWidgetSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QListWidget.Super.CustomEvent")
 	}
-	C.qute_QListWidget_super_83(self, eventPtr)
+	C.qute_QListWidget_super_86(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QListWidgetSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.ConnectNotify")
+	C.qute_QListWidget_super_87(self, rt.UseArg(unsafe.Pointer(signal), "QListWidget.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QListWidgetSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QListWidget.Super.DisconnectNotify")
+	C.qute_QListWidget_super_88(self, rt.UseArg(unsafe.Pointer(signal), "QListWidget.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // ResizeContents wraps the protected QListView::resizeContents for subclasses.
@@ -2848,6 +2947,16 @@ func (b *QListWidgetBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QListWidget.FocusPreviousChild")
 	r := C.qute_QListWidget_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QListWidgetBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QListWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QListWidget.IsSignalConnected")
+	r := C.qute_QListWidget_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QListWidget.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

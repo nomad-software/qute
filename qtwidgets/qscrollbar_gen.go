@@ -416,6 +416,38 @@ var qScrollBarVTable = []rt.Virtual{
 			event := rt.View[qtgui.QShowEvent](eventH, eventP)
 			v.(interface{ ShowEvent(*qtgui.QShowEvent) }).ShowEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
 			InputMethodEvent(*qtgui.QInputMethodEvent)
@@ -431,6 +463,20 @@ var qScrollBarVTable = []rt.Virtual{
 			v.(interface {
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QScrollBar.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -474,6 +520,18 @@ var qScrollBarVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -876,6 +934,23 @@ func (s *QScrollBarSuper) ShowEvent(event *qtgui.QShowEvent) {
 	runtime.KeepAlive(event)
 }
 
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QScrollBarSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QScrollBar_super_34(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QScrollBarSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.Metric")
+	r := C.qute_QScrollBar_super_35(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
 // InputMethodEvent calls QWidget::inputMethodEvent.
 func (s *QScrollBarSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.InputMethodEvent")
@@ -883,15 +958,23 @@ func (s *QScrollBarSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMethodE
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QScrollBar.Super.InputMethodEvent")
 	}
-	C.qute_QScrollBar_super_34(self, inputMethodEventPtr)
+	C.qute_QScrollBar_super_36(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
+}
+
+// InputMethodQuery calls QWidget::inputMethodQuery.
+func (s *QScrollBarSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.InputMethodQuery")
+	r := C.qute_QScrollBar_super_37(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QScrollBarSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.FocusNextPrevChild")
-	r := C.qute_QScrollBar_super_35(self, C.bool(next))
+	r := C.qute_QScrollBar_super_38(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -907,7 +990,7 @@ func (s *QScrollBarSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QScrollBar.Super.EventFilter")
 	}
-	r := C.qute_QScrollBar_super_36(self, watchedPtr, eventPtr)
+	r := C.qute_QScrollBar_super_39(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -921,7 +1004,7 @@ func (s *QScrollBarSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QScrollBar.Super.ChildEvent")
 	}
-	C.qute_QScrollBar_super_37(self, eventPtr)
+	C.qute_QScrollBar_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -933,9 +1016,25 @@ func (s *QScrollBarSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QScrollBar.Super.CustomEvent")
 	}
-	C.qute_QScrollBar_super_38(self, eventPtr)
+	C.qute_QScrollBar_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QScrollBarSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.ConnectNotify")
+	C.qute_QScrollBar_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QScrollBar.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QScrollBarSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QScrollBar.Super.DisconnectNotify")
+	C.qute_QScrollBar_super_43(self, rt.UseArg(unsafe.Pointer(signal), "QScrollBar.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // SetRepeatAction wraps the protected QAbstractSlider::setRepeatAction for subclasses.
@@ -994,6 +1093,16 @@ func (b *QScrollBarBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QScrollBar.FocusPreviousChild")
 	r := C.qute_QScrollBar_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QScrollBarBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QScrollBar // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QScrollBar.IsSignalConnected")
+	r := C.qute_QScrollBar_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QScrollBar.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

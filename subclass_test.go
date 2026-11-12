@@ -502,3 +502,116 @@ func TestGoGestureRecognizer(t *testing.T) {
 		qtwidgets.QGestureRecognizerUnregisterRecognizer(typ)
 	})
 }
+
+// imeWidget tells input methods it takes text and where its cursor is, as a
+// terminal does to place the candidate window.
+type imeWidget struct {
+	qtwidgets.QWidgetBase
+}
+
+var imeCursor = qtcore.QRect{X: 10, Y: 20, Width: 2, Height: 16}
+
+func (w *imeWidget) InputMethodQuery(q qtcore.InputMethodQueries) *qtcore.QVariant {
+	switch q {
+	case qtcore.ImEnabled:
+		return qtcore.NewQVariantWithBool(true)
+	case qtcore.ImCursorRectangle:
+		return qtcore.NewQVariantWithRect(imeCursor)
+	}
+	return w.Super().InputMethodQuery(q)
+}
+
+// inputMethodQuery was once hidden on every class; Qt asks it through the
+// widget's event, and a direct call dispatches to Go too.
+func TestSubclassInputMethodQuery(t *testing.T) {
+	qutetest.Run(t, func() {
+		w := &imeWidget{}
+		qtwidgets.NewQWidgetWith(w, nil)
+		defer w.Delete()
+		ev := qtgui.NewQInputMethodQueryEventWithInputMethodQuery(qtcore.ImEnabled | qtcore.ImCursorRectangle)
+		qtcore.QCoreApplicationSendEvent(w, ev)
+		if !ev.Value(qtcore.ImEnabled).ToBool() {
+			t.Error("ImEnabled is false, want true from the Go override")
+		}
+		if r := ev.Value(qtcore.ImCursorRectangle).ToRect(); r != imeCursor {
+			t.Errorf("ImCursorRectangle = %+v, want %+v", r, imeCursor)
+		}
+		if r := w.InputMethodQuery(qtcore.ImCursorRectangle).ToRect(); r != imeCursor {
+			t.Errorf("direct InputMethodQuery = %+v, want %+v", r, imeCursor)
+		}
+	})
+}
+
+type dpiWidget struct {
+	qtwidgets.QWidgetBase
+}
+
+func (w *dpiWidget) Metric(m qtgui.QPaintDevicePaintDeviceMetric) int {
+	if m == qtgui.QPaintDevicePdmDpiX {
+		return 300
+	}
+	return w.Super().Metric(m)
+}
+
+// metric, the paint-device query behind width, height and DPI, is
+// overridable; Super answers for the rest.
+func TestSubclassMetric(t *testing.T) {
+	qutetest.Run(t, func() {
+		w := &dpiWidget{}
+		qtwidgets.NewQWidgetWith(w, nil)
+		defer w.Delete()
+		w.Resize(40, 30)
+		d := w.AsQPaintDevice()
+		if got := d.LogicalDpiX(); got != 300 {
+			t.Errorf("LogicalDpiX = %d, want 300 from the Go override", got)
+		}
+		if got := d.Width(); got != 40 {
+			t.Errorf("Width = %d, want 40 from Super", got)
+		}
+	})
+}
+
+type connWatcher struct {
+	qtcore.QObjectBase
+	connected, disconnected []string
+}
+
+func (o *connWatcher) ConnectNotify(m *qtcore.QMetaMethod) {
+	o.connected = append(o.connected, string(m.MethodSignature()))
+}
+
+func (o *connWatcher) DisconnectNotify(m *qtcore.QMetaMethod) {
+	o.disconnected = append(o.disconnected, string(m.MethodSignature()))
+}
+
+// connectNotify and disconnectNotify see Go's connections, and
+// IsSignalConnected answers for them: the Qt idiom for doing work only
+// while someone listens.
+func TestSubclassConnectNotify(t *testing.T) {
+	qutetest.Run(t, func() {
+		o := &connWatcher{}
+		qtcore.NewQObjectWith(o, nil)
+		defer o.Delete()
+		mo := o.MetaObject()
+		sig := mo.Method(mo.IndexOfSignal("objectNameChanged(QString)"))
+		if o.IsSignalConnected(sig) {
+			t.Error("IsSignalConnected before any connection")
+		}
+		c := o.OnObjectNameChanged(func(string) {})
+		if fmt.Sprint(o.connected) != "[objectNameChanged(QString)]" {
+			t.Errorf("ConnectNotify saw %v", o.connected)
+		}
+		if !o.IsSignalConnected(sig) {
+			t.Error("IsSignalConnected is false while connected")
+		}
+		c.Disconnect()
+		if fmt.Sprint(o.disconnected) != "[objectNameChanged(QString)]" {
+			t.Errorf("DisconnectNotify saw %v", o.disconnected)
+		}
+		if o.IsSignalConnected(sig) {
+			t.Error("IsSignalConnected after Disconnect")
+		}
+		o.DumpObjectInfo() // debug output, bound since it is no longer hidden
+		o.DumpObjectTree()
+	})
+}

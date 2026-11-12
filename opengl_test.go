@@ -85,3 +85,34 @@ func TestOpenGLTriangle(t *testing.T) {
 		}
 	})
 }
+
+// getProcAddress hands a GL function's address on, as a GL loader (go-gl's
+// InitWithProcAddrFunc) needs; Go never calls it.
+func TestOpenGLGetProcAddress(t *testing.T) {
+	qutetest.Run(t, func() {
+		surf := qtgui.NewQOffscreenSurfaceWithScreen(nil, nil)
+		surf.Create()
+		defer surf.Delete()
+		ctx := qtgui.NewQOpenGLContext(nil)
+		defer ctx.Delete()
+		if !ctx.Create() || !ctx.MakeCurrent(surf) {
+			t.Skip("no OpenGL context available on this platform")
+		}
+		defer ctx.DoneCurrent()
+		p := ctx.GetProcAddress("glGetString")
+		if p == nil {
+			t.Error("GetProcAddress(glGetString) = nil")
+			return
+		}
+		if q := ctx.GetProcAddress("glGetString"); q != p {
+			t.Errorf("GetProcAddress gave %p then %p", p, q)
+		}
+		// (an unknown name is not checked: GLX hands out a stub for any name)
+		if q := ctx.GetProcAddress("glClear"); q == nil || q == p {
+			t.Errorf("GetProcAddress(glClear) = %p, want a second, different address", q)
+		}
+		if q := qtgui.QGuiApplicationPlatformFunction([]byte("quteNoSuchFunction")); q != nil {
+			t.Errorf("PlatformFunction of an unknown name = %p, want nil", q)
+		}
+	})
+}

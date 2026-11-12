@@ -367,6 +367,18 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -724,6 +736,20 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.InputMethodQuery")
+		}},
 	{Name: "SupportsExtension", Has: func(v any) bool {
 		_, ok := v.(interface {
 			SupportsExtension(qtwidgets.QGraphicsItemExtension) bool
@@ -902,17 +928,33 @@ func (s *QGraphicsVideoItemSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsVideoItemSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.ConnectNotify")
+	C.qute_QGraphicsVideoItem_super_9(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsVideoItem.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsVideoItemSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.DisconnectNotify")
+	C.qute_QGraphicsVideoItem_super_10(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsVideoItem.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // Advance calls QGraphicsItem::advance.
 func (s *QGraphicsVideoItemSuper) Advance(phase int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.Advance")
-	C.qute_QGraphicsVideoItem_super_9(self, C.int(phase))
+	C.qute_QGraphicsVideoItem_super_11(self, C.int(phase))
 	runtime.KeepAlive(s.this)
 }
 
 // Shape calls QGraphicsItem::shape.
 func (s *QGraphicsVideoItemSuper) Shape() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.Shape")
-	r := C.qute_QGraphicsVideoItem_super_10(self)
+	r := C.qute_QGraphicsVideoItem_super_12(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
@@ -920,7 +962,7 @@ func (s *QGraphicsVideoItemSuper) Shape() *qtgui.QPainterPath {
 // Contains calls QGraphicsItem::contains.
 func (s *QGraphicsVideoItemSuper) Contains(point qtcore.QPointF) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.Contains")
-	r := C.qute_QGraphicsVideoItem_super_11(self, cQPointF(point))
+	r := C.qute_QGraphicsVideoItem_super_13(self, cQPointF(point))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -932,7 +974,7 @@ func (s *QGraphicsVideoItemSuper) CollidesWithItem(other *qtwidgets.QGraphicsIte
 	if other != nil {
 		otherPtr = rt.UseArg(unsafe.Pointer(other.AsQGraphicsItem()), "QGraphicsVideoItem.Super.CollidesWithItem")
 	}
-	r := C.qute_QGraphicsVideoItem_super_12(self, otherPtr, C.int64_t(mode))
+	r := C.qute_QGraphicsVideoItem_super_14(self, otherPtr, C.int64_t(mode))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(other)
 	return bool(r)
@@ -941,7 +983,7 @@ func (s *QGraphicsVideoItemSuper) CollidesWithItem(other *qtwidgets.QGraphicsIte
 // CollidesWithPath calls QGraphicsItem::collidesWithPath.
 func (s *QGraphicsVideoItemSuper) CollidesWithPath(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.CollidesWithPath")
-	r := C.qute_QGraphicsVideoItem_super_13(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsVideoItem.Super.CollidesWithPath"), C.int64_t(mode))
+	r := C.qute_QGraphicsVideoItem_super_15(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsVideoItem.Super.CollidesWithPath"), C.int64_t(mode))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(path)
 	return bool(r)
@@ -954,7 +996,7 @@ func (s *QGraphicsVideoItemSuper) IsObscuredBy(item *qtwidgets.QGraphicsItem) bo
 	if item != nil {
 		itemPtr = rt.UseArg(unsafe.Pointer(item.AsQGraphicsItem()), "QGraphicsVideoItem.Super.IsObscuredBy")
 	}
-	r := C.qute_QGraphicsVideoItem_super_14(self, itemPtr)
+	r := C.qute_QGraphicsVideoItem_super_16(self, itemPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(item)
 	return bool(r)
@@ -963,7 +1005,7 @@ func (s *QGraphicsVideoItemSuper) IsObscuredBy(item *qtwidgets.QGraphicsItem) bo
 // OpaqueArea calls QGraphicsItem::opaqueArea.
 func (s *QGraphicsVideoItemSuper) OpaqueArea() *qtgui.QPainterPath {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.OpaqueArea")
-	r := C.qute_QGraphicsVideoItem_super_15(self)
+	r := C.qute_QGraphicsVideoItem_super_17(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[qtgui.QPainterPath](rt.WrapClass(r, "QPainterPath", rt.TakeOwned), r)
 }
@@ -979,7 +1021,7 @@ func (s *QGraphicsVideoItemSuper) SceneEventFilter(watched *qtwidgets.QGraphicsI
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsVideoItem.Super.SceneEventFilter")
 	}
-	r := C.qute_QGraphicsVideoItem_super_16(self, watchedPtr, eventPtr)
+	r := C.qute_QGraphicsVideoItem_super_18(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -993,7 +1035,7 @@ func (s *QGraphicsVideoItemSuper) SceneEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsVideoItem.Super.SceneEvent")
 	}
-	r := C.qute_QGraphicsVideoItem_super_17(self, eventPtr)
+	r := C.qute_QGraphicsVideoItem_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1006,7 +1048,7 @@ func (s *QGraphicsVideoItemSuper) ContextMenuEvent(event *qtwidgets.QGraphicsSce
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneContextMenuEvent()), "QGraphicsVideoItem.Super.ContextMenuEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_18(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1018,7 +1060,7 @@ func (s *QGraphicsVideoItemSuper) DragEnterEvent(event *qtwidgets.QGraphicsScene
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsVideoItem.Super.DragEnterEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_19(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1030,7 +1072,7 @@ func (s *QGraphicsVideoItemSuper) DragLeaveEvent(event *qtwidgets.QGraphicsScene
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsVideoItem.Super.DragLeaveEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_20(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1042,7 +1084,7 @@ func (s *QGraphicsVideoItemSuper) DragMoveEvent(event *qtwidgets.QGraphicsSceneD
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsVideoItem.Super.DragMoveEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_21(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_23(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1054,7 +1096,7 @@ func (s *QGraphicsVideoItemSuper) DropEvent(event *qtwidgets.QGraphicsSceneDragD
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneDragDropEvent()), "QGraphicsVideoItem.Super.DropEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_22(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_24(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1066,7 +1108,7 @@ func (s *QGraphicsVideoItemSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsVideoItem.Super.FocusInEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_23(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1078,7 +1120,7 @@ func (s *QGraphicsVideoItemSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QGraphicsVideoItem.Super.FocusOutEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_24(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1090,7 +1132,7 @@ func (s *QGraphicsVideoItemSuper) HoverEnterEvent(event *qtwidgets.QGraphicsScen
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsVideoItem.Super.HoverEnterEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_25(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1102,7 +1144,7 @@ func (s *QGraphicsVideoItemSuper) HoverMoveEvent(event *qtwidgets.QGraphicsScene
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsVideoItem.Super.HoverMoveEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_26(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1114,7 +1156,7 @@ func (s *QGraphicsVideoItemSuper) HoverLeaveEvent(event *qtwidgets.QGraphicsScen
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneHoverEvent()), "QGraphicsVideoItem.Super.HoverLeaveEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_27(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1126,7 +1168,7 @@ func (s *QGraphicsVideoItemSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsVideoItem.Super.KeyPressEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_28(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1138,7 +1180,7 @@ func (s *QGraphicsVideoItemSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QGraphicsVideoItem.Super.KeyReleaseEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_29(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1150,7 +1192,7 @@ func (s *QGraphicsVideoItemSuper) MousePressEvent(event *qtwidgets.QGraphicsScen
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsVideoItem.Super.MousePressEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_30(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1162,7 +1204,7 @@ func (s *QGraphicsVideoItemSuper) MouseMoveEvent(event *qtwidgets.QGraphicsScene
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsVideoItem.Super.MouseMoveEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_31(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1174,7 +1216,7 @@ func (s *QGraphicsVideoItemSuper) MouseReleaseEvent(event *qtwidgets.QGraphicsSc
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsVideoItem.Super.MouseReleaseEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_32(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1186,7 +1228,7 @@ func (s *QGraphicsVideoItemSuper) MouseDoubleClickEvent(event *qtwidgets.QGraphi
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneMouseEvent()), "QGraphicsVideoItem.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_33(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1198,7 +1240,7 @@ func (s *QGraphicsVideoItemSuper) WheelEvent(event *qtwidgets.QGraphicsSceneWhee
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneWheelEvent()), "QGraphicsVideoItem.Super.WheelEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_34(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1210,15 +1252,23 @@ func (s *QGraphicsVideoItemSuper) InputMethodEvent(event *qtgui.QInputMethodEven
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QGraphicsVideoItem.Super.InputMethodEvent")
 	}
-	C.qute_QGraphicsVideoItem_super_35(self, eventPtr)
+	C.qute_QGraphicsVideoItem_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QGraphicsVideoItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.InputMethodQuery")
+	r := C.qute_QGraphicsVideoItem_super_38(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // SupportsExtension calls QGraphicsItem::supportsExtension.
 func (s *QGraphicsVideoItemSuper) SupportsExtension(extension qtwidgets.QGraphicsItemExtension) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.SupportsExtension")
-	r := C.qute_QGraphicsVideoItem_super_36(self, C.int64_t(extension))
+	r := C.qute_QGraphicsVideoItem_super_39(self, C.int64_t(extension))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1226,7 +1276,7 @@ func (s *QGraphicsVideoItemSuper) SupportsExtension(extension qtwidgets.QGraphic
 // SetExtension calls QGraphicsItem::setExtension.
 func (s *QGraphicsVideoItemSuper) SetExtension(extension qtwidgets.QGraphicsItemExtension, variant *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.SetExtension")
-	C.qute_QGraphicsVideoItem_super_37(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsVideoItem.Super.SetExtension"))
+	C.qute_QGraphicsVideoItem_super_40(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsVideoItem.Super.SetExtension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 }
@@ -1234,7 +1284,7 @@ func (s *QGraphicsVideoItemSuper) SetExtension(extension qtwidgets.QGraphicsItem
 // Extension calls QGraphicsItem::extension.
 func (s *QGraphicsVideoItemSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsVideoItem.Super.Extension")
-	r := C.qute_QGraphicsVideoItem_super_38(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsVideoItem.Super.Extension"))
+	r := C.qute_QGraphicsVideoItem_super_41(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsVideoItem.Super.Extension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -1246,6 +1296,16 @@ func (b *QGraphicsVideoItemBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsVideoItem.UpdateMicroFocus")
 	C.qute_QGraphicsVideoItem_prot_updateMicroFocus(self)
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsVideoItemBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsVideoItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsVideoItem.IsSignalConnected")
+	r := C.qute_QGraphicsVideoItem_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsVideoItem.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // AddToIndex wraps the protected QGraphicsItem::addToIndex for subclasses.

@@ -1295,6 +1295,20 @@ var qAbstractItemViewVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemView.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractItemView.InputMethodQuery")
+		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
@@ -1942,6 +1956,38 @@ var qAbstractItemViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1959,6 +2005,18 @@ var qAbstractItemViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -2040,17 +2098,25 @@ func (s *QAbstractItemViewSuper) ItemDelegateForIndex(index *qtcore.QModelIndex)
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QAbstractItemViewSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.InputMethodQuery")
+	r := C.qute_QAbstractItemView_super_9(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Reset calls QAbstractItemView::reset.
 func (s *QAbstractItemViewSuper) Reset() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.Reset")
-	C.qute_QAbstractItemView_super_9(self)
+	C.qute_QAbstractItemView_super_10(self)
 	runtime.KeepAlive(s.this)
 }
 
 // SetRootIndex calls QAbstractItemView::setRootIndex.
 func (s *QAbstractItemViewSuper) SetRootIndex(index *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SetRootIndex")
-	C.qute_QAbstractItemView_super_10(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.SetRootIndex"))
+	C.qute_QAbstractItemView_super_11(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.SetRootIndex"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 }
@@ -2058,14 +2124,14 @@ func (s *QAbstractItemViewSuper) SetRootIndex(index *qtcore.QModelIndex) {
 // DoItemsLayout calls QAbstractItemView::doItemsLayout.
 func (s *QAbstractItemViewSuper) DoItemsLayout() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.DoItemsLayout")
-	C.qute_QAbstractItemView_super_11(self)
+	C.qute_QAbstractItemView_super_12(self)
 	runtime.KeepAlive(s.this)
 }
 
 // SelectAll calls QAbstractItemView::selectAll.
 func (s *QAbstractItemViewSuper) SelectAll() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SelectAll")
-	C.qute_QAbstractItemView_super_12(self)
+	C.qute_QAbstractItemView_super_13(self)
 	runtime.KeepAlive(s.this)
 }
 
@@ -2076,7 +2142,7 @@ func (s *QAbstractItemViewSuper) DataChanged(topLeft *qtcore.QModelIndex, bottom
 	for i := range roles {
 		rolesC[i] = C.int(roles[i])
 	}
-	C.qute_QAbstractItemView_super_13(self, rt.UseArg(unsafe.Pointer(topLeft), "QAbstractItemView.Super.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QAbstractItemView.Super.DataChanged"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
+	C.qute_QAbstractItemView_super_14(self, rt.UseArg(unsafe.Pointer(topLeft), "QAbstractItemView.Super.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QAbstractItemView.Super.DataChanged"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(topLeft)
 	runtime.KeepAlive(bottomRight)
@@ -2085,7 +2151,7 @@ func (s *QAbstractItemViewSuper) DataChanged(topLeft *qtcore.QModelIndex, bottom
 // RowsInserted calls QAbstractItemView::rowsInserted.
 func (s *QAbstractItemViewSuper) RowsInserted(parent *qtcore.QModelIndex, start int, end int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.RowsInserted")
-	C.qute_QAbstractItemView_super_14(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemView.Super.RowsInserted"), C.int(start), C.int(end))
+	C.qute_QAbstractItemView_super_15(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemView.Super.RowsInserted"), C.int(start), C.int(end))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
 }
@@ -2093,7 +2159,7 @@ func (s *QAbstractItemViewSuper) RowsInserted(parent *qtcore.QModelIndex, start 
 // RowsAboutToBeRemoved calls QAbstractItemView::rowsAboutToBeRemoved.
 func (s *QAbstractItemViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, start int, end int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.RowsAboutToBeRemoved")
-	C.qute_QAbstractItemView_super_15(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
+	C.qute_QAbstractItemView_super_16(self, rt.UseArg(unsafe.Pointer(parent), "QAbstractItemView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
 }
@@ -2101,7 +2167,7 @@ func (s *QAbstractItemViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex
 // SelectionChanged calls QAbstractItemView::selectionChanged.
 func (s *QAbstractItemViewSuper) SelectionChanged(selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SelectionChanged")
-	C.qute_QAbstractItemView_super_16(self, rt.Use(unsafe.Pointer(selected), "QAbstractItemView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QAbstractItemView.Super.SelectionChanged"))
+	C.qute_QAbstractItemView_super_17(self, rt.Use(unsafe.Pointer(selected), "QAbstractItemView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QAbstractItemView.Super.SelectionChanged"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(selected)
 	runtime.KeepAlive(deselected)
@@ -2110,7 +2176,7 @@ func (s *QAbstractItemViewSuper) SelectionChanged(selected *qtcore.QItemSelectio
 // CurrentChanged calls QAbstractItemView::currentChanged.
 func (s *QAbstractItemViewSuper) CurrentChanged(current *qtcore.QModelIndex, previous *qtcore.QModelIndex) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.CurrentChanged")
-	C.qute_QAbstractItemView_super_17(self, rt.UseArg(unsafe.Pointer(current), "QAbstractItemView.Super.CurrentChanged"), rt.UseArg(unsafe.Pointer(previous), "QAbstractItemView.Super.CurrentChanged"))
+	C.qute_QAbstractItemView_super_18(self, rt.UseArg(unsafe.Pointer(current), "QAbstractItemView.Super.CurrentChanged"), rt.UseArg(unsafe.Pointer(previous), "QAbstractItemView.Super.CurrentChanged"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(current)
 	runtime.KeepAlive(previous)
@@ -2119,49 +2185,49 @@ func (s *QAbstractItemViewSuper) CurrentChanged(current *qtcore.QModelIndex, pre
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QAbstractItemViewSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.UpdateEditorData")
-	C.qute_QAbstractItemView_super_18(self)
+	C.qute_QAbstractItemView_super_19(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QAbstractItemViewSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.UpdateEditorGeometries")
-	C.qute_QAbstractItemView_super_19(self)
+	C.qute_QAbstractItemView_super_20(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateGeometries calls QAbstractItemView::updateGeometries.
 func (s *QAbstractItemViewSuper) UpdateGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.UpdateGeometries")
-	C.qute_QAbstractItemView_super_20(self)
+	C.qute_QAbstractItemView_super_21(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QAbstractItemViewSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.VerticalScrollbarAction")
-	C.qute_QAbstractItemView_super_21(self, C.int(action))
+	C.qute_QAbstractItemView_super_22(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarAction calls QAbstractItemView::horizontalScrollbarAction.
 func (s *QAbstractItemViewSuper) HorizontalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.HorizontalScrollbarAction")
-	C.qute_QAbstractItemView_super_22(self, C.int(action))
+	C.qute_QAbstractItemView_super_23(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarValueChanged calls QAbstractItemView::verticalScrollbarValueChanged.
 func (s *QAbstractItemViewSuper) VerticalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.VerticalScrollbarValueChanged")
-	C.qute_QAbstractItemView_super_23(self, C.int(value))
+	C.qute_QAbstractItemView_super_24(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QAbstractItemViewSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.HorizontalScrollbarValueChanged")
-	C.qute_QAbstractItemView_super_24(self, C.int(value))
+	C.qute_QAbstractItemView_super_25(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -2172,7 +2238,7 @@ func (s *QAbstractItemViewSuper) CloseEditor(editor *QWidget, hint QAbstractItem
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemView.Super.CloseEditor")
 	}
-	C.qute_QAbstractItemView_super_25(self, editorPtr, C.int64_t(hint))
+	C.qute_QAbstractItemView_super_26(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2184,7 +2250,7 @@ func (s *QAbstractItemViewSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QAbstractItemView.Super.CommitData")
 	}
-	C.qute_QAbstractItemView_super_26(self, editorPtr)
+	C.qute_QAbstractItemView_super_27(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2196,7 +2262,7 @@ func (s *QAbstractItemViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QAbstractItemView.Super.EditorDestroyed")
 	}
-	C.qute_QAbstractItemView_super_27(self, editorPtr)
+	C.qute_QAbstractItemView_super_28(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2204,7 +2270,7 @@ func (s *QAbstractItemViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 // SelectedIndexes calls QAbstractItemView::selectedIndexes.
 func (s *QAbstractItemViewSuper) SelectedIndexes() []*qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SelectedIndexes")
-	r := C.qute_QAbstractItemView_super_34(self)
+	r := C.qute_QAbstractItemView_super_35(self)
 	runtime.KeepAlive(s.this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
 		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
@@ -2218,7 +2284,7 @@ func (s *QAbstractItemViewSuper) Edit(index *qtcore.QModelIndex, trigger QAbstra
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.Edit")
 	}
-	r := C.qute_QAbstractItemView_super_35(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QAbstractItemView_super_36(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2232,7 +2298,7 @@ func (s *QAbstractItemViewSuper) SelectionCommand(index *qtcore.QModelIndex, eve
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.SelectionCommand")
 	}
-	r := C.qute_QAbstractItemView_super_36(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QAbstractItemView_super_37(self, rt.UseArg(unsafe.Pointer(index), "QAbstractItemView.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2242,14 +2308,14 @@ func (s *QAbstractItemViewSuper) SelectionCommand(index *qtcore.QModelIndex, eve
 // StartDrag calls QAbstractItemView::startDrag.
 func (s *QAbstractItemViewSuper) StartDrag(supportedActions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.StartDrag")
-	C.qute_QAbstractItemView_super_37(self, C.int64_t(supportedActions))
+	C.qute_QAbstractItemView_super_38(self, C.int64_t(supportedActions))
 	runtime.KeepAlive(s.this)
 }
 
 // InitViewItemOption calls QAbstractItemView::initViewItemOption.
 func (s *QAbstractItemViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.InitViewItemOption")
-	C.qute_QAbstractItemView_super_38(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemView.Super.InitViewItemOption"))
+	C.qute_QAbstractItemView_super_39(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemView.Super.InitViewItemOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2257,7 +2323,7 @@ func (s *QAbstractItemViewSuper) InitViewItemOption(option *QStyleOptionViewItem
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QAbstractItemViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.FocusNextPrevChild")
-	r := C.qute_QAbstractItemView_super_39(self, C.bool(next))
+	r := C.qute_QAbstractItemView_super_40(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2269,7 +2335,7 @@ func (s *QAbstractItemViewSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.Event")
 	}
-	r := C.qute_QAbstractItemView_super_40(self, eventPtr)
+	r := C.qute_QAbstractItemView_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -2282,7 +2348,7 @@ func (s *QAbstractItemViewSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.ViewportEvent")
 	}
-	r := C.qute_QAbstractItemView_super_41(self, eventPtr)
+	r := C.qute_QAbstractItemView_super_42(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -2295,7 +2361,7 @@ func (s *QAbstractItemViewSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractItemView.Super.MousePressEvent")
 	}
-	C.qute_QAbstractItemView_super_42(self, eventPtr)
+	C.qute_QAbstractItemView_super_43(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2307,7 +2373,7 @@ func (s *QAbstractItemViewSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractItemView.Super.MouseMoveEvent")
 	}
-	C.qute_QAbstractItemView_super_43(self, eventPtr)
+	C.qute_QAbstractItemView_super_44(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2319,7 +2385,7 @@ func (s *QAbstractItemViewSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractItemView.Super.MouseReleaseEvent")
 	}
-	C.qute_QAbstractItemView_super_44(self, eventPtr)
+	C.qute_QAbstractItemView_super_45(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2331,7 +2397,7 @@ func (s *QAbstractItemViewSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractItemView.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QAbstractItemView_super_45(self, eventPtr)
+	C.qute_QAbstractItemView_super_46(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2343,7 +2409,7 @@ func (s *QAbstractItemViewSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QAbstractItemView.Super.DragEnterEvent")
 	}
-	C.qute_QAbstractItemView_super_46(self, eventPtr)
+	C.qute_QAbstractItemView_super_47(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2355,7 +2421,7 @@ func (s *QAbstractItemViewSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QAbstractItemView.Super.DragMoveEvent")
 	}
-	C.qute_QAbstractItemView_super_47(self, eventPtr)
+	C.qute_QAbstractItemView_super_48(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2367,7 +2433,7 @@ func (s *QAbstractItemViewSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QAbstractItemView.Super.DragLeaveEvent")
 	}
-	C.qute_QAbstractItemView_super_48(self, eventPtr)
+	C.qute_QAbstractItemView_super_49(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2379,7 +2445,7 @@ func (s *QAbstractItemViewSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QAbstractItemView.Super.DropEvent")
 	}
-	C.qute_QAbstractItemView_super_49(self, eventPtr)
+	C.qute_QAbstractItemView_super_50(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2391,7 +2457,7 @@ func (s *QAbstractItemViewSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractItemView.Super.FocusInEvent")
 	}
-	C.qute_QAbstractItemView_super_50(self, eventPtr)
+	C.qute_QAbstractItemView_super_51(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2403,7 +2469,7 @@ func (s *QAbstractItemViewSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractItemView.Super.FocusOutEvent")
 	}
-	C.qute_QAbstractItemView_super_51(self, eventPtr)
+	C.qute_QAbstractItemView_super_52(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2415,7 +2481,7 @@ func (s *QAbstractItemViewSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractItemView.Super.KeyPressEvent")
 	}
-	C.qute_QAbstractItemView_super_52(self, eventPtr)
+	C.qute_QAbstractItemView_super_53(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2427,7 +2493,7 @@ func (s *QAbstractItemViewSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QAbstractItemView.Super.ResizeEvent")
 	}
-	C.qute_QAbstractItemView_super_53(self, eventPtr)
+	C.qute_QAbstractItemView_super_54(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2439,7 +2505,7 @@ func (s *QAbstractItemViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QAbstractItemView.Super.TimerEvent")
 	}
-	C.qute_QAbstractItemView_super_54(self, eventPtr)
+	C.qute_QAbstractItemView_super_55(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2451,7 +2517,7 @@ func (s *QAbstractItemViewSuper) InputMethodEvent(event *qtgui.QInputMethodEvent
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QAbstractItemView.Super.InputMethodEvent")
 	}
-	C.qute_QAbstractItemView_super_55(self, eventPtr)
+	C.qute_QAbstractItemView_super_56(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2467,7 +2533,7 @@ func (s *QAbstractItemViewSuper) EventFilter(object *qtcore.QObject, event *qtco
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.EventFilter")
 	}
-	r := C.qute_QAbstractItemView_super_56(self, objectPtr, eventPtr)
+	r := C.qute_QAbstractItemView_super_57(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -2477,7 +2543,7 @@ func (s *QAbstractItemViewSuper) EventFilter(object *qtcore.QObject, event *qtco
 // ViewportSizeHint calls QAbstractItemView::viewportSizeHint.
 func (s *QAbstractItemViewSuper) ViewportSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.ViewportSizeHint")
-	r := C.qute_QAbstractItemView_super_57(self)
+	r := C.qute_QAbstractItemView_super_58(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2485,7 +2551,7 @@ func (s *QAbstractItemViewSuper) ViewportSizeHint() qtcore.QSize {
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QAbstractItemViewSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.MinimumSizeHint")
-	r := C.qute_QAbstractItemView_super_58(self)
+	r := C.qute_QAbstractItemView_super_59(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2493,7 +2559,7 @@ func (s *QAbstractItemViewSuper) MinimumSizeHint() qtcore.QSize {
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QAbstractItemViewSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SizeHint")
-	r := C.qute_QAbstractItemView_super_59(self)
+	r := C.qute_QAbstractItemView_super_60(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2505,7 +2571,7 @@ func (s *QAbstractItemViewSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QAbstractItemView.Super.SetupViewport")
 	}
-	C.qute_QAbstractItemView_super_60(self, viewportPtr)
+	C.qute_QAbstractItemView_super_61(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -2517,7 +2583,7 @@ func (s *QAbstractItemViewSuper) PaintEvent(paintEvent *qtgui.QPaintEvent) {
 	if paintEvent != nil {
 		paintEventPtr = rt.UseArg(unsafe.Pointer(paintEvent.AsQPaintEvent()), "QAbstractItemView.Super.PaintEvent")
 	}
-	C.qute_QAbstractItemView_super_61(self, paintEventPtr)
+	C.qute_QAbstractItemView_super_62(self, paintEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(paintEvent)
 }
@@ -2529,7 +2595,7 @@ func (s *QAbstractItemViewSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
 	if wheelEvent != nil {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QAbstractItemView.Super.WheelEvent")
 	}
-	C.qute_QAbstractItemView_super_62(self, wheelEventPtr)
+	C.qute_QAbstractItemView_super_63(self, wheelEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(wheelEvent)
 }
@@ -2541,7 +2607,7 @@ func (s *QAbstractItemViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QConte
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QAbstractItemView.Super.ContextMenuEvent")
 	}
-	C.qute_QAbstractItemView_super_63(self, contextMenuEventPtr)
+	C.qute_QAbstractItemView_super_64(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -2549,7 +2615,7 @@ func (s *QAbstractItemViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QConte
 // ScrollContentsBy calls QAbstractScrollArea::scrollContentsBy.
 func (s *QAbstractItemViewSuper) ScrollContentsBy(dx int, dy int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.ScrollContentsBy")
-	C.qute_QAbstractItemView_super_64(self, C.int(dx), C.int(dy))
+	C.qute_QAbstractItemView_super_65(self, C.int(dx), C.int(dy))
 	runtime.KeepAlive(s.this)
 }
 
@@ -2560,7 +2626,7 @@ func (s *QAbstractItemViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.ChangeEvent")
 	}
-	C.qute_QAbstractItemView_super_65(self, eventPtr)
+	C.qute_QAbstractItemView_super_66(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2568,7 +2634,7 @@ func (s *QAbstractItemViewSuper) ChangeEvent(event *qtcore.QEvent) {
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QAbstractItemViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.InitStyleOption")
-	C.qute_QAbstractItemView_super_66(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemView.Super.InitStyleOption"))
+	C.qute_QAbstractItemView_super_67(self, rt.UseArg(unsafe.Pointer(option), "QAbstractItemView.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2576,14 +2642,14 @@ func (s *QAbstractItemViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QAbstractItemViewSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.SetVisible")
-	C.qute_QAbstractItemView_super_67(self, C.bool(visible))
+	C.qute_QAbstractItemView_super_68(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QAbstractItemViewSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.HeightForWidth")
-	r := C.qute_QAbstractItemView_super_68(self, C.int(arg0))
+	r := C.qute_QAbstractItemView_super_69(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -2591,7 +2657,7 @@ func (s *QAbstractItemViewSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QAbstractItemViewSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.HasHeightForWidth")
-	r := C.qute_QAbstractItemView_super_69(self)
+	r := C.qute_QAbstractItemView_super_70(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2603,7 +2669,7 @@ func (s *QAbstractItemViewSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractItemView.Super.KeyReleaseEvent")
 	}
-	C.qute_QAbstractItemView_super_70(self, eventPtr)
+	C.qute_QAbstractItemView_super_71(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2615,7 +2681,7 @@ func (s *QAbstractItemViewSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QAbstractItemView.Super.EnterEvent")
 	}
-	C.qute_QAbstractItemView_super_71(self, eventPtr)
+	C.qute_QAbstractItemView_super_72(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2627,7 +2693,7 @@ func (s *QAbstractItemViewSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.LeaveEvent")
 	}
-	C.qute_QAbstractItemView_super_72(self, eventPtr)
+	C.qute_QAbstractItemView_super_73(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2639,7 +2705,7 @@ func (s *QAbstractItemViewSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QAbstractItemView.Super.MoveEvent")
 	}
-	C.qute_QAbstractItemView_super_73(self, eventPtr)
+	C.qute_QAbstractItemView_super_74(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2651,7 +2717,7 @@ func (s *QAbstractItemViewSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QAbstractItemView.Super.CloseEvent")
 	}
-	C.qute_QAbstractItemView_super_74(self, eventPtr)
+	C.qute_QAbstractItemView_super_75(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2663,7 +2729,7 @@ func (s *QAbstractItemViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QAbstractItemView.Super.TabletEvent")
 	}
-	C.qute_QAbstractItemView_super_75(self, eventPtr)
+	C.qute_QAbstractItemView_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2675,7 +2741,7 @@ func (s *QAbstractItemViewSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QAbstractItemView.Super.ActionEvent")
 	}
-	C.qute_QAbstractItemView_super_76(self, eventPtr)
+	C.qute_QAbstractItemView_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2687,7 +2753,7 @@ func (s *QAbstractItemViewSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QAbstractItemView.Super.ShowEvent")
 	}
-	C.qute_QAbstractItemView_super_77(self, eventPtr)
+	C.qute_QAbstractItemView_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2699,9 +2765,26 @@ func (s *QAbstractItemViewSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QAbstractItemView.Super.HideEvent")
 	}
-	C.qute_QAbstractItemView_super_78(self, eventPtr)
+	C.qute_QAbstractItemView_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QAbstractItemViewSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QAbstractItemView_super_80(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QAbstractItemViewSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.Metric")
+	r := C.qute_QAbstractItemView_super_81(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -2711,7 +2794,7 @@ func (s *QAbstractItemViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QAbstractItemView.Super.ChildEvent")
 	}
-	C.qute_QAbstractItemView_super_79(self, eventPtr)
+	C.qute_QAbstractItemView_super_82(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2723,9 +2806,25 @@ func (s *QAbstractItemViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractItemView.Super.CustomEvent")
 	}
-	C.qute_QAbstractItemView_super_80(self, eventPtr)
+	C.qute_QAbstractItemView_super_83(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAbstractItemViewSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.ConnectNotify")
+	C.qute_QAbstractItemView_super_84(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemView.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAbstractItemViewSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractItemView.Super.DisconnectNotify")
+	C.qute_QAbstractItemView_super_85(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemView.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // State wraps the protected QAbstractItemView::state for subclasses.
@@ -2889,6 +2988,16 @@ func (b *QAbstractItemViewBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.FocusPreviousChild")
 	r := C.qute_QAbstractItemView_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAbstractItemViewBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QAbstractItemView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractItemView.IsSignalConnected")
+	r := C.qute_QAbstractItemView_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractItemView.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

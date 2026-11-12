@@ -255,6 +255,20 @@ func (this *QOpenGLContext) SwapBuffers(surface QSurfaceLike) {
 	runtime.KeepAlive(surface)
 }
 
+// GetProcAddress wraps QOpenGLContext::getProcAddress.
+//
+//	C++: QFunctionPointer QOpenGLContext::getProcAddress(const char * procName) const
+//
+// Qt docs: https://doc.qt.io/qt-6/qopenglcontext.html#getProcAddress
+func (this *QOpenGLContext) GetProcAddress(procName string) unsafe.Pointer {
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.GetProcAddress")
+	procNameCStr := C.CString(procName)
+	defer C.free(unsafe.Pointer(procNameCStr))
+	r := C.qute_QOpenGLContext_getProcAddress(self, procNameCStr)
+	runtime.KeepAlive(this)
+	return r
+}
+
 // Surface wraps QOpenGLContext::surface.
 //
 //	C++: QSurface * QOpenGLContext::surface() const
@@ -489,6 +503,18 @@ var qOpenGLContextVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QOpenGLContextBase is embedded in Go types that subclass QOpenGLContext:
@@ -580,6 +606,22 @@ func (s *QOpenGLContextSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QOpenGLContextSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLContext.Super.ConnectNotify")
+	C.qute_QOpenGLContext_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLContext.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QOpenGLContextSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLContext.Super.DisconnectNotify")
+	C.qute_QOpenGLContext_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLContext.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // ResolveInterface wraps the protected QOpenGLContext::resolveInterface for subclasses.
 func (b *QOpenGLContextBase) ResolveInterface(name string, revision int) unsafe.Pointer {
 	this := b.QOpenGLContext // the receiver the ownership code below acts on
@@ -589,6 +631,16 @@ func (b *QOpenGLContextBase) ResolveInterface(name string, revision int) unsafe.
 	r := C.qute_QOpenGLContext_prot_resolveInterface(self, nameCStr, C.int(revision))
 	runtime.KeepAlive(this)
 	return r
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QOpenGLContextBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QOpenGLContext // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLContext.IsSignalConnected")
+	r := C.qute_QOpenGLContext_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLContext.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQOpenGLContextWith constructs a QOpenGLContext whose virtual methods dispatch to v. The

@@ -1711,6 +1711,20 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidget.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidget.InputMethodQuery")
+		}},
 	{Name: "UpdateEditorData", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorData() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
@@ -2049,6 +2063,38 @@ var qTreeWidgetVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -2066,6 +2112,18 @@ var qTreeWidgetVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -2549,31 +2607,39 @@ func (s *QTreeWidgetSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbs
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QTreeWidgetSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.InputMethodQuery")
+	r := C.qute_QTreeWidget_super_47(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QTreeWidgetSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.UpdateEditorData")
-	C.qute_QTreeWidget_super_47(self)
+	C.qute_QTreeWidget_super_48(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QTreeWidgetSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.UpdateEditorGeometries")
-	C.qute_QTreeWidget_super_48(self)
+	C.qute_QTreeWidget_super_49(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QTreeWidgetSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.VerticalScrollbarAction")
-	C.qute_QTreeWidget_super_49(self, C.int(action))
+	C.qute_QTreeWidget_super_50(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QTreeWidgetSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.HorizontalScrollbarValueChanged")
-	C.qute_QTreeWidget_super_50(self, C.int(value))
+	C.qute_QTreeWidget_super_51(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -2584,7 +2650,7 @@ func (s *QTreeWidgetSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelega
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QTreeWidget.Super.CloseEditor")
 	}
-	C.qute_QTreeWidget_super_51(self, editorPtr, C.int64_t(hint))
+	C.qute_QTreeWidget_super_52(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2596,7 +2662,7 @@ func (s *QTreeWidgetSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QTreeWidget.Super.CommitData")
 	}
-	C.qute_QTreeWidget_super_52(self, editorPtr)
+	C.qute_QTreeWidget_super_53(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2608,7 +2674,7 @@ func (s *QTreeWidgetSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QTreeWidget.Super.EditorDestroyed")
 	}
-	C.qute_QTreeWidget_super_53(self, editorPtr)
+	C.qute_QTreeWidget_super_54(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -2620,7 +2686,7 @@ func (s *QTreeWidgetSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItem
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeWidget.Super.Edit")
 	}
-	r := C.qute_QTreeWidget_super_54(self, rt.UseArg(unsafe.Pointer(index), "QTreeWidget.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QTreeWidget_super_55(self, rt.UseArg(unsafe.Pointer(index), "QTreeWidget.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2634,7 +2700,7 @@ func (s *QTreeWidgetSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeWidget.Super.SelectionCommand")
 	}
-	r := C.qute_QTreeWidget_super_55(self, rt.UseArg(unsafe.Pointer(index), "QTreeWidget.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QTreeWidget_super_56(self, rt.UseArg(unsafe.Pointer(index), "QTreeWidget.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -2644,14 +2710,14 @@ func (s *QTreeWidgetSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 // StartDrag calls QAbstractItemView::startDrag.
 func (s *QTreeWidgetSuper) StartDrag(supportedActions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.StartDrag")
-	C.qute_QTreeWidget_super_56(self, C.int64_t(supportedActions))
+	C.qute_QTreeWidget_super_57(self, C.int64_t(supportedActions))
 	runtime.KeepAlive(s.this)
 }
 
 // InitViewItemOption calls QAbstractItemView::initViewItemOption.
 func (s *QTreeWidgetSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.InitViewItemOption")
-	C.qute_QTreeWidget_super_57(self, rt.UseArg(unsafe.Pointer(option), "QTreeWidget.Super.InitViewItemOption"))
+	C.qute_QTreeWidget_super_58(self, rt.UseArg(unsafe.Pointer(option), "QTreeWidget.Super.InitViewItemOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2659,7 +2725,7 @@ func (s *QTreeWidgetSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QTreeWidgetSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.FocusNextPrevChild")
-	r := C.qute_QTreeWidget_super_58(self, C.bool(next))
+	r := C.qute_QTreeWidget_super_59(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2671,7 +2737,7 @@ func (s *QTreeWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QTreeWidget.Super.DragEnterEvent")
 	}
-	C.qute_QTreeWidget_super_59(self, eventPtr)
+	C.qute_QTreeWidget_super_60(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2683,7 +2749,7 @@ func (s *QTreeWidgetSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QTreeWidget.Super.DragLeaveEvent")
 	}
-	C.qute_QTreeWidget_super_60(self, eventPtr)
+	C.qute_QTreeWidget_super_61(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2695,7 +2761,7 @@ func (s *QTreeWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QTreeWidget.Super.FocusInEvent")
 	}
-	C.qute_QTreeWidget_super_61(self, eventPtr)
+	C.qute_QTreeWidget_super_62(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2707,7 +2773,7 @@ func (s *QTreeWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QTreeWidget.Super.FocusOutEvent")
 	}
-	C.qute_QTreeWidget_super_62(self, eventPtr)
+	C.qute_QTreeWidget_super_63(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2719,7 +2785,7 @@ func (s *QTreeWidgetSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QTreeWidget.Super.ResizeEvent")
 	}
-	C.qute_QTreeWidget_super_63(self, eventPtr)
+	C.qute_QTreeWidget_super_64(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2731,7 +2797,7 @@ func (s *QTreeWidgetSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QTreeWidget.Super.InputMethodEvent")
 	}
-	C.qute_QTreeWidget_super_64(self, eventPtr)
+	C.qute_QTreeWidget_super_65(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2747,7 +2813,7 @@ func (s *QTreeWidgetSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeWidget.Super.EventFilter")
 	}
-	r := C.qute_QTreeWidget_super_65(self, objectPtr, eventPtr)
+	r := C.qute_QTreeWidget_super_66(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -2757,7 +2823,7 @@ func (s *QTreeWidgetSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QTreeWidgetSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.MinimumSizeHint")
-	r := C.qute_QTreeWidget_super_66(self)
+	r := C.qute_QTreeWidget_super_67(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2765,7 +2831,7 @@ func (s *QTreeWidgetSuper) MinimumSizeHint() qtcore.QSize {
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QTreeWidgetSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.SizeHint")
-	r := C.qute_QTreeWidget_super_67(self)
+	r := C.qute_QTreeWidget_super_68(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2777,7 +2843,7 @@ func (s *QTreeWidgetSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QTreeWidget.Super.SetupViewport")
 	}
-	C.qute_QTreeWidget_super_68(self, viewportPtr)
+	C.qute_QTreeWidget_super_69(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -2789,7 +2855,7 @@ func (s *QTreeWidgetSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
 	if wheelEvent != nil {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QTreeWidget.Super.WheelEvent")
 	}
-	C.qute_QTreeWidget_super_69(self, wheelEventPtr)
+	C.qute_QTreeWidget_super_70(self, wheelEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(wheelEvent)
 }
@@ -2801,7 +2867,7 @@ func (s *QTreeWidgetSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenu
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QTreeWidget.Super.ContextMenuEvent")
 	}
-	C.qute_QTreeWidget_super_70(self, contextMenuEventPtr)
+	C.qute_QTreeWidget_super_71(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -2809,7 +2875,7 @@ func (s *QTreeWidgetSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenu
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QTreeWidgetSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.InitStyleOption")
-	C.qute_QTreeWidget_super_71(self, rt.UseArg(unsafe.Pointer(option), "QTreeWidget.Super.InitStyleOption"))
+	C.qute_QTreeWidget_super_72(self, rt.UseArg(unsafe.Pointer(option), "QTreeWidget.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2817,14 +2883,14 @@ func (s *QTreeWidgetSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QTreeWidgetSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.SetVisible")
-	C.qute_QTreeWidget_super_72(self, C.bool(visible))
+	C.qute_QTreeWidget_super_73(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QTreeWidgetSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.HeightForWidth")
-	r := C.qute_QTreeWidget_super_73(self, C.int(arg0))
+	r := C.qute_QTreeWidget_super_74(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -2832,7 +2898,7 @@ func (s *QTreeWidgetSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QTreeWidgetSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.HasHeightForWidth")
-	r := C.qute_QTreeWidget_super_74(self)
+	r := C.qute_QTreeWidget_super_75(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2844,7 +2910,7 @@ func (s *QTreeWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QTreeWidget.Super.KeyReleaseEvent")
 	}
-	C.qute_QTreeWidget_super_75(self, eventPtr)
+	C.qute_QTreeWidget_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2856,7 +2922,7 @@ func (s *QTreeWidgetSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QTreeWidget.Super.EnterEvent")
 	}
-	C.qute_QTreeWidget_super_76(self, eventPtr)
+	C.qute_QTreeWidget_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2868,7 +2934,7 @@ func (s *QTreeWidgetSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeWidget.Super.LeaveEvent")
 	}
-	C.qute_QTreeWidget_super_77(self, eventPtr)
+	C.qute_QTreeWidget_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2880,7 +2946,7 @@ func (s *QTreeWidgetSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QTreeWidget.Super.MoveEvent")
 	}
-	C.qute_QTreeWidget_super_78(self, eventPtr)
+	C.qute_QTreeWidget_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2892,7 +2958,7 @@ func (s *QTreeWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QTreeWidget.Super.CloseEvent")
 	}
-	C.qute_QTreeWidget_super_79(self, eventPtr)
+	C.qute_QTreeWidget_super_80(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2904,7 +2970,7 @@ func (s *QTreeWidgetSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QTreeWidget.Super.TabletEvent")
 	}
-	C.qute_QTreeWidget_super_80(self, eventPtr)
+	C.qute_QTreeWidget_super_81(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2916,7 +2982,7 @@ func (s *QTreeWidgetSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QTreeWidget.Super.ActionEvent")
 	}
-	C.qute_QTreeWidget_super_81(self, eventPtr)
+	C.qute_QTreeWidget_super_82(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2928,7 +2994,7 @@ func (s *QTreeWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QTreeWidget.Super.ShowEvent")
 	}
-	C.qute_QTreeWidget_super_82(self, eventPtr)
+	C.qute_QTreeWidget_super_83(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2940,9 +3006,26 @@ func (s *QTreeWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QTreeWidget.Super.HideEvent")
 	}
-	C.qute_QTreeWidget_super_83(self, eventPtr)
+	C.qute_QTreeWidget_super_84(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QTreeWidgetSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QTreeWidget_super_85(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QTreeWidgetSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.Metric")
+	r := C.qute_QTreeWidget_super_86(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -2952,7 +3035,7 @@ func (s *QTreeWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QTreeWidget.Super.ChildEvent")
 	}
-	C.qute_QTreeWidget_super_84(self, eventPtr)
+	C.qute_QTreeWidget_super_87(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2964,9 +3047,25 @@ func (s *QTreeWidgetSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QTreeWidget.Super.CustomEvent")
 	}
-	C.qute_QTreeWidget_super_85(self, eventPtr)
+	C.qute_QTreeWidget_super_88(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QTreeWidgetSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.ConnectNotify")
+	C.qute_QTreeWidget_super_89(self, rt.UseArg(unsafe.Pointer(signal), "QTreeWidget.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QTreeWidgetSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTreeWidget.Super.DisconnectNotify")
+	C.qute_QTreeWidget_super_90(self, rt.UseArg(unsafe.Pointer(signal), "QTreeWidget.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // ColumnResized wraps the protected QTreeView::columnResized for subclasses.
@@ -3205,6 +3304,16 @@ func (b *QTreeWidgetBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.FocusPreviousChild")
 	r := C.qute_QTreeWidget_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QTreeWidgetBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QTreeWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTreeWidget.IsSignalConnected")
+	r := C.qute_QTreeWidget_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QTreeWidget.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

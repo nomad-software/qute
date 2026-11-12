@@ -304,6 +304,18 @@ var qIntValidatorVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QIntValidatorBase is embedded in Go types that subclass QIntValidator:
@@ -412,6 +424,32 @@ func (s *QIntValidatorSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QIntValidator_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QIntValidatorSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QIntValidator.Super.ConnectNotify")
+	C.qute_QIntValidator_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QIntValidator.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QIntValidatorSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QIntValidator.Super.DisconnectNotify")
+	C.qute_QIntValidator_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QIntValidator.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QIntValidatorBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QIntValidator // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QIntValidator.IsSignalConnected")
+	r := C.qute_QIntValidator_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QIntValidator.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQIntValidatorWith constructs a QIntValidator whose virtual methods dispatch to v. The

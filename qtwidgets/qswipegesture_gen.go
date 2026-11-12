@@ -174,6 +174,18 @@ var qSwipeGestureVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QSwipeGestureBase is embedded in Go types that subclass QSwipeGesture:
@@ -263,6 +275,32 @@ func (s *QSwipeGestureSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QSwipeGesture_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSwipeGestureSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSwipeGesture.Super.ConnectNotify")
+	C.qute_QSwipeGesture_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QSwipeGesture.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSwipeGestureSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSwipeGesture.Super.DisconnectNotify")
+	C.qute_QSwipeGesture_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QSwipeGesture.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSwipeGestureBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QSwipeGesture // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSwipeGesture.IsSignalConnected")
+	r := C.qute_QSwipeGesture_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSwipeGesture.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQSwipeGestureWith constructs a QSwipeGesture whose virtual methods dispatch to v. The

@@ -417,6 +417,18 @@ var qDoubleValidatorVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QDoubleValidatorBase is embedded in Go types that subclass QDoubleValidator:
@@ -525,6 +537,32 @@ func (s *QDoubleValidatorSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QDoubleValidator_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QDoubleValidatorSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleValidator.Super.ConnectNotify")
+	C.qute_QDoubleValidator_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QDoubleValidator.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QDoubleValidatorSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDoubleValidator.Super.DisconnectNotify")
+	C.qute_QDoubleValidator_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QDoubleValidator.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QDoubleValidatorBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QDoubleValidator // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDoubleValidator.IsSignalConnected")
+	r := C.qute_QDoubleValidator_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QDoubleValidator.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQDoubleValidatorWith constructs a QDoubleValidator whose virtual methods dispatch to v. The

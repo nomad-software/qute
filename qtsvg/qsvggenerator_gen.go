@@ -267,7 +267,22 @@ func (this *QSvgGenerator) SvgVersion() QSvgGeneratorSvgVersion {
 	return QSvgGeneratorSvgVersion(r)
 }
 
-var qSvgGeneratorVTable = []rt.Virtual{}
+var qSvgGeneratorVTable = []rt.Virtual{
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(metric)
+			*(*C.int)(ret) = C.int(r)
+		}},
+}
 
 // QSvgGeneratorBase is embedded in Go types that subclass QSvgGenerator:
 //
@@ -290,6 +305,14 @@ func (b *QSvgGeneratorBase) Super() *QSvgGeneratorSuper {
 
 // QSvgGeneratorSuper calls the C++ base implementations of QSvgGenerator's virtuals.
 type QSvgGeneratorSuper struct{ this *QSvgGenerator }
+
+// Metric calls QSvgGenerator::metric.
+func (s *QSvgGeneratorSuper) Metric(metric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QSvgGenerator.Super.Metric")
+	r := C.qute_QSvgGenerator_super_0(self, C.int64_t(metric))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.
 func (b *QSvgGeneratorBase) GetDecodedMetricF(metricA qtgui.QPaintDevicePaintDeviceMetric, metricB qtgui.QPaintDevicePaintDeviceMetric) float64 {

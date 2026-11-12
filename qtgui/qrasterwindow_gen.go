@@ -72,6 +72,20 @@ func NewQRasterWindow(parent QWindowLike) *QRasterWindow {
 }
 
 var qRasterWindowVTable = []rt.Virtual{
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metric := QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(QPaintDevicePaintDeviceMetric) int
+			}).Metric(metric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*QResizeEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -268,6 +282,24 @@ var qRasterWindowVTable = []rt.Virtual{
 			tabletEvent := rt.View[QTabletEvent](tabletEventH, tabletEventP)
 			v.(interface{ TabletEvent(*QTabletEvent) }).TabletEvent(tabletEvent)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
 	{Name: "EventFilter", Has: func(v any) bool {
 		_, ok := v.(interface {
 			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
@@ -313,6 +345,18 @@ var qRasterWindowVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QRasterWindowBase is embedded in Go types that subclass QRasterWindow:
@@ -337,6 +381,14 @@ func (b *QRasterWindowBase) Super() *QRasterWindowSuper {
 // QRasterWindowSuper calls the C++ base implementations of QRasterWindow's virtuals.
 type QRasterWindowSuper struct{ this *QRasterWindow }
 
+// Metric calls QRasterWindow::metric.
+func (s *QRasterWindowSuper) Metric(metric QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.Metric")
+	r := C.qute_QRasterWindow_super_0(self, C.int64_t(metric))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
 // ResizeEvent calls QRasterWindow::resizeEvent.
 func (s *QRasterWindowSuper) ResizeEvent(event *QResizeEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.ResizeEvent")
@@ -344,7 +396,7 @@ func (s *QRasterWindowSuper) ResizeEvent(event *QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QRasterWindow.Super.ResizeEvent")
 	}
-	C.qute_QRasterWindow_super_0(self, eventPtr)
+	C.qute_QRasterWindow_super_1(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -356,7 +408,7 @@ func (s *QRasterWindowSuper) ExposeEvent(exposeEvent *QExposeEvent) {
 	if exposeEvent != nil {
 		exposeEventPtr = rt.UseArg(unsafe.Pointer(exposeEvent.AsQExposeEvent()), "QRasterWindow.Super.ExposeEvent")
 	}
-	C.qute_QRasterWindow_super_1(self, exposeEventPtr)
+	C.qute_QRasterWindow_super_2(self, exposeEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(exposeEvent)
 }
@@ -368,7 +420,7 @@ func (s *QRasterWindowSuper) PaintEvent(event *QPaintEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QRasterWindow.Super.PaintEvent")
 	}
-	C.qute_QRasterWindow_super_2(self, eventPtr)
+	C.qute_QRasterWindow_super_3(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -380,7 +432,7 @@ func (s *QRasterWindowSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QRasterWindow.Super.Event")
 	}
-	r := C.qute_QRasterWindow_super_3(self, eventPtr)
+	r := C.qute_QRasterWindow_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -389,7 +441,7 @@ func (s *QRasterWindowSuper) Event(event *qtcore.QEvent) bool {
 // SurfaceType calls QWindow::surfaceType.
 func (s *QRasterWindowSuper) SurfaceType() QSurfaceSurfaceType {
 	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.SurfaceType")
-	r := C.qute_QRasterWindow_super_4(self)
+	r := C.qute_QRasterWindow_super_5(self)
 	runtime.KeepAlive(s.this)
 	return QSurfaceSurfaceType(r)
 }
@@ -397,7 +449,7 @@ func (s *QRasterWindowSuper) SurfaceType() QSurfaceSurfaceType {
 // Format calls QWindow::format.
 func (s *QRasterWindowSuper) Format() *QSurfaceFormat {
 	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.Format")
-	r := C.qute_QRasterWindow_super_5(self)
+	r := C.qute_QRasterWindow_super_6(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[QSurfaceFormat](rt.WrapClass(r, "QSurfaceFormat", rt.TakeOwned), r)
 }
@@ -405,7 +457,7 @@ func (s *QRasterWindowSuper) Format() *QSurfaceFormat {
 // Size calls QWindow::size.
 func (s *QRasterWindowSuper) Size() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.Size")
-	r := C.qute_QRasterWindow_super_6(self)
+	r := C.qute_QRasterWindow_super_7(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -413,7 +465,7 @@ func (s *QRasterWindowSuper) Size() qtcore.QSize {
 // FocusObject calls QWindow::focusObject.
 func (s *QRasterWindowSuper) FocusObject() *qtcore.QObject {
 	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.FocusObject")
-	r := C.qute_QRasterWindow_super_7(self)
+	r := C.qute_QRasterWindow_super_8(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[qtcore.QObject](rt.WrapClass(r, "QObject", rt.KeepOrBorrow), r)
 }
@@ -425,7 +477,7 @@ func (s *QRasterWindowSuper) MoveEvent(moveEvent *QMoveEvent) {
 	if moveEvent != nil {
 		moveEventPtr = rt.UseArg(unsafe.Pointer(moveEvent.AsQMoveEvent()), "QRasterWindow.Super.MoveEvent")
 	}
-	C.qute_QRasterWindow_super_8(self, moveEventPtr)
+	C.qute_QRasterWindow_super_9(self, moveEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(moveEvent)
 }
@@ -437,7 +489,7 @@ func (s *QRasterWindowSuper) FocusInEvent(focusEvent *QFocusEvent) {
 	if focusEvent != nil {
 		focusEventPtr = rt.UseArg(unsafe.Pointer(focusEvent.AsQFocusEvent()), "QRasterWindow.Super.FocusInEvent")
 	}
-	C.qute_QRasterWindow_super_9(self, focusEventPtr)
+	C.qute_QRasterWindow_super_10(self, focusEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(focusEvent)
 }
@@ -449,7 +501,7 @@ func (s *QRasterWindowSuper) FocusOutEvent(focusEvent *QFocusEvent) {
 	if focusEvent != nil {
 		focusEventPtr = rt.UseArg(unsafe.Pointer(focusEvent.AsQFocusEvent()), "QRasterWindow.Super.FocusOutEvent")
 	}
-	C.qute_QRasterWindow_super_10(self, focusEventPtr)
+	C.qute_QRasterWindow_super_11(self, focusEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(focusEvent)
 }
@@ -461,7 +513,7 @@ func (s *QRasterWindowSuper) ShowEvent(showEvent *QShowEvent) {
 	if showEvent != nil {
 		showEventPtr = rt.UseArg(unsafe.Pointer(showEvent.AsQShowEvent()), "QRasterWindow.Super.ShowEvent")
 	}
-	C.qute_QRasterWindow_super_11(self, showEventPtr)
+	C.qute_QRasterWindow_super_12(self, showEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(showEvent)
 }
@@ -473,7 +525,7 @@ func (s *QRasterWindowSuper) HideEvent(hideEvent *QHideEvent) {
 	if hideEvent != nil {
 		hideEventPtr = rt.UseArg(unsafe.Pointer(hideEvent.AsQHideEvent()), "QRasterWindow.Super.HideEvent")
 	}
-	C.qute_QRasterWindow_super_12(self, hideEventPtr)
+	C.qute_QRasterWindow_super_13(self, hideEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(hideEvent)
 }
@@ -485,7 +537,7 @@ func (s *QRasterWindowSuper) CloseEvent(closeEvent *QCloseEvent) {
 	if closeEvent != nil {
 		closeEventPtr = rt.UseArg(unsafe.Pointer(closeEvent.AsQCloseEvent()), "QRasterWindow.Super.CloseEvent")
 	}
-	C.qute_QRasterWindow_super_13(self, closeEventPtr)
+	C.qute_QRasterWindow_super_14(self, closeEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(closeEvent)
 }
@@ -497,7 +549,7 @@ func (s *QRasterWindowSuper) KeyPressEvent(keyEvent *QKeyEvent) {
 	if keyEvent != nil {
 		keyEventPtr = rt.UseArg(unsafe.Pointer(keyEvent.AsQKeyEvent()), "QRasterWindow.Super.KeyPressEvent")
 	}
-	C.qute_QRasterWindow_super_14(self, keyEventPtr)
+	C.qute_QRasterWindow_super_15(self, keyEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(keyEvent)
 }
@@ -509,7 +561,7 @@ func (s *QRasterWindowSuper) KeyReleaseEvent(keyEvent *QKeyEvent) {
 	if keyEvent != nil {
 		keyEventPtr = rt.UseArg(unsafe.Pointer(keyEvent.AsQKeyEvent()), "QRasterWindow.Super.KeyReleaseEvent")
 	}
-	C.qute_QRasterWindow_super_15(self, keyEventPtr)
+	C.qute_QRasterWindow_super_16(self, keyEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(keyEvent)
 }
@@ -521,7 +573,7 @@ func (s *QRasterWindowSuper) MousePressEvent(mouseEvent *QMouseEvent) {
 	if mouseEvent != nil {
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QRasterWindow.Super.MousePressEvent")
 	}
-	C.qute_QRasterWindow_super_16(self, mouseEventPtr)
+	C.qute_QRasterWindow_super_17(self, mouseEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(mouseEvent)
 }
@@ -533,7 +585,7 @@ func (s *QRasterWindowSuper) MouseReleaseEvent(mouseEvent *QMouseEvent) {
 	if mouseEvent != nil {
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QRasterWindow.Super.MouseReleaseEvent")
 	}
-	C.qute_QRasterWindow_super_17(self, mouseEventPtr)
+	C.qute_QRasterWindow_super_18(self, mouseEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(mouseEvent)
 }
@@ -545,7 +597,7 @@ func (s *QRasterWindowSuper) MouseDoubleClickEvent(mouseEvent *QMouseEvent) {
 	if mouseEvent != nil {
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QRasterWindow.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QRasterWindow_super_18(self, mouseEventPtr)
+	C.qute_QRasterWindow_super_19(self, mouseEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(mouseEvent)
 }
@@ -557,7 +609,7 @@ func (s *QRasterWindowSuper) MouseMoveEvent(mouseEvent *QMouseEvent) {
 	if mouseEvent != nil {
 		mouseEventPtr = rt.UseArg(unsafe.Pointer(mouseEvent.AsQMouseEvent()), "QRasterWindow.Super.MouseMoveEvent")
 	}
-	C.qute_QRasterWindow_super_19(self, mouseEventPtr)
+	C.qute_QRasterWindow_super_20(self, mouseEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(mouseEvent)
 }
@@ -569,7 +621,7 @@ func (s *QRasterWindowSuper) WheelEvent(wheelEvent *QWheelEvent) {
 	if wheelEvent != nil {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QRasterWindow.Super.WheelEvent")
 	}
-	C.qute_QRasterWindow_super_20(self, wheelEventPtr)
+	C.qute_QRasterWindow_super_21(self, wheelEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(wheelEvent)
 }
@@ -581,7 +633,7 @@ func (s *QRasterWindowSuper) TouchEvent(touchEvent *QTouchEvent) {
 	if touchEvent != nil {
 		touchEventPtr = rt.UseArg(unsafe.Pointer(touchEvent.AsQTouchEvent()), "QRasterWindow.Super.TouchEvent")
 	}
-	C.qute_QRasterWindow_super_21(self, touchEventPtr)
+	C.qute_QRasterWindow_super_22(self, touchEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(touchEvent)
 }
@@ -593,9 +645,18 @@ func (s *QRasterWindowSuper) TabletEvent(tabletEvent *QTabletEvent) {
 	if tabletEvent != nil {
 		tabletEventPtr = rt.UseArg(unsafe.Pointer(tabletEvent.AsQTabletEvent()), "QRasterWindow.Super.TabletEvent")
 	}
-	C.qute_QRasterWindow_super_22(self, tabletEventPtr)
+	C.qute_QRasterWindow_super_23(self, tabletEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(tabletEvent)
+}
+
+// NativeEvent calls QWindow::nativeEvent.
+func (s *QRasterWindowSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QRasterWindow_super_24(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
 }
 
 // EventFilter calls QObject::eventFilter.
@@ -609,7 +670,7 @@ func (s *QRasterWindowSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QRasterWindow.Super.EventFilter")
 	}
-	r := C.qute_QRasterWindow_super_23(self, watchedPtr, eventPtr)
+	r := C.qute_QRasterWindow_super_25(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -623,7 +684,7 @@ func (s *QRasterWindowSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QRasterWindow.Super.TimerEvent")
 	}
-	C.qute_QRasterWindow_super_24(self, eventPtr)
+	C.qute_QRasterWindow_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -635,7 +696,7 @@ func (s *QRasterWindowSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QRasterWindow.Super.ChildEvent")
 	}
-	C.qute_QRasterWindow_super_25(self, eventPtr)
+	C.qute_QRasterWindow_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -647,9 +708,25 @@ func (s *QRasterWindowSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QRasterWindow.Super.CustomEvent")
 	}
-	C.qute_QRasterWindow_super_26(self, eventPtr)
+	C.qute_QRasterWindow_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QRasterWindowSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.ConnectNotify")
+	C.qute_QRasterWindow_super_29(self, rt.UseArg(unsafe.Pointer(signal), "QRasterWindow.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QRasterWindowSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QRasterWindow.Super.DisconnectNotify")
+	C.qute_QRasterWindow_super_30(self, rt.UseArg(unsafe.Pointer(signal), "QRasterWindow.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // ResolveInterface wraps the protected QWindow::resolveInterface for subclasses.
@@ -661,6 +738,16 @@ func (b *QRasterWindowBase) ResolveInterface(name string, revision int) unsafe.P
 	r := C.qute_QRasterWindow_prot_resolveInterface(self, nameCStr, C.int(revision))
 	runtime.KeepAlive(this)
 	return r
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QRasterWindowBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QRasterWindow // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QRasterWindow.IsSignalConnected")
+	r := C.qute_QRasterWindow_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QRasterWindow.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.

@@ -15,6 +15,7 @@ QGuiApplication:
   focusObject: { return: borrowed }
 
 QPainter:
+  paintEngine: { skip: "on purpose: paint-engine internals; QPaintEngine is not bound" }
   drawLines(const QList<QLineF>&): { name: DrawLineSegmentsF }
   drawLines(const QList<QLine>&): { name: DrawLineSegments }
   drawLines(const QLineF*, int): { skip: "use DrawLineSegmentsF" }
@@ -721,6 +722,7 @@ QInputEvent:
   device: { return: borrowed }
 
 QPdfWriter:
+  paintEngine: { skip: "on purpose: paint-engine internals; QPaintEngine is not bound" }
   QPdfWriter(QIODevice*): { args: { device: keep }, reviewed: true }
 
 QPicture:
@@ -759,6 +761,7 @@ QTextObject:
   document: { return: borrowed }
 
 QWindow:
+  nativeEvent: { args: { result: out } }
   parent: { return: borrowed }
   setParent: { args: { parent: transfer-this } }
   setTransientParent: { reviewed: true }
@@ -775,6 +778,7 @@ QOffscreenSurface:
   setScreen: { reviewed: true }
 
 QOpenGLContext:
+  getProcAddress(const QByteArray&): { skip: "use the string overload" }
   setShareContext: { args: { shareContext: keep }, reviewed: true }
   setScreen: { reviewed: true }
   shareContext: { return: borrowed }
@@ -991,3 +995,11 @@ QTabletEvent:
 
 QWheelEvent:
   QWheelEvent: { name: NewQWheelEvent, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+QPaintDevice:
+  devType: { skip: "on purpose: paint-device internals (the QInternal device type)" }
+  paintEngine: { skip: "on purpose: paint-engine internals; QPaintEngine is not bound" }
+  initPainter: { skip: "on purpose: paint-device internals; set the painter up in the paint handler" }
+  redirected: { skip: "on purpose: paint-device internals (painter redirection)" }
+  sharedPainter: { skip: "on purpose: paint-device internals (shared painters of widget backing stores)" }
+QRasterWindow:
+  redirected: { skip: "on purpose: paint-device internals (painter redirection)" }

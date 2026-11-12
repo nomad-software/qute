@@ -1090,6 +1090,18 @@ var qFormLayoutVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1387,10 +1399,26 @@ func (s *QFormLayoutSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QFormLayoutSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFormLayout.Super.ConnectNotify")
+	C.qute_QFormLayout_super_26(self, rt.UseArg(unsafe.Pointer(signal), "QFormLayout.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QFormLayoutSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFormLayout.Super.DisconnectNotify")
+	C.qute_QFormLayout_super_27(self, rt.UseArg(unsafe.Pointer(signal), "QFormLayout.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // MinimumHeightForWidth calls QLayoutItem::minimumHeightForWidth.
 func (s *QFormLayoutSuper) MinimumHeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QFormLayout.Super.MinimumHeightForWidth")
-	r := C.qute_QFormLayout_super_26(self, C.int(arg0))
+	r := C.qute_QFormLayout_super_28(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -1398,7 +1426,7 @@ func (s *QFormLayoutSuper) MinimumHeightForWidth(arg0 int) int {
 // Widget calls QLayoutItem::widget.
 func (s *QFormLayoutSuper) Widget() *QWidget {
 	self := rt.Use(unsafe.Pointer(s.this), "QFormLayout.Super.Widget")
-	r := C.qute_QFormLayout_super_27(self)
+	r := C.qute_QFormLayout_super_29(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[QWidget](rt.WrapClass(r, "QWidget", rt.KeepOrBorrow), r)
 }
@@ -1406,7 +1434,7 @@ func (s *QFormLayoutSuper) Widget() *QWidget {
 // SpacerItem calls QLayoutItem::spacerItem.
 func (s *QFormLayoutSuper) SpacerItem() *QSpacerItem {
 	self := rt.Use(unsafe.Pointer(s.this), "QFormLayout.Super.SpacerItem")
-	r := C.qute_QFormLayout_super_28(self)
+	r := C.qute_QFormLayout_super_30(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[QSpacerItem](rt.WrapClass(r, "QSpacerItem", rt.KeepOrBorrow), r)
 }
@@ -1477,6 +1505,16 @@ func (b *QFormLayoutBase) AlignmentRect(rect qtcore.QRect) qtcore.QRect {
 	r := C.qute_QFormLayout_prot_alignmentRect(self, cQRect(rect))
 	runtime.KeepAlive(this)
 	return goQRect(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QFormLayoutBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QFormLayout // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFormLayout.IsSignalConnected")
+	r := C.qute_QFormLayout_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QFormLayout.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQFormLayoutWith constructs a QFormLayout whose virtual methods dispatch to v. The

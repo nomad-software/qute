@@ -1247,6 +1247,24 @@ var qWebEngineViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QActionEvent](eventH, eventP)
 			v.(interface{ ActionEvent(*qtgui.QActionEvent) }).ActionEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1255,6 +1273,20 @@ var qWebEngineViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ ChangeEvent(*qtcore.QEvent) }).ChangeEvent(event)
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
@@ -1271,6 +1303,20 @@ var qWebEngineViewVTable = []rt.Virtual{
 			v.(interface {
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QWebEngineView.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -1323,6 +1369,18 @@ var qWebEngineViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1696,6 +1754,15 @@ func (s *QWebEngineViewSuper) ActionEvent(event *qtgui.QActionEvent) {
 	runtime.KeepAlive(event)
 }
 
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QWebEngineViewSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QWebEngineView_super_31(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
 // ChangeEvent calls QWidget::changeEvent.
 func (s *QWebEngineViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.ChangeEvent")
@@ -1703,9 +1770,17 @@ func (s *QWebEngineViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.ChangeEvent")
 	}
-	C.qute_QWebEngineView_super_31(self, eventPtr)
+	C.qute_QWebEngineView_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// Metric calls QWidget::metric.
+func (s *QWebEngineViewSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.Metric")
+	r := C.qute_QWebEngineView_super_33(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // InputMethodEvent calls QWidget::inputMethodEvent.
@@ -1715,15 +1790,23 @@ func (s *QWebEngineViewSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMet
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QWebEngineView.Super.InputMethodEvent")
 	}
-	C.qute_QWebEngineView_super_32(self, inputMethodEventPtr)
+	C.qute_QWebEngineView_super_34(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
+}
+
+// InputMethodQuery calls QWidget::inputMethodQuery.
+func (s *QWebEngineViewSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.InputMethodQuery")
+	r := C.qute_QWebEngineView_super_35(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QWebEngineViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.FocusNextPrevChild")
-	r := C.qute_QWebEngineView_super_33(self, C.bool(next))
+	r := C.qute_QWebEngineView_super_36(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1739,7 +1822,7 @@ func (s *QWebEngineViewSuper) EventFilter(watched *qtcore.QObject, event *qtcore
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.EventFilter")
 	}
-	r := C.qute_QWebEngineView_super_34(self, watchedPtr, eventPtr)
+	r := C.qute_QWebEngineView_super_37(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1753,7 +1836,7 @@ func (s *QWebEngineViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QWebEngineView.Super.TimerEvent")
 	}
-	C.qute_QWebEngineView_super_35(self, eventPtr)
+	C.qute_QWebEngineView_super_38(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1765,7 +1848,7 @@ func (s *QWebEngineViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QWebEngineView.Super.ChildEvent")
 	}
-	C.qute_QWebEngineView_super_36(self, eventPtr)
+	C.qute_QWebEngineView_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1777,9 +1860,25 @@ func (s *QWebEngineViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWebEngineView.Super.CustomEvent")
 	}
-	C.qute_QWebEngineView_super_37(self, eventPtr)
+	C.qute_QWebEngineView_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWebEngineViewSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.ConnectNotify")
+	C.qute_QWebEngineView_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineView.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWebEngineViewSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineView.Super.DisconnectNotify")
+	C.qute_QWebEngineView_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineView.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
@@ -1821,6 +1920,16 @@ func (b *QWebEngineViewBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.FocusPreviousChild")
 	r := C.qute_QWebEngineView_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWebEngineViewBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWebEngineView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineView.IsSignalConnected")
+	r := C.qute_QWebEngineView_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineView.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

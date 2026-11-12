@@ -503,6 +503,18 @@ var qAbstractTableModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QAbstractTableModelBase is embedded in Go types that subclass QAbstractTableModel:
@@ -886,6 +898,22 @@ func (s *QAbstractTableModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAbstractTableModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractTableModel.Super.ConnectNotify")
+	C.qute_QAbstractTableModel_super_39(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractTableModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAbstractTableModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractTableModel.Super.DisconnectNotify")
+	C.qute_QAbstractTableModel_super_40(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractTableModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QAbstractTableModelBase) CreateIndex(row int, column int) *QModelIndex {
 	this := b.QAbstractTableModel // the receiver the ownership code below acts on
@@ -1085,6 +1113,16 @@ func (b *QAbstractTableModelBase) PersistentIndexList() []*QModelIndex {
 	r := C.qute_QAbstractTableModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAbstractTableModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QAbstractTableModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractTableModel.IsSignalConnected")
+	r := C.qute_QAbstractTableModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractTableModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQAbstractTableModelWith constructs a QAbstractTableModel whose virtual methods dispatch to v. The

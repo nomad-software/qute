@@ -1301,3 +1301,70 @@ func TestSecondaryBaseOffset(t *testing.T) {
 		}
 	}
 }
+
+// virtual finds an overridable virtual of a class by its C++ name.
+func virtual(c *Class, name string) *Method {
+	for _, x := range c.Virtuals {
+		if x.IR.Name == name {
+			return x
+		}
+	}
+	return nil
+}
+
+// A name in globalSkip hides the method on every class without a word in
+// COVERAGE.md; inputMethodQuery, metric and connectNotify were hidden that
+// way. Only moc's names stay there; the rest bind or are listed with a reason.
+func TestNoSilentSkips(t *testing.T) {
+	for _, c := range []string{"QWidget", "QLineEdit", "QGraphicsView"} {
+		if virtual(class(t, c), "inputMethodQuery") == nil {
+			t.Errorf("%s::inputMethodQuery is not overridable", c)
+		}
+	}
+	method(t, "QWidget", "inputMethodQuery(Qt::InputMethodQuery)")
+	if mm := method(t, "QLineEdit", "inputMethodQuery(Qt::InputMethodQuery property, QVariant"); mm.GoName != "InputMethodQueryWithArgument" {
+		t.Errorf("QLineEdit::inputMethodQuery(query, argument) is %s, want InputMethodQueryWithArgument", mm.GoName)
+	}
+	w := class(t, "QWidget")
+	for _, n := range []string{"metric", "connectNotify", "disconnectNotify"} {
+		if virtual(w, n) == nil {
+			t.Errorf("QWidget::%s is not overridable", n)
+		}
+	}
+	method(t, "QObject", "dumpObjectTree()")
+	if v := virtual(w, "nativeEvent"); v == nil {
+		t.Error("QWidget::nativeEvent is not overridable")
+	} else if p := v.Params[2]; !p.Out || !p.Ruled {
+		t.Errorf("nativeEvent result: Out=%v Ruled=%v, want an out-parameter by rule", p.Out, p.Ruled)
+	}
+	// left out with a reason: by an overlay (which also stops the override),
+	// or as a value class's C++ idiom
+	notBound(t, "QWidget", "devType()")
+	listed := false
+	for _, n := range w.NoVirtuals {
+		listed = listed || strings.Contains(n.Sig, "redirected(") && strings.Contains(n.Why, "on purpose")
+	}
+	if !listed || virtual(w, "redirected") != nil {
+		t.Error("QWidget::redirected is not listed as a virtual left out on purpose")
+	}
+	listed = false
+	for _, s := range class(t, "QPixmap").Skipped {
+		listed = listed || strings.Contains(s.Sig, "swap(") && strings.HasPrefix(s.Why, "on purpose")
+	}
+	if !listed {
+		t.Error("QPixmap::swap is not listed as skipped on purpose")
+	}
+	if why := idiomSkip(class(t, "QObject"), &irMethod{Name: "detach"}); why != "" {
+		t.Errorf("a QObject's detach (QSharedMemory::detach) is skipped: %s", why)
+	}
+}
+
+// A QFunctionPointer result is only handed on (to a GL loader), so it binds
+// as unsafe.Pointer; taking a function pointer is still left out.
+func TestFunctionPointerResult(t *testing.T) {
+	mm := method(t, "QOpenGLContext", "getProcAddress(const char")
+	if mm.GoName != "GetProcAddress" || mm.Ret == nil || mm.Ret.k != kRaw {
+		t.Errorf("getProcAddress is %s, want GetProcAddress returning unsafe.Pointer", mm.GoName)
+	}
+	notBound(t, "QEasingCurve", "setCustomType(")
+}

@@ -471,6 +471,18 @@ var qGraphicsItemAnimationVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsItemAnimationBase is embedded in Go types that subclass QGraphicsItemAnimation:
@@ -578,6 +590,32 @@ func (s *QGraphicsItemAnimationSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QGraphicsItemAnimation_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsItemAnimationSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemAnimation.Super.ConnectNotify")
+	C.qute_QGraphicsItemAnimation_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsItemAnimation.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsItemAnimationSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemAnimation.Super.DisconnectNotify")
+	C.qute_QGraphicsItemAnimation_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsItemAnimation.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsItemAnimationBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsItemAnimation // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsItemAnimation.IsSignalConnected")
+	r := C.qute_QGraphicsItemAnimation_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsItemAnimation.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsItemAnimationWith constructs a QGraphicsItemAnimation whose virtual methods dispatch to v. The

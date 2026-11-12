@@ -825,6 +825,20 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 				HoverLeaveEvent(*QGraphicsSceneHoverEvent)
 			}).HoverLeaveEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsTextItem.InputMethodQuery")
+		}},
 	{Name: "SupportsExtension", Has: func(v any) bool {
 		_, ok := v.(interface {
 			SupportsExtension(QGraphicsItemExtension) bool
@@ -921,6 +935,18 @@ var qGraphicsTextItemVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -1319,10 +1345,18 @@ func (s *QGraphicsTextItemSuper) HoverLeaveEvent(event *QGraphicsSceneHoverEvent
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsTextItem::inputMethodQuery.
+func (s *QGraphicsTextItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.InputMethodQuery")
+	r := C.qute_QGraphicsTextItem_super_25(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // SupportsExtension calls QGraphicsTextItem::supportsExtension.
 func (s *QGraphicsTextItemSuper) SupportsExtension(extension QGraphicsItemExtension) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.SupportsExtension")
-	r := C.qute_QGraphicsTextItem_super_25(self, C.int64_t(extension))
+	r := C.qute_QGraphicsTextItem_super_26(self, C.int64_t(extension))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1330,7 +1364,7 @@ func (s *QGraphicsTextItemSuper) SupportsExtension(extension QGraphicsItemExtens
 // SetExtension calls QGraphicsTextItem::setExtension.
 func (s *QGraphicsTextItemSuper) SetExtension(extension QGraphicsItemExtension, variant *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.SetExtension")
-	C.qute_QGraphicsTextItem_super_26(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsTextItem.Super.SetExtension"))
+	C.qute_QGraphicsTextItem_super_27(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsTextItem.Super.SetExtension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 }
@@ -1338,7 +1372,7 @@ func (s *QGraphicsTextItemSuper) SetExtension(extension QGraphicsItemExtension, 
 // Extension calls QGraphicsTextItem::extension.
 func (s *QGraphicsTextItemSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.Extension")
-	r := C.qute_QGraphicsTextItem_super_27(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsTextItem.Super.Extension"))
+	r := C.qute_QGraphicsTextItem_super_28(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsTextItem.Super.Extension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -1351,7 +1385,7 @@ func (s *QGraphicsTextItemSuper) Event(ev *qtcore.QEvent) bool {
 	if ev != nil {
 		evPtr = rt.UseArg(unsafe.Pointer(ev.AsQEvent()), "QGraphicsTextItem.Super.Event")
 	}
-	r := C.qute_QGraphicsTextItem_super_28(self, evPtr)
+	r := C.qute_QGraphicsTextItem_super_29(self, evPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(ev)
 	return bool(r)
@@ -1368,7 +1402,7 @@ func (s *QGraphicsTextItemSuper) EventFilter(watched *qtcore.QObject, event *qtc
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsTextItem.Super.EventFilter")
 	}
-	r := C.qute_QGraphicsTextItem_super_29(self, watchedPtr, eventPtr)
+	r := C.qute_QGraphicsTextItem_super_30(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1382,7 +1416,7 @@ func (s *QGraphicsTextItemSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QGraphicsTextItem.Super.TimerEvent")
 	}
-	C.qute_QGraphicsTextItem_super_30(self, eventPtr)
+	C.qute_QGraphicsTextItem_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1394,7 +1428,7 @@ func (s *QGraphicsTextItemSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QGraphicsTextItem.Super.ChildEvent")
 	}
-	C.qute_QGraphicsTextItem_super_31(self, eventPtr)
+	C.qute_QGraphicsTextItem_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1406,15 +1440,31 @@ func (s *QGraphicsTextItemSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsTextItem.Super.CustomEvent")
 	}
-	C.qute_QGraphicsTextItem_super_32(self, eventPtr)
+	C.qute_QGraphicsTextItem_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsTextItemSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.ConnectNotify")
+	C.qute_QGraphicsTextItem_super_34(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTextItem.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsTextItemSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.DisconnectNotify")
+	C.qute_QGraphicsTextItem_super_35(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTextItem.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // Advance calls QGraphicsItem::advance.
 func (s *QGraphicsTextItemSuper) Advance(phase int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.Advance")
-	C.qute_QGraphicsTextItem_super_33(self, C.int(phase))
+	C.qute_QGraphicsTextItem_super_36(self, C.int(phase))
 	runtime.KeepAlive(s.this)
 }
 
@@ -1425,7 +1475,7 @@ func (s *QGraphicsTextItemSuper) CollidesWithItem(other *QGraphicsItem, mode qtc
 	if other != nil {
 		otherPtr = rt.UseArg(unsafe.Pointer(other.AsQGraphicsItem()), "QGraphicsTextItem.Super.CollidesWithItem")
 	}
-	r := C.qute_QGraphicsTextItem_super_34(self, otherPtr, C.int64_t(mode))
+	r := C.qute_QGraphicsTextItem_super_37(self, otherPtr, C.int64_t(mode))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(other)
 	return bool(r)
@@ -1434,7 +1484,7 @@ func (s *QGraphicsTextItemSuper) CollidesWithItem(other *QGraphicsItem, mode qtc
 // CollidesWithPath calls QGraphicsItem::collidesWithPath.
 func (s *QGraphicsTextItemSuper) CollidesWithPath(path *qtgui.QPainterPath, mode qtcore.ItemSelectionMode) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.CollidesWithPath")
-	r := C.qute_QGraphicsTextItem_super_35(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsTextItem.Super.CollidesWithPath"), C.int64_t(mode))
+	r := C.qute_QGraphicsTextItem_super_38(self, rt.UseArg(unsafe.Pointer(path), "QGraphicsTextItem.Super.CollidesWithPath"), C.int64_t(mode))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(path)
 	return bool(r)
@@ -1451,7 +1501,7 @@ func (s *QGraphicsTextItemSuper) SceneEventFilter(watched *QGraphicsItem, event 
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QGraphicsTextItem.Super.SceneEventFilter")
 	}
-	r := C.qute_QGraphicsTextItem_super_36(self, watchedPtr, eventPtr)
+	r := C.qute_QGraphicsTextItem_super_39(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1465,7 +1515,7 @@ func (s *QGraphicsTextItemSuper) WheelEvent(event *QGraphicsSceneWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQGraphicsSceneWheelEvent()), "QGraphicsTextItem.Super.WheelEvent")
 	}
-	C.qute_QGraphicsTextItem_super_37(self, eventPtr)
+	C.qute_QGraphicsTextItem_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1473,7 +1523,7 @@ func (s *QGraphicsTextItemSuper) WheelEvent(event *QGraphicsSceneWheelEvent) {
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QGraphicsTextItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsTextItem.Super.ItemChange")
-	r := C.qute_QGraphicsTextItem_super_38(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsTextItem.Super.ItemChange"))
+	r := C.qute_QGraphicsTextItem_super_41(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsTextItem.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -1485,6 +1535,16 @@ func (b *QGraphicsTextItemBase) UpdateMicroFocus() {
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.UpdateMicroFocus")
 	C.qute_QGraphicsTextItem_prot_updateMicroFocus(self)
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsTextItemBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsTextItem // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsTextItem.IsSignalConnected")
+	r := C.qute_QGraphicsTextItem_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsTextItem.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // AddToIndex wraps the protected QGraphicsItem::addToIndex for subclasses.

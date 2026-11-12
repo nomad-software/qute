@@ -367,6 +367,18 @@ var qGraphicsScaleVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsScaleBase is embedded in Go types that subclass QGraphicsScale:
@@ -466,12 +478,38 @@ func (s *QGraphicsScaleSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsScaleSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScale.Super.ConnectNotify")
+	C.qute_QGraphicsScale_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScale.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsScaleSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsScale.Super.DisconnectNotify")
+	C.qute_QGraphicsScale_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScale.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // Update wraps the protected QGraphicsTransform::update for subclasses.
 func (b *QGraphicsScaleBase) Update() {
 	this := b.QGraphicsScale // the receiver the ownership code below acts on
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.Update")
 	C.qute_QGraphicsScale_prot_update(self)
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsScaleBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsScale // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsScale.IsSignalConnected")
+	r := C.qute_QGraphicsScale_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsScale.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsScaleWith constructs a QGraphicsScale whose virtual methods dispatch to v. The

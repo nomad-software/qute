@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QIODevice>
+#include <QMetaMethod>
 #include <QMetaObject>
 #include <QObject>
 #include <QPaintDevice>
@@ -78,6 +79,18 @@ public:
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
 	~qute_QSvgGenerator() override { qute_qtsvg_dead(static_cast<void *>(static_cast<QSvgGenerator *>(this))); }
 	using QPaintDevice::getDecodedMetricF;
+	int metric(QPaintDevice::PaintDeviceMetric a0) const override {
+		if (qute_has(0)) {
+			int64_t c0 = static_cast<int64_t>(a0);
+			void *args[] = {&c0};
+			int r{};
+			if (qute_virtual(qute_id, 0, args, &r)) {
+				return static_cast<int>(r);
+			}
+		}
+		return QSvgGenerator::metric(a0);
+	}
+	int qute_super_0(QPaintDevice::PaintDeviceMetric a0) const { return QSvgGenerator::metric(a0); }
 };
 
 class qute_QSvgRenderer : public QSvgRenderer {
@@ -86,6 +99,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -144,6 +158,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 extern "C" {
@@ -175,6 +211,10 @@ void * qute_QSvgGenerator_new_shim_1(int64_t a0) {
 void qute_QSvgGenerator_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();
 	auto s = static_cast<qute_QSvgGenerator *>(static_cast<QSvgGenerator *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
+}
+int qute_QSvgGenerator_super_0(void *self, int64_t a0) {
+	qute_gui_only();
+	return static_cast<int>(static_cast<qute_QSvgGenerator *>(static_cast<QSvgGenerator *>(self))->qute_super_0(static_cast<QPaintDevice::PaintDeviceMetric>(a0)));
 }
 double qute_QSvgGenerator_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
 	qute_gui_only();
@@ -309,6 +349,18 @@ void qute_QSvgRenderer_super_3(void *self, void * a0) {
 void qute_QSvgRenderer_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QSvgRenderer *>(static_cast<QSvgRenderer *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QSvgRenderer_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSvgRenderer *>(static_cast<QSvgRenderer *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QSvgRenderer_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSvgRenderer *>(static_cast<QSvgRenderer *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QSvgRenderer_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QSvgRenderer *>(static_cast<QSvgRenderer *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QSvgRenderer_cast(void *obj) {
 	qute_gui_only();

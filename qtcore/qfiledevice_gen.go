@@ -394,6 +394,18 @@ var qFileDeviceVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QFileDeviceBase is embedded in Go types that subclass QFileDevice:
@@ -636,6 +648,22 @@ func (s *QFileDeviceSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QFileDeviceSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFileDevice.Super.ConnectNotify")
+	C.qute_QFileDevice_super_24(self, rt.UseArg(unsafe.Pointer(signal), "QFileDevice.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QFileDeviceSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QFileDevice.Super.DisconnectNotify")
+	C.qute_QFileDevice_super_25(self, rt.UseArg(unsafe.Pointer(signal), "QFileDevice.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetOpenMode wraps the protected QIODevice::setOpenMode for subclasses.
 func (b *QFileDeviceBase) SetOpenMode(openMode QIODeviceBaseOpenMode) {
 	this := b.QFileDevice // the receiver the ownership code below acts on
@@ -650,6 +678,16 @@ func (b *QFileDeviceBase) SetErrorString(errorString string) {
 	self := rt.Use(unsafe.Pointer(this), "QFileDevice.SetErrorString")
 	C.qute_QFileDevice_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QFileDeviceBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QFileDevice // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QFileDevice.IsSignalConnected")
+	r := C.qute_QFileDevice_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QFileDevice.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQFileDeviceWith constructs a QFileDevice whose virtual methods dispatch to v. The

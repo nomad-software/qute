@@ -304,6 +304,18 @@ var qGraphicsRotationVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsRotationBase is embedded in Go types that subclass QGraphicsRotation:
@@ -403,12 +415,38 @@ func (s *QGraphicsRotationSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsRotationSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.ConnectNotify")
+	C.qute_QGraphicsRotation_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsRotation.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsRotationSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRotation.Super.DisconnectNotify")
+	C.qute_QGraphicsRotation_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsRotation.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // Update wraps the protected QGraphicsTransform::update for subclasses.
 func (b *QGraphicsRotationBase) Update() {
 	this := b.QGraphicsRotation // the receiver the ownership code below acts on
 	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.Update")
 	C.qute_QGraphicsRotation_prot_update(self)
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsRotationBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsRotation // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsRotation.IsSignalConnected")
+	r := C.qute_QGraphicsRotation_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsRotation.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsRotationWith constructs a QGraphicsRotation whose virtual methods dispatch to v. The

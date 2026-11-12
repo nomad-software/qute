@@ -986,6 +986,20 @@ var qDateTimeEditVTable = []rt.Virtual{
 			r := v.(interface{ MinimumSizeHint() qtcore.QSize }).MinimumSizeHint()
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QDateTimeEdit.InputMethodQuery")
+		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1201,6 +1215,38 @@ var qDateTimeEditVTable = []rt.Virtual{
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
 			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
 			InputMethodEvent(*qtgui.QInputMethodEvent)
@@ -1252,6 +1298,18 @@ var qDateTimeEditVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1440,6 +1498,14 @@ func (s *QDateTimeEditSuper) MinimumSizeHint() qtcore.QSize {
 	return goQSize(r)
 }
 
+// InputMethodQuery calls QAbstractSpinBox::inputMethodQuery.
+func (s *QDateTimeEditSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.InputMethodQuery")
+	r := C.qute_QDateTimeEdit_super_17(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ResizeEvent calls QAbstractSpinBox::resizeEvent.
 func (s *QDateTimeEditSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.ResizeEvent")
@@ -1447,7 +1513,7 @@ func (s *QDateTimeEditSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QDateTimeEdit.Super.ResizeEvent")
 	}
-	C.qute_QDateTimeEdit_super_17(self, eventPtr)
+	C.qute_QDateTimeEdit_super_18(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1459,7 +1525,7 @@ func (s *QDateTimeEditSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QDateTimeEdit.Super.KeyReleaseEvent")
 	}
-	C.qute_QDateTimeEdit_super_18(self, eventPtr)
+	C.qute_QDateTimeEdit_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1471,7 +1537,7 @@ func (s *QDateTimeEditSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QDateTimeEdit.Super.FocusOutEvent")
 	}
-	C.qute_QDateTimeEdit_super_19(self, eventPtr)
+	C.qute_QDateTimeEdit_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1483,7 +1549,7 @@ func (s *QDateTimeEditSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QDateTimeEdit.Super.ContextMenuEvent")
 	}
-	C.qute_QDateTimeEdit_super_20(self, eventPtr)
+	C.qute_QDateTimeEdit_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1495,7 +1561,7 @@ func (s *QDateTimeEditSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDateTimeEdit.Super.ChangeEvent")
 	}
-	C.qute_QDateTimeEdit_super_21(self, eventPtr)
+	C.qute_QDateTimeEdit_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1507,7 +1573,7 @@ func (s *QDateTimeEditSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QDateTimeEdit.Super.CloseEvent")
 	}
-	C.qute_QDateTimeEdit_super_22(self, eventPtr)
+	C.qute_QDateTimeEdit_super_23(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1519,7 +1585,7 @@ func (s *QDateTimeEditSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QDateTimeEdit.Super.HideEvent")
 	}
-	C.qute_QDateTimeEdit_super_23(self, eventPtr)
+	C.qute_QDateTimeEdit_super_24(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1531,7 +1597,7 @@ func (s *QDateTimeEditSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDateTimeEdit.Super.MouseReleaseEvent")
 	}
-	C.qute_QDateTimeEdit_super_24(self, eventPtr)
+	C.qute_QDateTimeEdit_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1543,7 +1609,7 @@ func (s *QDateTimeEditSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDateTimeEdit.Super.MouseMoveEvent")
 	}
-	C.qute_QDateTimeEdit_super_25(self, eventPtr)
+	C.qute_QDateTimeEdit_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1555,7 +1621,7 @@ func (s *QDateTimeEditSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QDateTimeEdit.Super.TimerEvent")
 	}
-	C.qute_QDateTimeEdit_super_26(self, eventPtr)
+	C.qute_QDateTimeEdit_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1567,7 +1633,7 @@ func (s *QDateTimeEditSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QDateTimeEdit.Super.ShowEvent")
 	}
-	C.qute_QDateTimeEdit_super_27(self, eventPtr)
+	C.qute_QDateTimeEdit_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1575,14 +1641,14 @@ func (s *QDateTimeEditSuper) ShowEvent(event *qtgui.QShowEvent) {
 // SetVisible calls QWidget::setVisible.
 func (s *QDateTimeEditSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.SetVisible")
-	C.qute_QDateTimeEdit_super_28(self, C.bool(visible))
+	C.qute_QDateTimeEdit_super_29(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QDateTimeEditSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.HeightForWidth")
-	r := C.qute_QDateTimeEdit_super_29(self, C.int(arg0))
+	r := C.qute_QDateTimeEdit_super_30(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -1590,7 +1656,7 @@ func (s *QDateTimeEditSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QDateTimeEditSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.HasHeightForWidth")
-	r := C.qute_QDateTimeEdit_super_30(self)
+	r := C.qute_QDateTimeEdit_super_31(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1602,7 +1668,7 @@ func (s *QDateTimeEditSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QDateTimeEdit.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QDateTimeEdit_super_31(self, eventPtr)
+	C.qute_QDateTimeEdit_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1614,7 +1680,7 @@ func (s *QDateTimeEditSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QDateTimeEdit.Super.EnterEvent")
 	}
-	C.qute_QDateTimeEdit_super_32(self, eventPtr)
+	C.qute_QDateTimeEdit_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1626,7 +1692,7 @@ func (s *QDateTimeEditSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDateTimeEdit.Super.LeaveEvent")
 	}
-	C.qute_QDateTimeEdit_super_33(self, eventPtr)
+	C.qute_QDateTimeEdit_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1638,7 +1704,7 @@ func (s *QDateTimeEditSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QDateTimeEdit.Super.MoveEvent")
 	}
-	C.qute_QDateTimeEdit_super_34(self, eventPtr)
+	C.qute_QDateTimeEdit_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1650,7 +1716,7 @@ func (s *QDateTimeEditSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QDateTimeEdit.Super.TabletEvent")
 	}
-	C.qute_QDateTimeEdit_super_35(self, eventPtr)
+	C.qute_QDateTimeEdit_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1662,7 +1728,7 @@ func (s *QDateTimeEditSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QDateTimeEdit.Super.ActionEvent")
 	}
-	C.qute_QDateTimeEdit_super_36(self, eventPtr)
+	C.qute_QDateTimeEdit_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1674,7 +1740,7 @@ func (s *QDateTimeEditSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QDateTimeEdit.Super.DragEnterEvent")
 	}
-	C.qute_QDateTimeEdit_super_37(self, eventPtr)
+	C.qute_QDateTimeEdit_super_38(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1686,7 +1752,7 @@ func (s *QDateTimeEditSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QDateTimeEdit.Super.DragMoveEvent")
 	}
-	C.qute_QDateTimeEdit_super_38(self, eventPtr)
+	C.qute_QDateTimeEdit_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1698,7 +1764,7 @@ func (s *QDateTimeEditSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QDateTimeEdit.Super.DragLeaveEvent")
 	}
-	C.qute_QDateTimeEdit_super_39(self, eventPtr)
+	C.qute_QDateTimeEdit_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1710,9 +1776,26 @@ func (s *QDateTimeEditSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QDateTimeEdit.Super.DropEvent")
 	}
-	C.qute_QDateTimeEdit_super_40(self, eventPtr)
+	C.qute_QDateTimeEdit_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QDateTimeEditSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QDateTimeEdit_super_42(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QDateTimeEditSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.Metric")
+	r := C.qute_QDateTimeEdit_super_43(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // InputMethodEvent calls QWidget::inputMethodEvent.
@@ -1722,7 +1805,7 @@ func (s *QDateTimeEditSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMeth
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QDateTimeEdit.Super.InputMethodEvent")
 	}
-	C.qute_QDateTimeEdit_super_41(self, inputMethodEventPtr)
+	C.qute_QDateTimeEdit_super_44(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
 }
@@ -1738,7 +1821,7 @@ func (s *QDateTimeEditSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDateTimeEdit.Super.EventFilter")
 	}
-	r := C.qute_QDateTimeEdit_super_42(self, watchedPtr, eventPtr)
+	r := C.qute_QDateTimeEdit_super_45(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1752,7 +1835,7 @@ func (s *QDateTimeEditSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QDateTimeEdit.Super.ChildEvent")
 	}
-	C.qute_QDateTimeEdit_super_43(self, eventPtr)
+	C.qute_QDateTimeEdit_super_46(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1764,9 +1847,25 @@ func (s *QDateTimeEditSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QDateTimeEdit.Super.CustomEvent")
 	}
-	C.qute_QDateTimeEdit_super_44(self, eventPtr)
+	C.qute_QDateTimeEdit_super_47(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QDateTimeEditSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.ConnectNotify")
+	C.qute_QDateTimeEdit_super_48(self, rt.UseArg(unsafe.Pointer(signal), "QDateTimeEdit.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QDateTimeEditSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDateTimeEdit.Super.DisconnectNotify")
+	C.qute_QDateTimeEdit_super_49(self, rt.UseArg(unsafe.Pointer(signal), "QDateTimeEdit.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // LineEdit wraps the protected QAbstractSpinBox::lineEdit for subclasses.
@@ -1832,6 +1931,16 @@ func (b *QDateTimeEditBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.FocusPreviousChild")
 	r := C.qute_QDateTimeEdit_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QDateTimeEditBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QDateTimeEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDateTimeEdit.IsSignalConnected")
+	r := C.qute_QDateTimeEdit_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QDateTimeEdit.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

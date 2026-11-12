@@ -644,6 +644,20 @@ var qUndoViewVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QUndoView.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QUndoView.InputMethodQuery")
+		}},
 	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
@@ -1003,6 +1017,38 @@ var qUndoViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1020,6 +1066,18 @@ var qUndoViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1410,52 +1468,60 @@ func (s *QUndoViewSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbstr
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QUndoViewSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.InputMethodQuery")
+	r := C.qute_QUndoView_super_39(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // SelectAll calls QAbstractItemView::selectAll.
 func (s *QUndoViewSuper) SelectAll() {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.SelectAll")
-	C.qute_QUndoView_super_39(self)
+	C.qute_QUndoView_super_40(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QUndoViewSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.UpdateEditorData")
-	C.qute_QUndoView_super_40(self)
+	C.qute_QUndoView_super_41(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QUndoViewSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.UpdateEditorGeometries")
-	C.qute_QUndoView_super_41(self)
+	C.qute_QUndoView_super_42(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QUndoViewSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.VerticalScrollbarAction")
-	C.qute_QUndoView_super_42(self, C.int(action))
+	C.qute_QUndoView_super_43(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarAction calls QAbstractItemView::horizontalScrollbarAction.
 func (s *QUndoViewSuper) HorizontalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.HorizontalScrollbarAction")
-	C.qute_QUndoView_super_43(self, C.int(action))
+	C.qute_QUndoView_super_44(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarValueChanged calls QAbstractItemView::verticalScrollbarValueChanged.
 func (s *QUndoViewSuper) VerticalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.VerticalScrollbarValueChanged")
-	C.qute_QUndoView_super_44(self, C.int(value))
+	C.qute_QUndoView_super_45(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QUndoViewSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.HorizontalScrollbarValueChanged")
-	C.qute_QUndoView_super_45(self, C.int(value))
+	C.qute_QUndoView_super_46(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -1466,7 +1532,7 @@ func (s *QUndoViewSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelegate
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QUndoView.Super.CloseEditor")
 	}
-	C.qute_QUndoView_super_46(self, editorPtr, C.int64_t(hint))
+	C.qute_QUndoView_super_47(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1478,7 +1544,7 @@ func (s *QUndoViewSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QUndoView.Super.CommitData")
 	}
-	C.qute_QUndoView_super_47(self, editorPtr)
+	C.qute_QUndoView_super_48(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1490,7 +1556,7 @@ func (s *QUndoViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QUndoView.Super.EditorDestroyed")
 	}
-	C.qute_QUndoView_super_48(self, editorPtr)
+	C.qute_QUndoView_super_49(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1502,7 +1568,7 @@ func (s *QUndoViewSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItemVi
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.Edit")
 	}
-	r := C.qute_QUndoView_super_49(self, rt.UseArg(unsafe.Pointer(index), "QUndoView.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QUndoView_super_50(self, rt.UseArg(unsafe.Pointer(index), "QUndoView.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -1516,7 +1582,7 @@ func (s *QUndoViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qtco
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.SelectionCommand")
 	}
-	r := C.qute_QUndoView_super_50(self, rt.UseArg(unsafe.Pointer(index), "QUndoView.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QUndoView_super_51(self, rt.UseArg(unsafe.Pointer(index), "QUndoView.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -1526,7 +1592,7 @@ func (s *QUndoViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qtco
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QUndoViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.FocusNextPrevChild")
-	r := C.qute_QUndoView_super_51(self, C.bool(next))
+	r := C.qute_QUndoView_super_52(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1538,7 +1604,7 @@ func (s *QUndoViewSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.ViewportEvent")
 	}
-	r := C.qute_QUndoView_super_52(self, eventPtr)
+	r := C.qute_QUndoView_super_53(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1551,7 +1617,7 @@ func (s *QUndoViewSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QUndoView.Super.MousePressEvent")
 	}
-	C.qute_QUndoView_super_53(self, eventPtr)
+	C.qute_QUndoView_super_54(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1563,7 +1629,7 @@ func (s *QUndoViewSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QUndoView.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QUndoView_super_54(self, eventPtr)
+	C.qute_QUndoView_super_55(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1575,7 +1641,7 @@ func (s *QUndoViewSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QUndoView.Super.DragEnterEvent")
 	}
-	C.qute_QUndoView_super_55(self, eventPtr)
+	C.qute_QUndoView_super_56(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1587,7 +1653,7 @@ func (s *QUndoViewSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QUndoView.Super.FocusInEvent")
 	}
-	C.qute_QUndoView_super_56(self, eventPtr)
+	C.qute_QUndoView_super_57(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1599,7 +1665,7 @@ func (s *QUndoViewSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QUndoView.Super.FocusOutEvent")
 	}
-	C.qute_QUndoView_super_57(self, eventPtr)
+	C.qute_QUndoView_super_58(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1611,7 +1677,7 @@ func (s *QUndoViewSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QUndoView.Super.KeyPressEvent")
 	}
-	C.qute_QUndoView_super_58(self, eventPtr)
+	C.qute_QUndoView_super_59(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1623,7 +1689,7 @@ func (s *QUndoViewSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QUndoView.Super.InputMethodEvent")
 	}
-	C.qute_QUndoView_super_59(self, eventPtr)
+	C.qute_QUndoView_super_60(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1639,7 +1705,7 @@ func (s *QUndoViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEven
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.EventFilter")
 	}
-	r := C.qute_QUndoView_super_60(self, objectPtr, eventPtr)
+	r := C.qute_QUndoView_super_61(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -1649,7 +1715,7 @@ func (s *QUndoViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEven
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QUndoViewSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.MinimumSizeHint")
-	r := C.qute_QUndoView_super_61(self)
+	r := C.qute_QUndoView_super_62(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -1657,7 +1723,7 @@ func (s *QUndoViewSuper) MinimumSizeHint() qtcore.QSize {
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QUndoViewSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.SizeHint")
-	r := C.qute_QUndoView_super_62(self)
+	r := C.qute_QUndoView_super_63(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -1669,7 +1735,7 @@ func (s *QUndoViewSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QUndoView.Super.SetupViewport")
 	}
-	C.qute_QUndoView_super_63(self, viewportPtr)
+	C.qute_QUndoView_super_64(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -1681,7 +1747,7 @@ func (s *QUndoViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenuEv
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QUndoView.Super.ContextMenuEvent")
 	}
-	C.qute_QUndoView_super_64(self, contextMenuEventPtr)
+	C.qute_QUndoView_super_65(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -1693,7 +1759,7 @@ func (s *QUndoViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.ChangeEvent")
 	}
-	C.qute_QUndoView_super_65(self, eventPtr)
+	C.qute_QUndoView_super_66(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1701,7 +1767,7 @@ func (s *QUndoViewSuper) ChangeEvent(event *qtcore.QEvent) {
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QUndoViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.InitStyleOption")
-	C.qute_QUndoView_super_66(self, rt.UseArg(unsafe.Pointer(option), "QUndoView.Super.InitStyleOption"))
+	C.qute_QUndoView_super_67(self, rt.UseArg(unsafe.Pointer(option), "QUndoView.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -1709,14 +1775,14 @@ func (s *QUndoViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QUndoViewSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.SetVisible")
-	C.qute_QUndoView_super_67(self, C.bool(visible))
+	C.qute_QUndoView_super_68(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QUndoViewSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.HeightForWidth")
-	r := C.qute_QUndoView_super_68(self, C.int(arg0))
+	r := C.qute_QUndoView_super_69(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -1724,7 +1790,7 @@ func (s *QUndoViewSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QUndoViewSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.HasHeightForWidth")
-	r := C.qute_QUndoView_super_69(self)
+	r := C.qute_QUndoView_super_70(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1736,7 +1802,7 @@ func (s *QUndoViewSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QUndoView.Super.KeyReleaseEvent")
 	}
-	C.qute_QUndoView_super_70(self, eventPtr)
+	C.qute_QUndoView_super_71(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1748,7 +1814,7 @@ func (s *QUndoViewSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QUndoView.Super.EnterEvent")
 	}
-	C.qute_QUndoView_super_71(self, eventPtr)
+	C.qute_QUndoView_super_72(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1760,7 +1826,7 @@ func (s *QUndoViewSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.LeaveEvent")
 	}
-	C.qute_QUndoView_super_72(self, eventPtr)
+	C.qute_QUndoView_super_73(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1772,7 +1838,7 @@ func (s *QUndoViewSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QUndoView.Super.MoveEvent")
 	}
-	C.qute_QUndoView_super_73(self, eventPtr)
+	C.qute_QUndoView_super_74(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1784,7 +1850,7 @@ func (s *QUndoViewSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QUndoView.Super.CloseEvent")
 	}
-	C.qute_QUndoView_super_74(self, eventPtr)
+	C.qute_QUndoView_super_75(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1796,7 +1862,7 @@ func (s *QUndoViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QUndoView.Super.TabletEvent")
 	}
-	C.qute_QUndoView_super_75(self, eventPtr)
+	C.qute_QUndoView_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1808,7 +1874,7 @@ func (s *QUndoViewSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QUndoView.Super.ActionEvent")
 	}
-	C.qute_QUndoView_super_76(self, eventPtr)
+	C.qute_QUndoView_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1820,7 +1886,7 @@ func (s *QUndoViewSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QUndoView.Super.ShowEvent")
 	}
-	C.qute_QUndoView_super_77(self, eventPtr)
+	C.qute_QUndoView_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1832,9 +1898,26 @@ func (s *QUndoViewSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QUndoView.Super.HideEvent")
 	}
-	C.qute_QUndoView_super_78(self, eventPtr)
+	C.qute_QUndoView_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QUndoViewSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QUndoView_super_80(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QUndoViewSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.Metric")
+	r := C.qute_QUndoView_super_81(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1844,7 +1927,7 @@ func (s *QUndoViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QUndoView.Super.ChildEvent")
 	}
-	C.qute_QUndoView_super_79(self, eventPtr)
+	C.qute_QUndoView_super_82(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1856,9 +1939,25 @@ func (s *QUndoViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QUndoView.Super.CustomEvent")
 	}
-	C.qute_QUndoView_super_80(self, eventPtr)
+	C.qute_QUndoView_super_83(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QUndoViewSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.ConnectNotify")
+	C.qute_QUndoView_super_84(self, rt.UseArg(unsafe.Pointer(signal), "QUndoView.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QUndoViewSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoView.Super.DisconnectNotify")
+	C.qute_QUndoView_super_85(self, rt.UseArg(unsafe.Pointer(signal), "QUndoView.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // ResizeContents wraps the protected QListView::resizeContents for subclasses.
@@ -2058,6 +2157,16 @@ func (b *QUndoViewBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QUndoView.FocusPreviousChild")
 	r := C.qute_QUndoView_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QUndoViewBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QUndoView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QUndoView.IsSignalConnected")
+	r := C.qute_QUndoView_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QUndoView.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

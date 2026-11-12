@@ -422,6 +422,18 @@ var qItemDelegateVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QItemDelegateBase is embedded in Go types that subclass QItemDelegate:
@@ -711,6 +723,22 @@ func (s *QItemDelegateSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QItemDelegateSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemDelegate.Super.ConnectNotify")
+	C.qute_QItemDelegate_super_19(self, rt.UseArg(unsafe.Pointer(signal), "QItemDelegate.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QItemDelegateSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemDelegate.Super.DisconnectNotify")
+	C.qute_QItemDelegate_super_20(self, rt.UseArg(unsafe.Pointer(signal), "QItemDelegate.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // DrawBackground wraps the protected QItemDelegate::drawBackground for subclasses.
 func (b *QItemDelegateBase) DrawBackground(painter qtgui.QPainterLike, option *QStyleOptionViewItem, index *qtcore.QModelIndex) {
 	this := b.QItemDelegate // the receiver the ownership code below acts on
@@ -783,6 +811,16 @@ func (b *QItemDelegateBase) TextRectangle(painter qtgui.QPainterLike, rect qtcor
 	runtime.KeepAlive(painter)
 	runtime.KeepAlive(font)
 	return goQRect(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QItemDelegateBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QItemDelegate // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QItemDelegate.IsSignalConnected")
+	r := C.qute_QItemDelegate_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QItemDelegate.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQItemDelegateWith constructs a QItemDelegate whose virtual methods dispatch to v. The

@@ -215,6 +215,18 @@ var qWidgetActionVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QWidgetActionBase is embedded in Go types that subclass QWidgetAction:
@@ -331,6 +343,22 @@ func (s *QWidgetActionSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWidgetActionSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.ConnectNotify")
+	C.qute_QWidgetAction_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QWidgetAction.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWidgetActionSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWidgetAction.Super.DisconnectNotify")
+	C.qute_QWidgetAction_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QWidgetAction.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreatedWidgets wraps the protected QWidgetAction::createdWidgets for subclasses.
 func (b *QWidgetActionBase) CreatedWidgets() []*QWidget {
 	this := b.QWidgetAction // the receiver the ownership code below acts on
@@ -340,6 +368,16 @@ func (b *QWidgetActionBase) CreatedWidgets() []*QWidget {
 	return quteList(r, func(e unsafe.Pointer) *QWidget {
 		return rt.View[QWidget](rt.WrapClass(e, "QWidget", rt.KeepOrBorrow), e)
 	})
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWidgetActionBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWidgetAction // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWidgetAction.IsSignalConnected")
+	r := C.qute_QWidgetAction_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWidgetAction.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQWidgetActionWith constructs a QWidgetAction whose virtual methods dispatch to v. The

@@ -1230,6 +1230,18 @@ var qStandardItemModelVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QStandardItemModelBase is embedded in Go types that subclass QStandardItemModel:
@@ -1660,6 +1672,22 @@ func (s *QStandardItemModelSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QStandardItemModelSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.ConnectNotify")
+	C.qute_QStandardItemModel_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QStandardItemModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QStandardItemModelSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStandardItemModel.Super.DisconnectNotify")
+	C.qute_QStandardItemModel_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QStandardItemModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QStandardItemModelBase) CreateIndex(row int, column int) *qtcore.QModelIndex {
 	this := b.QStandardItemModel // the receiver the ownership code below acts on
@@ -1861,6 +1889,16 @@ func (b *QStandardItemModelBase) PersistentIndexList() []*qtcore.QModelIndex {
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
 		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
 	})
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QStandardItemModelBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QStandardItemModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStandardItemModel.IsSignalConnected")
+	r := C.qute_QStandardItemModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QStandardItemModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQStandardItemModelWith constructs a QStandardItemModel whose virtual methods dispatch to v. The

@@ -16,13 +16,13 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12222 |
+| Bound constructors, methods and functions | 12232 |
 | of which Full forms (every argument, defaults included) | 776 |
 | Plain-object results that depend on their receiver | 100 |
-| Skipped on purpose (with reasons below) | 841 |
+| Skipped on purpose (with reasons below) | 968 |
 | Classes Go can subclass | 237 |
 | Classes Go cannot subclass (with reasons below) | 31 |
-| Virtuals Go cannot override (with reasons below) | 21 |
+| Virtuals Go cannot override (with reasons below) | 40 |
 | Operators, conversions and member templates not in the IR | 622 |
 | Default ownership rules to review | 0 |
 | Numbered overload names | 0 |
@@ -50,7 +50,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (841)
+## Skipped on purpose (968)
 
 
 ### QAbstractAnimation
@@ -78,8 +78,30 @@ These bind once the generator learns the type. Counts by type:
 - `QWidget * QApplication::widgetAt(int x, int y)`: skipped by overlay (use the QPoint overload)
 - `QWidget * QApplication::topLevelAt(int x, int y)`: skipped by overlay (use the QPoint overload)
 
+### QAudioBuffer
+
+- `void QAudioBuffer::swap(QAudioBuffer & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QAudioBuffer::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+
+### QAudioDevice
+
+- `void QAudioDevice::swap(QAudioDevice & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QBasicTimer
+
+- `void QBasicTimer::swap(QBasicTimer & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QBitArray
+
+- `void QBitArray::swap(QBitArray & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QBitArray::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `bool QBitArray::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QBitArray::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `const DataPtr & QBitArray::data_ptr() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+
 ### QBitmap
 
+- `void QBitmap::swap(QBitmap & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QBitmap QBitmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QBitmap::QBitmap(int w, int h)`: on purpose: plain-number twin of the struct overload
 
@@ -87,7 +109,10 @@ These bind once the generator learns the type. Counts by type:
 
 - `QBrush::QBrush(Qt::GlobalColor color, Qt::BrushStyle bs = …)`: skipped by overlay (use NewQBrushWithColor)
 - `QBrush::QBrush(Qt::GlobalColor color, const QPixmap & pixmap)`: skipped by overlay (use NewQBrushWithColorPixmap)
+- `void QBrush::swap(QBrush & other)`: on purpose: C++ swap; swap the Go variables instead
 - `void QBrush::setColor(Qt::GlobalColor color)`: skipped by overlay (use SetColor)
+- `bool QBrush::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QBrush::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QBuffer
 
@@ -101,9 +126,14 @@ These bind once the generator learns the type. Counts by type:
 
 - `QMap<QDate, QTextCharFormat> QCalendarWidget::dateTextFormat() const`: return: on purpose: a map keyed by a value class; use the single-key getter
 
+### QCapturableWindow
+
+- `void QCapturableWindow::swap(QCapturableWindow & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QCborArray
 
 - `QCborArray::QCborArray(std::initializer_list<QCborValue> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `void QCborArray::swap(QCborArray & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QCborValue QCborArray::first() const`: skipped by overlay (returns a reference into the array; use At(0))
 - `QCborValue QCborArray::last() const`: skipped by overlay (returns a reference into the array; use At(Size()-1))
 - `QCborValueRef QCborArray::first()`: skipped by overlay (returns a reference into the array; use At(0))
@@ -130,6 +160,7 @@ These bind once the generator learns the type. Counts by type:
 ### QCborMap
 
 - `QCborMap::QCborMap(std::initializer_list<value_type> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `void QCborMap::swap(QCborMap & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QCborValue QCborMap::value(QLatin1StringView key) const`: on purpose: use the string overload
 - `QCborValue QCborMap::take(QLatin1StringView key)`: on purpose: use the string overload
 - `void QCborMap::remove(QLatin1StringView key)`: on purpose: use the string overload
@@ -216,6 +247,7 @@ These bind once the generator learns the type. Counts by type:
 - `QCborValue::QCborValue(QCborTag tag, const QCborValue & taggedValue = …)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
 - `QCborValue::QCborValue(QCborKnownTags t_, const QCborValue & tv = …)`: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
 - `QCborValue::QCborValue(const void *)`: deprecated or variadic
+- `void QCborValue::swap(QCborValue & other)`: on purpose: C++ swap; swap the Go variables instead
 - `bool QCborValue::isSimpleType(QCborSimpleType st) const`: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
 - `QCborSimpleType QCborValue::toSimpleType(QCborSimpleType defaultValue = …) const`: return: on purpose: a global enum the IR does not record; use the typed QCborValue constructors
 - `QCborTag QCborValue::tag(QCborTag defaultValue = …) const`: return: on purpose: a global enum the IR does not record; tagged CBOR values are not bound
@@ -235,10 +267,20 @@ These bind once the generator learns the type. Counts by type:
 
 - `void QColorDialog::open(QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
 
+### QColorSpace
+
+- `void QColorSpace::swap(QColorSpace & colorSpace)`: on purpose: C++ swap; swap the Go variables instead
+- `void QColorSpace::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+
 ### QColorTransform
 
+- `void QColorTransform::swap(QColorTransform & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QRgbaFloat16 QColorTransform::map(QRgbaFloat16 rgbafp16) const`: on purpose: a template class; use QColor or QRgba64
 - `QRgbaFloat32 QColorTransform::map(QRgbaFloat32 rgbafp32) const`: on purpose: a template class; use QColor or QRgba64
+
+### QCommandLineOption
+
+- `void QCommandLineOption::swap(QCommandLineOption & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QConicalGradient
 
@@ -255,6 +297,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QCursor
 
+- `void QCursor::swap(QCursor & other)`: on purpose: C++ swap; swap the Go variables instead
 - `void QCursor::setPos(int x, int y)`: skipped by overlay (use QCursorSetPos(point))
 - `void QCursor::setPos(QScreen * screen, int x, int y)`: skipped by overlay (use QCursorSetPosOn)
 
@@ -277,6 +320,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QDateTime
 
+- `void QDateTime::swap(QDateTime & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QString QDateTime::toString(QStringView format) const`: skipped by overlay (use the QString overload)
 - `QDateTime QDateTime::fromString(QStringView string, Qt::DateFormat format = …)`: skipped by overlay (use the QString overload)
 - `QDateTime QDateTime::fromString(QStringView string, QStringView format, QCalendar cal)`: skipped by overlay (use the QString overload)
@@ -287,10 +331,18 @@ These bind once the generator learns the type. Counts by type:
 - `QDateTime QDateTime::fromString(const QString & string, QStringView format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QDateTime QDateTime::fromString(const QString & string, const QString & format, int baseYear, QCalendar cal)`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QDeadlineTimer
+
+- `void QDeadlineTimer::swap(QDeadlineTimer & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QDesktopServices
 
 - `void QDesktopServices::setUrlHandler(const QString & scheme, QObject * receiver, const char * method)`: skipped by overlay (calls a Qt slot by name, which a Go object does not have (cgo builds run no moc))
 - `void QDesktopServices::unsetUrlHandler(const QString & scheme)`: skipped by overlay (only undoes SetUrlHandler, which is not bound)
+
+### QDir
+
+- `void QDir::swap(QDir & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QDragEnterEvent
 
@@ -302,12 +354,18 @@ These bind once the generator learns the type. Counts by type:
 
 ### QEasingCurve
 
+- `void QEasingCurve::swap(QEasingCurve & other)`: on purpose: C++ swap; swap the Go variables instead
 - `void QEasingCurve::setCustomType(EasingFunction func)`: on purpose: C function pointer; a Go closure cannot become one
 - `EasingFunction QEasingCurve::customType() const`: return: on purpose: C function pointer; a Go closure cannot become one
 
 ### QEventLoopLocker
 
 - `QEventLoopLocker::QEventLoopLocker(QThread * thread)`: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
+- `void QEventLoopLocker::swap(QEventLoopLocker & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QEventPoint
+
+- `void QEventPoint::swap(QEventPoint & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QFile
 
@@ -324,6 +382,11 @@ These bind once the generator learns the type. Counts by type:
 ### QFileInfo
 
 - `QFileInfo::QFileInfo(QFileInfoPrivate * d)`: on purpose: private API
+- `void QFileInfo::swap(QFileInfo & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QFont
+
+- `void QFont::swap(QFont & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QFontDatabase
 
@@ -335,14 +398,21 @@ These bind once the generator learns the type. Counts by type:
 
 ### QFontInfo
 
+- `void QFontInfo::swap(QFontInfo & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QList<QFontVariableAxis> QFontInfo::variableAxes() const`: return: on purpose: low-level font internals
 
 ### QFontMetrics
 
+- `void QFontMetrics::swap(QFontMetrics & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QRect QFontMetrics::boundingRect(int x, int y, int w, int h, int flags, const QString & text, int tabstops = …, int * tabarray = …) const`: skipped by overlay (use BoundingRectIn)
+
+### QFontMetricsF
+
+- `void QFontMetricsF::swap(QFontMetricsF & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QGlyphRun
 
+- `void QGlyphRun::swap(QGlyphRun & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QRawFont QGlyphRun::rawFont() const`: return: on purpose: low-level font internals
 - `void QGlyphRun::setRawFont(const QRawFont & rawFont)`: on purpose: low-level font internals
 - `void QGlyphRun::setRawData(const quint32 * glyphIndexArray, const QPointF * glyphPositionArray, int size)`: skipped by overlay (on purpose: low-level font internals)
@@ -447,7 +517,6 @@ These bind once the generator learns the type. Counts by type:
 ### QGuiApplication
 
 - `QPlatformNativeInterface * QGuiApplication::platformNativeInterface()`: return: on purpose: private platform API
-- `QFunctionPointer QGuiApplication::platformFunction(const QByteArray & function)`: return: on purpose: C function pointer; a Go closure cannot become one
 
 ### QHBoxLayout
 
@@ -465,14 +534,21 @@ These bind once the generator learns the type. Counts by type:
 
 ### QIcon
 
+- `void QIcon::swap(QIcon & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QPixmap QIcon::pixmap(int w, int h, Mode mode = …, State state = …) const`: skipped by overlay (use Pixmap(size))
 - `void QIcon::paint(QPainter * painter, int x, int y, int w, int h, Qt::Alignment alignment = …, Mode mode = …, State state = …) const`: skipped by overlay (use Paint(painter, rect))
+- `bool QIcon::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `void QIcon::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QIcon::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QImage
 
 - `QImage::QImage(uchar * data, int width, int height, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
 - `QImage::QImage(uchar * data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = …, void * cleanupInfo = …)`: skipped by overlay (on purpose: use NewQImageFromBytes (copies) or the const uchar * overload (NewQImageOverMemory*), which never writes into memory the image does not own)
 - `QImage::QImage(const char *const[] xpm)`: on purpose: a C array; use the string or byte-array form
+- `void QImage::swap(QImage & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QImage::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `bool QImage::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `QImage QImage::copy(int x, int y, int w, int h) const`: skipped by overlay (use Copy(rect))
 - `bool QImage::valid(const QPoint & pt) const`: skipped by overlay (use Valid(x, y))
 - `int QImage::pixelIndex(const QPoint & pt) const`: skipped by overlay (use PixelIndex(x, y))
@@ -485,6 +561,7 @@ These bind once the generator learns the type. Counts by type:
 - `QImage QImage::mirrored(bool horizontally = …, bool vertically = …) const`: deprecated or variadic
 - `QImage QImage::mirrored(bool horizontally = …, bool vertically = …)`: deprecated or variadic
 - `void QImage::mirror(bool horizontally = …, bool vertically = …)`: deprecated or variadic
+- `DataPtr & QImage::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `QImage::QImage(int width, int height, Format format)`: on purpose: plain-number twin of the struct overload
 - `QImage QImage::convertToFormat(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QImage QImage::convertedTo(Format f, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
@@ -521,9 +598,14 @@ These bind once the generator learns the type. Counts by type:
 - `QBindable<QAbstractItemModel *> QItemSelectionModel::bindableModel()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `QAbstractItemModel * QItemSelectionModel::model()`: on purpose: same Go signature as another overload (often a QStringView twin)
 
+### QItemSelectionRange
+
+- `void QItemSelectionRange::swap(QItemSelectionRange & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QJsonArray
 
 - `QJsonArray::QJsonArray(std::initializer_list<QJsonValue> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `void QJsonArray::swap(QJsonArray & other)`: on purpose: C++ swap; swap the Go variables instead
 - `iterator QJsonArray::begin()`: on purpose: iterator; use the method that returns a list
 - `const_iterator QJsonArray::begin() const`: on purpose: iterator; use the method that returns a list
 - `const_iterator QJsonArray::constBegin() const`: on purpose: iterator; use the method that returns a list
@@ -539,10 +621,12 @@ These bind once the generator learns the type. Counts by type:
 
 - `QJsonDocument::QJsonDocument(QJsonObject && object)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QJsonDocument::QJsonDocument(QJsonArray && array)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QJsonDocument::swap(QJsonDocument & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QJsonObject
 
 - `QJsonObject::QJsonObject(std::initializer_list<std::pair<QString, QJsonValue>> args)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `void QJsonObject::swap(QJsonObject & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QJsonValue QJsonObject::value(QLatin1StringView key) const`: on purpose: use the string overload
 - `void QJsonObject::remove(QLatin1StringView key)`: on purpose: use the string overload
 - `QJsonValue QJsonObject::take(QLatin1StringView key)`: on purpose: use the string overload
@@ -588,7 +672,14 @@ These bind once the generator learns the type. Counts by type:
 - `QJsonValue::QJsonValue(QLatin1StringView s)`: on purpose: use the string overload
 - `QJsonValue::QJsonValue(QJsonArray && a)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QJsonValue::QJsonValue(QJsonObject && o)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `void QJsonValue::swap(QJsonValue & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QJsonValue::QJsonValue(const char * s)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QKeySequence
+
+- `void QKeySequence::swap(QKeySequence & other)`: on purpose: C++ swap; swap the Go variables instead
+- `bool QKeySequence::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QKeySequence::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QLabel
 
@@ -624,6 +715,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QLocale
 
+- `void QLocale::swap(QLocale & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QLocale::QLocale(QStringView name)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `short QLocale::toShort(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `ushort QLocale::toUShort(QStringView s, bool * ok = …) const`: on purpose: same Go signature as another overload (often a QStringView twin)
@@ -659,10 +751,19 @@ These bind once the generator learns the type. Counts by type:
 
 - `QPlatformMediaCaptureSession * QMediaCaptureSession::platformSession() const`: return: on purpose: private platform API
 
+### QMediaFormat
+
+- `void QMediaFormat::swap(QMediaFormat & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QMediaRecorder
 
 - `QPlatformMediaRecorder * QMediaRecorder::platformRecoder() const`: return: on purpose: private platform API
 - `void QMediaRecorder::setVideoResolution(int width, int height)`: on purpose: plain-number twin of the struct overload
+
+### QMediaTimeRange
+
+- `void QMediaTimeRange::swap(QMediaTimeRange & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QMediaTimeRange::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QMenu
 
@@ -700,6 +801,8 @@ These bind once the generator learns the type. Counts by type:
 ### QMetaObject
 
 - `int QMetaObject::indexOfSlot(const char * slot) const`: string-based SLOT() connection; use the On* signal methods instead
+- `Connection QMetaObject::connect(const QObject * sender, int signal_index, const QObject * receiver, int method_index, int type = …, int * types = …)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QMetaObject::disconnect(const QObject * sender, int signal_index, const QObject * receiver, int method_index)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
 - `void QMetaObject::activate(QObject * sender, int signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
 - `void QMetaObject::activate(QObject * sender, const QMetaObject *, int local_signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
 - `void QMetaObject::activate(QObject * sender, int signal_offset, int local_signal_index, void ** argv)`: skipped by overlay (on purpose: moc internals (raw signal argument arrays))
@@ -728,6 +831,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QMimeType
 
+- `void QMimeType::swap(QMimeType & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QMimeType::QMimeType(const QMimeTypePrivate & dd)`: on purpose: private API
 
 ### QModelIndex
@@ -741,22 +845,43 @@ These bind once the generator learns the type. Counts by type:
 
 ### QObject
 
+- `QBindable<QString> QObject::bindableObjectName()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `QThread * QObject::thread() const`: return: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
 - `bool QObject::moveToThread(QThread * thread, Qt::Disambiguated_t = …)`: on purpose: threads are not supported yet: the runtime is GUI-thread-only (roadmap)
+- `QMetaObject::Connection QObject::connect(const QObject * sender, const char * signal, const QObject * receiver, const char * member, Qt::ConnectionType = …)`: string-based SLOT() connection; use the On* signal methods instead
+- `QMetaObject::Connection QObject::connect(const QObject * sender, const QMetaMethod & signal, const QObject * receiver, const QMetaMethod & method, Qt::ConnectionType type = …)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `QMetaObject::Connection QObject::connect(const QObject * sender, const char * signal, const char * member, Qt::ConnectionType type = …) const`: string-based SLOT() connection; use the On* signal methods instead
+- `bool QObject::disconnect(const QObject * sender, const char * signal, const QObject * receiver, const char * member)`: string-based SLOT() connection; use the On* signal methods instead
+- `bool QObject::disconnect(const QObject * sender, const QMetaMethod & signal, const QObject * receiver, const QMetaMethod & member)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QObject::disconnect(const char * signal = …, const QObject * receiver = …, const char * member = …) const`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QObject::disconnect(const QObject * receiver, const char * member = …) const`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QObject::disconnect(const QMetaObject::Connection &)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QObject::disconnect(QMetaObject::Connection &)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
+- `bool QObject::disconnect(QMetaObject::Connection && conn)`: skipped by overlay (on purpose: string- and index-based connections; use the On* signal methods, which return a Connection)
 - `bool QObject::setProperty(const char * name, QVariant && value)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QBindingStorage * QObject::bindingStorage()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `const QBindingStorage * QObject::bindingStorage() const`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
+- `QObject * QObject::sender() const`: skipped by overlay (on purpose: qute connects Go handlers with the sender as context, so sender() names nothing a handler's closure does not already have)
+- `int QObject::senderSignalIndex() const`: skipped by overlay (on purpose: qute connects Go handlers with the sender as context, so there is no sending signal to report)
+- `int QObject::receivers(const char * signal) const`: skipped by overlay (on purpose: takes a SIGNAL() string; use IsSignalConnected with a QMetaMethod)
 
 ### QOffscreenSurface
 
 - `QPlatformOffscreenSurface * QOffscreenSurface::handle() const`: return: on purpose: private platform API
 
+### QOpenGLBuffer
+
+- `void QOpenGLBuffer::swap(QOpenGLBuffer & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QOpenGLContext
 
-- `QFunctionPointer QOpenGLContext::getProcAddress(const QByteArray & procName) const`: return: on purpose: C function pointer; a Go closure cannot become one
-- `QFunctionPointer QOpenGLContext::getProcAddress(const char * procName) const`: return: on purpose: C function pointer; a Go closure cannot become one
+- `QFunctionPointer QOpenGLContext::getProcAddress(const QByteArray & procName) const`: skipped by overlay (use the string overload)
 - `QPlatformOpenGLContext * QOpenGLContext::handle() const`: return: on purpose: private platform API
 - `QPlatformOpenGLContext * QOpenGLContext::shareHandle() const`: return: on purpose: private platform API
+
+### QOpenGLDebugMessage
+
+- `void QOpenGLDebugMessage::swap(QOpenGLDebugMessage & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QOpenGLExtraFunctions
 
@@ -772,6 +897,10 @@ These bind once the generator learns the type. Counts by type:
 ### QOpenGLPaintDevice
 
 - `QOpenGLPaintDevice::QOpenGLPaintDevice(int width, int height)`: on purpose: plain-number twin of the struct overload
+
+### QOpenGLPixelTransferOptions
+
+- `void QOpenGLPixelTransferOptions::swap(QOpenGLPixelTransferOptions & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QOpenGLShader
 
@@ -890,6 +1019,11 @@ These bind once the generator learns the type. Counts by type:
 - `QPageRanges QPagedPaintDevice::pageRanges() const`: return: on purpose: printing page setup is not bound yet
 - `QPagedPaintDevicePrivate * QPagedPaintDevice::dd()`: return: on purpose: private API
 
+### QPaintDevice
+
+- `int QPaintDevice::devType() const`: skipped by overlay (on purpose: paint-device internals (the QInternal device type))
+- `QPaintEngine * QPaintDevice::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+
 ### QPainter
 
 - `void QPainter::setPen(QPen && pen)`: on purpose: C++ move overload; the copying overload does the same in Go
@@ -947,12 +1081,14 @@ These bind once the generator learns the type. Counts by type:
 - `void QPainter::fillRect(const QRectF & r, Qt::BrushStyle style)`: skipped by overlay (use FillRectBrushF)
 - `void QPainter::fillRect(int x, int y, int w, int h, QGradient::Preset preset)`: skipped by overlay (use FillRectPreset)
 - `void QPainter::eraseRect(int x, int y, int w, int h)`: skipped by overlay (use EraseRect)
+- `QPaintEngine * QPainter::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
 - `void QPainter::drawPicture(int x, int y, const QPicture & picture)`: on purpose: plain-number twin of the struct overload
 - `void QPainter::drawStaticText(int left, int top, const QStaticText & staticText)`: on purpose: plain-number twin of the struct overload
 - `void QPainter::drawTextItem(int x, int y, const QTextItem & ti)`: on purpose: plain-number twin of the struct overload
 
 ### QPainterPath
 
+- `void QPainterPath::swap(QPainterPath & other)`: on purpose: C++ swap; swap the Go variables instead
 - `void QPainterPath::moveTo(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
 - `void QPainterPath::lineTo(qreal x, qreal y)`: skipped by overlay (use the QPointF overload)
 - `void QPainterPath::arcMoveTo(qreal x, qreal y, qreal w, qreal h, qreal angle)`: skipped by overlay (use the QRectF overload)
@@ -966,9 +1102,14 @@ These bind once the generator learns the type. Counts by type:
 - `void QPainterPath::translate(qreal dx, qreal dy)`: skipped by overlay (use the QPointF overload)
 - `QPainterPath QPainterPath::translated(qreal dx, qreal dy) const`: skipped by overlay (use the QPointF overload)
 
+### QPainterStateGuard
+
+- `void QPainterStateGuard::swap(QPainterStateGuard & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QPalette
 
 - `QPalette::QPalette(Qt::GlobalColor button)`: skipped by overlay (use NewQPaletteWithButton)
+- `void QPalette::swap(QPalette & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QPartialOrdering
 
@@ -985,31 +1126,61 @@ These bind once the generator learns the type. Counts by type:
 - `QPdfOutputIntent QPdfWriter::outputIntent() const`: return: on purpose: printing page setup is not bound yet
 - `void QPdfWriter::setOutputIntent(const QPdfOutputIntent & intent)`: on purpose: printing page setup is not bound yet
 
+### QPen
+
+- `void QPen::swap(QPen & other)`: on purpose: C++ swap; swap the Go variables instead
+- `bool QPen::isDetached()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QPen::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+
 ### QPersistentModelIndex
 
+- `void QPersistentModelIndex::swap(QPersistentModelIndex & other)`: on purpose: C++ swap; swap the Go variables instead
 - `void QPersistentModelIndex::multiData(QModelRoleDataSpan roleDataSpan) const`: on purpose: a batching optimisation of data(); use Data
+
+### QPicture
+
+- `void QPicture::swap(QPicture & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QPicture::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `bool QPicture::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QPicture::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QPixmap
 
 - `QPixmap::QPixmap(QPlatformPixmap * data)`: on purpose: private platform API
 - `QPixmap::QPixmap(const QSize &)`: skipped by overlay (use NewQPixmapWithW(w, h))
 - `QPixmap::QPixmap(const char *const[] xpm)`: on purpose: a C array; use the string or byte-array form
+- `void QPixmap::swap(QPixmap & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QPixmap QPixmap::scaled(const QSize & s, Qt::AspectRatioMode aspectMode = …, Qt::TransformationMode mode = …) const`: skipped by overlay (use Scaled(w, h))
 - `QPixmap QPixmap::fromImage(QImage && image, Qt::ImageConversionFlags flags = …)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QPixmap QPixmap::copy(int x, int y, int width, int height) const`: skipped by overlay (use Copy(rect))
 - `void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height, QRegion * exposed = …)`: skipped by overlay (out parameter)
+- `bool QPixmap::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `void QPixmap::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `QPlatformPixmap * QPixmap::handle() const`: return: on purpose: private platform API
+- `DataPtr & QPixmap::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `bool QPixmap::loadFromData(const QByteArray & data, const char * format = …, Qt::ImageConversionFlags flags = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QPixmapCacheKey
+
+- `void QPixmapCacheKey::swap(Key & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QPlainTextEdit
 
 - `QAbstractTextDocumentLayout::PaintContext QPlainTextEdit::getPaintContext() const`: skipped by overlay (on purpose: QAbstractTextDocumentLayout, which uses the paint context, is not bound)
+
+### QPlaybackOptions
+
+- `void QPlaybackOptions::swap(QPlaybackOptions & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QProcess
 
 - `std::function<void ()> QProcess::childProcessModifier() const`: return: on purpose: a C++ function cannot be turned back into a Go func
 - `void QProcess::setChildProcessModifier(const std::function<void ()> & modifier)`: skipped by overlay (on purpose: the modifier runs in the forked child, where the Go runtime cannot run)
 - `void QProcess::failChildProcessModifier(const char * description, int error = …)`: skipped by overlay (on purpose: only valid inside a child process modifier, which is not bound)
+
+### QProcessEnvironment
+
+- `void QProcessEnvironment::swap(QProcessEnvironment & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QProcessUnixProcessParameters
 
@@ -1043,6 +1214,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QRegion
 
+- `void QRegion::swap(QRegion & other)`: on purpose: C++ swap; swap the Go variables instead
 - `const_iterator QRegion::begin() const`: on purpose: iterator; use the method that returns a list
 - `const_iterator QRegion::cbegin() const`: on purpose: iterator; use the method that returns a list
 - `const_iterator QRegion::end() const`: on purpose: iterator; use the method that returns a list
@@ -1058,9 +1230,18 @@ These bind once the generator learns the type. Counts by type:
 
 ### QRegularExpression
 
+- `void QRegularExpression::swap(QRegularExpression & other)`: on purpose: C++ swap; swap the Go variables instead
 - `QString QRegularExpression::escape(QStringView str)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QRegularExpression::wildcardToRegularExpression(QStringView str, WildcardConversionOptions options = …)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QString QRegularExpression::anchoredPattern(QStringView expression)`: on purpose: same Go signature as another overload (often a QStringView twin)
+
+### QRegularExpressionMatch
+
+- `void QRegularExpressionMatch::swap(QRegularExpressionMatch & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QRegularExpressionMatchIterator
+
+- `void QRegularExpressionMatchIterator::swap(QRegularExpressionMatchIterator & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QScreen
 
@@ -1108,6 +1289,14 @@ These bind once the generator learns the type. Counts by type:
 
 - `QBindable<int> QStandardItemModel::bindableSortRole()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
+### QStaticText
+
+- `void QStaticText::swap(QStaticText & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QStorageInfo
+
+- `void QStorageInfo::swap(QStorageInfo & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QStyleHints
 
 - `const QAccessibilityHints * QStyleHints::accessibility() const`: return: on purpose: the accessibility API is not bound
@@ -1119,6 +1308,10 @@ These bind once the generator learns the type. Counts by type:
 ### QTableWidget
 
 - `QTableWidgetItem * QTableWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+
+### QTemporaryDir
+
+- `void QTemporaryDir::swap(QTemporaryDir & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QTemporaryFile
 
@@ -1143,6 +1336,7 @@ These bind once the generator learns the type. Counts by type:
 
 - `QTextCursor::QTextCursor(QTextDocumentPrivate * p, int pos)`: on purpose: private API
 - `QTextCursor::QTextCursor(QTextCursorPrivate * d)`: on purpose: private API
+- `void QTextCursor::swap(QTextCursor & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QTextDocument
 
@@ -1151,6 +1345,10 @@ These bind once the generator learns the type. Counts by type:
 - `QTextDocument::ResourceProvider QTextDocument::resourceProvider() const`: return: on purpose: a C++ function cannot be turned back into a Go func
 - `QTextDocument::ResourceProvider QTextDocument::defaultResourceProvider()`: return: on purpose: a C++ function cannot be turned back into a Go func
 - `void QTextDocument::appendUndoItem(QAbstractUndoItem *)`: on purpose: custom undo items need C++ subclassing
+
+### QTextFormat
+
+- `void QTextFormat::swap(QTextFormat & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QTextFrame
 
@@ -1180,6 +1378,10 @@ These bind once the generator learns the type. Counts by type:
 - `QBindable<QEasingCurve> QTimeLine::bindableEasingCurve()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 - `QBindable<int> QTimeLine::bindableCurrentTime()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
 
+### QTimeZone
+
+- `void QTimeZone::swap(QTimeZone & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QTimer
 
 - `QBindable<bool> QTimer::bindableActive()`: return: on purpose: Qt's property-binding system; use the getters, setters and change signals
@@ -1206,9 +1408,19 @@ These bind once the generator learns the type. Counts by type:
 
 - `QTreeWidgetItem * QTreeWidget::itemAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
 
+### QUrl
+
+- `void QUrl::swap(QUrl & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QUrl::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `bool QUrl::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QUrl::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+
 ### QUrlQuery
 
 - `QUrlQuery::QUrlQuery(std::initializer_list<std::pair<QString, QString>> list)`: on purpose: std::initializer_list cannot be built at run time; use the list overload
+- `void QUrlQuery::swap(QUrlQuery & other)`: on purpose: C++ swap; swap the Go variables instead
+- `bool QUrlQuery::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `DataPtr & QUrlQuery::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 
 ### QUuid
 
@@ -1240,7 +1452,12 @@ These bind once the generator learns the type. Counts by type:
 - `QVariant::QVariant(QJsonDocument && jsonDocument)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QVariant::QVariant(QPersistentModelIndex && modelIndex)`: on purpose: C++ move overload; the copying overload does the same in Go
 - `QVariant::QVariant(QLatin1StringView string)`: on purpose: use the string overload
+- `void QVariant::swap(QVariant & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QVariant::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `bool QVariant::isDetached() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `void QVariant::setValue(QVariant && avalue)`: on purpose: C++ move overload; the copying overload does the same in Go
+- `DataPtr & QVariant::data_ptr()`: on purpose: implicit-sharing internals; copies are already cheap and independent
+- `const DataPtr & QVariant::data_ptr() const`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `QVariant::QVariant(const QMap<QString, QVariant> & map)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `QVariant::QVariant(const char * str)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `const void * QVariant::data() const`: on purpose: same Go signature as another overload (often a QStringView twin)
@@ -1272,10 +1489,13 @@ These bind once the generator learns the type. Counts by type:
 ### QVideoFrame
 
 - `QVideoFrame::QVideoFrame(std::unique_ptr<QAbstractVideoBuffer> videoBuffer)`: skipped by overlay (on purpose: custom video buffers need C++ subclassing)
+- `void QVideoFrame::swap(QVideoFrame & other)`: on purpose: C++ swap; swap the Go variables instead
 - `const uchar * QVideoFrame::bits(int plane) const`: on purpose: same Go signature as another overload (often a QStringView twin)
 
 ### QVideoFrameFormat
 
+- `void QVideoFrameFormat::swap(QVideoFrameFormat & other)`: on purpose: C++ swap; swap the Go variables instead
+- `void QVideoFrameFormat::detach()`: on purpose: implicit-sharing internals; copies are already cheap and independent
 - `void QVideoFrameFormat::setFrameSize(int width, int height)`: on purpose: plain-number twin of the struct overload
 
 ### QVideoSink
@@ -1310,6 +1530,26 @@ These bind once the generator learns the type. Counts by type:
 - `void QWebEngineCookieStore::cookieRemoved(const QNetworkCookie & cookie)`: signal: on purpose: QtNetwork is not bound
 - `void QWebEngineCookieStore::cookieRemoved(const QNetworkCookie & cookie)`: on purpose: QtNetwork is not bound
 
+### QWebEngineDesktopMediaRequest
+
+- `void QWebEngineDesktopMediaRequest::swap(QWebEngineDesktopMediaRequest & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QWebEngineExtensionInfo
+
+- `void QWebEngineExtensionInfo::swap(QWebEngineExtensionInfo & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QWebEngineFileSystemAccessRequest
+
+- `void QWebEngineFileSystemAccessRequest::swap(QWebEngineFileSystemAccessRequest & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QWebEngineHistoryItem
+
+- `void QWebEngineHistoryItem::swap(QWebEngineHistoryItem & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QWebEngineHttpRequest
+
+- `void QWebEngineHttpRequest::swap(QWebEngineHttpRequest & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QWebEngineLoadingInfo
 
 - `QMultiMap<QByteArray, QByteArray> QWebEngineLoadingInfo::responseHeaders() const`: skipped by overlay (on purpose: multi-maps keyed by byte arrays are not supported yet)
@@ -1323,6 +1563,10 @@ These bind once the generator learns the type. Counts by type:
 - `void QWebEnginePage::proxyAuthenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator, const QString & proxyHost)`: signal: on purpose: QtNetwork is not bound
 - `void QWebEnginePage::proxyAuthenticationRequired(const QUrl & requestUrl, QAuthenticator * authenticator, const QString & proxyHost)`: on purpose: QtNetwork is not bound
 
+### QWebEnginePermission
+
+- `void QWebEnginePermission::swap(QWebEnginePermission & other)`: on purpose: C++ swap; swap the Go variables instead
+
 ### QWebEngineProfile
 
 - `void QWebEngineProfile::setNotificationPresenter(std::function<void (std::unique_ptr<QWebEngineNotification>)> notificationPresenter)`: skipped by overlay (on purpose: Qt hands the notification over as a std::unique_ptr)
@@ -1331,6 +1575,10 @@ These bind once the generator learns the type. Counts by type:
 ### QWebEngineProfileBuilder
 
 - `QWebEngineProfileBuilder & QWebEngineProfileBuilder::setAdditionalTrustedCertificates(const QList<QSslCertificate> & additionalTrustedCertificates)`: on purpose: QtNetwork is not bound
+
+### QWebEngineScript
+
+- `void QWebEngineScript::swap(QWebEngineScript & other)`: on purpose: C++ swap; swap the Go variables instead
 
 ### QWebEngineUrlRequestInfo
 
@@ -1347,6 +1595,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QWidget
 
+- `int QWidget::devType() const`: skipped by overlay (on purpose: paint-device internals (the QInternal device type))
 - `void QWidget::setMinimumSize(const QSize &)`: skipped by overlay (use SetMinimumSize(w, h))
 - `void QWidget::setMaximumSize(const QSize &)`: skipped by overlay (use SetMaximumSize(w, h))
 - `void QWidget::setSizeIncrement(const QSize &)`: skipped by overlay (use SetSizeIncrement(w, h))
@@ -1362,6 +1611,7 @@ These bind once the generator learns the type. Counts by type:
 - `QAction * QWidget::addAction(const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QAction * QWidget::addAction(const QIcon & icon, const QString & text, const QKeySequence & shortcut, const QObject * receiver, const char * member, Qt::ConnectionType type = …)`: string-based SLOT() connection; use the On* signal methods instead
 - `QWidget * QWidget::childAt(int x, int y) const`: skipped by overlay (use the QPoint overload)
+- `QPaintEngine * QWidget::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
 - `QBackingStore * QWidget::backingStore() const`: return: on purpose: platform internals
 - `QWidget * QWidget::createWindowContainer(QWindow * window, QWidget * parent = …, Qt::WindowFlags flags = …)`: skipped by overlay (QWindow is not bound)
 - `void QWidget::setGeometry(int x, int y, int w, int h)`: on purpose: plain-number twin of the struct overload
@@ -1389,7 +1639,7 @@ These bind once the generator learns the type. Counts by type:
 - `QXmlStreamWriter::QXmlStreamWriter(QByteArray * array)`: skipped by overlay (on purpose: the writer keeps a pointer to the byte array, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data()))
 - `QXmlStreamWriter::QXmlStreamWriter(QString * string)`: skipped by overlay (on purpose: the writer keeps a pointer to the string, which Go cannot keep alive; use NewQXmlStreamWriter over a QBuffer (NewQBuffer, then Data()))
 
-## Virtuals Go cannot override (21)
+## Virtuals Go cannot override (40)
 
 
 ### QAbstractItemModel
@@ -1422,6 +1672,20 @@ These bind once the generator learns the type. Counts by type:
 - `qint64 QIODevice::readLineData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
 - `qint64 QIODevice::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
 
+### QOpenGLPaintDevice
+
+- `int QOpenGLPaintDevice::devType() const`: skipped by overlay (on purpose: paint-device internals (the QInternal device type))
+- `QPaintEngine * QOpenGLPaintDevice::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+
+### QOpenGLWidget
+
+- `QPaintDevice * QOpenGLWidget::redirected(QPoint * p) const`: skipped by overlay (on purpose: paint-device internals (painter redirection))
+- `QPaintEngine * QOpenGLWidget::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+
+### QOpenGLWindow
+
+- `QPaintDevice * QOpenGLWindow::redirected(QPoint *) const`: skipped by overlay (on purpose: paint-device internals (painter redirection))
+
 ### QPagedPaintDevice
 
 - `bool QPagedPaintDevice::setPageLayout(const QPageLayout & pageLayout)`: parameter pageLayout: on purpose: printing page setup is not bound yet
@@ -1430,6 +1694,18 @@ These bind once the generator learns the type. Counts by type:
 - `bool QPagedPaintDevice::setPageMargins(const QMarginsF & margins, QPageLayout::Unit units = …)`: parameter units: on purpose: printing page setup is not bound yet
 - `void QPagedPaintDevice::setPageRanges(const QPageRanges & ranges)`: parameter ranges: on purpose: printing page setup is not bound yet
 
+### QPaintDevice
+
+- `int QPaintDevice::devType() const`: skipped by overlay (on purpose: paint-device internals (the QInternal device type))
+- `QPaintEngine * QPaintDevice::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+- `void QPaintDevice::initPainter(QPainter * painter) const`: skipped by overlay (on purpose: paint-device internals; set the painter up in the paint handler)
+- `QPaintDevice * QPaintDevice::redirected(QPoint * offset) const`: skipped by overlay (on purpose: paint-device internals (painter redirection))
+- `QPainter * QPaintDevice::sharedPainter() const`: skipped by overlay (on purpose: paint-device internals (shared painters of widget backing stores))
+
+### QPdfWriter
+
+- `QPaintEngine * QPdfWriter::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+
 ### QProcess
 
 - `qint64 QProcess::readData(char * data, qint64 maxlen)`: parameter data: unsupported type "char *" (pointer or out-parameter to primitive)
@@ -1437,6 +1713,10 @@ These bind once the generator learns the type. Counts by type:
 ### QProxyStyle
 
 - `void QProxyStyle::polish(QPalette & pal)`: parameter pal: an override cannot fill in QPalette &
+
+### QRasterWindow
+
+- `QPaintDevice * QRasterWindow::redirected(QPoint *) const`: skipped by overlay (on purpose: paint-device internals (painter redirection))
 
 ### QStandardItem
 
@@ -1453,6 +1733,19 @@ These bind once the generator learns the type. Counts by type:
 ### QSurface
 
 - `QPlatformSurface * QSurface::surfaceHandle() const`: result: on purpose: private platform API
+
+### QSvgGenerator
+
+- `QPaintEngine * QSvgGenerator::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+- `void QSvgGenerator::initPainter(QPainter *) const`: skipped by overlay (on purpose: paint-device internals; set the painter up in the paint handler)
+
+### QWidget
+
+- `int QWidget::devType() const`: skipped by overlay (on purpose: paint-device internals (the QInternal device type))
+- `QPaintEngine * QWidget::paintEngine() const`: skipped by overlay (on purpose: paint-engine internals; QPaintEngine is not bound)
+- `void QWidget::initPainter(QPainter * painter) const`: skipped by overlay (on purpose: paint-device internals; set the painter up in the paint handler)
+- `QPaintDevice * QWidget::redirected(QPoint * offset) const`: skipped by overlay (on purpose: paint-device internals (painter redirection))
+- `QPainter * QWidget::sharedPainter() const`: skipped by overlay (on purpose: paint-device internals (shared painters of widget backing stores))
 
 ### QWindow
 

@@ -192,6 +192,20 @@ var qOpenGLPaintDeviceVTable = []rt.Virtual{
 			_ = args
 			v.(interface{ EnsureActiveTarget() }).EnsureActiveTarget()
 		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(metric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 }
 
 // QOpenGLPaintDeviceBase is embedded in Go types that subclass QOpenGLPaintDevice:
@@ -223,6 +237,14 @@ func (s *QOpenGLPaintDeviceSuper) EnsureActiveTarget() {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLPaintDevice.Super.EnsureActiveTarget")
 	C.qute_QOpenGLPaintDevice_super_0(self)
 	runtime.KeepAlive(s.this)
+}
+
+// Metric calls QOpenGLPaintDevice::metric.
+func (s *QOpenGLPaintDeviceSuper) Metric(metric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLPaintDevice.Super.Metric")
+	r := C.qute_QOpenGLPaintDevice_super_1(self, C.int64_t(metric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.

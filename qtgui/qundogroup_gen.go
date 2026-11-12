@@ -590,6 +590,18 @@ var qUndoGroupVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QUndoGroupBase is embedded in Go types that subclass QUndoGroup:
@@ -677,6 +689,32 @@ func (s *QUndoGroupSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QUndoGroup_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QUndoGroupSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoGroup.Super.ConnectNotify")
+	C.qute_QUndoGroup_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QUndoGroup.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QUndoGroupSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QUndoGroup.Super.DisconnectNotify")
+	C.qute_QUndoGroup_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QUndoGroup.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QUndoGroupBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QUndoGroup // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QUndoGroup.IsSignalConnected")
+	r := C.qute_QUndoGroup_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QUndoGroup.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQUndoGroupWith constructs a QUndoGroup whose virtual methods dispatch to v. The

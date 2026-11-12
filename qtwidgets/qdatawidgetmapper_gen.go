@@ -514,6 +514,18 @@ var qDataWidgetMapperVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QDataWidgetMapperBase is embedded in Go types that subclass QDataWidgetMapper:
@@ -610,6 +622,32 @@ func (s *QDataWidgetMapperSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QDataWidgetMapper_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QDataWidgetMapperSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDataWidgetMapper.Super.ConnectNotify")
+	C.qute_QDataWidgetMapper_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QDataWidgetMapper.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QDataWidgetMapperSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QDataWidgetMapper.Super.DisconnectNotify")
+	C.qute_QDataWidgetMapper_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QDataWidgetMapper.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QDataWidgetMapperBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QDataWidgetMapper // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QDataWidgetMapper.IsSignalConnected")
+	r := C.qute_QDataWidgetMapper_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QDataWidgetMapper.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQDataWidgetMapperWith constructs a QDataWidgetMapper whose virtual methods dispatch to v. The

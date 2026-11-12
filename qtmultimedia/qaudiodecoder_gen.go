@@ -585,6 +585,18 @@ var qAudioDecoderVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QAudioDecoderBase is embedded in Go types that subclass QAudioDecoder:
@@ -674,6 +686,32 @@ func (s *QAudioDecoderSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QAudioDecoder_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAudioDecoderSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAudioDecoder.Super.ConnectNotify")
+	C.qute_QAudioDecoder_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QAudioDecoder.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAudioDecoderSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAudioDecoder.Super.DisconnectNotify")
+	C.qute_QAudioDecoder_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QAudioDecoder.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAudioDecoderBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QAudioDecoder // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAudioDecoder.IsSignalConnected")
+	r := C.qute_QAudioDecoder_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAudioDecoder.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQAudioDecoderWith constructs a QAudioDecoder whose virtual methods dispatch to v. The

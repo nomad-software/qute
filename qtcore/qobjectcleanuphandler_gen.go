@@ -176,6 +176,18 @@ var qObjectCleanupHandlerVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QObjectCleanupHandlerBase is embedded in Go types that subclass QObjectCleanupHandler:
@@ -269,6 +281,32 @@ func (s *QObjectCleanupHandlerSuper) CustomEvent(event *QEvent) {
 	C.qute_QObjectCleanupHandler_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QObjectCleanupHandlerSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QObjectCleanupHandler.Super.ConnectNotify")
+	C.qute_QObjectCleanupHandler_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QObjectCleanupHandler.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QObjectCleanupHandlerSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QObjectCleanupHandler.Super.DisconnectNotify")
+	C.qute_QObjectCleanupHandler_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QObjectCleanupHandler.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QObjectCleanupHandlerBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QObjectCleanupHandler // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QObjectCleanupHandler.IsSignalConnected")
+	r := C.qute_QObjectCleanupHandler_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QObjectCleanupHandler.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQObjectCleanupHandlerWith constructs a QObjectCleanupHandler whose virtual methods dispatch to v. The

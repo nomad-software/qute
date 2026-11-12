@@ -357,6 +357,18 @@ var qSignalMapperVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QSignalMapperBase is embedded in Go types that subclass QSignalMapper:
@@ -446,6 +458,32 @@ func (s *QSignalMapperSuper) CustomEvent(event *QEvent) {
 	C.qute_QSignalMapper_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSignalMapperSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSignalMapper.Super.ConnectNotify")
+	C.qute_QSignalMapper_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QSignalMapper.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSignalMapperSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSignalMapper.Super.DisconnectNotify")
+	C.qute_QSignalMapper_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QSignalMapper.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSignalMapperBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QSignalMapper // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSignalMapper.IsSignalConnected")
+	r := C.qute_QSignalMapper_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSignalMapper.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQSignalMapperWith constructs a QSignalMapper whose virtual methods dispatch to v. The

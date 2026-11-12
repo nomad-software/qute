@@ -387,6 +387,28 @@ func (this *QObject) RemoveEventFilter(obj QObjectLike) {
 	rt.Release(rt.RefOf(unsafe.Pointer(this)).H, objH)
 }
 
+// DumpObjectTree wraps QObject::dumpObjectTree.
+//
+//	C++: void QObject::dumpObjectTree() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#dumpObjectTree
+func (this *QObject) DumpObjectTree() {
+	self := rt.Use(unsafe.Pointer(this), "QObject.DumpObjectTree")
+	C.qute_QObject_dumpObjectTree(self)
+	runtime.KeepAlive(this)
+}
+
+// DumpObjectInfo wraps QObject::dumpObjectInfo.
+//
+//	C++: void QObject::dumpObjectInfo() const
+//
+// Qt docs: https://doc.qt.io/qt-6/qobject.html#dumpObjectInfo
+func (this *QObject) DumpObjectInfo() {
+	self := rt.Use(unsafe.Pointer(this), "QObject.DumpObjectInfo")
+	C.qute_QObject_dumpObjectInfo(self)
+	runtime.KeepAlive(this)
+}
+
 // SetProperty wraps QObject::setProperty.
 //
 //	C++: bool QObject::setProperty(const char * name, const QVariant & value)
@@ -593,6 +615,18 @@ var qObjectVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QObjectBase is embedded in Go types that subclass QObject:
@@ -680,6 +714,32 @@ func (s *QObjectSuper) CustomEvent(event *QEvent) {
 	C.qute_QObject_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QObjectSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QObject.Super.ConnectNotify")
+	C.qute_QObject_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QObject.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QObjectSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QObject.Super.DisconnectNotify")
+	C.qute_QObject_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QObject.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QObjectBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QObject // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QObject.IsSignalConnected")
+	r := C.qute_QObject_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QObject.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQObjectWith constructs a QObject whose virtual methods dispatch to v. The

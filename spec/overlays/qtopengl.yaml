@@ -163,6 +163,7 @@ QOpenGLPaintDevice:
   context: { return: borrowed }
 
 QOpenGLWindow:
+  redirected: { skip: "on purpose: paint-device internals (painter redirection)" }
   QOpenGLWindow(QOpenGLContext*, QOpenGLWindow::UpdateBehavior, QWindow*): { name: NewQOpenGLWindowShared, args: { shareContext: keep } }
   context: { return: borrowed }
   shareContext: { return: borrowed }

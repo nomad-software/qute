@@ -526,6 +526,20 @@ var qGraphicsRectItemVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsRectItem.InputMethodQuery")
+		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
 			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
@@ -937,10 +951,18 @@ func (s *QGraphicsRectItemSuper) InputMethodEvent(event *qtgui.QInputMethodEvent
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QGraphicsRectItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRectItem.Super.InputMethodQuery")
+	r := C.qute_QGraphicsRectItem_super_33(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QGraphicsRectItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsRectItem.Super.ItemChange")
-	r := C.qute_QGraphicsRectItem_super_33(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsRectItem.Super.ItemChange"))
+	r := C.qute_QGraphicsRectItem_super_34(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsRectItem.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)

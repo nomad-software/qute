@@ -877,6 +877,18 @@ var qWebEngineProfileVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QWebEngineProfileBase is embedded in Go types that subclass QWebEngineProfile:
@@ -966,6 +978,32 @@ func (s *QWebEngineProfileSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QWebEngineProfile_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWebEngineProfileSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineProfile.Super.ConnectNotify")
+	C.qute_QWebEngineProfile_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineProfile.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWebEngineProfileSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineProfile.Super.DisconnectNotify")
+	C.qute_QWebEngineProfile_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineProfile.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWebEngineProfileBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWebEngineProfile // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineProfile.IsSignalConnected")
+	r := C.qute_QWebEngineProfile_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineProfile.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQWebEngineProfileWith constructs a QWebEngineProfile whose virtual methods dispatch to v. The

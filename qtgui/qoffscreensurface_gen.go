@@ -320,6 +320,18 @@ var qOffscreenSurfaceVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QOffscreenSurfaceBase is embedded in Go types that subclass QOffscreenSurface:
@@ -435,6 +447,22 @@ func (s *QOffscreenSurfaceSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QOffscreenSurfaceSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.ConnectNotify")
+	C.qute_QOffscreenSurface_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QOffscreenSurface.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QOffscreenSurfaceSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOffscreenSurface.Super.DisconnectNotify")
+	C.qute_QOffscreenSurface_super_9(self, rt.UseArg(unsafe.Pointer(signal), "QOffscreenSurface.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // ResolveInterface wraps the protected QOffscreenSurface::resolveInterface for subclasses.
 func (b *QOffscreenSurfaceBase) ResolveInterface(name string, revision int) unsafe.Pointer {
 	this := b.QOffscreenSurface // the receiver the ownership code below acts on
@@ -444,6 +472,16 @@ func (b *QOffscreenSurfaceBase) ResolveInterface(name string, revision int) unsa
 	r := C.qute_QOffscreenSurface_prot_resolveInterface(self, nameCStr, C.int(revision))
 	runtime.KeepAlive(this)
 	return r
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QOffscreenSurfaceBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QOffscreenSurface // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOffscreenSurface.IsSignalConnected")
+	r := C.qute_QOffscreenSurface_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QOffscreenSurface.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQOffscreenSurfaceWith constructs a QOffscreenSurface whose virtual methods dispatch to v. The

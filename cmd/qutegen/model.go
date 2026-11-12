@@ -176,16 +176,31 @@ var goKeywords = map[string]bool{
 	"new": true, "nil": true, "true": true, "false": true, "id": true, "mask": true, "b": true, "s": true, "a": true,
 }
 
-// Methods that never become bindings.
+// Methods moc or Qt's macros generate in every class: they are not API, so
+// they are left out silently. Anything else left out goes through a reason
+// (idiomSkip, an overlay's skip, a type-wide deliberate reason) so that
+// COVERAGE.md lists it: a name here hides the method on every class, as
+// inputMethodQuery once was hidden.
 var globalSkip = map[string]bool{
-	"tr": true, "trUtf8": true, "metaObject": true, "connect": true, "disconnect": true,
-	"staticMetaObject": true, "d_func": true, "qt_metacast": true, "qt_metacall": true,
-	"connectNotify": true, "disconnectNotify": true, "isSignalConnected": true, "receivers": true,
-	"sender": true, "senderSignalIndex": true, "swap": true, "data_ptr": true, "detach": true,
-	"isDetached": true, "devType": true, "paintEngine": true, "initPainter": true,
-	"redirected": true, "sharedPainter": true, "metric": true, "nativeEvent": true,
-	"inputMethodQuery": true, "setupUi": true, "dumpObjectTree": true, "dumpObjectInfo": true,
-	"bindableObjectName": true, "qt_static_metacall": true, "qt_check_for_QGADGET_macro": true,
+	"tr": true, "trUtf8": true, "metaObject": true, "staticMetaObject": true, "d_func": true,
+	"qt_metacast": true, "qt_metacall": true, "qt_static_metacall": true,
+	"qt_check_for_QGADGET_macro": true, "setupUi": true,
+}
+
+// idiomSkip returns why a method is a C++ idiom with no meaning in Go, or
+// "": the implicit-sharing plumbing of value classes. A QObject's method of
+// the same name is real API (QSharedMemory::detach) and is bound.
+func idiomSkip(c *Class, m *irMethod) string {
+	if c.Kind == KindObject {
+		return ""
+	}
+	switch m.Name {
+	case "swap":
+		return "on purpose: C++ swap; swap the Go variables instead"
+	case "data_ptr", "detach", "isDetached":
+		return "on purpose: implicit-sharing internals; copies are already cheap and independent"
+	}
+	return ""
 }
 
 func exportName(s string) string {
@@ -649,6 +664,10 @@ func (g *Gen) buildMembers(c *Class) {
 		}
 		if iteratorNames[im.Name] && returnsIterator(im) {
 			g.skip(c, im, "on purpose: iterator; use the method that returns a list")
+			continue
+		}
+		if why := idiomSkip(c, im); why != "" {
+			g.skip(c, im, why)
 			continue
 		}
 		if ov.skipped() {
@@ -1552,6 +1571,13 @@ func (g *Gen) newVirtual(c, owner *Class, im *irMethod) (*Method, string) {
 		if ov != nil {
 			ovs = append(ovs, ov)
 			ovDecl = append(ovDecl, declIn(x, im))
+		}
+	}
+	for _, ov := range ovs {
+		if ov.skipped() {
+			// an overlay's skip on the declaring class or a base also keeps
+			// Go from overriding it (QPaintDevice::redirected)
+			return nil, fmt.Sprintf("skipped by overlay (%v)", ov.Skip)
 		}
 	}
 	names := paramNames(im)

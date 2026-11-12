@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <QIODevice>
 #include <QIcon>
+#include <QMetaMethod>
 #include <QMetaObject>
 #include <QModelIndex>
 #include <QObject>
@@ -112,6 +113,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	void triggerAction(QWebEnginePage::WebAction a0, bool a1) override {
 		if (qute_has(0)) {
 			int64_t c0 = static_cast<int64_t>(a0);
@@ -280,6 +282,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_12(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(13)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 13, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_13(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(14)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 14, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_14(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWebEngineProfile : public QWebEngineProfile {
@@ -288,6 +312,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -346,6 +371,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor {
@@ -354,6 +401,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	void interceptRequest(QWebEngineUrlRequestInfo & a0) override {
 		if (qute_has(0)) {
 			void * c0 = const_cast<void *>(static_cast<const void *>(&a0));
@@ -422,6 +470,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWebEngineUrlSchemeHandler : public QWebEngineUrlSchemeHandler {
@@ -430,6 +500,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	void requestStarted(QWebEngineUrlRequestJob * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -498,6 +569,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(7)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_7(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 extern "C" {
@@ -1586,6 +1679,18 @@ void qute_QWebEnginePage_super_12(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_12(static_cast<QEvent *>(a0));
 }
+void qute_QWebEnginePage_super_13(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_13((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWebEnginePage_super_14(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->qute_super_14((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QWebEnginePage_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEnginePage *>(static_cast<QWebEnginePage *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QWebEnginePage_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWebEnginePage *>(static_cast<QObject *>(obj)));
@@ -2284,6 +2389,18 @@ void qute_QWebEngineProfile_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QWebEngineProfile_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWebEngineProfile_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QWebEngineProfile_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEngineProfile *>(static_cast<QWebEngineProfile *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QWebEngineProfile_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWebEngineProfile *>(static_cast<QObject *>(obj)));
@@ -2834,6 +2951,18 @@ void qute_QWebEngineUrlRequestInterceptor_super_5(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWebEngineUrlRequestInterceptor *>(static_cast<QWebEngineUrlRequestInterceptor *>(self))->qute_super_5(static_cast<QEvent *>(a0));
 }
+void qute_QWebEngineUrlRequestInterceptor_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineUrlRequestInterceptor *>(static_cast<QWebEngineUrlRequestInterceptor *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWebEngineUrlRequestInterceptor_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineUrlRequestInterceptor *>(static_cast<QWebEngineUrlRequestInterceptor *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QWebEngineUrlRequestInterceptor_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEngineUrlRequestInterceptor *>(static_cast<QWebEngineUrlRequestInterceptor *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QWebEngineUrlRequestInterceptor_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QWebEngineUrlRequestInterceptor *>(static_cast<QObject *>(obj)));
@@ -2959,6 +3088,18 @@ void qute_QWebEngineUrlSchemeHandler_super_4(void *self, void * a0) {
 void qute_QWebEngineUrlSchemeHandler_super_5(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWebEngineUrlSchemeHandler *>(static_cast<QWebEngineUrlSchemeHandler *>(self))->qute_super_5(static_cast<QEvent *>(a0));
+}
+void qute_QWebEngineUrlSchemeHandler_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineUrlSchemeHandler *>(static_cast<QWebEngineUrlSchemeHandler *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWebEngineUrlSchemeHandler_super_7(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWebEngineUrlSchemeHandler *>(static_cast<QWebEngineUrlSchemeHandler *>(self))->qute_super_7((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QWebEngineUrlSchemeHandler_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWebEngineUrlSchemeHandler *>(static_cast<QWebEngineUrlSchemeHandler *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QWebEngineUrlSchemeHandler_cast(void *obj) {
 	qute_gui_only();

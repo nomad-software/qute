@@ -258,6 +258,18 @@ var qEventLoopVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QEventLoopBase is embedded in Go types that subclass QEventLoop:
@@ -345,6 +357,32 @@ func (s *QEventLoopSuper) CustomEvent(event *QEvent) {
 	C.qute_QEventLoop_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QEventLoopSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QEventLoop.Super.ConnectNotify")
+	C.qute_QEventLoop_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QEventLoop.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QEventLoopSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QEventLoop.Super.DisconnectNotify")
+	C.qute_QEventLoop_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QEventLoop.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QEventLoopBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QEventLoop // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QEventLoop.IsSignalConnected")
+	r := C.qute_QEventLoop_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QEventLoop.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQEventLoopWith constructs a QEventLoop whose virtual methods dispatch to v. The

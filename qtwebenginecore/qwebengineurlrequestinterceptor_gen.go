@@ -140,6 +140,18 @@ var qWebEngineUrlRequestInterceptorVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QWebEngineUrlRequestInterceptorBase is embedded in Go types that subclass QWebEngineUrlRequestInterceptor:
@@ -237,6 +249,32 @@ func (s *QWebEngineUrlRequestInterceptorSuper) CustomEvent(event *qtcore.QEvent)
 	C.qute_QWebEngineUrlRequestInterceptor_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWebEngineUrlRequestInterceptorSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineUrlRequestInterceptor.Super.ConnectNotify")
+	C.qute_QWebEngineUrlRequestInterceptor_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlRequestInterceptor.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWebEngineUrlRequestInterceptorSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineUrlRequestInterceptor.Super.DisconnectNotify")
+	C.qute_QWebEngineUrlRequestInterceptor_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlRequestInterceptor.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWebEngineUrlRequestInterceptorBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWebEngineUrlRequestInterceptor // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineUrlRequestInterceptor.IsSignalConnected")
+	r := C.qute_QWebEngineUrlRequestInterceptor_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlRequestInterceptor.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQWebEngineUrlRequestInterceptorWith constructs a QWebEngineUrlRequestInterceptor whose virtual methods dispatch to v. The

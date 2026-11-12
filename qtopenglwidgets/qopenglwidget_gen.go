@@ -449,6 +449,20 @@ var qOpenGLWidgetVTable = []rt.Virtual{
 			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(eArg)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(metric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -685,6 +699,24 @@ var qOpenGLWidgetVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -709,6 +741,20 @@ var qOpenGLWidgetVTable = []rt.Virtual{
 			v.(interface {
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(inputMethodEvent)
+		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOpenGLWidget.InputMethodQuery")
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
@@ -761,6 +807,18 @@ var qOpenGLWidgetVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -844,17 +902,25 @@ func (s *QOpenGLWidgetSuper) Event(eArg *qtcore.QEvent) bool {
 	return bool(r)
 }
 
+// Metric calls QOpenGLWidget::metric.
+func (s *QOpenGLWidgetSuper) Metric(metric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.Metric")
+	r := C.qute_QOpenGLWidget_super_6(self, C.int64_t(metric))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
 // SetVisible calls QWidget::setVisible.
 func (s *QOpenGLWidgetSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.SetVisible")
-	C.qute_QOpenGLWidget_super_6(self, C.bool(visible))
+	C.qute_QOpenGLWidget_super_7(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // SizeHint calls QWidget::sizeHint.
 func (s *QOpenGLWidgetSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.SizeHint")
-	r := C.qute_QOpenGLWidget_super_7(self)
+	r := C.qute_QOpenGLWidget_super_8(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -862,7 +928,7 @@ func (s *QOpenGLWidgetSuper) SizeHint() qtcore.QSize {
 // MinimumSizeHint calls QWidget::minimumSizeHint.
 func (s *QOpenGLWidgetSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.MinimumSizeHint")
-	r := C.qute_QOpenGLWidget_super_8(self)
+	r := C.qute_QOpenGLWidget_super_9(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -870,7 +936,7 @@ func (s *QOpenGLWidgetSuper) MinimumSizeHint() qtcore.QSize {
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QOpenGLWidgetSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.HeightForWidth")
-	r := C.qute_QOpenGLWidget_super_9(self, C.int(arg0))
+	r := C.qute_QOpenGLWidget_super_10(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -878,7 +944,7 @@ func (s *QOpenGLWidgetSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QOpenGLWidgetSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.HasHeightForWidth")
-	r := C.qute_QOpenGLWidget_super_10(self)
+	r := C.qute_QOpenGLWidget_super_11(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -890,7 +956,7 @@ func (s *QOpenGLWidgetSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MousePressEvent")
 	}
-	C.qute_QOpenGLWidget_super_11(self, eventPtr)
+	C.qute_QOpenGLWidget_super_12(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -902,7 +968,7 @@ func (s *QOpenGLWidgetSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseReleaseEvent")
 	}
-	C.qute_QOpenGLWidget_super_12(self, eventPtr)
+	C.qute_QOpenGLWidget_super_13(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -914,7 +980,7 @@ func (s *QOpenGLWidgetSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QOpenGLWidget_super_13(self, eventPtr)
+	C.qute_QOpenGLWidget_super_14(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -926,7 +992,7 @@ func (s *QOpenGLWidgetSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QOpenGLWidget.Super.MouseMoveEvent")
 	}
-	C.qute_QOpenGLWidget_super_14(self, eventPtr)
+	C.qute_QOpenGLWidget_super_15(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -938,7 +1004,7 @@ func (s *QOpenGLWidgetSuper) WheelEvent(event *qtgui.QWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QOpenGLWidget.Super.WheelEvent")
 	}
-	C.qute_QOpenGLWidget_super_15(self, eventPtr)
+	C.qute_QOpenGLWidget_super_16(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -950,7 +1016,7 @@ func (s *QOpenGLWidgetSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QOpenGLWidget.Super.KeyPressEvent")
 	}
-	C.qute_QOpenGLWidget_super_16(self, eventPtr)
+	C.qute_QOpenGLWidget_super_17(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -962,7 +1028,7 @@ func (s *QOpenGLWidgetSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QOpenGLWidget.Super.KeyReleaseEvent")
 	}
-	C.qute_QOpenGLWidget_super_17(self, eventPtr)
+	C.qute_QOpenGLWidget_super_18(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -974,7 +1040,7 @@ func (s *QOpenGLWidgetSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QOpenGLWidget.Super.FocusInEvent")
 	}
-	C.qute_QOpenGLWidget_super_18(self, eventPtr)
+	C.qute_QOpenGLWidget_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -986,7 +1052,7 @@ func (s *QOpenGLWidgetSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QOpenGLWidget.Super.FocusOutEvent")
 	}
-	C.qute_QOpenGLWidget_super_19(self, eventPtr)
+	C.qute_QOpenGLWidget_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -998,7 +1064,7 @@ func (s *QOpenGLWidgetSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QOpenGLWidget.Super.EnterEvent")
 	}
-	C.qute_QOpenGLWidget_super_20(self, eventPtr)
+	C.qute_QOpenGLWidget_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1010,7 +1076,7 @@ func (s *QOpenGLWidgetSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.LeaveEvent")
 	}
-	C.qute_QOpenGLWidget_super_21(self, eventPtr)
+	C.qute_QOpenGLWidget_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1022,7 +1088,7 @@ func (s *QOpenGLWidgetSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QOpenGLWidget.Super.MoveEvent")
 	}
-	C.qute_QOpenGLWidget_super_22(self, eventPtr)
+	C.qute_QOpenGLWidget_super_23(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1034,7 +1100,7 @@ func (s *QOpenGLWidgetSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QOpenGLWidget.Super.CloseEvent")
 	}
-	C.qute_QOpenGLWidget_super_23(self, eventPtr)
+	C.qute_QOpenGLWidget_super_24(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1046,7 +1112,7 @@ func (s *QOpenGLWidgetSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QOpenGLWidget.Super.ContextMenuEvent")
 	}
-	C.qute_QOpenGLWidget_super_24(self, eventPtr)
+	C.qute_QOpenGLWidget_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1058,7 +1124,7 @@ func (s *QOpenGLWidgetSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QOpenGLWidget.Super.TabletEvent")
 	}
-	C.qute_QOpenGLWidget_super_25(self, eventPtr)
+	C.qute_QOpenGLWidget_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1070,7 +1136,7 @@ func (s *QOpenGLWidgetSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QOpenGLWidget.Super.ActionEvent")
 	}
-	C.qute_QOpenGLWidget_super_26(self, eventPtr)
+	C.qute_QOpenGLWidget_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1082,7 +1148,7 @@ func (s *QOpenGLWidgetSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QOpenGLWidget.Super.DragEnterEvent")
 	}
-	C.qute_QOpenGLWidget_super_27(self, eventPtr)
+	C.qute_QOpenGLWidget_super_28(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1094,7 +1160,7 @@ func (s *QOpenGLWidgetSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QOpenGLWidget.Super.DragMoveEvent")
 	}
-	C.qute_QOpenGLWidget_super_28(self, eventPtr)
+	C.qute_QOpenGLWidget_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1106,7 +1172,7 @@ func (s *QOpenGLWidgetSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QOpenGLWidget.Super.DragLeaveEvent")
 	}
-	C.qute_QOpenGLWidget_super_29(self, eventPtr)
+	C.qute_QOpenGLWidget_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1118,7 +1184,7 @@ func (s *QOpenGLWidgetSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QOpenGLWidget.Super.DropEvent")
 	}
-	C.qute_QOpenGLWidget_super_30(self, eventPtr)
+	C.qute_QOpenGLWidget_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1130,7 +1196,7 @@ func (s *QOpenGLWidgetSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QOpenGLWidget.Super.ShowEvent")
 	}
-	C.qute_QOpenGLWidget_super_31(self, eventPtr)
+	C.qute_QOpenGLWidget_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1142,9 +1208,18 @@ func (s *QOpenGLWidgetSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QOpenGLWidget.Super.HideEvent")
 	}
-	C.qute_QOpenGLWidget_super_32(self, eventPtr)
+	C.qute_QOpenGLWidget_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QOpenGLWidgetSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QOpenGLWidget_super_34(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
 }
 
 // ChangeEvent calls QWidget::changeEvent.
@@ -1154,7 +1229,7 @@ func (s *QOpenGLWidgetSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.ChangeEvent")
 	}
-	C.qute_QOpenGLWidget_super_33(self, eventPtr)
+	C.qute_QOpenGLWidget_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1166,15 +1241,23 @@ func (s *QOpenGLWidgetSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMeth
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QOpenGLWidget.Super.InputMethodEvent")
 	}
-	C.qute_QOpenGLWidget_super_34(self, inputMethodEventPtr)
+	C.qute_QOpenGLWidget_super_36(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
+}
+
+// InputMethodQuery calls QWidget::inputMethodQuery.
+func (s *QOpenGLWidgetSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.InputMethodQuery")
+	r := C.qute_QOpenGLWidget_super_37(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QOpenGLWidgetSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.FocusNextPrevChild")
-	r := C.qute_QOpenGLWidget_super_35(self, C.bool(next))
+	r := C.qute_QOpenGLWidget_super_38(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1190,7 +1273,7 @@ func (s *QOpenGLWidgetSuper) EventFilter(watched *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.EventFilter")
 	}
-	r := C.qute_QOpenGLWidget_super_36(self, watchedPtr, eventPtr)
+	r := C.qute_QOpenGLWidget_super_39(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1204,7 +1287,7 @@ func (s *QOpenGLWidgetSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QOpenGLWidget.Super.TimerEvent")
 	}
-	C.qute_QOpenGLWidget_super_37(self, eventPtr)
+	C.qute_QOpenGLWidget_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1216,7 +1299,7 @@ func (s *QOpenGLWidgetSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QOpenGLWidget.Super.ChildEvent")
 	}
-	C.qute_QOpenGLWidget_super_38(self, eventPtr)
+	C.qute_QOpenGLWidget_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1228,9 +1311,25 @@ func (s *QOpenGLWidgetSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QOpenGLWidget.Super.CustomEvent")
 	}
-	C.qute_QOpenGLWidget_super_39(self, eventPtr)
+	C.qute_QOpenGLWidget_super_42(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QOpenGLWidgetSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.ConnectNotify")
+	C.qute_QOpenGLWidget_super_43(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLWidget.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QOpenGLWidgetSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QOpenGLWidget.Super.DisconnectNotify")
+	C.qute_QOpenGLWidget_super_44(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLWidget.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // UpdateMicroFocus wraps the protected QWidget::updateMicroFocus for subclasses.
@@ -1272,6 +1371,16 @@ func (b *QOpenGLWidgetBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.FocusPreviousChild")
 	r := C.qute_QOpenGLWidget_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QOpenGLWidgetBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QOpenGLWidget // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QOpenGLWidget.IsSignalConnected")
+	r := C.qute_QOpenGLWidget_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QOpenGLWidget.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

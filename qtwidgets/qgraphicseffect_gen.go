@@ -227,6 +227,18 @@ var qGraphicsEffectVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QGraphicsEffectBase is embedded in Go types that subclass QGraphicsEffect:
@@ -333,6 +345,22 @@ func (s *QGraphicsEffectSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QGraphicsEffectSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsEffect.Super.ConnectNotify")
+	C.qute_QGraphicsEffect_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsEffect.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QGraphicsEffectSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsEffect.Super.DisconnectNotify")
+	C.qute_QGraphicsEffect_super_9(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsEffect.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // UpdateBoundingRect wraps the protected QGraphicsEffect::updateBoundingRect for subclasses.
 func (b *QGraphicsEffectBase) UpdateBoundingRect() {
 	this := b.QGraphicsEffect // the receiver the ownership code below acts on
@@ -379,6 +407,16 @@ func (b *QGraphicsEffectBase) SourcePixmap() *qtgui.QPixmap {
 	r := C.qute_QGraphicsEffect_prot_sourcePixmap(self)
 	runtime.KeepAlive(this)
 	return rt.View[qtgui.QPixmap](rt.WrapClass(r, "QPixmap", rt.TakeOwned), r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QGraphicsEffectBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QGraphicsEffect // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QGraphicsEffect.IsSignalConnected")
+	r := C.qute_QGraphicsEffect_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QGraphicsEffect.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQGraphicsEffectWith constructs a QGraphicsEffect whose virtual methods dispatch to v. The

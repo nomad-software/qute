@@ -728,6 +728,18 @@ var qItemSelectionModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QItemSelectionModelBase is embedded in Go types that subclass QItemSelectionModel:
@@ -866,6 +878,22 @@ func (s *QItemSelectionModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QItemSelectionModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.ConnectNotify")
+	C.qute_QItemSelectionModel_super_11(self, rt.UseArg(unsafe.Pointer(signal), "QItemSelectionModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QItemSelectionModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QItemSelectionModel.Super.DisconnectNotify")
+	C.qute_QItemSelectionModel_super_12(self, rt.UseArg(unsafe.Pointer(signal), "QItemSelectionModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // EmitSelectionChangedBetween wraps the protected QItemSelectionModel::emitSelectionChanged for subclasses.
 func (b *QItemSelectionModelBase) EmitSelectionChangedBetween(newSelection *QItemSelection, oldSelection *QItemSelection) {
 	this := b.QItemSelectionModel // the receiver the ownership code below acts on
@@ -874,6 +902,16 @@ func (b *QItemSelectionModelBase) EmitSelectionChangedBetween(newSelection *QIte
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(newSelection)
 	runtime.KeepAlive(oldSelection)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QItemSelectionModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QItemSelectionModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QItemSelectionModel.IsSignalConnected")
+	r := C.qute_QItemSelectionModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QItemSelectionModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQItemSelectionModelWith constructs a QItemSelectionModel whose virtual methods dispatch to v. The

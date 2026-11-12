@@ -231,6 +231,12 @@ func deliberate(can, base string, ptr, ref, rref, ret bool) string {
 func (g *Gen) special(t irType, ret bool) (*conv, error, bool) {
 	can := strings.TrimSpace(t.Canonical)
 	base, cnst, ptr, ref, rref := parseCpp(can)
+	if ret && can == "void (*)()" {
+		// QFunctionPointer from Qt (QOpenGLContext::getProcAddress): Go only
+		// hands the address on (to a GL loader), so it needs no Go closure
+		// behind it. Taking one is still refused, by deliberate.
+		return &conv{k: kRaw, cpp: can, base: base, ptr: true}, nil, true
+	}
 	if why := deliberate(can, base, ptr, ref, rref, ret); why != "" {
 		c, err := onPurpose(why)
 		return c, err, true

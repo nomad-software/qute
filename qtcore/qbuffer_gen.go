@@ -144,6 +144,18 @@ var qBufferVTable = []rt.Virtual{
 			r := v.(interface{ CanReadLine() bool }).CanReadLine()
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metaMethod := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(metaMethod)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			metaMethod := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(metaMethod)
+		}},
 	{Name: "WriteData", Has: func(v any) bool { _, ok := v.(interface{ WriteData(string, int64) int64 }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
@@ -322,12 +334,28 @@ func (s *QBufferSuper) CanReadLine() bool {
 	return bool(r)
 }
 
+// ConnectNotify calls QBuffer::connectNotify.
+func (s *QBufferSuper) ConnectNotify(metaMethod *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.ConnectNotify")
+	C.qute_QBuffer_super_7(self, rt.UseArg(unsafe.Pointer(metaMethod), "QBuffer.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(metaMethod)
+}
+
+// DisconnectNotify calls QBuffer::disconnectNotify.
+func (s *QBufferSuper) DisconnectNotify(metaMethod *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.DisconnectNotify")
+	C.qute_QBuffer_super_8(self, rt.UseArg(unsafe.Pointer(metaMethod), "QBuffer.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(metaMethod)
+}
+
 // WriteData calls QBuffer::writeData.
 func (s *QBufferSuper) WriteData(data string, lenArg int64) int64 {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.WriteData")
 	dataCStr := C.CString(data)
 	defer C.free(unsafe.Pointer(dataCStr))
-	r := C.qute_QBuffer_super_7(self, dataCStr, C.longlong(lenArg))
+	r := C.qute_QBuffer_super_9(self, dataCStr, C.longlong(lenArg))
 	runtime.KeepAlive(s.this)
 	return int64(r)
 }
@@ -335,7 +363,7 @@ func (s *QBufferSuper) WriteData(data string, lenArg int64) int64 {
 // IsSequential calls QIODevice::isSequential.
 func (s *QBufferSuper) IsSequential() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.IsSequential")
-	r := C.qute_QBuffer_super_8(self)
+	r := C.qute_QBuffer_super_10(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -343,7 +371,7 @@ func (s *QBufferSuper) IsSequential() bool {
 // Reset calls QIODevice::reset.
 func (s *QBufferSuper) Reset() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.Reset")
-	r := C.qute_QBuffer_super_9(self)
+	r := C.qute_QBuffer_super_11(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -351,7 +379,7 @@ func (s *QBufferSuper) Reset() bool {
 // BytesAvailable calls QIODevice::bytesAvailable.
 func (s *QBufferSuper) BytesAvailable() int64 {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.BytesAvailable")
-	r := C.qute_QBuffer_super_10(self)
+	r := C.qute_QBuffer_super_12(self)
 	runtime.KeepAlive(s.this)
 	return int64(r)
 }
@@ -359,7 +387,7 @@ func (s *QBufferSuper) BytesAvailable() int64 {
 // BytesToWrite calls QIODevice::bytesToWrite.
 func (s *QBufferSuper) BytesToWrite() int64 {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.BytesToWrite")
-	r := C.qute_QBuffer_super_11(self)
+	r := C.qute_QBuffer_super_13(self)
 	runtime.KeepAlive(s.this)
 	return int64(r)
 }
@@ -367,7 +395,7 @@ func (s *QBufferSuper) BytesToWrite() int64 {
 // WaitForReadyRead calls QIODevice::waitForReadyRead.
 func (s *QBufferSuper) WaitForReadyRead(msecs int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.WaitForReadyRead")
-	r := C.qute_QBuffer_super_12(self, C.int(msecs))
+	r := C.qute_QBuffer_super_14(self, C.int(msecs))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -375,7 +403,7 @@ func (s *QBufferSuper) WaitForReadyRead(msecs int) bool {
 // WaitForBytesWritten calls QIODevice::waitForBytesWritten.
 func (s *QBufferSuper) WaitForBytesWritten(msecs int) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.WaitForBytesWritten")
-	r := C.qute_QBuffer_super_13(self, C.int(msecs))
+	r := C.qute_QBuffer_super_15(self, C.int(msecs))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -383,7 +411,7 @@ func (s *QBufferSuper) WaitForBytesWritten(msecs int) bool {
 // SkipData calls QIODevice::skipData.
 func (s *QBufferSuper) SkipData(maxSize int64) int64 {
 	self := rt.Use(unsafe.Pointer(s.this), "QBuffer.Super.SkipData")
-	r := C.qute_QBuffer_super_14(self, C.longlong(maxSize))
+	r := C.qute_QBuffer_super_16(self, C.longlong(maxSize))
 	runtime.KeepAlive(s.this)
 	return int64(r)
 }
@@ -395,7 +423,7 @@ func (s *QBufferSuper) Event(event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QBuffer.Super.Event")
 	}
-	r := C.qute_QBuffer_super_15(self, eventPtr)
+	r := C.qute_QBuffer_super_17(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -412,7 +440,7 @@ func (s *QBufferSuper) EventFilter(watched *QObject, event *QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QBuffer.Super.EventFilter")
 	}
-	r := C.qute_QBuffer_super_16(self, watchedPtr, eventPtr)
+	r := C.qute_QBuffer_super_18(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -426,7 +454,7 @@ func (s *QBufferSuper) TimerEvent(event *QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QBuffer.Super.TimerEvent")
 	}
-	C.qute_QBuffer_super_17(self, eventPtr)
+	C.qute_QBuffer_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -438,7 +466,7 @@ func (s *QBufferSuper) ChildEvent(event *QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QBuffer.Super.ChildEvent")
 	}
-	C.qute_QBuffer_super_18(self, eventPtr)
+	C.qute_QBuffer_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -450,7 +478,7 @@ func (s *QBufferSuper) CustomEvent(event *QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QBuffer.Super.CustomEvent")
 	}
-	C.qute_QBuffer_super_19(self, eventPtr)
+	C.qute_QBuffer_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -469,6 +497,16 @@ func (b *QBufferBase) SetErrorString(errorString string) {
 	self := rt.Use(unsafe.Pointer(this), "QBuffer.SetErrorString")
 	C.qute_QBuffer_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QBufferBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QBuffer // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QBuffer.IsSignalConnected")
+	r := C.qute_QBuffer_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QBuffer.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQBufferWith constructs a QBuffer whose virtual methods dispatch to v. The

@@ -567,6 +567,18 @@ var qStringListModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QStringListModelBase is embedded in Go types that subclass QStringListModel:
@@ -966,6 +978,22 @@ func (s *QStringListModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QStringListModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.ConnectNotify")
+	C.qute_QStringListModel_super_38(self, rt.UseArg(unsafe.Pointer(signal), "QStringListModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QStringListModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QStringListModel.Super.DisconnectNotify")
+	C.qute_QStringListModel_super_39(self, rt.UseArg(unsafe.Pointer(signal), "QStringListModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QStringListModelBase) CreateIndex(row int, column int) *QModelIndex {
 	this := b.QStringListModel // the receiver the ownership code below acts on
@@ -1165,6 +1193,16 @@ func (b *QStringListModelBase) PersistentIndexList() []*QModelIndex {
 	r := C.qute_QStringListModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QStringListModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QStringListModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QStringListModel.IsSignalConnected")
+	r := C.qute_QStringListModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QStringListModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQStringListModelWith constructs a QStringListModel whose virtual methods dispatch to v. The

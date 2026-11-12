@@ -643,6 +643,18 @@ var qConcatenateTablesProxyModelVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QConcatenateTablesProxyModelBase is embedded in Go types that subclass QConcatenateTablesProxyModel:
@@ -1073,6 +1085,22 @@ func (s *QConcatenateTablesProxyModelSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QConcatenateTablesProxyModelSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QConcatenateTablesProxyModel.Super.ConnectNotify")
+	C.qute_QConcatenateTablesProxyModel_super_41(self, rt.UseArg(unsafe.Pointer(signal), "QConcatenateTablesProxyModel.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QConcatenateTablesProxyModelSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QConcatenateTablesProxyModel.Super.DisconnectNotify")
+	C.qute_QConcatenateTablesProxyModel_super_42(self, rt.UseArg(unsafe.Pointer(signal), "QConcatenateTablesProxyModel.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // CreateIndex wraps the protected QAbstractItemModel::createIndex for subclasses.
 func (b *QConcatenateTablesProxyModelBase) CreateIndex(row int, column int) *QModelIndex {
 	this := b.QConcatenateTablesProxyModel // the receiver the ownership code below acts on
@@ -1272,6 +1300,16 @@ func (b *QConcatenateTablesProxyModelBase) PersistentIndexList() []*QModelIndex 
 	r := C.qute_QConcatenateTablesProxyModel_prot_persistentIndexList(self)
 	runtime.KeepAlive(this)
 	return quteList(r, func(e unsafe.Pointer) *QModelIndex { return rt.InlineOwnedView[QModelIndex](e, "QModelIndex") })
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QConcatenateTablesProxyModelBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QConcatenateTablesProxyModel // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QConcatenateTablesProxyModel.IsSignalConnected")
+	r := C.qute_QConcatenateTablesProxyModel_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QConcatenateTablesProxyModel.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQConcatenateTablesProxyModelWith constructs a QConcatenateTablesProxyModel whose virtual methods dispatch to v. The

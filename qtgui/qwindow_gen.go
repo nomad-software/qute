@@ -2202,6 +2202,24 @@ var qWindowVTable = []rt.Virtual{
 			tabletEvent := rt.View[QTabletEvent](tabletEventH, tabletEventP)
 			v.(interface{ TabletEvent(*QTabletEvent) }).TabletEvent(tabletEvent)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
 	{Name: "EventFilter", Has: func(v any) bool {
 		_, ok := v.(interface {
 			EventFilter(*qtcore.QObject, *qtcore.QEvent) bool
@@ -2246,6 +2264,18 @@ var qWindowVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -2530,6 +2560,15 @@ func (s *QWindowSuper) TabletEvent(tabletEvent *QTabletEvent) {
 	runtime.KeepAlive(tabletEvent)
 }
 
+// NativeEvent calls QWindow::nativeEvent.
+func (s *QWindowSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWindow.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QWindow_super_23(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
 // EventFilter calls QObject::eventFilter.
 func (s *QWindowSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QWindow.Super.EventFilter")
@@ -2541,7 +2580,7 @@ func (s *QWindowSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEvent
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWindow.Super.EventFilter")
 	}
-	r := C.qute_QWindow_super_23(self, watchedPtr, eventPtr)
+	r := C.qute_QWindow_super_24(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -2555,7 +2594,7 @@ func (s *QWindowSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QWindow.Super.TimerEvent")
 	}
-	C.qute_QWindow_super_24(self, eventPtr)
+	C.qute_QWindow_super_25(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2567,7 +2606,7 @@ func (s *QWindowSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QWindow.Super.ChildEvent")
 	}
-	C.qute_QWindow_super_25(self, eventPtr)
+	C.qute_QWindow_super_26(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2579,9 +2618,25 @@ func (s *QWindowSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QWindow.Super.CustomEvent")
 	}
-	C.qute_QWindow_super_26(self, eventPtr)
+	C.qute_QWindow_super_27(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWindowSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWindow.Super.ConnectNotify")
+	C.qute_QWindow_super_28(self, rt.UseArg(unsafe.Pointer(signal), "QWindow.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWindowSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWindow.Super.DisconnectNotify")
+	C.qute_QWindow_super_29(self, rt.UseArg(unsafe.Pointer(signal), "QWindow.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // ResolveInterface wraps the protected QWindow::resolveInterface for subclasses.
@@ -2593,6 +2648,16 @@ func (b *QWindowBase) ResolveInterface(name string, revision int) unsafe.Pointer
 	r := C.qute_QWindow_prot_resolveInterface(self, nameCStr, C.int(revision))
 	runtime.KeepAlive(this)
 	return r
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWindowBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWindow // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWindow.IsSignalConnected")
+	r := C.qute_QWindow_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWindow.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQWindowWith constructs a QWindow whose virtual methods dispatch to v. The

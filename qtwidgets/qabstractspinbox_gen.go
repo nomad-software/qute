@@ -496,6 +496,20 @@ var qAbstractSpinBoxVTable = []rt.Virtual{
 			r := v.(interface{ Event(*qtcore.QEvent) bool }).Event(event)
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			inputMethodQuery := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(inputMethodQuery)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QAbstractSpinBox.InputMethodQuery")
+		}},
 	{Name: "Validate", Has: func(v any) bool {
 		_, ok := v.(interface {
 			Validate(string, int) (qtgui.QValidatorState, string, int)
@@ -830,6 +844,38 @@ var qAbstractSpinBoxVTable = []rt.Virtual{
 			event := rt.View[qtgui.QDropEvent](eventH, eventP)
 			v.(interface{ DropEvent(*qtgui.QDropEvent) }).DropEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "InputMethodEvent", Has: func(v any) bool {
 		_, ok := v.(interface {
 			InputMethodEvent(*qtgui.QInputMethodEvent)
@@ -889,6 +935,18 @@ var qAbstractSpinBoxVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QAbstractSpinBoxBase is embedded in Go types that subclass QAbstractSpinBox:
@@ -942,12 +1000,20 @@ func (s *QAbstractSpinBoxSuper) Event(event *qtcore.QEvent) bool {
 	return bool(r)
 }
 
+// InputMethodQuery calls QAbstractSpinBox::inputMethodQuery.
+func (s *QAbstractSpinBoxSuper) InputMethodQuery(inputMethodQuery qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.InputMethodQuery")
+	r := C.qute_QAbstractSpinBox_super_3(self, C.int64_t(inputMethodQuery))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Validate calls QAbstractSpinBox::validate.
 func (s *QAbstractSpinBoxSuper) Validate(input string, pos int) (qtgui.QValidatorState, string, int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.Validate")
 	var inputOut C.qute_str
 	var posOut C.int
-	r := C.qute_QAbstractSpinBox_super_3(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut, C.int(pos), &posOut)
+	r := C.qute_QAbstractSpinBox_super_4(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut, C.int(pos), &posOut)
 	runtime.KeepAlive(s.this)
 	return qtgui.QValidatorState(r), quteStr(inputOut), int(posOut)
 }
@@ -956,7 +1022,7 @@ func (s *QAbstractSpinBoxSuper) Validate(input string, pos int) (qtgui.QValidato
 func (s *QAbstractSpinBoxSuper) Fixup(input string) string {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.Fixup")
 	var inputOut C.qute_str
-	C.qute_QAbstractSpinBox_super_4(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut)
+	C.qute_QAbstractSpinBox_super_5(self, (*C.char)(unsafe.Pointer(unsafe.StringData(input))), C.ptrdiff_t(len(input)), &inputOut)
 	runtime.KeepAlive(s.this)
 	return quteStr(inputOut)
 }
@@ -964,14 +1030,14 @@ func (s *QAbstractSpinBoxSuper) Fixup(input string) string {
 // StepBy calls QAbstractSpinBox::stepBy.
 func (s *QAbstractSpinBoxSuper) StepBy(steps int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.StepBy")
-	C.qute_QAbstractSpinBox_super_5(self, C.int(steps))
+	C.qute_QAbstractSpinBox_super_6(self, C.int(steps))
 	runtime.KeepAlive(s.this)
 }
 
 // Clear calls QAbstractSpinBox::clear.
 func (s *QAbstractSpinBoxSuper) Clear() {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.Clear")
-	C.qute_QAbstractSpinBox_super_6(self)
+	C.qute_QAbstractSpinBox_super_7(self)
 	runtime.KeepAlive(s.this)
 }
 
@@ -982,7 +1048,7 @@ func (s *QAbstractSpinBoxSuper) ResizeEvent(event *qtgui.QResizeEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQResizeEvent()), "QAbstractSpinBox.Super.ResizeEvent")
 	}
-	C.qute_QAbstractSpinBox_super_7(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_8(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -994,7 +1060,7 @@ func (s *QAbstractSpinBoxSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractSpinBox.Super.KeyPressEvent")
 	}
-	C.qute_QAbstractSpinBox_super_8(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_9(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1006,7 +1072,7 @@ func (s *QAbstractSpinBoxSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QAbstractSpinBox.Super.KeyReleaseEvent")
 	}
-	C.qute_QAbstractSpinBox_super_9(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_10(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1018,7 +1084,7 @@ func (s *QAbstractSpinBoxSuper) WheelEvent(event *qtgui.QWheelEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQWheelEvent()), "QAbstractSpinBox.Super.WheelEvent")
 	}
-	C.qute_QAbstractSpinBox_super_10(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_11(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1030,7 +1096,7 @@ func (s *QAbstractSpinBoxSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractSpinBox.Super.FocusInEvent")
 	}
-	C.qute_QAbstractSpinBox_super_11(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_12(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1042,7 +1108,7 @@ func (s *QAbstractSpinBoxSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QAbstractSpinBox.Super.FocusOutEvent")
 	}
-	C.qute_QAbstractSpinBox_super_12(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_13(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1054,7 +1120,7 @@ func (s *QAbstractSpinBoxSuper) ContextMenuEvent(event *qtgui.QContextMenuEvent)
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQContextMenuEvent()), "QAbstractSpinBox.Super.ContextMenuEvent")
 	}
-	C.qute_QAbstractSpinBox_super_13(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_14(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1066,7 +1132,7 @@ func (s *QAbstractSpinBoxSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractSpinBox.Super.ChangeEvent")
 	}
-	C.qute_QAbstractSpinBox_super_14(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_15(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1078,7 +1144,7 @@ func (s *QAbstractSpinBoxSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QAbstractSpinBox.Super.CloseEvent")
 	}
-	C.qute_QAbstractSpinBox_super_15(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_16(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1090,7 +1156,7 @@ func (s *QAbstractSpinBoxSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QAbstractSpinBox.Super.HideEvent")
 	}
-	C.qute_QAbstractSpinBox_super_16(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_17(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1102,7 +1168,7 @@ func (s *QAbstractSpinBoxSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractSpinBox.Super.MousePressEvent")
 	}
-	C.qute_QAbstractSpinBox_super_17(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_18(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1114,7 +1180,7 @@ func (s *QAbstractSpinBoxSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractSpinBox.Super.MouseReleaseEvent")
 	}
-	C.qute_QAbstractSpinBox_super_18(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_19(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1126,7 +1192,7 @@ func (s *QAbstractSpinBoxSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractSpinBox.Super.MouseMoveEvent")
 	}
-	C.qute_QAbstractSpinBox_super_19(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_20(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1138,7 +1204,7 @@ func (s *QAbstractSpinBoxSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QAbstractSpinBox.Super.TimerEvent")
 	}
-	C.qute_QAbstractSpinBox_super_20(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_21(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1150,7 +1216,7 @@ func (s *QAbstractSpinBoxSuper) PaintEvent(event *qtgui.QPaintEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQPaintEvent()), "QAbstractSpinBox.Super.PaintEvent")
 	}
-	C.qute_QAbstractSpinBox_super_21(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_22(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1162,7 +1228,7 @@ func (s *QAbstractSpinBoxSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QAbstractSpinBox.Super.ShowEvent")
 	}
-	C.qute_QAbstractSpinBox_super_22(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_23(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1170,7 +1236,7 @@ func (s *QAbstractSpinBoxSuper) ShowEvent(event *qtgui.QShowEvent) {
 // InitStyleOption calls QAbstractSpinBox::initStyleOption.
 func (s *QAbstractSpinBoxSuper) InitStyleOption(option *QStyleOptionSpinBox) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.InitStyleOption")
-	C.qute_QAbstractSpinBox_super_23(self, rt.UseArg(unsafe.Pointer(option), "QAbstractSpinBox.Super.InitStyleOption"))
+	C.qute_QAbstractSpinBox_super_24(self, rt.UseArg(unsafe.Pointer(option), "QAbstractSpinBox.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -1178,7 +1244,7 @@ func (s *QAbstractSpinBoxSuper) InitStyleOption(option *QStyleOptionSpinBox) {
 // StepEnabled calls QAbstractSpinBox::stepEnabled.
 func (s *QAbstractSpinBoxSuper) StepEnabled() QAbstractSpinBoxStepEnabled {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.StepEnabled")
-	r := C.qute_QAbstractSpinBox_super_24(self)
+	r := C.qute_QAbstractSpinBox_super_25(self)
 	runtime.KeepAlive(s.this)
 	return QAbstractSpinBoxStepEnabled(r)
 }
@@ -1186,14 +1252,14 @@ func (s *QAbstractSpinBoxSuper) StepEnabled() QAbstractSpinBoxStepEnabled {
 // SetVisible calls QWidget::setVisible.
 func (s *QAbstractSpinBoxSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.SetVisible")
-	C.qute_QAbstractSpinBox_super_25(self, C.bool(visible))
+	C.qute_QAbstractSpinBox_super_26(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QAbstractSpinBoxSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.HeightForWidth")
-	r := C.qute_QAbstractSpinBox_super_26(self, C.int(arg0))
+	r := C.qute_QAbstractSpinBox_super_27(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -1201,7 +1267,7 @@ func (s *QAbstractSpinBoxSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QAbstractSpinBoxSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.HasHeightForWidth")
-	r := C.qute_QAbstractSpinBox_super_27(self)
+	r := C.qute_QAbstractSpinBox_super_28(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1213,7 +1279,7 @@ func (s *QAbstractSpinBoxSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) 
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QAbstractSpinBox.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QAbstractSpinBox_super_28(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_29(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1225,7 +1291,7 @@ func (s *QAbstractSpinBoxSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QAbstractSpinBox.Super.EnterEvent")
 	}
-	C.qute_QAbstractSpinBox_super_29(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_30(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1237,7 +1303,7 @@ func (s *QAbstractSpinBoxSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractSpinBox.Super.LeaveEvent")
 	}
-	C.qute_QAbstractSpinBox_super_30(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_31(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1249,7 +1315,7 @@ func (s *QAbstractSpinBoxSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QAbstractSpinBox.Super.MoveEvent")
 	}
-	C.qute_QAbstractSpinBox_super_31(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_32(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1261,7 +1327,7 @@ func (s *QAbstractSpinBoxSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QAbstractSpinBox.Super.TabletEvent")
 	}
-	C.qute_QAbstractSpinBox_super_32(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1273,7 +1339,7 @@ func (s *QAbstractSpinBoxSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QAbstractSpinBox.Super.ActionEvent")
 	}
-	C.qute_QAbstractSpinBox_super_33(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_34(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1285,7 +1351,7 @@ func (s *QAbstractSpinBoxSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QAbstractSpinBox.Super.DragEnterEvent")
 	}
-	C.qute_QAbstractSpinBox_super_34(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_35(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1297,7 +1363,7 @@ func (s *QAbstractSpinBoxSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QAbstractSpinBox.Super.DragMoveEvent")
 	}
-	C.qute_QAbstractSpinBox_super_35(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_36(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1309,7 +1375,7 @@ func (s *QAbstractSpinBoxSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QAbstractSpinBox.Super.DragLeaveEvent")
 	}
-	C.qute_QAbstractSpinBox_super_36(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_37(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1321,9 +1387,26 @@ func (s *QAbstractSpinBoxSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QAbstractSpinBox.Super.DropEvent")
 	}
-	C.qute_QAbstractSpinBox_super_37(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_38(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QAbstractSpinBoxSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QAbstractSpinBox_super_39(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QAbstractSpinBoxSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.Metric")
+	r := C.qute_QAbstractSpinBox_super_40(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // InputMethodEvent calls QWidget::inputMethodEvent.
@@ -1333,7 +1416,7 @@ func (s *QAbstractSpinBoxSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputM
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QAbstractSpinBox.Super.InputMethodEvent")
 	}
-	C.qute_QAbstractSpinBox_super_38(self, inputMethodEventPtr)
+	C.qute_QAbstractSpinBox_super_41(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
 }
@@ -1341,7 +1424,7 @@ func (s *QAbstractSpinBoxSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputM
 // FocusNextPrevChild calls QWidget::focusNextPrevChild.
 func (s *QAbstractSpinBoxSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.FocusNextPrevChild")
-	r := C.qute_QAbstractSpinBox_super_39(self, C.bool(next))
+	r := C.qute_QAbstractSpinBox_super_42(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1357,7 +1440,7 @@ func (s *QAbstractSpinBoxSuper) EventFilter(watched *qtcore.QObject, event *qtco
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractSpinBox.Super.EventFilter")
 	}
-	r := C.qute_QAbstractSpinBox_super_40(self, watchedPtr, eventPtr)
+	r := C.qute_QAbstractSpinBox_super_43(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -1371,7 +1454,7 @@ func (s *QAbstractSpinBoxSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QAbstractSpinBox.Super.ChildEvent")
 	}
-	C.qute_QAbstractSpinBox_super_41(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_44(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1383,9 +1466,25 @@ func (s *QAbstractSpinBoxSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QAbstractSpinBox.Super.CustomEvent")
 	}
-	C.qute_QAbstractSpinBox_super_42(self, eventPtr)
+	C.qute_QAbstractSpinBox_super_45(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAbstractSpinBoxSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.ConnectNotify")
+	C.qute_QAbstractSpinBox_super_46(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractSpinBox.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAbstractSpinBoxSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAbstractSpinBox.Super.DisconnectNotify")
+	C.qute_QAbstractSpinBox_super_47(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractSpinBox.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // LineEdit wraps the protected QAbstractSpinBox::lineEdit for subclasses.
@@ -1451,6 +1550,16 @@ func (b *QAbstractSpinBoxBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.FocusPreviousChild")
 	r := C.qute_QAbstractSpinBox_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAbstractSpinBoxBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QAbstractSpinBox // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAbstractSpinBox.IsSignalConnected")
+	r := C.qute_QAbstractSpinBox_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAbstractSpinBox.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

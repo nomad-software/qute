@@ -599,6 +599,20 @@ var qGraphicsPixmapItemVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsPixmapItem.InputMethodQuery")
+		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
 			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
@@ -1012,10 +1026,18 @@ func (s *QGraphicsPixmapItemSuper) InputMethodEvent(event *qtgui.QInputMethodEve
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QGraphicsPixmapItemSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsPixmapItem.Super.InputMethodQuery")
+	r := C.qute_QGraphicsPixmapItem_super_33(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QGraphicsPixmapItemSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsPixmapItem.Super.ItemChange")
-	r := C.qute_QGraphicsPixmapItem_super_33(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsPixmapItem.Super.ItemChange"))
+	r := C.qute_QGraphicsPixmapItem_super_34(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsPixmapItem.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)

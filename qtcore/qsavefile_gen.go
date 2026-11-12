@@ -342,6 +342,18 @@ var qSaveFileVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QSaveFileBase is embedded in Go types that subclass QSaveFile:
@@ -577,6 +589,22 @@ func (s *QSaveFileSuper) CustomEvent(event *QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSaveFileSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSaveFile.Super.ConnectNotify")
+	C.qute_QSaveFile_super_23(self, rt.UseArg(unsafe.Pointer(signal), "QSaveFile.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSaveFileSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSaveFile.Super.DisconnectNotify")
+	C.qute_QSaveFile_super_24(self, rt.UseArg(unsafe.Pointer(signal), "QSaveFile.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetOpenMode wraps the protected QIODevice::setOpenMode for subclasses.
 func (b *QSaveFileBase) SetOpenMode(openMode QIODeviceBaseOpenMode) {
 	this := b.QSaveFile // the receiver the ownership code below acts on
@@ -591,6 +619,16 @@ func (b *QSaveFileBase) SetErrorString(errorString string) {
 	self := rt.Use(unsafe.Pointer(this), "QSaveFile.SetErrorString")
 	C.qute_QSaveFile_prot_setErrorString(self, (*C.char)(unsafe.Pointer(unsafe.StringData(errorString))), C.ptrdiff_t(len(errorString)))
 	runtime.KeepAlive(this)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSaveFileBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QSaveFile // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSaveFile.IsSignalConnected")
+	r := C.qute_QSaveFile_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSaveFile.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQSaveFileWith constructs a QSaveFile whose virtual methods dispatch to v. The

@@ -478,6 +478,20 @@ var qGraphicsItemGroupVTable = []rt.Virtual{
 				InputMethodEvent(*qtgui.QInputMethodEvent)
 			}).InputMethodEvent(event)
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsItemGroup.InputMethodQuery")
+		}},
 	{Name: "ItemChange", Has: func(v any) bool {
 		_, ok := v.(interface {
 			ItemChange(QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant
@@ -908,10 +922,18 @@ func (s *QGraphicsItemGroupSuper) InputMethodEvent(event *qtgui.QInputMethodEven
 	runtime.KeepAlive(event)
 }
 
+// InputMethodQuery calls QGraphicsItem::inputMethodQuery.
+func (s *QGraphicsItemGroupSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemGroup.Super.InputMethodQuery")
+	r := C.qute_QGraphicsItemGroup_super_30(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // ItemChange calls QGraphicsItem::itemChange.
 func (s *QGraphicsItemGroupSuper) ItemChange(change QGraphicsItemGraphicsItemChange, value *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemGroup.Super.ItemChange")
-	r := C.qute_QGraphicsItemGroup_super_30(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsItemGroup.Super.ItemChange"))
+	r := C.qute_QGraphicsItemGroup_super_31(self, C.int64_t(change), rt.UseArg(unsafe.Pointer(value), "QGraphicsItemGroup.Super.ItemChange"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(value)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
@@ -920,7 +942,7 @@ func (s *QGraphicsItemGroupSuper) ItemChange(change QGraphicsItemGraphicsItemCha
 // SupportsExtension calls QGraphicsItem::supportsExtension.
 func (s *QGraphicsItemGroupSuper) SupportsExtension(extension QGraphicsItemExtension) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemGroup.Super.SupportsExtension")
-	r := C.qute_QGraphicsItemGroup_super_31(self, C.int64_t(extension))
+	r := C.qute_QGraphicsItemGroup_super_32(self, C.int64_t(extension))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -928,7 +950,7 @@ func (s *QGraphicsItemGroupSuper) SupportsExtension(extension QGraphicsItemExten
 // SetExtension calls QGraphicsItem::setExtension.
 func (s *QGraphicsItemGroupSuper) SetExtension(extension QGraphicsItemExtension, variant *qtcore.QVariant) {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemGroup.Super.SetExtension")
-	C.qute_QGraphicsItemGroup_super_32(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsItemGroup.Super.SetExtension"))
+	C.qute_QGraphicsItemGroup_super_33(self, C.int64_t(extension), rt.UseArg(unsafe.Pointer(variant), "QGraphicsItemGroup.Super.SetExtension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 }
@@ -936,7 +958,7 @@ func (s *QGraphicsItemGroupSuper) SetExtension(extension QGraphicsItemExtension,
 // Extension calls QGraphicsItem::extension.
 func (s *QGraphicsItemGroupSuper) Extension(variant *qtcore.QVariant) *qtcore.QVariant {
 	self := rt.Use(unsafe.Pointer(s.this), "QGraphicsItemGroup.Super.Extension")
-	r := C.qute_QGraphicsItemGroup_super_33(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsItemGroup.Super.Extension"))
+	r := C.qute_QGraphicsItemGroup_super_34(self, rt.UseArg(unsafe.Pointer(variant), "QGraphicsItemGroup.Super.Extension"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(variant)
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)

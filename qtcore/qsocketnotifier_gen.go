@@ -230,6 +230,18 @@ var qSocketNotifierVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QSocketNotifierBase is embedded in Go types that subclass QSocketNotifier:
@@ -319,6 +331,32 @@ func (s *QSocketNotifierSuper) CustomEvent(event *QEvent) {
 	C.qute_QSocketNotifier_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QSocketNotifierSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSocketNotifier.Super.ConnectNotify")
+	C.qute_QSocketNotifier_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QSocketNotifier.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QSocketNotifierSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QSocketNotifier.Super.DisconnectNotify")
+	C.qute_QSocketNotifier_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QSocketNotifier.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QSocketNotifierBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QSocketNotifier // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QSocketNotifier.IsSignalConnected")
+	r := C.qute_QSocketNotifier_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QSocketNotifier.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQSocketNotifierWith constructs a QSocketNotifier whose virtual methods dispatch to v. The

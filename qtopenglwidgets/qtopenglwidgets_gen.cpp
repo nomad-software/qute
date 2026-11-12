@@ -17,6 +17,7 @@
 #include <QImage>
 #include <QInputMethodEvent>
 #include <QKeyEvent>
+#include <QMetaMethod>
 #include <QMetaObject>
 #include <QMouseEvent>
 #include <QMoveEvent>
@@ -29,6 +30,7 @@
 #include <QSurfaceFormat>
 #include <QTabletEvent>
 #include <QTimerEvent>
+#include <QVariant>
 #include <QWheelEvent>
 #include <QWidget>
 
@@ -98,6 +100,7 @@ public:
 	using QWidget::destroy;
 	using QWidget::focusNextChild;
 	using QWidget::focusPreviousChild;
+	using QObject::isSignalConnected;
 	using QPaintDevice::getDecodedMetricF;
 	void initializeGL() override {
 		if (qute_has(0)) {
@@ -163,71 +166,72 @@ public:
 		return QOpenGLWidget::event(a0);
 	}
 	bool qute_super_5(QEvent * a0) { return QOpenGLWidget::event(a0); }
-	void setVisible(bool a0) override {
+	int metric(QPaintDevice::PaintDeviceMetric a0) const override {
 		if (qute_has(6)) {
+			int64_t c0 = static_cast<int64_t>(a0);
+			void *args[] = {&c0};
+			int r{};
+			if (qute_virtual(qute_id, 6, args, &r)) {
+				return static_cast<int>(r);
+			}
+		}
+		return QOpenGLWidget::metric(a0);
+	}
+	int qute_super_6(QPaintDevice::PaintDeviceMetric a0) const { return QOpenGLWidget::metric(a0); }
+	void setVisible(bool a0) override {
+		if (qute_has(7)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 6, args, nullptr)) {
+			if (qute_virtual(qute_id, 7, args, nullptr)) {
 				return;
 			}
 		}
 		QWidget::setVisible(a0);
 	}
-	void qute_super_6(bool a0) { return QWidget::setVisible(a0); }
+	void qute_super_7(bool a0) { return QWidget::setVisible(a0); }
 	QSize sizeHint() const override {
-		if (qute_has(7)) {
-			qute_size r{};
-			if (qute_virtual(qute_id, 7, nullptr, &r)) {
-				return qute_to_QSize(r);
-			}
-		}
-		return QWidget::sizeHint();
-	}
-	QSize qute_super_7() const { return QWidget::sizeHint(); }
-	QSize minimumSizeHint() const override {
 		if (qute_has(8)) {
 			qute_size r{};
 			if (qute_virtual(qute_id, 8, nullptr, &r)) {
 				return qute_to_QSize(r);
 			}
 		}
+		return QWidget::sizeHint();
+	}
+	QSize qute_super_8() const { return QWidget::sizeHint(); }
+	QSize minimumSizeHint() const override {
+		if (qute_has(9)) {
+			qute_size r{};
+			if (qute_virtual(qute_id, 9, nullptr, &r)) {
+				return qute_to_QSize(r);
+			}
+		}
 		return QWidget::minimumSizeHint();
 	}
-	QSize qute_super_8() const { return QWidget::minimumSizeHint(); }
+	QSize qute_super_9() const { return QWidget::minimumSizeHint(); }
 	int heightForWidth(int a0) const override {
-		if (qute_has(9)) {
+		if (qute_has(10)) {
 			int c0 = static_cast<int>(a0);
 			void *args[] = {&c0};
 			int r{};
-			if (qute_virtual(qute_id, 9, args, &r)) {
+			if (qute_virtual(qute_id, 10, args, &r)) {
 				return static_cast<int>(r);
 			}
 		}
 		return QWidget::heightForWidth(a0);
 	}
-	int qute_super_9(int a0) const { return QWidget::heightForWidth(a0); }
+	int qute_super_10(int a0) const { return QWidget::heightForWidth(a0); }
 	bool hasHeightForWidth() const override {
-		if (qute_has(10)) {
+		if (qute_has(11)) {
 			bool r{};
-			if (qute_virtual(qute_id, 10, nullptr, &r)) {
+			if (qute_virtual(qute_id, 11, nullptr, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QWidget::hasHeightForWidth();
 	}
-	bool qute_super_10() const { return QWidget::hasHeightForWidth(); }
+	bool qute_super_11() const { return QWidget::hasHeightForWidth(); }
 	void mousePressEvent(QMouseEvent * a0) override {
-		if (qute_has(11)) {
-			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 11, args, nullptr)) {
-				return;
-			}
-		}
-		QWidget::mousePressEvent(a0);
-	}
-	void qute_super_11(QMouseEvent * a0) { return QWidget::mousePressEvent(a0); }
-	void mouseReleaseEvent(QMouseEvent * a0) override {
 		if (qute_has(12)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -235,10 +239,10 @@ public:
 				return;
 			}
 		}
-		QWidget::mouseReleaseEvent(a0);
+		QWidget::mousePressEvent(a0);
 	}
-	void qute_super_12(QMouseEvent * a0) { return QWidget::mouseReleaseEvent(a0); }
-	void mouseDoubleClickEvent(QMouseEvent * a0) override {
+	void qute_super_12(QMouseEvent * a0) { return QWidget::mousePressEvent(a0); }
+	void mouseReleaseEvent(QMouseEvent * a0) override {
 		if (qute_has(13)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -246,10 +250,10 @@ public:
 				return;
 			}
 		}
-		QWidget::mouseDoubleClickEvent(a0);
+		QWidget::mouseReleaseEvent(a0);
 	}
-	void qute_super_13(QMouseEvent * a0) { return QWidget::mouseDoubleClickEvent(a0); }
-	void mouseMoveEvent(QMouseEvent * a0) override {
+	void qute_super_13(QMouseEvent * a0) { return QWidget::mouseReleaseEvent(a0); }
+	void mouseDoubleClickEvent(QMouseEvent * a0) override {
 		if (qute_has(14)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -257,10 +261,10 @@ public:
 				return;
 			}
 		}
-		QWidget::mouseMoveEvent(a0);
+		QWidget::mouseDoubleClickEvent(a0);
 	}
-	void qute_super_14(QMouseEvent * a0) { return QWidget::mouseMoveEvent(a0); }
-	void wheelEvent(QWheelEvent * a0) override {
+	void qute_super_14(QMouseEvent * a0) { return QWidget::mouseDoubleClickEvent(a0); }
+	void mouseMoveEvent(QMouseEvent * a0) override {
 		if (qute_has(15)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -268,10 +272,10 @@ public:
 				return;
 			}
 		}
-		QWidget::wheelEvent(a0);
+		QWidget::mouseMoveEvent(a0);
 	}
-	void qute_super_15(QWheelEvent * a0) { return QWidget::wheelEvent(a0); }
-	void keyPressEvent(QKeyEvent * a0) override {
+	void qute_super_15(QMouseEvent * a0) { return QWidget::mouseMoveEvent(a0); }
+	void wheelEvent(QWheelEvent * a0) override {
 		if (qute_has(16)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -279,10 +283,10 @@ public:
 				return;
 			}
 		}
-		QWidget::keyPressEvent(a0);
+		QWidget::wheelEvent(a0);
 	}
-	void qute_super_16(QKeyEvent * a0) { return QWidget::keyPressEvent(a0); }
-	void keyReleaseEvent(QKeyEvent * a0) override {
+	void qute_super_16(QWheelEvent * a0) { return QWidget::wheelEvent(a0); }
+	void keyPressEvent(QKeyEvent * a0) override {
 		if (qute_has(17)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -290,10 +294,10 @@ public:
 				return;
 			}
 		}
-		QWidget::keyReleaseEvent(a0);
+		QWidget::keyPressEvent(a0);
 	}
-	void qute_super_17(QKeyEvent * a0) { return QWidget::keyReleaseEvent(a0); }
-	void focusInEvent(QFocusEvent * a0) override {
+	void qute_super_17(QKeyEvent * a0) { return QWidget::keyPressEvent(a0); }
+	void keyReleaseEvent(QKeyEvent * a0) override {
 		if (qute_has(18)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -301,10 +305,10 @@ public:
 				return;
 			}
 		}
-		QWidget::focusInEvent(a0);
+		QWidget::keyReleaseEvent(a0);
 	}
-	void qute_super_18(QFocusEvent * a0) { return QWidget::focusInEvent(a0); }
-	void focusOutEvent(QFocusEvent * a0) override {
+	void qute_super_18(QKeyEvent * a0) { return QWidget::keyReleaseEvent(a0); }
+	void focusInEvent(QFocusEvent * a0) override {
 		if (qute_has(19)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -312,10 +316,10 @@ public:
 				return;
 			}
 		}
-		QWidget::focusOutEvent(a0);
+		QWidget::focusInEvent(a0);
 	}
-	void qute_super_19(QFocusEvent * a0) { return QWidget::focusOutEvent(a0); }
-	void enterEvent(QEnterEvent * a0) override {
+	void qute_super_19(QFocusEvent * a0) { return QWidget::focusInEvent(a0); }
+	void focusOutEvent(QFocusEvent * a0) override {
 		if (qute_has(20)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -323,10 +327,10 @@ public:
 				return;
 			}
 		}
-		QWidget::enterEvent(a0);
+		QWidget::focusOutEvent(a0);
 	}
-	void qute_super_20(QEnterEvent * a0) { return QWidget::enterEvent(a0); }
-	void leaveEvent(QEvent * a0) override {
+	void qute_super_20(QFocusEvent * a0) { return QWidget::focusOutEvent(a0); }
+	void enterEvent(QEnterEvent * a0) override {
 		if (qute_has(21)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -334,10 +338,10 @@ public:
 				return;
 			}
 		}
-		QWidget::leaveEvent(a0);
+		QWidget::enterEvent(a0);
 	}
-	void qute_super_21(QEvent * a0) { return QWidget::leaveEvent(a0); }
-	void moveEvent(QMoveEvent * a0) override {
+	void qute_super_21(QEnterEvent * a0) { return QWidget::enterEvent(a0); }
+	void leaveEvent(QEvent * a0) override {
 		if (qute_has(22)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -345,10 +349,10 @@ public:
 				return;
 			}
 		}
-		QWidget::moveEvent(a0);
+		QWidget::leaveEvent(a0);
 	}
-	void qute_super_22(QMoveEvent * a0) { return QWidget::moveEvent(a0); }
-	void closeEvent(QCloseEvent * a0) override {
+	void qute_super_22(QEvent * a0) { return QWidget::leaveEvent(a0); }
+	void moveEvent(QMoveEvent * a0) override {
 		if (qute_has(23)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -356,10 +360,10 @@ public:
 				return;
 			}
 		}
-		QWidget::closeEvent(a0);
+		QWidget::moveEvent(a0);
 	}
-	void qute_super_23(QCloseEvent * a0) { return QWidget::closeEvent(a0); }
-	void contextMenuEvent(QContextMenuEvent * a0) override {
+	void qute_super_23(QMoveEvent * a0) { return QWidget::moveEvent(a0); }
+	void closeEvent(QCloseEvent * a0) override {
 		if (qute_has(24)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -367,10 +371,10 @@ public:
 				return;
 			}
 		}
-		QWidget::contextMenuEvent(a0);
+		QWidget::closeEvent(a0);
 	}
-	void qute_super_24(QContextMenuEvent * a0) { return QWidget::contextMenuEvent(a0); }
-	void tabletEvent(QTabletEvent * a0) override {
+	void qute_super_24(QCloseEvent * a0) { return QWidget::closeEvent(a0); }
+	void contextMenuEvent(QContextMenuEvent * a0) override {
 		if (qute_has(25)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -378,10 +382,10 @@ public:
 				return;
 			}
 		}
-		QWidget::tabletEvent(a0);
+		QWidget::contextMenuEvent(a0);
 	}
-	void qute_super_25(QTabletEvent * a0) { return QWidget::tabletEvent(a0); }
-	void actionEvent(QActionEvent * a0) override {
+	void qute_super_25(QContextMenuEvent * a0) { return QWidget::contextMenuEvent(a0); }
+	void tabletEvent(QTabletEvent * a0) override {
 		if (qute_has(26)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -389,10 +393,10 @@ public:
 				return;
 			}
 		}
-		QWidget::actionEvent(a0);
+		QWidget::tabletEvent(a0);
 	}
-	void qute_super_26(QActionEvent * a0) { return QWidget::actionEvent(a0); }
-	void dragEnterEvent(QDragEnterEvent * a0) override {
+	void qute_super_26(QTabletEvent * a0) { return QWidget::tabletEvent(a0); }
+	void actionEvent(QActionEvent * a0) override {
 		if (qute_has(27)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -400,10 +404,10 @@ public:
 				return;
 			}
 		}
-		QWidget::dragEnterEvent(a0);
+		QWidget::actionEvent(a0);
 	}
-	void qute_super_27(QDragEnterEvent * a0) { return QWidget::dragEnterEvent(a0); }
-	void dragMoveEvent(QDragMoveEvent * a0) override {
+	void qute_super_27(QActionEvent * a0) { return QWidget::actionEvent(a0); }
+	void dragEnterEvent(QDragEnterEvent * a0) override {
 		if (qute_has(28)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -411,10 +415,10 @@ public:
 				return;
 			}
 		}
-		QWidget::dragMoveEvent(a0);
+		QWidget::dragEnterEvent(a0);
 	}
-	void qute_super_28(QDragMoveEvent * a0) { return QWidget::dragMoveEvent(a0); }
-	void dragLeaveEvent(QDragLeaveEvent * a0) override {
+	void qute_super_28(QDragEnterEvent * a0) { return QWidget::dragEnterEvent(a0); }
+	void dragMoveEvent(QDragMoveEvent * a0) override {
 		if (qute_has(29)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -422,10 +426,10 @@ public:
 				return;
 			}
 		}
-		QWidget::dragLeaveEvent(a0);
+		QWidget::dragMoveEvent(a0);
 	}
-	void qute_super_29(QDragLeaveEvent * a0) { return QWidget::dragLeaveEvent(a0); }
-	void dropEvent(QDropEvent * a0) override {
+	void qute_super_29(QDragMoveEvent * a0) { return QWidget::dragMoveEvent(a0); }
+	void dragLeaveEvent(QDragLeaveEvent * a0) override {
 		if (qute_has(30)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -433,10 +437,10 @@ public:
 				return;
 			}
 		}
-		QWidget::dropEvent(a0);
+		QWidget::dragLeaveEvent(a0);
 	}
-	void qute_super_30(QDropEvent * a0) { return QWidget::dropEvent(a0); }
-	void showEvent(QShowEvent * a0) override {
+	void qute_super_30(QDragLeaveEvent * a0) { return QWidget::dragLeaveEvent(a0); }
+	void dropEvent(QDropEvent * a0) override {
 		if (qute_has(31)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -444,10 +448,10 @@ public:
 				return;
 			}
 		}
-		QWidget::showEvent(a0);
+		QWidget::dropEvent(a0);
 	}
-	void qute_super_31(QShowEvent * a0) { return QWidget::showEvent(a0); }
-	void hideEvent(QHideEvent * a0) override {
+	void qute_super_31(QDropEvent * a0) { return QWidget::dropEvent(a0); }
+	void showEvent(QShowEvent * a0) override {
 		if (qute_has(32)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -455,10 +459,10 @@ public:
 				return;
 			}
 		}
-		QWidget::hideEvent(a0);
+		QWidget::showEvent(a0);
 	}
-	void qute_super_32(QHideEvent * a0) { return QWidget::hideEvent(a0); }
-	void changeEvent(QEvent * a0) override {
+	void qute_super_32(QShowEvent * a0) { return QWidget::showEvent(a0); }
+	void hideEvent(QHideEvent * a0) override {
 		if (qute_has(33)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -466,78 +470,140 @@ public:
 				return;
 			}
 		}
-		QWidget::changeEvent(a0);
+		QWidget::hideEvent(a0);
 	}
-	void qute_super_33(QEvent * a0) { return QWidget::changeEvent(a0); }
-	void inputMethodEvent(QInputMethodEvent * a0) override {
+	void qute_super_33(QHideEvent * a0) { return QWidget::hideEvent(a0); }
+	bool nativeEvent(const QByteArray & a0, void * a1, long long * a2) override {
 		if (qute_has(34)) {
+			qute_str c0 = qute_ret_bytes(a0);
+			void * c1 = (void *)(a1);
+			long long c2{};
+			void *args[] = {&c0, &c1, a2 ? static_cast<void *>(&c2) : nullptr};
+			bool r{};
+			if (qute_virtual(qute_id, 34, args, &r)) {
+				if (a2) {
+					*a2 = static_cast<long long>(c2);
+				}
+				return static_cast<bool>(r);
+			}
+		}
+		return QWidget::nativeEvent(a0, a1, a2);
+	}
+	bool qute_super_34(const QByteArray & a0, void * a1, long long * a2) { return QWidget::nativeEvent(a0, a1, a2); }
+	void changeEvent(QEvent * a0) override {
+		if (qute_has(35)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 34, args, nullptr)) {
+			if (qute_virtual(qute_id, 35, args, nullptr)) {
+				return;
+			}
+		}
+		QWidget::changeEvent(a0);
+	}
+	void qute_super_35(QEvent * a0) { return QWidget::changeEvent(a0); }
+	void inputMethodEvent(QInputMethodEvent * a0) override {
+		if (qute_has(36)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 36, args, nullptr)) {
 				return;
 			}
 		}
 		QWidget::inputMethodEvent(a0);
 	}
-	void qute_super_34(QInputMethodEvent * a0) { return QWidget::inputMethodEvent(a0); }
+	void qute_super_36(QInputMethodEvent * a0) { return QWidget::inputMethodEvent(a0); }
+	QVariant inputMethodQuery(Qt::InputMethodQuery a0) const override {
+		if (qute_has(37)) {
+			int64_t c0 = static_cast<int64_t>(a0);
+			void *args[] = {&c0};
+			void * r = nullptr;
+			if (qute_virtual(qute_id, 37, args, &r)) {
+				return (r ? *static_cast<QVariant *>(r) : QVariant());
+			}
+		}
+		return QWidget::inputMethodQuery(a0);
+	}
+	QVariant qute_super_37(Qt::InputMethodQuery a0) const { return QWidget::inputMethodQuery(a0); }
 	bool focusNextPrevChild(bool a0) override {
-		if (qute_has(35)) {
+		if (qute_has(38)) {
 			bool c0 = static_cast<bool>(a0);
 			void *args[] = {&c0};
 			bool r{};
-			if (qute_virtual(qute_id, 35, args, &r)) {
+			if (qute_virtual(qute_id, 38, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QWidget::focusNextPrevChild(a0);
 	}
-	bool qute_super_35(bool a0) { return QWidget::focusNextPrevChild(a0); }
+	bool qute_super_38(bool a0) { return QWidget::focusNextPrevChild(a0); }
 	bool eventFilter(QObject * a0, QEvent * a1) override {
-		if (qute_has(36)) {
+		if (qute_has(39)) {
 			void * c0 = (void *)(a0);
 			void * c1 = (void *)(a1);
 			void *args[] = {&c0, &c1};
 			bool r{};
-			if (qute_virtual(qute_id, 36, args, &r)) {
+			if (qute_virtual(qute_id, 39, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
 		return QObject::eventFilter(a0, a1);
 	}
-	bool qute_super_36(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	bool qute_super_39(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
 	void timerEvent(QTimerEvent * a0) override {
-		if (qute_has(37)) {
+		if (qute_has(40)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 37, args, nullptr)) {
+			if (qute_virtual(qute_id, 40, args, nullptr)) {
 				return;
 			}
 		}
 		QObject::timerEvent(a0);
 	}
-	void qute_super_37(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void qute_super_40(QTimerEvent * a0) { return QObject::timerEvent(a0); }
 	void childEvent(QChildEvent * a0) override {
-		if (qute_has(38)) {
+		if (qute_has(41)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 38, args, nullptr)) {
+			if (qute_virtual(qute_id, 41, args, nullptr)) {
 				return;
 			}
 		}
 		QObject::childEvent(a0);
 	}
-	void qute_super_38(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void qute_super_41(QChildEvent * a0) { return QObject::childEvent(a0); }
 	void customEvent(QEvent * a0) override {
-		if (qute_has(39)) {
+		if (qute_has(42)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 39, args, nullptr)) {
+			if (qute_virtual(qute_id, 42, args, nullptr)) {
 				return;
 			}
 		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_39(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_42(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(43)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 43, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_43(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(44)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 44, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_44(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 extern "C" {
@@ -589,29 +655,29 @@ bool qute_QOpenGLWidget_super_5(void *self, void * a0) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_5(static_cast<QEvent *>(a0)));
 }
-void qute_QOpenGLWidget_super_6(void *self, bool a0) {
+int qute_QOpenGLWidget_super_6(void *self, int64_t a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_6(static_cast<bool>(a0));
+	return static_cast<int>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_6(static_cast<QPaintDevice::PaintDeviceMetric>(a0)));
 }
-qute_size qute_QOpenGLWidget_super_7(void *self) {
+void qute_QOpenGLWidget_super_7(void *self, bool a0) {
 	qute_gui_only();
-	return qute_from_QSize(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_7());
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_7(static_cast<bool>(a0));
 }
 qute_size qute_QOpenGLWidget_super_8(void *self) {
 	qute_gui_only();
 	return qute_from_QSize(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_8());
 }
-int qute_QOpenGLWidget_super_9(void *self, int a0) {
+qute_size qute_QOpenGLWidget_super_9(void *self) {
 	qute_gui_only();
-	return static_cast<int>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_9(static_cast<int>(a0)));
+	return qute_from_QSize(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_9());
 }
-bool qute_QOpenGLWidget_super_10(void *self) {
+int qute_QOpenGLWidget_super_10(void *self, int a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_10());
+	return static_cast<int>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_10(static_cast<int>(a0)));
 }
-void qute_QOpenGLWidget_super_11(void *self, void * a0) {
+bool qute_QOpenGLWidget_super_11(void *self) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_11(static_cast<QMouseEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_11());
 }
 void qute_QOpenGLWidget_super_12(void *self, void * a0) {
 	qute_gui_only();
@@ -627,11 +693,11 @@ void qute_QOpenGLWidget_super_14(void *self, void * a0) {
 }
 void qute_QOpenGLWidget_super_15(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_15(static_cast<QWheelEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_15(static_cast<QMouseEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_16(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_16(static_cast<QKeyEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_16(static_cast<QWheelEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_17(void *self, void * a0) {
 	qute_gui_only();
@@ -639,7 +705,7 @@ void qute_QOpenGLWidget_super_17(void *self, void * a0) {
 }
 void qute_QOpenGLWidget_super_18(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_18(static_cast<QFocusEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_18(static_cast<QKeyEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_19(void *self, void * a0) {
 	qute_gui_only();
@@ -647,83 +713,106 @@ void qute_QOpenGLWidget_super_19(void *self, void * a0) {
 }
 void qute_QOpenGLWidget_super_20(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_20(static_cast<QEnterEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_20(static_cast<QFocusEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_21(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_21(static_cast<QEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_21(static_cast<QEnterEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_22(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_22(static_cast<QMoveEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_22(static_cast<QEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_23(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_23(static_cast<QCloseEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_23(static_cast<QMoveEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_24(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_24(static_cast<QContextMenuEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_24(static_cast<QCloseEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_25(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_25(static_cast<QTabletEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_25(static_cast<QContextMenuEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_26(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_26(static_cast<QActionEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_26(static_cast<QTabletEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_27(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_27(static_cast<QDragEnterEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_27(static_cast<QActionEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_28(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_28(static_cast<QDragMoveEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_28(static_cast<QDragEnterEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_29(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_29(static_cast<QDragLeaveEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_29(static_cast<QDragMoveEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_30(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_30(static_cast<QDropEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_30(static_cast<QDragLeaveEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_31(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_31(static_cast<QShowEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_31(static_cast<QDropEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_32(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_32(static_cast<QHideEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_32(static_cast<QShowEvent *>(a0));
 }
 void qute_QOpenGLWidget_super_33(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_33(static_cast<QEvent *>(a0));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_33(static_cast<QHideEvent *>(a0));
 }
-void qute_QOpenGLWidget_super_34(void *self, void * a0) {
+bool qute_QOpenGLWidget_super_34(void *self, const char *a0, ptrdiff_t a0_len, void * a1, long long *a2_out) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_34(static_cast<QInputMethodEvent *>(a0));
+	long long t2{};
+	auto &&r = static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_34(QByteArray(a0, a0_len), (void *)(a1), &t2);
+	*a2_out = static_cast<long long>(t2);
+	return static_cast<bool>(r);
 }
-bool qute_QOpenGLWidget_super_35(void *self, bool a0) {
+void qute_QOpenGLWidget_super_35(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_35(static_cast<bool>(a0)));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_35(static_cast<QEvent *>(a0));
 }
-bool qute_QOpenGLWidget_super_36(void *self, void * a0, void * a1) {
+void qute_QOpenGLWidget_super_36(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_36(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_36(static_cast<QInputMethodEvent *>(a0));
 }
-void qute_QOpenGLWidget_super_37(void *self, void * a0) {
+void * qute_QOpenGLWidget_super_37(void *self, int64_t a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_37(static_cast<QTimerEvent *>(a0));
+	return static_cast<void *>(new QVariant(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_37(static_cast<Qt::InputMethodQuery>(a0))));
 }
-void qute_QOpenGLWidget_super_38(void *self, void * a0) {
+bool qute_QOpenGLWidget_super_38(void *self, bool a0) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_38(static_cast<QChildEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_38(static_cast<bool>(a0)));
 }
-void qute_QOpenGLWidget_super_39(void *self, void * a0) {
+bool qute_QOpenGLWidget_super_39(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_39(static_cast<QEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_39(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+}
+void qute_QOpenGLWidget_super_40(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_40(static_cast<QTimerEvent *>(a0));
+}
+void qute_QOpenGLWidget_super_41(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_41(static_cast<QChildEvent *>(a0));
+}
+void qute_QOpenGLWidget_super_42(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_42(static_cast<QEvent *>(a0));
+}
+void qute_QOpenGLWidget_super_43(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_43((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QOpenGLWidget_super_44(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->qute_super_44((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
 }
 void qute_QOpenGLWidget_prot_updateMicroFocus(void *self) {
 	qute_gui_only();
@@ -744,6 +833,10 @@ bool qute_QOpenGLWidget_prot_focusNextChild(void *self) {
 bool qute_QOpenGLWidget_prot_focusPreviousChild(void *self) {
 	qute_gui_only();
 	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->focusPreviousChild());
+}
+bool qute_QOpenGLWidget_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QOpenGLWidget *>(static_cast<QOpenGLWidget *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 double qute_QOpenGLWidget_prot_getDecodedMetricF(void *self, int64_t a0, int64_t a1) {
 	qute_gui_only();

@@ -237,6 +237,18 @@ var qTextFrameVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QTextFrameBase is embedded in Go types that subclass QTextFrame:
@@ -326,6 +338,22 @@ func (s *QTextFrameSuper) CustomEvent(event *qtcore.QEvent) {
 	runtime.KeepAlive(event)
 }
 
+// ConnectNotify calls QObject::connectNotify.
+func (s *QTextFrameSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.ConnectNotify")
+	C.qute_QTextFrame_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QTextFrame.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QTextFrameSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QTextFrame.Super.DisconnectNotify")
+	C.qute_QTextFrame_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QTextFrame.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
 // SetFormat wraps the protected QTextObject::setFormat for subclasses.
 func (b *QTextFrameBase) SetFormat(format *QTextFormat) {
 	this := b.QTextFrame // the receiver the ownership code below acts on
@@ -333,6 +361,16 @@ func (b *QTextFrameBase) SetFormat(format *QTextFormat) {
 	C.qute_QTextFrame_prot_setFormat(self, rt.UseArg(unsafe.Pointer(format), "QTextFrame.SetFormat"))
 	runtime.KeepAlive(this)
 	runtime.KeepAlive(format)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QTextFrameBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QTextFrame // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QTextFrame.IsSignalConnected")
+	r := C.qute_QTextFrame_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QTextFrame.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQTextFrameWith constructs a QTextFrame whose virtual methods dispatch to v. The

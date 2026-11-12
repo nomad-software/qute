@@ -269,6 +269,18 @@ var qPropertyAnimationVTable = []rt.Virtual{
 			event := rt.View[QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QPropertyAnimationBase is embedded in Go types that subclass QPropertyAnimation:
@@ -407,6 +419,32 @@ func (s *QPropertyAnimationSuper) CustomEvent(event *QEvent) {
 	C.qute_QPropertyAnimation_super_10(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QPropertyAnimationSuper) ConnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPropertyAnimation.Super.ConnectNotify")
+	C.qute_QPropertyAnimation_super_11(self, rt.UseArg(unsafe.Pointer(signal), "QPropertyAnimation.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QPropertyAnimationSuper) DisconnectNotify(signal *QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPropertyAnimation.Super.DisconnectNotify")
+	C.qute_QPropertyAnimation_super_12(self, rt.UseArg(unsafe.Pointer(signal), "QPropertyAnimation.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QPropertyAnimationBase) IsSignalConnected(signal *QMetaMethod) bool {
+	this := b.QPropertyAnimation // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPropertyAnimation.IsSignalConnected")
+	r := C.qute_QPropertyAnimation_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QPropertyAnimation.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQPropertyAnimationWith constructs a QPropertyAnimation whose virtual methods dispatch to v. The

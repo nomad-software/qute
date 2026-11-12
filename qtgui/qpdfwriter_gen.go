@@ -322,6 +322,20 @@ var qPdfWriterVTable = []rt.Virtual{
 			r := v.(interface{ NewPage() bool }).NewPage()
 			*(*C.bool)(ret) = C.bool(r)
 		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			idArg := QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(QPaintDevicePaintDeviceMetric) int
+			}).Metric(idArg)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -377,6 +391,18 @@ var qPdfWriterVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QPdfWriterBase is embedded in Go types that subclass QPdfWriter:
@@ -407,6 +433,14 @@ func (s *QPdfWriterSuper) NewPage() bool {
 	return bool(r)
 }
 
+// Metric calls QPdfWriter::metric.
+func (s *QPdfWriterSuper) Metric(idArg QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.Metric")
+	r := C.qute_QPdfWriter_super_1(self, C.int64_t(idArg))
+	runtime.KeepAlive(s.this)
+	return int(r)
+}
+
 // Event calls QObject::event.
 func (s *QPdfWriterSuper) Event(event *qtcore.QEvent) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.Event")
@@ -414,7 +448,7 @@ func (s *QPdfWriterSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.Event")
 	}
-	r := C.qute_QPdfWriter_super_1(self, eventPtr)
+	r := C.qute_QPdfWriter_super_2(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -431,7 +465,7 @@ func (s *QPdfWriterSuper) EventFilter(watched *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.EventFilter")
 	}
-	r := C.qute_QPdfWriter_super_2(self, watchedPtr, eventPtr)
+	r := C.qute_QPdfWriter_super_3(self, watchedPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(watched)
 	runtime.KeepAlive(event)
@@ -445,7 +479,7 @@ func (s *QPdfWriterSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QPdfWriter.Super.TimerEvent")
 	}
-	C.qute_QPdfWriter_super_3(self, eventPtr)
+	C.qute_QPdfWriter_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -457,7 +491,7 @@ func (s *QPdfWriterSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QPdfWriter.Super.ChildEvent")
 	}
-	C.qute_QPdfWriter_super_4(self, eventPtr)
+	C.qute_QPdfWriter_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -469,9 +503,35 @@ func (s *QPdfWriterSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPdfWriter.Super.CustomEvent")
 	}
-	C.qute_QPdfWriter_super_5(self, eventPtr)
+	C.qute_QPdfWriter_super_6(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QPdfWriterSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.ConnectNotify")
+	C.qute_QPdfWriter_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QPdfWriter.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QPdfWriterSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPdfWriter.Super.DisconnectNotify")
+	C.qute_QPdfWriter_super_8(self, rt.UseArg(unsafe.Pointer(signal), "QPdfWriter.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QPdfWriterBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QPdfWriter // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPdfWriter.IsSignalConnected")
+	r := C.qute_QPdfWriter_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QPdfWriter.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // GetDecodedMetricF wraps the protected QPaintDevice::getDecodedMetricF for subclasses.

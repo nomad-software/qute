@@ -461,6 +461,20 @@ var qColumnViewVTable = []rt.Virtual{
 			}).ItemDelegateForIndex(index)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QColumnView.ItemDelegateForIndex")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			query := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(query)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QColumnView.InputMethodQuery")
+		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			_ = args
@@ -977,6 +991,38 @@ var qColumnViewVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -994,6 +1040,18 @@ var qColumnViewVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1215,17 +1273,25 @@ func (s *QColumnViewSuper) ItemDelegateForIndex(index *qtcore.QModelIndex) *QAbs
 	return rt.View[QAbstractItemDelegate](rt.WrapClass(r, "QAbstractItemDelegate", rt.KeepOrBorrow), r)
 }
 
+// InputMethodQuery calls QAbstractItemView::inputMethodQuery.
+func (s *QColumnViewSuper) InputMethodQuery(query qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.InputMethodQuery")
+	r := C.qute_QColumnView_super_23(self, C.int64_t(query))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Reset calls QAbstractItemView::reset.
 func (s *QColumnViewSuper) Reset() {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.Reset")
-	C.qute_QColumnView_super_23(self)
+	C.qute_QColumnView_super_24(self)
 	runtime.KeepAlive(s.this)
 }
 
 // DoItemsLayout calls QAbstractItemView::doItemsLayout.
 func (s *QColumnViewSuper) DoItemsLayout() {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.DoItemsLayout")
-	C.qute_QColumnView_super_24(self)
+	C.qute_QColumnView_super_25(self)
 	runtime.KeepAlive(s.this)
 }
 
@@ -1236,7 +1302,7 @@ func (s *QColumnViewSuper) DataChanged(topLeft *qtcore.QModelIndex, bottomRight 
 	for i := range roles {
 		rolesC[i] = C.int(roles[i])
 	}
-	C.qute_QColumnView_super_25(self, rt.UseArg(unsafe.Pointer(topLeft), "QColumnView.Super.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QColumnView.Super.DataChanged"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
+	C.qute_QColumnView_super_26(self, rt.UseArg(unsafe.Pointer(topLeft), "QColumnView.Super.DataChanged"), rt.UseArg(unsafe.Pointer(bottomRight), "QColumnView.Super.DataChanged"), unsafe.Pointer(unsafe.SliceData(rolesC)), C.ptrdiff_t(len(roles)))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(topLeft)
 	runtime.KeepAlive(bottomRight)
@@ -1245,7 +1311,7 @@ func (s *QColumnViewSuper) DataChanged(topLeft *qtcore.QModelIndex, bottomRight 
 // RowsAboutToBeRemoved calls QAbstractItemView::rowsAboutToBeRemoved.
 func (s *QColumnViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, start int, end int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.RowsAboutToBeRemoved")
-	C.qute_QColumnView_super_26(self, rt.UseArg(unsafe.Pointer(parent), "QColumnView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
+	C.qute_QColumnView_super_27(self, rt.UseArg(unsafe.Pointer(parent), "QColumnView.Super.RowsAboutToBeRemoved"), C.int(start), C.int(end))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(parent)
 }
@@ -1253,7 +1319,7 @@ func (s *QColumnViewSuper) RowsAboutToBeRemoved(parent *qtcore.QModelIndex, star
 // SelectionChanged calls QAbstractItemView::selectionChanged.
 func (s *QColumnViewSuper) SelectionChanged(selected *qtcore.QItemSelection, deselected *qtcore.QItemSelection) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.SelectionChanged")
-	C.qute_QColumnView_super_27(self, rt.Use(unsafe.Pointer(selected), "QColumnView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QColumnView.Super.SelectionChanged"))
+	C.qute_QColumnView_super_28(self, rt.Use(unsafe.Pointer(selected), "QColumnView.Super.SelectionChanged"), rt.Use(unsafe.Pointer(deselected), "QColumnView.Super.SelectionChanged"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(selected)
 	runtime.KeepAlive(deselected)
@@ -1262,49 +1328,49 @@ func (s *QColumnViewSuper) SelectionChanged(selected *qtcore.QItemSelection, des
 // UpdateEditorData calls QAbstractItemView::updateEditorData.
 func (s *QColumnViewSuper) UpdateEditorData() {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.UpdateEditorData")
-	C.qute_QColumnView_super_28(self)
+	C.qute_QColumnView_super_29(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateEditorGeometries calls QAbstractItemView::updateEditorGeometries.
 func (s *QColumnViewSuper) UpdateEditorGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.UpdateEditorGeometries")
-	C.qute_QColumnView_super_29(self)
+	C.qute_QColumnView_super_30(self)
 	runtime.KeepAlive(s.this)
 }
 
 // UpdateGeometries calls QAbstractItemView::updateGeometries.
 func (s *QColumnViewSuper) UpdateGeometries() {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.UpdateGeometries")
-	C.qute_QColumnView_super_30(self)
+	C.qute_QColumnView_super_31(self)
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarAction calls QAbstractItemView::verticalScrollbarAction.
 func (s *QColumnViewSuper) VerticalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.VerticalScrollbarAction")
-	C.qute_QColumnView_super_31(self, C.int(action))
+	C.qute_QColumnView_super_32(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarAction calls QAbstractItemView::horizontalScrollbarAction.
 func (s *QColumnViewSuper) HorizontalScrollbarAction(action int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.HorizontalScrollbarAction")
-	C.qute_QColumnView_super_32(self, C.int(action))
+	C.qute_QColumnView_super_33(self, C.int(action))
 	runtime.KeepAlive(s.this)
 }
 
 // VerticalScrollbarValueChanged calls QAbstractItemView::verticalScrollbarValueChanged.
 func (s *QColumnViewSuper) VerticalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.VerticalScrollbarValueChanged")
-	C.qute_QColumnView_super_33(self, C.int(value))
+	C.qute_QColumnView_super_34(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
 // HorizontalScrollbarValueChanged calls QAbstractItemView::horizontalScrollbarValueChanged.
 func (s *QColumnViewSuper) HorizontalScrollbarValueChanged(value int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.HorizontalScrollbarValueChanged")
-	C.qute_QColumnView_super_34(self, C.int(value))
+	C.qute_QColumnView_super_35(self, C.int(value))
 	runtime.KeepAlive(s.this)
 }
 
@@ -1315,7 +1381,7 @@ func (s *QColumnViewSuper) CloseEditor(editor *QWidget, hint QAbstractItemDelega
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QColumnView.Super.CloseEditor")
 	}
-	C.qute_QColumnView_super_35(self, editorPtr, C.int64_t(hint))
+	C.qute_QColumnView_super_36(self, editorPtr, C.int64_t(hint))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1327,7 +1393,7 @@ func (s *QColumnViewSuper) CommitData(editor *QWidget) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQWidget()), "QColumnView.Super.CommitData")
 	}
-	C.qute_QColumnView_super_36(self, editorPtr)
+	C.qute_QColumnView_super_37(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1339,7 +1405,7 @@ func (s *QColumnViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 	if editor != nil {
 		editorPtr = rt.UseArg(unsafe.Pointer(editor.AsQObject()), "QColumnView.Super.EditorDestroyed")
 	}
-	C.qute_QColumnView_super_37(self, editorPtr)
+	C.qute_QColumnView_super_38(self, editorPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(editor)
 }
@@ -1347,7 +1413,7 @@ func (s *QColumnViewSuper) EditorDestroyed(editor *qtcore.QObject) {
 // SelectedIndexes calls QAbstractItemView::selectedIndexes.
 func (s *QColumnViewSuper) SelectedIndexes() []*qtcore.QModelIndex {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.SelectedIndexes")
-	r := C.qute_QColumnView_super_38(self)
+	r := C.qute_QColumnView_super_39(self)
 	runtime.KeepAlive(s.this)
 	return quteList(r, func(e unsafe.Pointer) *qtcore.QModelIndex {
 		return rt.InlineOwnedView[qtcore.QModelIndex](e, "QModelIndex")
@@ -1361,7 +1427,7 @@ func (s *QColumnViewSuper) Edit(index *qtcore.QModelIndex, trigger QAbstractItem
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.Edit")
 	}
-	r := C.qute_QColumnView_super_39(self, rt.UseArg(unsafe.Pointer(index), "QColumnView.Super.Edit"), C.int64_t(trigger), eventPtr)
+	r := C.qute_QColumnView_super_40(self, rt.UseArg(unsafe.Pointer(index), "QColumnView.Super.Edit"), C.int64_t(trigger), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -1375,7 +1441,7 @@ func (s *QColumnViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.SelectionCommand")
 	}
-	r := C.qute_QColumnView_super_40(self, rt.UseArg(unsafe.Pointer(index), "QColumnView.Super.SelectionCommand"), eventPtr)
+	r := C.qute_QColumnView_super_41(self, rt.UseArg(unsafe.Pointer(index), "QColumnView.Super.SelectionCommand"), eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(index)
 	runtime.KeepAlive(event)
@@ -1385,14 +1451,14 @@ func (s *QColumnViewSuper) SelectionCommand(index *qtcore.QModelIndex, event *qt
 // StartDrag calls QAbstractItemView::startDrag.
 func (s *QColumnViewSuper) StartDrag(supportedActions qtcore.DropActions) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.StartDrag")
-	C.qute_QColumnView_super_41(self, C.int64_t(supportedActions))
+	C.qute_QColumnView_super_42(self, C.int64_t(supportedActions))
 	runtime.KeepAlive(s.this)
 }
 
 // InitViewItemOption calls QAbstractItemView::initViewItemOption.
 func (s *QColumnViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.InitViewItemOption")
-	C.qute_QColumnView_super_42(self, rt.UseArg(unsafe.Pointer(option), "QColumnView.Super.InitViewItemOption"))
+	C.qute_QColumnView_super_43(self, rt.UseArg(unsafe.Pointer(option), "QColumnView.Super.InitViewItemOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -1400,7 +1466,7 @@ func (s *QColumnViewSuper) InitViewItemOption(option *QStyleOptionViewItem) {
 // FocusNextPrevChild calls QAbstractItemView::focusNextPrevChild.
 func (s *QColumnViewSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.FocusNextPrevChild")
-	r := C.qute_QColumnView_super_43(self, C.bool(next))
+	r := C.qute_QColumnView_super_44(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1412,7 +1478,7 @@ func (s *QColumnViewSuper) Event(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.Event")
 	}
-	r := C.qute_QColumnView_super_44(self, eventPtr)
+	r := C.qute_QColumnView_super_45(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1425,7 +1491,7 @@ func (s *QColumnViewSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.ViewportEvent")
 	}
-	r := C.qute_QColumnView_super_45(self, eventPtr)
+	r := C.qute_QColumnView_super_46(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -1438,7 +1504,7 @@ func (s *QColumnViewSuper) MousePressEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QColumnView.Super.MousePressEvent")
 	}
-	C.qute_QColumnView_super_46(self, eventPtr)
+	C.qute_QColumnView_super_47(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1450,7 +1516,7 @@ func (s *QColumnViewSuper) MouseMoveEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QColumnView.Super.MouseMoveEvent")
 	}
-	C.qute_QColumnView_super_47(self, eventPtr)
+	C.qute_QColumnView_super_48(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1462,7 +1528,7 @@ func (s *QColumnViewSuper) MouseReleaseEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QColumnView.Super.MouseReleaseEvent")
 	}
-	C.qute_QColumnView_super_48(self, eventPtr)
+	C.qute_QColumnView_super_49(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1474,7 +1540,7 @@ func (s *QColumnViewSuper) MouseDoubleClickEvent(event *qtgui.QMouseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMouseEvent()), "QColumnView.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QColumnView_super_49(self, eventPtr)
+	C.qute_QColumnView_super_50(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1486,7 +1552,7 @@ func (s *QColumnViewSuper) DragEnterEvent(event *qtgui.QDragEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragEnterEvent()), "QColumnView.Super.DragEnterEvent")
 	}
-	C.qute_QColumnView_super_50(self, eventPtr)
+	C.qute_QColumnView_super_51(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1498,7 +1564,7 @@ func (s *QColumnViewSuper) DragMoveEvent(event *qtgui.QDragMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragMoveEvent()), "QColumnView.Super.DragMoveEvent")
 	}
-	C.qute_QColumnView_super_51(self, eventPtr)
+	C.qute_QColumnView_super_52(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1510,7 +1576,7 @@ func (s *QColumnViewSuper) DragLeaveEvent(event *qtgui.QDragLeaveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDragLeaveEvent()), "QColumnView.Super.DragLeaveEvent")
 	}
-	C.qute_QColumnView_super_52(self, eventPtr)
+	C.qute_QColumnView_super_53(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1522,7 +1588,7 @@ func (s *QColumnViewSuper) DropEvent(event *qtgui.QDropEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQDropEvent()), "QColumnView.Super.DropEvent")
 	}
-	C.qute_QColumnView_super_53(self, eventPtr)
+	C.qute_QColumnView_super_54(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1534,7 +1600,7 @@ func (s *QColumnViewSuper) FocusInEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QColumnView.Super.FocusInEvent")
 	}
-	C.qute_QColumnView_super_54(self, eventPtr)
+	C.qute_QColumnView_super_55(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1546,7 +1612,7 @@ func (s *QColumnViewSuper) FocusOutEvent(event *qtgui.QFocusEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQFocusEvent()), "QColumnView.Super.FocusOutEvent")
 	}
-	C.qute_QColumnView_super_55(self, eventPtr)
+	C.qute_QColumnView_super_56(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1558,7 +1624,7 @@ func (s *QColumnViewSuper) KeyPressEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QColumnView.Super.KeyPressEvent")
 	}
-	C.qute_QColumnView_super_56(self, eventPtr)
+	C.qute_QColumnView_super_57(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1570,7 +1636,7 @@ func (s *QColumnViewSuper) TimerEvent(event *qtcore.QTimerEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTimerEvent()), "QColumnView.Super.TimerEvent")
 	}
-	C.qute_QColumnView_super_57(self, eventPtr)
+	C.qute_QColumnView_super_58(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1582,7 +1648,7 @@ func (s *QColumnViewSuper) InputMethodEvent(event *qtgui.QInputMethodEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQInputMethodEvent()), "QColumnView.Super.InputMethodEvent")
 	}
-	C.qute_QColumnView_super_58(self, eventPtr)
+	C.qute_QColumnView_super_59(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1598,7 +1664,7 @@ func (s *QColumnViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.EventFilter")
 	}
-	r := C.qute_QColumnView_super_59(self, objectPtr, eventPtr)
+	r := C.qute_QColumnView_super_60(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -1608,7 +1674,7 @@ func (s *QColumnViewSuper) EventFilter(object *qtcore.QObject, event *qtcore.QEv
 // ViewportSizeHint calls QAbstractItemView::viewportSizeHint.
 func (s *QColumnViewSuper) ViewportSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.ViewportSizeHint")
-	r := C.qute_QColumnView_super_60(self)
+	r := C.qute_QColumnView_super_61(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -1616,7 +1682,7 @@ func (s *QColumnViewSuper) ViewportSizeHint() qtcore.QSize {
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QColumnViewSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.MinimumSizeHint")
-	r := C.qute_QColumnView_super_61(self)
+	r := C.qute_QColumnView_super_62(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -1628,7 +1694,7 @@ func (s *QColumnViewSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QColumnView.Super.SetupViewport")
 	}
-	C.qute_QColumnView_super_62(self, viewportPtr)
+	C.qute_QColumnView_super_63(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -1640,7 +1706,7 @@ func (s *QColumnViewSuper) PaintEvent(paintEvent *qtgui.QPaintEvent) {
 	if paintEvent != nil {
 		paintEventPtr = rt.UseArg(unsafe.Pointer(paintEvent.AsQPaintEvent()), "QColumnView.Super.PaintEvent")
 	}
-	C.qute_QColumnView_super_63(self, paintEventPtr)
+	C.qute_QColumnView_super_64(self, paintEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(paintEvent)
 }
@@ -1652,7 +1718,7 @@ func (s *QColumnViewSuper) WheelEvent(wheelEvent *qtgui.QWheelEvent) {
 	if wheelEvent != nil {
 		wheelEventPtr = rt.UseArg(unsafe.Pointer(wheelEvent.AsQWheelEvent()), "QColumnView.Super.WheelEvent")
 	}
-	C.qute_QColumnView_super_64(self, wheelEventPtr)
+	C.qute_QColumnView_super_65(self, wheelEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(wheelEvent)
 }
@@ -1664,7 +1730,7 @@ func (s *QColumnViewSuper) ContextMenuEvent(contextMenuEvent *qtgui.QContextMenu
 	if contextMenuEvent != nil {
 		contextMenuEventPtr = rt.UseArg(unsafe.Pointer(contextMenuEvent.AsQContextMenuEvent()), "QColumnView.Super.ContextMenuEvent")
 	}
-	C.qute_QColumnView_super_65(self, contextMenuEventPtr)
+	C.qute_QColumnView_super_66(self, contextMenuEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(contextMenuEvent)
 }
@@ -1676,7 +1742,7 @@ func (s *QColumnViewSuper) ChangeEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.ChangeEvent")
 	}
-	C.qute_QColumnView_super_66(self, eventPtr)
+	C.qute_QColumnView_super_67(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1684,7 +1750,7 @@ func (s *QColumnViewSuper) ChangeEvent(event *qtcore.QEvent) {
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QColumnViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.InitStyleOption")
-	C.qute_QColumnView_super_67(self, rt.UseArg(unsafe.Pointer(option), "QColumnView.Super.InitStyleOption"))
+	C.qute_QColumnView_super_68(self, rt.UseArg(unsafe.Pointer(option), "QColumnView.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -1692,14 +1758,14 @@ func (s *QColumnViewSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QColumnViewSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.SetVisible")
-	C.qute_QColumnView_super_68(self, C.bool(visible))
+	C.qute_QColumnView_super_69(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QColumnViewSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.HeightForWidth")
-	r := C.qute_QColumnView_super_69(self, C.int(arg0))
+	r := C.qute_QColumnView_super_70(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -1707,7 +1773,7 @@ func (s *QColumnViewSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QColumnViewSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.HasHeightForWidth")
-	r := C.qute_QColumnView_super_70(self)
+	r := C.qute_QColumnView_super_71(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1719,7 +1785,7 @@ func (s *QColumnViewSuper) KeyReleaseEvent(event *qtgui.QKeyEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQKeyEvent()), "QColumnView.Super.KeyReleaseEvent")
 	}
-	C.qute_QColumnView_super_71(self, eventPtr)
+	C.qute_QColumnView_super_72(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1731,7 +1797,7 @@ func (s *QColumnViewSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QColumnView.Super.EnterEvent")
 	}
-	C.qute_QColumnView_super_72(self, eventPtr)
+	C.qute_QColumnView_super_73(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1743,7 +1809,7 @@ func (s *QColumnViewSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.LeaveEvent")
 	}
-	C.qute_QColumnView_super_73(self, eventPtr)
+	C.qute_QColumnView_super_74(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1755,7 +1821,7 @@ func (s *QColumnViewSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QColumnView.Super.MoveEvent")
 	}
-	C.qute_QColumnView_super_74(self, eventPtr)
+	C.qute_QColumnView_super_75(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1767,7 +1833,7 @@ func (s *QColumnViewSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QColumnView.Super.CloseEvent")
 	}
-	C.qute_QColumnView_super_75(self, eventPtr)
+	C.qute_QColumnView_super_76(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1779,7 +1845,7 @@ func (s *QColumnViewSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QColumnView.Super.TabletEvent")
 	}
-	C.qute_QColumnView_super_76(self, eventPtr)
+	C.qute_QColumnView_super_77(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1791,7 +1857,7 @@ func (s *QColumnViewSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QColumnView.Super.ActionEvent")
 	}
-	C.qute_QColumnView_super_77(self, eventPtr)
+	C.qute_QColumnView_super_78(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1803,7 +1869,7 @@ func (s *QColumnViewSuper) ShowEvent(event *qtgui.QShowEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQShowEvent()), "QColumnView.Super.ShowEvent")
 	}
-	C.qute_QColumnView_super_78(self, eventPtr)
+	C.qute_QColumnView_super_79(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1815,9 +1881,26 @@ func (s *QColumnViewSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QColumnView.Super.HideEvent")
 	}
-	C.qute_QColumnView_super_79(self, eventPtr)
+	C.qute_QColumnView_super_80(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QColumnViewSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QColumnView_super_81(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QColumnViewSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.Metric")
+	r := C.qute_QColumnView_super_82(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -1827,7 +1910,7 @@ func (s *QColumnViewSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QColumnView.Super.ChildEvent")
 	}
-	C.qute_QColumnView_super_80(self, eventPtr)
+	C.qute_QColumnView_super_83(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -1839,9 +1922,25 @@ func (s *QColumnViewSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QColumnView.Super.CustomEvent")
 	}
-	C.qute_QColumnView_super_81(self, eventPtr)
+	C.qute_QColumnView_super_84(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QColumnViewSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.ConnectNotify")
+	C.qute_QColumnView_super_85(self, rt.UseArg(unsafe.Pointer(signal), "QColumnView.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QColumnViewSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QColumnView.Super.DisconnectNotify")
+	C.qute_QColumnView_super_86(self, rt.UseArg(unsafe.Pointer(signal), "QColumnView.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // InitializeColumn wraps the protected QColumnView::initializeColumn for subclasses.
@@ -2018,6 +2117,16 @@ func (b *QColumnViewBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QColumnView.FocusPreviousChild")
 	r := C.qute_QColumnView_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QColumnViewBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QColumnView // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QColumnView.IsSignalConnected")
+	r := C.qute_QColumnView_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QColumnView.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 

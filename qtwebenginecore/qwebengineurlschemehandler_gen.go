@@ -139,6 +139,18 @@ var qWebEngineUrlSchemeHandlerVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QWebEngineUrlSchemeHandlerBase is embedded in Go types that subclass QWebEngineUrlSchemeHandler:
@@ -232,6 +244,32 @@ func (s *QWebEngineUrlSchemeHandlerSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QWebEngineUrlSchemeHandler_super_5(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QWebEngineUrlSchemeHandlerSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineUrlSchemeHandler.Super.ConnectNotify")
+	C.qute_QWebEngineUrlSchemeHandler_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlSchemeHandler.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QWebEngineUrlSchemeHandlerSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QWebEngineUrlSchemeHandler.Super.DisconnectNotify")
+	C.qute_QWebEngineUrlSchemeHandler_super_7(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlSchemeHandler.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QWebEngineUrlSchemeHandlerBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QWebEngineUrlSchemeHandler // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QWebEngineUrlSchemeHandler.IsSignalConnected")
+	r := C.qute_QWebEngineUrlSchemeHandler_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QWebEngineUrlSchemeHandler.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQWebEngineUrlSchemeHandlerWith constructs a QWebEngineUrlSchemeHandler whose virtual methods dispatch to v. The

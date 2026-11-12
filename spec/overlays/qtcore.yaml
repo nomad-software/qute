@@ -18,6 +18,14 @@ QCoreApplication:
   removePostedEvents: { reviewed: true }
   exit: { keep-defaults: true }
 QObject:
+  connect: { skip: "on purpose: string- and index-based connections; use the On* signal methods, which return a Connection" }
+  disconnect: { skip: "on purpose: string- and index-based connections; use the On* signal methods, which return a Connection" }
+  sender: { skip: "on purpose: qute connects Go handlers with the sender as context, so sender() names nothing a handler's closure does not already have" }
+  senderSignalIndex: { skip: "on purpose: qute connects Go handlers with the sender as context, so there is no sending signal to report" }
+  receivers: { skip: "on purpose: takes a SIGNAL() string; use IsSignalConnected with a QMetaMethod" }
+  isSignalConnected: { reviewed: true }
+  connectNotify: { reviewed: true }
+  disconnectNotify: { reviewed: true }
   killTimer(Qt::TimerId): { name: KillTimerID }
   setParent: { args: { parent: transfer-this } }
   event: { reviewed: true }
@@ -382,6 +390,8 @@ QMetaMethod:
   getParameterTypes: { skip: "writes an array; use ParameterType(i) for each of ParameterCount()" }
 
 QMetaObject:
+  connect: { skip: "on purpose: string- and index-based connections; use the On* signal methods, which return a Connection" }
+  disconnect: { skip: "on purpose: string- and index-based connections; use the On* signal methods, which return a Connection" }
   static_metacall: { skip: "on purpose: moc internals (raw argument arrays)" }
   superClass: { return: borrowed }
   inherits: { reviewed: true }

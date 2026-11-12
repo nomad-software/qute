@@ -29,6 +29,7 @@
 #include <QMediaPlayer>
 #include <QMediaRecorder>
 #include <QMediaTimeRange>
+#include <QMetaMethod>
 #include <QMetaObject>
 #include <QMimeType>
 #include <QObject>
@@ -108,6 +109,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -166,6 +168,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioBufferOutput : public QAudioBufferOutput {
@@ -174,6 +198,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -232,6 +257,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioDecoder : public QAudioDecoder {
@@ -240,6 +287,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -298,6 +346,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioInput : public QAudioInput {
@@ -306,6 +376,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -364,6 +435,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioOutput : public QAudioOutput {
@@ -372,6 +465,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -430,6 +524,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioSink : public QAudioSink {
@@ -438,6 +554,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -496,6 +613,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QAudioSource : public QAudioSource {
@@ -504,6 +643,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -562,6 +702,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QCamera : public QCamera {
@@ -570,6 +732,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -628,6 +791,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QImageCapture : public QImageCapture {
@@ -636,6 +821,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -694,6 +880,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QMediaCaptureSession : public QMediaCaptureSession {
@@ -702,6 +910,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -760,6 +969,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QMediaDevices : public QMediaDevices {
@@ -768,43 +999,44 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
-	bool event(QEvent * a0) override {
+	using QObject::isSignalConnected;
+	void connectNotify(const QMetaMethod & a0) override {
 		if (qute_has(0)) {
-			void * c0 = (void *)(a0);
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
 			void *args[] = {&c0};
-			bool r{};
-			if (qute_virtual(qute_id, 0, args, &r)) {
-				return static_cast<bool>(r);
+			if (qute_virtual(qute_id, 0, args, nullptr)) {
+				return;
 			}
 		}
-		return QObject::event(a0);
+		QMediaDevices::connectNotify(a0);
 	}
-	bool qute_super_0(QEvent * a0) { return QObject::event(a0); }
-	bool eventFilter(QObject * a0, QEvent * a1) override {
+	void qute_super_0(const QMetaMethod & a0) { return QMediaDevices::connectNotify(a0); }
+	bool event(QEvent * a0) override {
 		if (qute_has(1)) {
 			void * c0 = (void *)(a0);
-			void * c1 = (void *)(a1);
-			void *args[] = {&c0, &c1};
+			void *args[] = {&c0};
 			bool r{};
 			if (qute_virtual(qute_id, 1, args, &r)) {
 				return static_cast<bool>(r);
 			}
 		}
-		return QObject::eventFilter(a0, a1);
+		return QObject::event(a0);
 	}
-	bool qute_super_1(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
-	void timerEvent(QTimerEvent * a0) override {
+	bool qute_super_1(QEvent * a0) { return QObject::event(a0); }
+	bool eventFilter(QObject * a0, QEvent * a1) override {
 		if (qute_has(2)) {
 			void * c0 = (void *)(a0);
-			void *args[] = {&c0};
-			if (qute_virtual(qute_id, 2, args, nullptr)) {
-				return;
+			void * c1 = (void *)(a1);
+			void *args[] = {&c0, &c1};
+			bool r{};
+			if (qute_virtual(qute_id, 2, args, &r)) {
+				return static_cast<bool>(r);
 			}
 		}
-		QObject::timerEvent(a0);
+		return QObject::eventFilter(a0, a1);
 	}
-	void qute_super_2(QTimerEvent * a0) { return QObject::timerEvent(a0); }
-	void childEvent(QChildEvent * a0) override {
+	bool qute_super_2(QObject * a0, QEvent * a1) { return QObject::eventFilter(a0, a1); }
+	void timerEvent(QTimerEvent * a0) override {
 		if (qute_has(3)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -812,10 +1044,10 @@ public:
 				return;
 			}
 		}
-		QObject::childEvent(a0);
+		QObject::timerEvent(a0);
 	}
-	void qute_super_3(QChildEvent * a0) { return QObject::childEvent(a0); }
-	void customEvent(QEvent * a0) override {
+	void qute_super_3(QTimerEvent * a0) { return QObject::timerEvent(a0); }
+	void childEvent(QChildEvent * a0) override {
 		if (qute_has(4)) {
 			void * c0 = (void *)(a0);
 			void *args[] = {&c0};
@@ -823,9 +1055,31 @@ public:
 				return;
 			}
 		}
+		QObject::childEvent(a0);
+	}
+	void qute_super_4(QChildEvent * a0) { return QObject::childEvent(a0); }
+	void customEvent(QEvent * a0) override {
+		if (qute_has(5)) {
+			void * c0 = (void *)(a0);
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
 		QObject::customEvent(a0);
 	}
-	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void qute_super_5(QEvent * a0) { return QObject::customEvent(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QMediaPlayer : public QMediaPlayer {
@@ -834,6 +1088,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -892,6 +1147,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QMediaRecorder : public QMediaRecorder {
@@ -900,6 +1177,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -958,6 +1236,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QScreenCapture : public QScreenCapture {
@@ -966,6 +1266,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1024,6 +1325,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QSoundEffect : public QSoundEffect {
@@ -1032,6 +1355,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1090,6 +1414,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QVideoFrameInput : public QVideoFrameInput {
@@ -1098,6 +1444,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1156,6 +1503,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QVideoSink : public QVideoSink {
@@ -1164,6 +1533,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1222,6 +1592,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 class qute_QWindowCapture : public QWindowCapture {
@@ -1230,6 +1622,7 @@ public:
 	uintptr_t qute_id = 0;
 	uint64_t qute_mask[1] = {};
 	bool qute_has(int i) const { return qute_id && ((qute_mask[i / 64] >> (i % 64)) & 1); }
+	using QObject::isSignalConnected;
 	bool event(QEvent * a0) override {
 		if (qute_has(0)) {
 			void * c0 = (void *)(a0);
@@ -1288,6 +1681,28 @@ public:
 		QObject::customEvent(a0);
 	}
 	void qute_super_4(QEvent * a0) { return QObject::customEvent(a0); }
+	void connectNotify(const QMetaMethod & a0) override {
+		if (qute_has(5)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 5, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::connectNotify(a0);
+	}
+	void qute_super_5(const QMetaMethod & a0) { return QObject::connectNotify(a0); }
+	void disconnectNotify(const QMetaMethod & a0) override {
+		if (qute_has(6)) {
+			void * c0 = static_cast<void *>(new QMetaMethod(a0));
+			void *args[] = {&c0};
+			if (qute_virtual(qute_id, 6, args, nullptr)) {
+				return;
+			}
+		}
+		QObject::disconnectNotify(a0);
+	}
+	void qute_super_6(const QMetaMethod & a0) { return QObject::disconnectNotify(a0); }
 };
 
 extern "C" {
@@ -1414,6 +1829,18 @@ void qute_QAudioBufferInput_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QAudioBufferInput_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioBufferInput_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioBufferInput_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferInput *>(static_cast<QAudioBufferInput *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QAudioBufferInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioBufferInput *>(static_cast<QObject *>(obj)));
@@ -1482,6 +1909,18 @@ void qute_QAudioBufferOutput_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QAudioBufferOutput_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioBufferOutput_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioBufferOutput_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioBufferOutput *>(static_cast<QAudioBufferOutput *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QAudioBufferOutput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioBufferOutput *>(static_cast<QObject *>(obj)));
@@ -1533,6 +1972,18 @@ void qute_QAudioDecoder_super_3(void *self, void * a0) {
 void qute_QAudioDecoder_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QAudioDecoder_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioDecoder_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioDecoder_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioDecoder *>(static_cast<QAudioDecoder *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QAudioDecoder_cast(void *obj) {
 	qute_gui_only();
@@ -1886,6 +2337,18 @@ void qute_QAudioInput_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QAudioInput_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioInput_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioInput_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioInput *>(static_cast<QAudioInput *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QAudioInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioInput *>(static_cast<QObject *>(obj)));
@@ -1986,6 +2449,18 @@ void qute_QAudioOutput_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QAudioOutput_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioOutput_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioOutput_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioOutput *>(static_cast<QAudioOutput *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QAudioOutput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QAudioOutput *>(static_cast<QObject *>(obj)));
@@ -2085,6 +2560,18 @@ void qute_QAudioSink_super_3(void *self, void * a0) {
 void qute_QAudioSink_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QAudioSink_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioSink_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioSink_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSink *>(static_cast<QAudioSink *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QAudioSink_cast(void *obj) {
 	qute_gui_only();
@@ -2229,6 +2716,18 @@ void qute_QAudioSource_super_3(void *self, void * a0) {
 void qute_QAudioSource_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QAudioSource_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QAudioSource_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QAudioSource_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QAudioSource *>(static_cast<QAudioSource *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QAudioSource_cast(void *obj) {
 	qute_gui_only();
@@ -2381,6 +2880,18 @@ void qute_QCamera_super_3(void *self, void * a0) {
 void qute_QCamera_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QCamera_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QCamera_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QCamera_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QCamera *>(static_cast<QCamera *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QCamera_cast(void *obj) {
 	qute_gui_only();
@@ -3014,6 +3525,18 @@ void qute_QImageCapture_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QImageCapture_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QImageCapture_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QImageCapture_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QImageCapture *>(static_cast<QImageCapture *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QImageCapture_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QImageCapture *>(static_cast<QObject *>(obj)));
@@ -3252,6 +3775,18 @@ void qute_QMediaCaptureSession_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QMediaCaptureSession_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QMediaCaptureSession_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QMediaCaptureSession_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaCaptureSession *>(static_cast<QMediaCaptureSession *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QMediaCaptureSession_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QMediaCaptureSession *>(static_cast<QObject *>(obj)));
@@ -3476,25 +4011,37 @@ void qute_QMediaDevices_shim_init(void *self, uintptr_t id, const uint64_t *mask
 	qute_gui_only();
 	auto s = static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self)); s->qute_id = id; std::memcpy(s->qute_mask, mask, sizeof(s->qute_mask));
 }
-bool qute_QMediaDevices_super_0(void *self, void * a0) {
+void qute_QMediaDevices_super_0(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_0(static_cast<QEvent *>(a0)));
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_0((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
 }
-bool qute_QMediaDevices_super_1(void *self, void * a0, void * a1) {
+bool qute_QMediaDevices_super_1(void *self, void * a0) {
 	qute_gui_only();
-	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_1(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
+	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_1(static_cast<QEvent *>(a0)));
 }
-void qute_QMediaDevices_super_2(void *self, void * a0) {
+bool qute_QMediaDevices_super_2(void *self, void * a0, void * a1) {
 	qute_gui_only();
-	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_2(static_cast<QTimerEvent *>(a0));
+	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_2(static_cast<QObject *>(a0), static_cast<QEvent *>(a1)));
 }
 void qute_QMediaDevices_super_3(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_3(static_cast<QChildEvent *>(a0));
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_3(static_cast<QTimerEvent *>(a0));
 }
 void qute_QMediaDevices_super_4(void *self, void * a0) {
 	qute_gui_only();
-	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_4(static_cast<QChildEvent *>(a0));
+}
+void qute_QMediaDevices_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_5(static_cast<QEvent *>(a0));
+}
+void qute_QMediaDevices_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QMediaDevices_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaDevices *>(static_cast<QMediaDevices *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QMediaDevices_cast(void *obj) {
 	qute_gui_only();
@@ -3715,6 +4262,18 @@ void qute_QMediaPlayer_super_3(void *self, void * a0) {
 void qute_QMediaPlayer_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QMediaPlayer_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QMediaPlayer_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QMediaPlayer_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaPlayer *>(static_cast<QMediaPlayer *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QMediaPlayer_cast(void *obj) {
 	qute_gui_only();
@@ -4173,6 +4732,18 @@ void qute_QMediaRecorder_super_3(void *self, void * a0) {
 void qute_QMediaRecorder_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QMediaRecorder_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QMediaRecorder_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QMediaRecorder_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QMediaRecorder *>(static_cast<QMediaRecorder *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QMediaRecorder_cast(void *obj) {
 	qute_gui_only();
@@ -4674,6 +5245,18 @@ void qute_QScreenCapture_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QScreenCapture_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QScreenCapture_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QScreenCapture_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QScreenCapture *>(static_cast<QScreenCapture *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QScreenCapture_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QScreenCapture *>(static_cast<QObject *>(obj)));
@@ -4805,6 +5388,18 @@ void qute_QSoundEffect_super_3(void *self, void * a0) {
 void qute_QSoundEffect_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QSoundEffect_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QSoundEffect_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QSoundEffect_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QSoundEffect *>(static_cast<QSoundEffect *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QSoundEffect_cast(void *obj) {
 	qute_gui_only();
@@ -5330,6 +5925,18 @@ void qute_QVideoFrameInput_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_4(static_cast<QEvent *>(a0));
 }
+void qute_QVideoFrameInput_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QVideoFrameInput_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QVideoFrameInput_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoFrameInput *>(static_cast<QVideoFrameInput *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
+}
 void * qute_QVideoFrameInput_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(qobject_cast<QVideoFrameInput *>(static_cast<QObject *>(obj)));
@@ -5389,6 +5996,18 @@ void qute_QVideoSink_super_3(void *self, void * a0) {
 void qute_QVideoSink_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QVideoSink_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QVideoSink_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QVideoSink_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QVideoSink *>(static_cast<QVideoSink *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QVideoSink_cast(void *obj) {
 	qute_gui_only();
@@ -5477,6 +6096,18 @@ void qute_QWindowCapture_super_3(void *self, void * a0) {
 void qute_QWindowCapture_super_4(void *self, void * a0) {
 	qute_gui_only();
 	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_4(static_cast<QEvent *>(a0));
+}
+void qute_QWindowCapture_super_5(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_5((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+void qute_QWindowCapture_super_6(void *self, void * a0) {
+	qute_gui_only();
+	static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->qute_super_6((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod()));
+}
+bool qute_QWindowCapture_prot_isSignalConnected(void *self, void * a0) {
+	qute_gui_only();
+	return static_cast<bool>(static_cast<qute_QWindowCapture *>(static_cast<QWindowCapture *>(self))->isSignalConnected((a0 ? *static_cast<QMetaMethod *>(a0) : QMetaMethod())));
 }
 void * qute_QWindowCapture_cast(void *obj) {
 	qute_gui_only();

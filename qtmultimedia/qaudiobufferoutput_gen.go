@@ -194,6 +194,18 @@ var qAudioBufferOutputVTable = []rt.Virtual{
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
 		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
+		}},
 }
 
 // QAudioBufferOutputBase is embedded in Go types that subclass QAudioBufferOutput:
@@ -285,6 +297,32 @@ func (s *QAudioBufferOutputSuper) CustomEvent(event *qtcore.QEvent) {
 	C.qute_QAudioBufferOutput_super_4(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QAudioBufferOutputSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAudioBufferOutput.Super.ConnectNotify")
+	C.qute_QAudioBufferOutput_super_5(self, rt.UseArg(unsafe.Pointer(signal), "QAudioBufferOutput.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QAudioBufferOutputSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QAudioBufferOutput.Super.DisconnectNotify")
+	C.qute_QAudioBufferOutput_super_6(self, rt.UseArg(unsafe.Pointer(signal), "QAudioBufferOutput.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QAudioBufferOutputBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QAudioBufferOutput // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QAudioBufferOutput.IsSignalConnected")
+	r := C.qute_QAudioBufferOutput_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QAudioBufferOutput.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
+	return bool(r)
 }
 
 // NewQAudioBufferOutputWith constructs a QAudioBufferOutput whose virtual methods dispatch to v. The

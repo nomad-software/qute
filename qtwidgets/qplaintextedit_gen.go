@@ -748,6 +748,21 @@ func (this *QPlainTextEdit) BlockCount() int {
 	return int(r)
 }
 
+// InputMethodQueryWithArgument wraps QPlainTextEdit::inputMethodQuery.
+//
+//	C++: QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
+//
+// Ownership: the result is an Owned copy.
+//
+// Qt docs: https://doc.qt.io/qt-6/qplaintextedit.html#inputMethodQuery
+func (this *QPlainTextEdit) InputMethodQueryWithArgument(query qtcore.InputMethodQueries, argument *qtcore.QVariant) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.InputMethodQueryWithArgument")
+	r := C.qute_QPlainTextEdit_inputMethodQuery(self, C.int64_t(query), rt.UseArg(unsafe.Pointer(argument), "QPlainTextEdit.InputMethodQueryWithArgument"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(argument)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // SetPlainText wraps QPlainTextEdit::setPlainText.
 //
 //	C++: void QPlainTextEdit::setPlainText(const QString & text)
@@ -1240,6 +1255,20 @@ var qPlainTextEditVTable = []rt.Virtual{
 			}).LoadResource(typeArg, name)
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QPlainTextEdit.LoadResource")
 		}},
+	{Name: "InputMethodQuery", Has: func(v any) bool {
+		_, ok := v.(interface {
+			InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			property := qtcore.InputMethodQueries(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				InputMethodQuery(qtcore.InputMethodQueries) *qtcore.QVariant
+			}).InputMethodQuery(property)
+			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QPlainTextEdit.InputMethodQuery")
+		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1629,6 +1658,38 @@ var qPlainTextEditVTable = []rt.Virtual{
 			event := rt.View[qtgui.QHideEvent](eventH, eventP)
 			v.(interface{ HideEvent(*qtgui.QHideEvent) }).HideEvent(event)
 		}},
+	{Name: "NativeEvent", Has: func(v any) bool {
+		_, ok := v.(interface {
+			NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 3)
+			eventType := quteBytes(*(*C.qute_str)(a[0]))
+			message := *(*unsafe.Pointer)(a[1])
+			r, o2 := v.(interface {
+				NativeEvent([]byte, unsafe.Pointer) (bool, int64)
+			}).NativeEvent(eventType, message)
+			*(*C.bool)(ret) = C.bool(r)
+			if a[2] != nil {
+				*(*C.longlong)(a[2]) = C.longlong(o2)
+			}
+		}},
+	{Name: "Metric", Has: func(v any) bool {
+		_, ok := v.(interface {
+			Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+		})
+		return ok
+	},
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			paintDeviceMetric := qtgui.QPaintDevicePaintDeviceMetric(*(*C.int64_t)(a[0]))
+			r := v.(interface {
+				Metric(qtgui.QPaintDevicePaintDeviceMetric) int
+			}).Metric(paintDeviceMetric)
+			*(*C.int)(ret) = C.int(r)
+		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
 		Call: func(v any, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
@@ -1646,6 +1707,18 @@ var qPlainTextEditVTable = []rt.Virtual{
 			defer eventH.Expire()
 			event := rt.View[qtcore.QEvent](eventH, eventP)
 			v.(interface{ CustomEvent(*qtcore.QEvent) }).CustomEvent(event)
+		}},
+	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }).ConnectNotify(signal)
+		}},
+	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
+		Call: func(v any, args, ret unsafe.Pointer) {
+			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
+			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
+			v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }).DisconnectNotify(signal)
 		}},
 }
 
@@ -1680,6 +1753,14 @@ func (s *QPlainTextEditSuper) LoadResource(typeArg int, name *qtcore.QUrl) *qtco
 	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
 }
 
+// InputMethodQuery calls QPlainTextEdit::inputMethodQuery.
+func (s *QPlainTextEditSuper) InputMethodQuery(property qtcore.InputMethodQueries) *qtcore.QVariant {
+	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.InputMethodQuery")
+	r := C.qute_QPlainTextEdit_super_1(self, C.int64_t(property))
+	runtime.KeepAlive(s.this)
+	return rt.View[qtcore.QVariant](rt.WrapClass(r, "QVariant", rt.TakeOwned), r)
+}
+
 // Event calls QPlainTextEdit::event.
 func (s *QPlainTextEditSuper) Event(eArg *qtcore.QEvent) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.Event")
@@ -1687,7 +1768,7 @@ func (s *QPlainTextEditSuper) Event(eArg *qtcore.QEvent) bool {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QPlainTextEdit.Super.Event")
 	}
-	r := C.qute_QPlainTextEdit_super_1(self, eArgPtr)
+	r := C.qute_QPlainTextEdit_super_2(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 	return bool(r)
@@ -1700,7 +1781,7 @@ func (s *QPlainTextEditSuper) TimerEvent(eArg *qtcore.QTimerEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQTimerEvent()), "QPlainTextEdit.Super.TimerEvent")
 	}
-	C.qute_QPlainTextEdit_super_2(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_3(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1712,7 +1793,7 @@ func (s *QPlainTextEditSuper) KeyPressEvent(eArg *qtgui.QKeyEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QPlainTextEdit.Super.KeyPressEvent")
 	}
-	C.qute_QPlainTextEdit_super_3(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_4(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1724,7 +1805,7 @@ func (s *QPlainTextEditSuper) KeyReleaseEvent(eArg *qtgui.QKeyEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQKeyEvent()), "QPlainTextEdit.Super.KeyReleaseEvent")
 	}
-	C.qute_QPlainTextEdit_super_4(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_5(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1736,7 +1817,7 @@ func (s *QPlainTextEditSuper) ResizeEvent(eArg *qtgui.QResizeEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQResizeEvent()), "QPlainTextEdit.Super.ResizeEvent")
 	}
-	C.qute_QPlainTextEdit_super_5(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_6(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1748,7 +1829,7 @@ func (s *QPlainTextEditSuper) PaintEvent(eArg *qtgui.QPaintEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQPaintEvent()), "QPlainTextEdit.Super.PaintEvent")
 	}
-	C.qute_QPlainTextEdit_super_6(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_7(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1760,7 +1841,7 @@ func (s *QPlainTextEditSuper) MousePressEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPlainTextEdit.Super.MousePressEvent")
 	}
-	C.qute_QPlainTextEdit_super_7(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_8(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1772,7 +1853,7 @@ func (s *QPlainTextEditSuper) MouseMoveEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPlainTextEdit.Super.MouseMoveEvent")
 	}
-	C.qute_QPlainTextEdit_super_8(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_9(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1784,7 +1865,7 @@ func (s *QPlainTextEditSuper) MouseReleaseEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPlainTextEdit.Super.MouseReleaseEvent")
 	}
-	C.qute_QPlainTextEdit_super_9(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_10(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1796,7 +1877,7 @@ func (s *QPlainTextEditSuper) MouseDoubleClickEvent(eArg *qtgui.QMouseEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQMouseEvent()), "QPlainTextEdit.Super.MouseDoubleClickEvent")
 	}
-	C.qute_QPlainTextEdit_super_10(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_11(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1804,7 +1885,7 @@ func (s *QPlainTextEditSuper) MouseDoubleClickEvent(eArg *qtgui.QMouseEvent) {
 // FocusNextPrevChild calls QPlainTextEdit::focusNextPrevChild.
 func (s *QPlainTextEditSuper) FocusNextPrevChild(next bool) bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.FocusNextPrevChild")
-	r := C.qute_QPlainTextEdit_super_11(self, C.bool(next))
+	r := C.qute_QPlainTextEdit_super_12(self, C.bool(next))
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -1816,7 +1897,7 @@ func (s *QPlainTextEditSuper) ContextMenuEvent(eArg *qtgui.QContextMenuEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQContextMenuEvent()), "QPlainTextEdit.Super.ContextMenuEvent")
 	}
-	C.qute_QPlainTextEdit_super_12(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_13(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1828,7 +1909,7 @@ func (s *QPlainTextEditSuper) DragEnterEvent(eArg *qtgui.QDragEnterEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragEnterEvent()), "QPlainTextEdit.Super.DragEnterEvent")
 	}
-	C.qute_QPlainTextEdit_super_13(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_14(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1840,7 +1921,7 @@ func (s *QPlainTextEditSuper) DragLeaveEvent(eArg *qtgui.QDragLeaveEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragLeaveEvent()), "QPlainTextEdit.Super.DragLeaveEvent")
 	}
-	C.qute_QPlainTextEdit_super_14(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_15(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1852,7 +1933,7 @@ func (s *QPlainTextEditSuper) DragMoveEvent(eArg *qtgui.QDragMoveEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDragMoveEvent()), "QPlainTextEdit.Super.DragMoveEvent")
 	}
-	C.qute_QPlainTextEdit_super_15(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_16(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1864,7 +1945,7 @@ func (s *QPlainTextEditSuper) DropEvent(eArg *qtgui.QDropEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQDropEvent()), "QPlainTextEdit.Super.DropEvent")
 	}
-	C.qute_QPlainTextEdit_super_16(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_17(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1876,7 +1957,7 @@ func (s *QPlainTextEditSuper) FocusInEvent(eArg *qtgui.QFocusEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QPlainTextEdit.Super.FocusInEvent")
 	}
-	C.qute_QPlainTextEdit_super_17(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_18(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1888,7 +1969,7 @@ func (s *QPlainTextEditSuper) FocusOutEvent(eArg *qtgui.QFocusEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQFocusEvent()), "QPlainTextEdit.Super.FocusOutEvent")
 	}
-	C.qute_QPlainTextEdit_super_18(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_19(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1900,7 +1981,7 @@ func (s *QPlainTextEditSuper) ShowEvent(showEvent *qtgui.QShowEvent) {
 	if showEvent != nil {
 		showEventPtr = rt.UseArg(unsafe.Pointer(showEvent.AsQShowEvent()), "QPlainTextEdit.Super.ShowEvent")
 	}
-	C.qute_QPlainTextEdit_super_19(self, showEventPtr)
+	C.qute_QPlainTextEdit_super_20(self, showEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(showEvent)
 }
@@ -1912,7 +1993,7 @@ func (s *QPlainTextEditSuper) ChangeEvent(eArg *qtcore.QEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQEvent()), "QPlainTextEdit.Super.ChangeEvent")
 	}
-	C.qute_QPlainTextEdit_super_20(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_21(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1924,7 +2005,7 @@ func (s *QPlainTextEditSuper) WheelEvent(eArg *qtgui.QWheelEvent) {
 	if eArg != nil {
 		eArgPtr = rt.UseArg(unsafe.Pointer(eArg.AsQWheelEvent()), "QPlainTextEdit.Super.WheelEvent")
 	}
-	C.qute_QPlainTextEdit_super_21(self, eArgPtr)
+	C.qute_QPlainTextEdit_super_22(self, eArgPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(eArg)
 }
@@ -1932,7 +2013,7 @@ func (s *QPlainTextEditSuper) WheelEvent(eArg *qtgui.QWheelEvent) {
 // CreateMimeDataFromSelection calls QPlainTextEdit::createMimeDataFromSelection.
 func (s *QPlainTextEditSuper) CreateMimeDataFromSelection() *qtcore.QMimeData {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.CreateMimeDataFromSelection")
-	r := C.qute_QPlainTextEdit_super_22(self)
+	r := C.qute_QPlainTextEdit_super_23(self)
 	runtime.KeepAlive(s.this)
 	return rt.View[qtcore.QMimeData](rt.WrapClass(r, "QMimeData", rt.KeepOrBorrow), r)
 }
@@ -1944,7 +2025,7 @@ func (s *QPlainTextEditSuper) CanInsertFromMimeData(source *qtcore.QMimeData) bo
 	if source != nil {
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QPlainTextEdit.Super.CanInsertFromMimeData")
 	}
-	r := C.qute_QPlainTextEdit_super_23(self, sourcePtr)
+	r := C.qute_QPlainTextEdit_super_24(self, sourcePtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(source)
 	return bool(r)
@@ -1957,7 +2038,7 @@ func (s *QPlainTextEditSuper) InsertFromMimeData(source *qtcore.QMimeData) {
 	if source != nil {
 		sourcePtr = rt.UseArg(unsafe.Pointer(source.AsQMimeData()), "QPlainTextEdit.Super.InsertFromMimeData")
 	}
-	C.qute_QPlainTextEdit_super_24(self, sourcePtr)
+	C.qute_QPlainTextEdit_super_25(self, sourcePtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(source)
 }
@@ -1969,7 +2050,7 @@ func (s *QPlainTextEditSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMet
 	if inputMethodEvent != nil {
 		inputMethodEventPtr = rt.UseArg(unsafe.Pointer(inputMethodEvent.AsQInputMethodEvent()), "QPlainTextEdit.Super.InputMethodEvent")
 	}
-	C.qute_QPlainTextEdit_super_25(self, inputMethodEventPtr)
+	C.qute_QPlainTextEdit_super_26(self, inputMethodEventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(inputMethodEvent)
 }
@@ -1977,14 +2058,14 @@ func (s *QPlainTextEditSuper) InputMethodEvent(inputMethodEvent *qtgui.QInputMet
 // ScrollContentsBy calls QPlainTextEdit::scrollContentsBy.
 func (s *QPlainTextEditSuper) ScrollContentsBy(dx int, dy int) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.ScrollContentsBy")
-	C.qute_QPlainTextEdit_super_26(self, C.int(dx), C.int(dy))
+	C.qute_QPlainTextEdit_super_27(self, C.int(dx), C.int(dy))
 	runtime.KeepAlive(s.this)
 }
 
 // DoSetTextCursor calls QPlainTextEdit::doSetTextCursor.
 func (s *QPlainTextEditSuper) DoSetTextCursor(cursor *qtgui.QTextCursor) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.DoSetTextCursor")
-	C.qute_QPlainTextEdit_super_27(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.Super.DoSetTextCursor"))
+	C.qute_QPlainTextEdit_super_28(self, rt.UseArg(unsafe.Pointer(cursor), "QPlainTextEdit.Super.DoSetTextCursor"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(cursor)
 }
@@ -1992,7 +2073,7 @@ func (s *QPlainTextEditSuper) DoSetTextCursor(cursor *qtgui.QTextCursor) {
 // MinimumSizeHint calls QAbstractScrollArea::minimumSizeHint.
 func (s *QPlainTextEditSuper) MinimumSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.MinimumSizeHint")
-	r := C.qute_QPlainTextEdit_super_28(self)
+	r := C.qute_QPlainTextEdit_super_29(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2000,7 +2081,7 @@ func (s *QPlainTextEditSuper) MinimumSizeHint() qtcore.QSize {
 // SizeHint calls QAbstractScrollArea::sizeHint.
 func (s *QPlainTextEditSuper) SizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.SizeHint")
-	r := C.qute_QPlainTextEdit_super_29(self)
+	r := C.qute_QPlainTextEdit_super_30(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2012,7 +2093,7 @@ func (s *QPlainTextEditSuper) SetupViewport(viewport *QWidget) {
 	if viewport != nil {
 		viewportPtr = rt.UseArg(unsafe.Pointer(viewport.AsQWidget()), "QPlainTextEdit.Super.SetupViewport")
 	}
-	C.qute_QPlainTextEdit_super_30(self, viewportPtr)
+	C.qute_QPlainTextEdit_super_31(self, viewportPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(viewport)
 }
@@ -2028,7 +2109,7 @@ func (s *QPlainTextEditSuper) EventFilter(object *qtcore.QObject, event *qtcore.
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPlainTextEdit.Super.EventFilter")
 	}
-	r := C.qute_QPlainTextEdit_super_31(self, objectPtr, eventPtr)
+	r := C.qute_QPlainTextEdit_super_32(self, objectPtr, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(object)
 	runtime.KeepAlive(event)
@@ -2042,7 +2123,7 @@ func (s *QPlainTextEditSuper) ViewportEvent(event *qtcore.QEvent) bool {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPlainTextEdit.Super.ViewportEvent")
 	}
-	r := C.qute_QPlainTextEdit_super_32(self, eventPtr)
+	r := C.qute_QPlainTextEdit_super_33(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 	return bool(r)
@@ -2051,7 +2132,7 @@ func (s *QPlainTextEditSuper) ViewportEvent(event *qtcore.QEvent) bool {
 // ViewportSizeHint calls QAbstractScrollArea::viewportSizeHint.
 func (s *QPlainTextEditSuper) ViewportSizeHint() qtcore.QSize {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.ViewportSizeHint")
-	r := C.qute_QPlainTextEdit_super_33(self)
+	r := C.qute_QPlainTextEdit_super_34(self)
 	runtime.KeepAlive(s.this)
 	return goQSize(r)
 }
@@ -2059,7 +2140,7 @@ func (s *QPlainTextEditSuper) ViewportSizeHint() qtcore.QSize {
 // InitStyleOption calls QFrame::initStyleOption.
 func (s *QPlainTextEditSuper) InitStyleOption(option *QStyleOptionFrame) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.InitStyleOption")
-	C.qute_QPlainTextEdit_super_34(self, rt.UseArg(unsafe.Pointer(option), "QPlainTextEdit.Super.InitStyleOption"))
+	C.qute_QPlainTextEdit_super_35(self, rt.UseArg(unsafe.Pointer(option), "QPlainTextEdit.Super.InitStyleOption"))
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(option)
 }
@@ -2067,14 +2148,14 @@ func (s *QPlainTextEditSuper) InitStyleOption(option *QStyleOptionFrame) {
 // SetVisible calls QWidget::setVisible.
 func (s *QPlainTextEditSuper) SetVisible(visible bool) {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.SetVisible")
-	C.qute_QPlainTextEdit_super_35(self, C.bool(visible))
+	C.qute_QPlainTextEdit_super_36(self, C.bool(visible))
 	runtime.KeepAlive(s.this)
 }
 
 // HeightForWidth calls QWidget::heightForWidth.
 func (s *QPlainTextEditSuper) HeightForWidth(arg0 int) int {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.HeightForWidth")
-	r := C.qute_QPlainTextEdit_super_36(self, C.int(arg0))
+	r := C.qute_QPlainTextEdit_super_37(self, C.int(arg0))
 	runtime.KeepAlive(s.this)
 	return int(r)
 }
@@ -2082,7 +2163,7 @@ func (s *QPlainTextEditSuper) HeightForWidth(arg0 int) int {
 // HasHeightForWidth calls QWidget::hasHeightForWidth.
 func (s *QPlainTextEditSuper) HasHeightForWidth() bool {
 	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.HasHeightForWidth")
-	r := C.qute_QPlainTextEdit_super_37(self)
+	r := C.qute_QPlainTextEdit_super_38(self)
 	runtime.KeepAlive(s.this)
 	return bool(r)
 }
@@ -2094,7 +2175,7 @@ func (s *QPlainTextEditSuper) EnterEvent(event *qtgui.QEnterEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEnterEvent()), "QPlainTextEdit.Super.EnterEvent")
 	}
-	C.qute_QPlainTextEdit_super_38(self, eventPtr)
+	C.qute_QPlainTextEdit_super_39(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2106,7 +2187,7 @@ func (s *QPlainTextEditSuper) LeaveEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPlainTextEdit.Super.LeaveEvent")
 	}
-	C.qute_QPlainTextEdit_super_39(self, eventPtr)
+	C.qute_QPlainTextEdit_super_40(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2118,7 +2199,7 @@ func (s *QPlainTextEditSuper) MoveEvent(event *qtgui.QMoveEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQMoveEvent()), "QPlainTextEdit.Super.MoveEvent")
 	}
-	C.qute_QPlainTextEdit_super_40(self, eventPtr)
+	C.qute_QPlainTextEdit_super_41(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2130,7 +2211,7 @@ func (s *QPlainTextEditSuper) CloseEvent(event *qtgui.QCloseEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQCloseEvent()), "QPlainTextEdit.Super.CloseEvent")
 	}
-	C.qute_QPlainTextEdit_super_41(self, eventPtr)
+	C.qute_QPlainTextEdit_super_42(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2142,7 +2223,7 @@ func (s *QPlainTextEditSuper) TabletEvent(event *qtgui.QTabletEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQTabletEvent()), "QPlainTextEdit.Super.TabletEvent")
 	}
-	C.qute_QPlainTextEdit_super_42(self, eventPtr)
+	C.qute_QPlainTextEdit_super_43(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2154,7 +2235,7 @@ func (s *QPlainTextEditSuper) ActionEvent(event *qtgui.QActionEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQActionEvent()), "QPlainTextEdit.Super.ActionEvent")
 	}
-	C.qute_QPlainTextEdit_super_43(self, eventPtr)
+	C.qute_QPlainTextEdit_super_44(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2166,9 +2247,26 @@ func (s *QPlainTextEditSuper) HideEvent(event *qtgui.QHideEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQHideEvent()), "QPlainTextEdit.Super.HideEvent")
 	}
-	C.qute_QPlainTextEdit_super_44(self, eventPtr)
+	C.qute_QPlainTextEdit_super_45(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// NativeEvent calls QWidget::nativeEvent.
+func (s *QPlainTextEditSuper) NativeEvent(eventType []byte, message unsafe.Pointer) (bool, int64) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.NativeEvent")
+	var resultOut C.longlong
+	r := C.qute_QPlainTextEdit_super_46(self, (*C.char)(unsafe.Pointer(unsafe.SliceData(eventType))), C.ptrdiff_t(len(eventType)), message, &resultOut)
+	runtime.KeepAlive(s.this)
+	return bool(r), int64(resultOut)
+}
+
+// Metric calls QWidget::metric.
+func (s *QPlainTextEditSuper) Metric(paintDeviceMetric qtgui.QPaintDevicePaintDeviceMetric) int {
+	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.Metric")
+	r := C.qute_QPlainTextEdit_super_47(self, C.int64_t(paintDeviceMetric))
+	runtime.KeepAlive(s.this)
+	return int(r)
 }
 
 // ChildEvent calls QObject::childEvent.
@@ -2178,7 +2276,7 @@ func (s *QPlainTextEditSuper) ChildEvent(event *qtcore.QChildEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQChildEvent()), "QPlainTextEdit.Super.ChildEvent")
 	}
-	C.qute_QPlainTextEdit_super_45(self, eventPtr)
+	C.qute_QPlainTextEdit_super_48(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
 }
@@ -2190,9 +2288,25 @@ func (s *QPlainTextEditSuper) CustomEvent(event *qtcore.QEvent) {
 	if event != nil {
 		eventPtr = rt.UseArg(unsafe.Pointer(event.AsQEvent()), "QPlainTextEdit.Super.CustomEvent")
 	}
-	C.qute_QPlainTextEdit_super_46(self, eventPtr)
+	C.qute_QPlainTextEdit_super_49(self, eventPtr)
 	runtime.KeepAlive(s.this)
 	runtime.KeepAlive(event)
+}
+
+// ConnectNotify calls QObject::connectNotify.
+func (s *QPlainTextEditSuper) ConnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.ConnectNotify")
+	C.qute_QPlainTextEdit_super_50(self, rt.UseArg(unsafe.Pointer(signal), "QPlainTextEdit.Super.ConnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
+}
+
+// DisconnectNotify calls QObject::disconnectNotify.
+func (s *QPlainTextEditSuper) DisconnectNotify(signal *qtcore.QMetaMethod) {
+	self := rt.Use(unsafe.Pointer(s.this), "QPlainTextEdit.Super.DisconnectNotify")
+	C.qute_QPlainTextEdit_super_51(self, rt.UseArg(unsafe.Pointer(signal), "QPlainTextEdit.Super.DisconnectNotify"))
+	runtime.KeepAlive(s.this)
+	runtime.KeepAlive(signal)
 }
 
 // FirstVisibleBlock wraps the protected QPlainTextEdit::firstVisibleBlock for subclasses.
@@ -2310,6 +2424,16 @@ func (b *QPlainTextEditBase) FocusPreviousChild() bool {
 	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.FocusPreviousChild")
 	r := C.qute_QPlainTextEdit_prot_focusPreviousChild(self)
 	runtime.KeepAlive(this)
+	return bool(r)
+}
+
+// IsSignalConnected wraps the protected QObject::isSignalConnected for subclasses.
+func (b *QPlainTextEditBase) IsSignalConnected(signal *qtcore.QMetaMethod) bool {
+	this := b.QPlainTextEdit // the receiver the ownership code below acts on
+	self := rt.Use(unsafe.Pointer(this), "QPlainTextEdit.IsSignalConnected")
+	r := C.qute_QPlainTextEdit_prot_isSignalConnected(self, rt.UseArg(unsafe.Pointer(signal), "QPlainTextEdit.IsSignalConnected"))
+	runtime.KeepAlive(this)
+	runtime.KeepAlive(signal)
 	return bool(r)
 }
 
