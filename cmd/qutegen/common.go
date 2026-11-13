@@ -20,9 +20,7 @@ func (g *Gen) initStructs() {
 		{name: "QColor", module: gui, cType: "qute_color", fields: []structField{u("R", "r"), u("G", "g"), u("B", "b"), u("A", "a")}},
 	}
 	for _, d := range defs {
-		if d.module != nil {
-			g.structs[d.name] = d
-		}
+		g.structs[d.name] = d
 	}
 }
 

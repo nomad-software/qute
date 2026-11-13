@@ -51,7 +51,7 @@ func Remeasure(h *Handle) {
 	if h == nil || h.State() != Owned {
 		return
 	}
-	if v, ok := classes.Load(h.class); ok {
+	if v, ok := classes.Load(h.class); ok { // by name: see parentedDeleteHint
 		if ci := v.(classInfo); ci.memory != nil {
 			setMemory(h, ci.memory(h.ptr))
 		}

@@ -305,7 +305,7 @@ type fancyCanvas struct{ hintCanvas }
 
 type deepCanvas struct {
 	fancyCanvas
-	extra int
+	_ int
 }
 
 type plainCanvas struct{ qtwidgets.QWidgetBase }

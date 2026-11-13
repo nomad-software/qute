@@ -139,10 +139,12 @@ func InlineArg(arg unsafe.Pointer, class string) *Handle {
 	return h
 }
 
-// InlineSize returns the size of an inline value class, or 0.
+// InlineSize returns the size of an inline value class, or 0. Generated code
+// passes the class as a literal, for every row a model is asked about, so
+// the lookup goes through the class cache.
 func InlineSize(class string) int {
-	if v, ok := classes.Load(class); ok {
-		return v.(classInfo).inline
+	if ci, ok := classOf(class); ok {
+		return ci.inline
 	}
 	return 0
 }

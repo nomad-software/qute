@@ -5,7 +5,7 @@ import "testing"
 // Stand-ins with the layout of generated code: a wrapper starts with a Ref,
 // a derived wrapper embeds its base, a Base type holds a pointer to its
 // wrapper and declares the protected methods.
-type udWrapper struct{ quteRef Ref }
+type udWrapper struct{ _ Ref }
 
 func (w *udWrapper) SizeHint() int { return 0 }
 func (w *udWrapper) Paint()        {}
@@ -18,7 +18,7 @@ func (b *udBase) Protected() {}
 
 type userDirect struct {
 	udBase
-	n int
+	_ int
 }
 
 func (u *userDirect) SizeHint() int { return 1 }
@@ -27,7 +27,7 @@ type userNested struct{ userDirect }
 
 type userDeep struct {
 	userNested
-	extra int
+	_ int
 }
 
 type userByPointer struct{ *userDirect }

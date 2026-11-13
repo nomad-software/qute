@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"sort"
 	"strings"
 
@@ -176,6 +177,31 @@ func (o *overlay) skipped() bool {
 
 type overlayFile map[string]map[string]*overlay
 
+// mergeFrom lays o over the receiver: every key o sets replaces the
+// receiver's, and its arg rules are added to the receiver's. It goes through
+// the fields by reflection, so a new overlay key is merged without a line
+// here (a key left out of a hand-written merge would be lost silently
+// whenever a bare-name entry and a signature entry both match a method).
+func (dst *overlay) mergeFrom(o *overlay) {
+	d, src := reflect.ValueOf(dst).Elem(), reflect.ValueOf(o).Elem()
+	for i := 0; i < src.NumField(); i++ {
+		f := src.Field(i)
+		if f.IsZero() {
+			continue
+		}
+		if args, ok := f.Interface().(map[string]string); ok {
+			if dst.Args == nil {
+				dst.Args = map[string]string{}
+			}
+			for k, v := range args {
+				dst.Args[k] = v
+			}
+			continue
+		}
+		d.Field(i).Set(f)
+	}
+}
+
 func loadYAML(path string, into any) error {
 	b, err := os.ReadFile(path)
 	if err != nil {
@@ -203,65 +229,9 @@ func (f overlayFile) overlayFor(class string, m *irMethod) (*overlay, []string) 
 			return
 		}
 		if out == nil {
-			c := *o
-			c.Args = map[string]string{}
-			for k, v := range o.Args {
-				c.Args[k] = v
-			}
-			out = &c
-			return
+			out = &overlay{Args: map[string]string{}}
 		}
-		for k, v := range o.Args {
-			out.Args[k] = v
-		}
-		if o.Return != "" {
-			out.Return = o.Return
-		}
-		if o.Name != "" {
-			out.Name = o.Name
-		}
-		if o.Full != "" {
-			out.Full = o.Full
-		}
-		if o.KeepDefs {
-			out.KeepDefs = true
-		}
-		if o.NoFull != "" {
-			out.NoFull = o.NoFull
-		}
-		if o.Skip != nil {
-			out.Skip = o.Skip
-		}
-		if o.Error {
-			out.Error = true
-		}
-		if o.ErrorMsg != "" {
-			out.ErrorMsg = o.ErrorMsg
-		}
-		if o.Cpp != "" {
-			out.Cpp = o.Cpp
-		}
-		if o.Created {
-			out.Created = true
-		}
-		if o.Reviewed {
-			out.Reviewed = true
-		}
-		if o.Test != "" {
-			out.Test = o.Test
-		}
-		if o.Doc != "" {
-			out.Doc = o.Doc
-		}
-		if o.ReleaseSlot != "" {
-			out.ReleaseSlot = o.ReleaseSlot
-		}
-		if o.KeptDelete != "" {
-			out.KeptDelete = o.KeptDelete
-		}
-		if o.Required != "" {
-			out.Required = o.Required
-		}
+		out.mergeFrom(o)
 	}
 	if o, ok := entries[m.Name]; ok {
 		merge(o)

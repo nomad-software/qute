@@ -8,6 +8,7 @@ static QVariant &V(void *v) { return *static_cast<QVariant *>(v); }
 
 extern "C" {
 void *qute_variant_null(void) { return new QVariant(); }
+void *qute_variant_copy(const void *v) { return new QVariant(*static_cast<const QVariant *>(v)); }
 void *qute_variant_bool(bool v) { return new QVariant(v); }
 void *qute_variant_int(int v) { return new QVariant(v); }
 void *qute_variant_int64(long long v) {

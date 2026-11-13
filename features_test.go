@@ -309,3 +309,33 @@ func TestConversionsToVariant(t *testing.T) {
 		}
 	})
 }
+
+// NewQVariantOf of a *QVariant used to go through Value(), which only knows
+// the basic types: a colour came back as its name, a map as a null variant.
+// It is a real copy now, and a nil one a null variant, as for other handles.
+func TestVariantOfVariantKeepsItsType(t *testing.T) {
+	qutetest.Run(t, func() {
+		colour := qtgui.NewQVariantOf(qtgui.RGB(1, 2, 3))
+		cp := qtcore.NewQVariantOf(colour)
+		if cp == colour || cp.Ptr() == colour.Ptr() {
+			t.Error("the copy is the same object as the original")
+		}
+		if got := qtgui.VariantValue(cp); got != qtgui.RGB(1, 2, 3) {
+			t.Errorf("copy of a colour variant = %#v (%s), want RGB(1, 2, 3)", got, cp.TypeName())
+		}
+		// the copy does not depend on the original
+		colour.Delete()
+		if got := qtgui.VariantValue(cp); got != qtgui.RGB(1, 2, 3) {
+			t.Errorf("copy after the original was deleted = %#v, want RGB(1, 2, 3)", got)
+		}
+
+		m := qtcore.NewQVariantWithMap(map[string]*qtcore.QVariant{"n": qtcore.NewQVariantOf(7)})
+		if got := qtcore.NewQVariantOf(m).ToMap(); len(got) != 1 || got["n"] == nil || got["n"].ToInt() != 7 {
+			t.Errorf("copy of a map variant = %v, want one entry n = 7", got)
+		}
+
+		if v := qtcore.NewQVariantOf((*qtcore.QVariant)(nil)); v == nil || v.IsValid() {
+			t.Errorf("NewQVariantOf of a nil *QVariant = %v, want an invalid variant", v)
+		}
+	})
+}

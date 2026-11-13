@@ -100,7 +100,7 @@ type handleExt struct {
 	callbacks  map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
 	memBytes   int64                                 // external memory counted for this value (memory.go)
 
-	keeps map[string]any // kept references (guarded by keepMu)
+	keeps map[string]*Handle // kept references, by slot (guarded by keepMu)
 	// release drops what an unregistered keeper holds once its handle is
 	// collected, while Go does not free it (guarded by keepMu, see keep.go)
 	release    runtime.Cleanup
@@ -967,6 +967,9 @@ func RegisterParentedDelete(class, hint string) {
 }
 
 func parentedDeleteHint(class string) string {
+	// by name, not through classOf: a handle's class may be a name built at
+	// run time (classNameC, for a QObject found behind a base pointer), and
+	// those must not fill the cache that is keyed by the name's address
 	if v, ok := classes.Load(class); ok {
 		return v.(classInfo).parentedDelete
 	}

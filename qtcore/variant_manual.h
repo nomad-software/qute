@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 void *qute_variant_null(void);
+void *qute_variant_copy(const void *v);
 void *qute_variant_bool(bool v);
 void *qute_variant_int(int v);
 void *qute_variant_int64(long long v);

@@ -189,9 +189,9 @@ func (h *Handle) registeredKind() bool { return h.kind == KindQObject || h.kind 
 
 // slotsFor returns the keep slots of owner, creating them if create is set.
 // The caller holds keepMu.
-func slotsFor(owner *Handle, create bool) map[string]any {
+func slotsFor(owner *Handle, create bool) map[string]*Handle {
 	if owner.x().keeps == nil && create {
-		owner.x().keeps = map[string]any{}
+		owner.x().keeps = map[string]*Handle{}
 		if owner.registeredKind() {
 			owner.anchorPin()
 		} else {
@@ -243,7 +243,7 @@ func unslotLocked(owner *Handle, slot string) {
 	if e := owner.ext.Load(); e == nil || e.keeps == nil {
 		return
 	}
-	if old, ok := owner.x().keeps[slot].(*Handle); ok && unholdLocked(owner.serial, old.serial) {
+	if old := owner.x().keeps[slot]; old != nil && unholdLocked(owner.serial, old.serial) {
 		defer wakeDeferred()
 	}
 	delete(owner.x().keeps, slot)
@@ -272,7 +272,7 @@ func KeepArg(owner *Handle, slot string, arg *Handle, guard bool) {
 		return
 	}
 	ks := slotsFor(owner, true)
-	if old, ok := ks[slot].(*Handle); ok {
+	if old := ks[slot]; old != nil {
 		if old == arg {
 			return
 		}

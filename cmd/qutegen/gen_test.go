@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"sync"
 	"testing"
@@ -1478,6 +1479,53 @@ func TestProtectedAccessor(t *testing.T) {
 	for _, c := range g.classes {
 		if c.overridable() && len(c.Protected) == 0 && strings.Contains(string(g.emitClass(c)), ") Protected() *") {
 			t.Errorf("%s has Protected() but no protected methods", c.Name)
+		}
+	}
+}
+
+// A method may match a bare-name overlay entry and a signature entry; the
+// second lies over the first. Every overlay key must survive that merge: one
+// forgotten there was lost without a warning, so the test fills each field
+// in turn instead of naming them.
+func TestOverlayMergeCarriesEveryKey(t *testing.T) {
+	im := &irMethod{Name: "f"}
+	typ := reflect.TypeFor[overlay]()
+	for i := 0; i < typ.NumField(); i++ {
+		field := typ.Field(i)
+		sig := &overlay{}
+		v := reflect.ValueOf(sig).Elem().Field(i)
+		switch v.Kind() {
+		case reflect.String:
+			v.SetString("set")
+		case reflect.Bool:
+			v.SetBool(true)
+		case reflect.Interface:
+			v.Set(reflect.ValueOf("why"))
+		case reflect.Map:
+			v.Set(reflect.ValueOf(map[string]string{"b": "transfer-to-cpp"}))
+		default:
+			t.Fatalf("overlay.%s: the test does not know how to fill a %s", field.Name, v.Kind())
+		}
+		bare := &overlay{Args: map[string]string{"a": "keep"}, Doc: "bare"}
+		f := overlayFile{"C": {"f": bare, "f()": sig}}
+		got, used := f.overlayFor("C", im)
+		if len(used) != 2 {
+			t.Fatalf("overlay.%s: matched %v, want the bare and the signature entry", field.Name, used)
+		}
+		if field.Name == "Args" {
+			if got.Args["a"] != "keep" || got.Args["b"] != "transfer-to-cpp" {
+				t.Errorf("merged args = %v, want both entries' rules", got.Args)
+			}
+			continue
+		}
+		if g := reflect.ValueOf(got).Elem().Field(i); !reflect.DeepEqual(g.Interface(), v.Interface()) {
+			t.Errorf("overlay.%s = %v after the merge, want the signature entry's %v", field.Name, g.Interface(), v.Interface())
+		}
+		if got.Args["a"] != "keep" || (field.Name != "Doc" && got.Doc != "bare") {
+			t.Errorf("overlay.%s: the bare entry's keys were lost: %+v", field.Name, got)
+		}
+		if len(bare.Args) != 1 || bare.Doc != "bare" {
+			t.Errorf("overlay.%s: the merge changed the spec's own entry: %+v", field.Name, bare)
 		}
 	}
 }

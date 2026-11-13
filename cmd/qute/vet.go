@@ -89,7 +89,13 @@ func vetFindings(args []string) ([]finding, error) {
 		if all[i].pos.Filename != all[j].pos.Filename {
 			return all[i].pos.Filename < all[j].pos.Filename
 		}
-		return all[i].pos.Line < all[j].pos.Line
+		if all[i].pos.Line != all[j].pos.Line {
+			return all[i].pos.Line < all[j].pos.Line
+		}
+		if all[i].pos.Column != all[j].pos.Column {
+			return all[i].pos.Column < all[j].pos.Column
+		}
+		return all[i].rule < all[j].rule // two findings at one place: a fixed order
 	})
 	return all, nil
 }
@@ -626,7 +632,7 @@ func (v *vetter) newOwned(call *ast.CallExpr) (subclass, owned bool) {
 		if subclass && i == 0 || i >= sig.Params().Len() {
 			continue // the Go value, not a parent
 		}
-		if id, ok := a.(*ast.Ident); ok && id.Name == "nil" {
+		if isNilIdent(a) {
 			continue
 		}
 		pt := sig.Params().At(i).Type()

@@ -9,6 +9,7 @@ import "C"
 import (
 	"fmt"
 	"reflect"
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -16,7 +17,8 @@ import (
 
 // NewQVariantOf converts a Go value to an Owned QVariant. It accepts nil,
 // bool, int, int32, int64, uint, uint32, uint64, float32, float64, string,
-// []byte, []string, *QVariant (copied), the geometry structs, and any
+// []byte, []string, *QVariant (copied with whatever it holds; a nil one gives
+// a null variant), the geometry structs, and any
 // handle with a ToQVariant method (the classes with Qt's operator QVariant,
 // such as qtgui's *QTextFormat or qtwidgets' *QSizePolicy; a nil one gives a
 // null variant).
@@ -52,7 +54,14 @@ func NewQVariantOf(v any) *QVariant {
 		d, l := quteStrListArg(x)
 		p = C.qute_variant_strlist((*C.char)(unsafe.Pointer(unsafe.SliceData(d))), (*C.ptrdiff_t)(unsafe.SliceData(l)), C.ptrdiff_t(len(x)))
 	case *QVariant:
-		return NewQVariantOf(x.Value())
+		// QVariant's copy constructor, so the copy holds what x holds whatever
+		// its type (a colour, a map, a date), not only what Value can express
+		if x == nil {
+			p = C.qute_variant_null()
+			break
+		}
+		p = C.qute_variant_copy(rt.Use(unsafe.Pointer(x), "NewQVariantOf"))
+		runtime.KeepAlive(x)
 	case QPoint:
 		p = C.qute_variant_point(cQPoint(x))
 	case QSize:
@@ -83,6 +92,7 @@ type variantConvertible interface{ ToQVariant() *QVariant }
 // are returned as their string form, or nil if Qt cannot convert them.
 func (this *QVariant) Value() any {
 	self := rt.Use(unsafe.Pointer(this), "QVariant.Value")
+	defer runtime.KeepAlive(this)
 	switch C.qute_variant_kind(self) {
 	case 0:
 		return nil

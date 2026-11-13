@@ -567,6 +567,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   chain does not, through a secondary base, needs its own: `QWidget` and
   `QPaintDevice` both skip `redirected`); it is listed under the virtuals Go
   cannot override.
+  A bare-name entry and a matching signature entry are merged, the signature
+  entry on top (`overlay.mergeFrom`, by reflection over the struct's fields,
+  so a new key needs no merge code; arg rules are added together).
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `no-full: <why>` (the
   method has no Full form on purpose: a defaulted input array), `error`,
   `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…; on a
@@ -805,7 +808,9 @@ Known limitations:
 - operators, conversion operators and member templates are left out by irgen
   (it records them in the IR's `dropped` lists); COVERAGE.md counts and lists
   them. `operator QVariant()` is bound as `ToQVariant` (`variantConversion`),
-  which `NewQVariantOf` also accepts.
+  which `NewQVariantOf` also accepts. A `*QVariant` given to `NewQVariantOf`
+  is copied by QVariant's copy constructor, never through `Value()`, which
+  only knows the basic types.
 
 Open questions: is one eager `destroyed` connection per wrapped QObject cheap
 enough, or should it be lazy? The first build takes about two minutes; would
@@ -826,6 +831,9 @@ go run ./examples/hello -screenshot out.png     # render offscreen, then Read th
 python3 tools/irgen/irgen.py                    # only for a new Qt version (needs python3-clang)
 ```
 
+- Build the tools with `go run`, or `go build -o` somewhere outside the
+  tree: a binary left in the root (`qutegen`, `qute-bin`) is ignored by
+  `.gitignore`, and one was once committed by mistake.
 - Go 1.26 is the minimum: `golang.org/x/tools` (used by `qute vet`) needs it,
   and `go mod tidy` raises the `go` line back if it is lowered. Keep the
   `go.mod` that `qute new` writes in step.
@@ -877,8 +885,8 @@ Layout:
   `regression_test.go` calls a virtual through every secondary-base upcast.
 - `features_test.go` checks each extra type kind end to end (out-parameters,
   chaining, buffers, maps, durations, fields, callbacks, GUI values in
-  variants, `ToQVariant` conversions, images from bytes, defaulted
-  out-parameters in Full forms).
+  variants, a variant copied with its type, `ToQVariant` conversions, images
+  from bytes, defaulted out-parameters in Full forms).
 - `events_test.go` sends and posts events made in Go (key, mouse, custom),
   checks an override's view of one is scoped while the event lives on, and
   that dropped events are collected. `qtwidgets/dialogs_test.go` answers the

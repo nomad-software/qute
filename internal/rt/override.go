@@ -26,7 +26,7 @@ func Override(wrapper unsafe.Pointer, method, name string, f any) {
 	Use(wrapper, method)
 	GUIOnly(method)
 	h := (*Ref)(wrapper).H
-	ci, _ := classes.Load(h.class)
+	ci, _ := classes.Load(h.class) // by name: see parentedDeleteHint
 	info, _ := ci.(classInfo)
 	if !h.shim || info.shimInit == nil {
 		panic(fmt.Sprintf("%s: this %s was not made by a qute constructor (Qt created it, or its class cannot be "+

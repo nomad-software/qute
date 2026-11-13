@@ -345,7 +345,8 @@ happened and the fix.
   and `qtgui.VariantValue` also take and return colours, icons, fonts, brushes,
   pixmaps, images and the other GUI values, for item model roles. A class with
   Qt's `operator QVariant()` has `ToQVariant()` (`format.ToQVariant()` for a
-  `QTextFormat`), and `NewQVariantOf` takes it too.
+  `QTextFormat`), and `NewQVariantOf` takes it too. Given a `*QVariant`,
+  `NewQVariantOf` copies it with whatever it holds.
 - Calls whose Qt result signals failure return `error`, e.g.
   `img.Load(path)`.
 - Out-parameters become results: `l, t, r, b := layout.GetContentsMargins()`.
