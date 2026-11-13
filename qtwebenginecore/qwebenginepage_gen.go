@@ -2019,6 +2019,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TriggerAction") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QWebEnginePageWebAction, bool), QWebEnginePageWebAction, bool))
 			return ok
@@ -2036,7 +2037,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2057,6 +2059,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CreateWindow") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QWebEnginePageWebWindowType) *QWebEnginePage, QWebEnginePageWebWindowType) *QWebEnginePage)
 			return ok
@@ -2080,6 +2083,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChooseFiles") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QWebEnginePageFileSelectionMode, []string, []string) []string, QWebEnginePageFileSelectionMode, []string, []string) []string)
 			return ok
@@ -2100,7 +2104,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			*(*C.qute_list)(ret) = quteCStrList(r)
 		}},
 	{Name: "JavaScriptAlert", Has: func(v any) bool { _, ok := v.(interface{ JavaScriptAlert(*qtcore.QUrl, string) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QUrl, string), *qtcore.QUrl, string)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("JavaScriptAlert") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QUrl, string), *qtcore.QUrl, string)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			securityOrigin := rt.View[qtcore.QUrl](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUrl", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -2117,6 +2122,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("JavaScriptConfirm") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QUrl, string) bool, *qtcore.QUrl, string) bool)
 			return ok
@@ -2141,6 +2147,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("JavaScriptPrompt") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QUrl, string, string) (bool, string), *qtcore.QUrl, string, string) (bool, string))
 			return ok
@@ -2169,6 +2176,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("JavaScriptConsoleMessage") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string), QWebEnginePageJavaScriptConsoleMessageLevel, string, int, string))
 			return ok
@@ -2193,6 +2201,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("AcceptNavigationRequest") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QUrl, QWebEnginePageNavigationType, bool) bool, *qtcore.QUrl, QWebEnginePageNavigationType, bool) bool)
 			return ok
@@ -2218,6 +2227,7 @@ var qWebEnginePageVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -2240,7 +2250,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2254,7 +2265,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2268,7 +2280,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2282,7 +2295,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -2293,7 +2307,8 @@ var qWebEnginePageVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

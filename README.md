@@ -455,6 +455,15 @@ or the Go state you stored on a text block with `QTextBlock.SetUserData`.
 `COVERAGE.md` lists the classes Go can't subclass (singletons only Qt
 creates, `QIODevice`) and the few virtuals Go can't override, with reasons.
 
+Binary size: the linker drops every `Override`, `Super` and protected method
+your program doesn't use (a stripped `examples/hello` is about 14 MB). That
+holds only while nothing in the program calls reflect's `Method` or
+`MethodByName` with a name computed at run time. One such call anywhere
+makes the Go linker keep every exported method of every type, and with
+qute's packages that more than doubles the binary (`examples/hello`: about
+31 MB). `text/template` and `html/template` make such calls, so a qute app
+that links either one pays the full size.
+
 All Qt calls happen on the GUI thread (the main goroutine inside
 `qute.Main`); a call from another goroutine panics. From other goroutines use
 `qute.Post(f)` or `qute.PostSync(f)`. A panic in a handler that `f` triggers

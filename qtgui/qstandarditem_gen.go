@@ -1332,7 +1332,8 @@ func (this *QStandardItem) SortChildrenFull(column int, order qtcore.SortOrder) 
 
 var qStandardItemVTable = []rt.Virtual{
 	{Name: "Data", Has: func(v any) bool { _, ok := v.(interface{ Data(int) *qtcore.QVariant }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Data") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) *qtcore.QVariant, int) *qtcore.QVariant); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			role := int(*(*C.int)(a[0]))
@@ -1345,7 +1346,8 @@ var qStandardItemVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QStandardItem.Data")
 		}},
 	{Name: "SetData", Has: func(v any) bool { _, ok := v.(interface{ SetData(*qtcore.QVariant, int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QVariant, int), *qtcore.QVariant, int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QVariant, int), *qtcore.QVariant, int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			value := rt.View[qtcore.QVariant](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QVariant", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -1357,7 +1359,8 @@ var qStandardItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QStandardItem }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QStandardItem) *QStandardItem); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Clone") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QStandardItem) *QStandardItem); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QStandardItem)
@@ -1372,7 +1375,8 @@ var qStandardItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Type") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -1384,7 +1388,8 @@ var qStandardItemVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Read") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
@@ -1398,7 +1403,8 @@ var qStandardItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Write") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])

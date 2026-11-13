@@ -271,7 +271,8 @@ func (this *QUndoCommand) Child(index int) *QUndoCommand {
 
 var qUndoCommandVTable = []rt.Virtual{
 	{Name: "Undo", Has: func(v any) bool { _, ok := v.(interface{ Undo() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Undo") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -281,7 +282,8 @@ var qUndoCommandVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Redo", Has: func(v any) bool { _, ok := v.(interface{ Redo() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Redo") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -291,7 +293,8 @@ var qUndoCommandVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Id", Has: func(v any) bool { _, ok := v.(interface{ Id() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Id") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -303,7 +306,8 @@ var qUndoCommandVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "MergeWith", Has: func(v any) bool { _, ok := v.(interface{ MergeWith(*QUndoCommand) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QUndoCommand) bool, *QUndoCommand) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MergeWith") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QUndoCommand) bool, *QUndoCommand) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			other := rt.View[QUndoCommand](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QUndoCommand", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))

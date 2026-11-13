@@ -1215,7 +1215,8 @@ func (this *QTreeWidgetItem) SortChildren(column int, order qtcore.SortOrder) {
 
 var qTreeWidgetItemVTable = []rt.Virtual{
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QTreeWidgetItem }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QTreeWidgetItem) *QTreeWidgetItem); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Clone") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QTreeWidgetItem) *QTreeWidgetItem); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QTreeWidgetItem)
@@ -1235,6 +1236,7 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Data") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int) *qtcore.QVariant, int, int) *qtcore.QVariant)
 			return ok
@@ -1259,6 +1261,7 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QVariant), int, int, *qtcore.QVariant))
 			return ok
@@ -1277,7 +1280,8 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Read", Has: func(v any) bool { _, ok := v.(interface{ Read(*qtcore.QDataStream) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Read") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			inP := *(*unsafe.Pointer)(a[0])
@@ -1291,7 +1295,8 @@ var qTreeWidgetItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Write", Has: func(v any) bool { _, ok := v.(interface{ Write(*qtcore.QDataStream) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Write") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QDataStream), *qtcore.QDataStream)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			outP := *(*unsafe.Pointer)(a[0])

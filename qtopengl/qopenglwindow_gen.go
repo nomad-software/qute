@@ -231,7 +231,8 @@ func (this *QOpenGLWindow) OnFrameSwapped(f func()) qtcore.Connection {
 
 var qOpenGLWindowVTable = []rt.Virtual{
 	{Name: "InitializeGL", Has: func(v any) bool { _, ok := v.(interface{ InitializeGL() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InitializeGL") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -241,7 +242,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ResizeGL", Has: func(v any) bool { _, ok := v.(interface{ ResizeGL(int, int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResizeGL") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			w := int(*(*C.int)(a[0]))
@@ -253,7 +255,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintGL", Has: func(v any) bool { _, ok := v.(interface{ PaintGL() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintGL") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -263,7 +266,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintUnderGL", Has: func(v any) bool { _, ok := v.(interface{ PaintUnderGL() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintUnderGL") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -273,7 +277,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintOverGL", Has: func(v any) bool { _, ok := v.(interface{ PaintOverGL() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintOverGL") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -283,7 +288,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -297,7 +303,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResizeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -316,6 +323,7 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Metric") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
 			return ok
@@ -334,7 +342,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ExposeEvent", Has: func(v any) bool { _, ok := v.(interface{ ExposeEvent(*qtgui.QExposeEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QExposeEvent), *qtgui.QExposeEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ExposeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QExposeEvent), *qtgui.QExposeEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			exposeEventP := *(*unsafe.Pointer)(a[0])
@@ -348,7 +357,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -369,6 +379,7 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SurfaceType") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func() qtgui.QSurfaceSurfaceType) qtgui.QSurfaceSurfaceType)
 			return ok
@@ -386,7 +397,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Format", Has: func(v any) bool { _, ok := v.(interface{ Format() *qtgui.QSurfaceFormat }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QSurfaceFormat) *qtgui.QSurfaceFormat); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Format") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtgui.QSurfaceFormat) *qtgui.QSurfaceFormat); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtgui.QSurfaceFormat)
@@ -398,7 +410,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOpenGLWindow.Format")
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Size") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -410,7 +423,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "FocusObject", Has: func(v any) bool { _, ok := v.(interface{ FocusObject() *qtcore.QObject }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusObject") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtcore.QObject)
@@ -422,7 +436,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QOpenGLWindow.FocusObject")
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			moveEventP := *(*unsafe.Pointer)(a[0])
@@ -436,7 +451,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusInEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
@@ -450,7 +466,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusOutEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
@@ -464,7 +481,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ShowEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
@@ -478,7 +496,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HideEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			hideEventP := *(*unsafe.Pointer)(a[0])
@@ -492,7 +511,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CloseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
@@ -506,7 +526,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyPressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
@@ -520,7 +541,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
@@ -534,7 +556,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MousePressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -548,7 +571,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -562,7 +586,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseDoubleClickEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -576,7 +601,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseMoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -590,7 +616,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WheelEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
@@ -604,7 +631,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TouchEvent", Has: func(v any) bool { _, ok := v.(interface{ TouchEvent(*qtgui.QTouchEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTouchEvent), *qtgui.QTouchEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TouchEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QTouchEvent), *qtgui.QTouchEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			touchEventP := *(*unsafe.Pointer)(a[0])
@@ -618,7 +646,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TabletEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			tabletEventP := *(*unsafe.Pointer)(a[0])
@@ -637,6 +666,7 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("NativeEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
 			return ok
@@ -664,6 +694,7 @@ var qOpenGLWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -686,7 +717,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -700,7 +732,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -714,7 +747,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -728,7 +762,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -739,7 +774,8 @@ var qOpenGLWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

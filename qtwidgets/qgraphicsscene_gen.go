@@ -1450,6 +1450,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodQuery") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
 			return ok
@@ -1468,7 +1469,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsScene.InputMethodQuery")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1489,6 +1491,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -1516,6 +1519,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ContextMenuEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneContextMenuEvent), *QGraphicsSceneContextMenuEvent))
 			return ok
@@ -1540,6 +1544,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragEnterEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
 			return ok
@@ -1564,6 +1569,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragMoveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
 			return ok
@@ -1588,6 +1594,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragLeaveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
 			return ok
@@ -1612,6 +1619,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DropEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneDragDropEvent), *QGraphicsSceneDragDropEvent))
 			return ok
@@ -1631,7 +1639,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusInEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1645,7 +1654,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusOutEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1664,6 +1674,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HelpEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneHelpEvent), *QGraphicsSceneHelpEvent))
 			return ok
@@ -1683,7 +1694,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyPressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1697,7 +1709,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1716,6 +1729,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MousePressEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
 			return ok
@@ -1740,6 +1754,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseMoveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
 			return ok
@@ -1764,6 +1779,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseReleaseEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
 			return ok
@@ -1788,6 +1804,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseDoubleClickEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneMouseEvent), *QGraphicsSceneMouseEvent))
 			return ok
@@ -1812,6 +1829,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WheelEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGraphicsSceneWheelEvent), *QGraphicsSceneWheelEvent))
 			return ok
@@ -1836,6 +1854,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
 			return ok
@@ -1860,6 +1879,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawBackground") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
 			return ok
@@ -1885,6 +1905,7 @@ var qGraphicsSceneVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawForeground") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRectF), *qtgui.QPainter, qtcore.QRectF))
 			return ok
@@ -1905,7 +1926,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusNextPrevChild") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
@@ -1918,7 +1940,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1932,7 +1955,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1946,7 +1970,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1960,7 +1985,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -1971,7 +1997,8 @@ var qGraphicsSceneVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

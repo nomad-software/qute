@@ -1235,6 +1235,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetSelectionModel") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QItemSelectionModel), *qtcore.QItemSelectionModel))
 			return ok
@@ -1251,7 +1252,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
@@ -1267,7 +1269,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MimeTypes", Has: func(v any) bool { _, ok := v.(interface{ MimeTypes() []string }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MimeTypes") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new([]string)
@@ -1284,6 +1287,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MimeData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func([]*QTreeWidgetItem) *qtcore.QMimeData, []*QTreeWidgetItem) *qtcore.QMimeData)
 			return ok
@@ -1312,6 +1316,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DropMimeData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QTreeWidgetItem, int, *qtcore.QMimeData, qtcore.DropActions) bool, *QTreeWidgetItem, int, *qtcore.QMimeData, qtcore.DropActions) bool)
 			return ok
@@ -1333,7 +1338,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SupportedDropActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDropActions() qtcore.DropActions }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SupportedDropActions") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.DropActions)
@@ -1345,7 +1351,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "DropEvent", Has: func(v any) bool { _, ok := v.(interface{ DropEvent(*qtgui.QDropEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DropEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QDropEvent), *qtgui.QDropEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1359,7 +1366,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "SetRootIndex", Has: func(v any) bool { _, ok := v.(interface{ SetRootIndex(*qtcore.QModelIndex) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetRootIndex") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
@@ -1370,7 +1378,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyboardSearch", Has: func(v any) bool { _, ok := v.(interface{ KeyboardSearch(string) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(string), string)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyboardSearch") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(string), string)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			search := quteStr(*(*C.qute_str)(a[0]))
@@ -1386,6 +1395,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("VisualRect") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) qtcore.QRect, *qtcore.QModelIndex) qtcore.QRect)
 			return ok
@@ -1409,6 +1419,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ScrollTo") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, QAbstractItemViewScrollHint), *qtcore.QModelIndex, QAbstractItemViewScrollHint))
 			return ok
@@ -1431,6 +1442,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IndexAt") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QPoint) *qtcore.QModelIndex, qtcore.QPoint) *qtcore.QModelIndex)
 			return ok
@@ -1449,7 +1461,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QTreeWidget.IndexAt")
 		}},
 	{Name: "DoItemsLayout", Has: func(v any) bool { _, ok := v.(interface{ DoItemsLayout() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DoItemsLayout") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1459,7 +1472,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Reset") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1474,6 +1488,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DataChanged") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex, []int), *qtcore.QModelIndex, *qtcore.QModelIndex, []int))
 			return ok
@@ -1492,7 +1507,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "SelectAll", Has: func(v any) bool { _, ok := v.(interface{ SelectAll() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SelectAll") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1502,7 +1518,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "VerticalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarValueChanged(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("VerticalScrollbarValueChanged") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			value := int(*(*C.int)(a[0]))
@@ -1513,7 +1530,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ScrollContentsBy", Has: func(v any) bool { _, ok := v.(interface{ ScrollContentsBy(int, int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ScrollContentsBy") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int, int), int, int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			dx := int(*(*C.int)(a[0]))
@@ -1530,6 +1548,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RowsInserted") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int))
 			return ok
@@ -1553,6 +1572,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RowsAboutToBeRemoved") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int, int), *qtcore.QModelIndex, int, int))
 			return ok
@@ -1576,6 +1596,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveCursor") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex, QAbstractItemViewCursorAction, qtcore.KeyboardModifiers) *qtcore.QModelIndex)
 			return ok
@@ -1595,7 +1616,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QTreeWidget.MoveCursor")
 		}},
 	{Name: "HorizontalOffset", Has: func(v any) bool { _, ok := v.(interface{ HorizontalOffset() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HorizontalOffset") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -1607,7 +1629,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "VerticalOffset", Has: func(v any) bool { _, ok := v.(interface{ VerticalOffset() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("VerticalOffset") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -1624,6 +1647,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetSelection") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags), qtcore.QRect, qtcore.QItemSelectionModelSelectionFlags))
 			return ok
@@ -1646,6 +1670,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("VisualRegionForSelection") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QItemSelection) *qtgui.QRegion, *qtcore.QItemSelection) *qtgui.QRegion)
 			return ok
@@ -1664,7 +1689,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidget.VisualRegionForSelection")
 		}},
 	{Name: "SelectedIndexes", Has: func(v any) bool { _, ok := v.(interface{ SelectedIndexes() []*qtcore.QModelIndex }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() []*qtcore.QModelIndex) []*qtcore.QModelIndex); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SelectedIndexes") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() []*qtcore.QModelIndex) []*qtcore.QModelIndex); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new([]*qtcore.QModelIndex)
@@ -1676,7 +1702,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.qute_list)(ret) = C.qute_list{data: rt.InlineBlock("QModelIndex", "QTreeWidget.SelectedIndexes", len(r), func(i int) unsafe.Pointer { return unsafe.Pointer(r[i]) }, func(n int) unsafe.Pointer { return C.malloc(C.size_t(n)) }), len: C.ptrdiff_t(len(r))}
 		}},
 	{Name: "ChangeEvent", Has: func(v any) bool { _, ok := v.(interface{ ChangeEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChangeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1690,7 +1717,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1704,7 +1732,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*qtgui.QPaintEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QPaintEvent), *qtgui.QPaintEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1723,6 +1752,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawRow") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, *QStyleOptionViewItem, *qtcore.QModelIndex), *qtgui.QPainter, *QStyleOptionViewItem, *qtcore.QModelIndex))
 			return ok
@@ -1749,6 +1779,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawBranches") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRect, *qtcore.QModelIndex), *qtgui.QPainter, qtcore.QRect, *qtcore.QModelIndex))
 			return ok
@@ -1770,7 +1801,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MousePressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1784,7 +1816,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1798,7 +1831,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseDoubleClickEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1812,7 +1846,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*qtgui.QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseMoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMouseEvent), *qtgui.QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1826,7 +1861,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyPressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1840,7 +1876,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DragMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragMoveEvent(*qtgui.QDragMoveEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragMoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QDragMoveEvent), *qtgui.QDragMoveEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1854,7 +1891,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ViewportEvent", Has: func(v any) bool { _, ok := v.(interface{ ViewportEvent(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ViewportEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1870,7 +1908,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "UpdateGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometries() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UpdateGeometries") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1880,7 +1919,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ViewportSizeHint", Has: func(v any) bool { _, ok := v.(interface{ ViewportSizeHint() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ViewportSizeHint") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -1892,7 +1932,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SizeHintForColumn", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForColumn(int) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHintForColumn") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			column := int(*(*C.int)(a[0]))
@@ -1905,7 +1946,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HorizontalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarAction(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HorizontalScrollbarAction") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			action := int(*(*C.int)(a[0]))
@@ -1921,6 +1963,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsIndexHidden") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool)
 			return ok
@@ -1944,6 +1987,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SelectionChanged") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QItemSelection, *qtcore.QItemSelection), *qtcore.QItemSelection, *qtcore.QItemSelection))
 			return ok
@@ -1966,6 +2010,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CurrentChanged") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QModelIndex), *qtcore.QModelIndex, *qtcore.QModelIndex))
 			return ok
@@ -1983,7 +2028,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "SizeHintForRow", Has: func(v any) bool { _, ok := v.(interface{ SizeHintForRow(int) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHintForRow") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			row := int(*(*C.int)(a[0]))
@@ -2001,6 +2047,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemDelegateForIndex") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) *QAbstractItemDelegate, *qtcore.QModelIndex) *QAbstractItemDelegate)
 			return ok
@@ -2024,6 +2071,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodQuery") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
 			return ok
@@ -2042,7 +2090,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QTreeWidget.InputMethodQuery")
 		}},
 	{Name: "UpdateEditorData", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorData() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UpdateEditorData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -2052,7 +2101,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UpdateEditorGeometries", Has: func(v any) bool { _, ok := v.(interface{ UpdateEditorGeometries() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UpdateEditorGeometries") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -2062,7 +2112,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "VerticalScrollbarAction", Has: func(v any) bool { _, ok := v.(interface{ VerticalScrollbarAction(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("VerticalScrollbarAction") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			action := int(*(*C.int)(a[0]))
@@ -2073,7 +2124,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "HorizontalScrollbarValueChanged", Has: func(v any) bool { _, ok := v.(interface{ HorizontalScrollbarValueChanged(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HorizontalScrollbarValueChanged") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			value := int(*(*C.int)(a[0]))
@@ -2089,6 +2141,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CloseEditor") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QWidget, QAbstractItemDelegateEndEditHint), *QWidget, QAbstractItemDelegateEndEditHint))
 			return ok
@@ -2106,7 +2159,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CommitData", Has: func(v any) bool { _, ok := v.(interface{ CommitData(*QWidget) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CommitData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			editor := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -2117,7 +2171,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "EditorDestroyed", Has: func(v any) bool { _, ok := v.(interface{ EditorDestroyed(*qtcore.QObject) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QObject), *qtcore.QObject)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EditorDestroyed") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QObject), *qtcore.QObject)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			editor := rt.View[qtcore.QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -2133,6 +2188,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Edit") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool, *qtcore.QModelIndex, QAbstractItemViewEditTriggers, *qtcore.QEvent) bool)
 			return ok
@@ -2161,6 +2217,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SelectionCommand") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags, *qtcore.QModelIndex, *qtcore.QEvent) qtcore.QItemSelectionModelSelectionFlags)
 			return ok
@@ -2183,7 +2240,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "StartDrag", Has: func(v any) bool { _, ok := v.(interface{ StartDrag(qtcore.DropActions) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.DropActions), qtcore.DropActions)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("StartDrag") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(qtcore.DropActions), qtcore.DropActions)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			supportedActions := qtcore.DropActions(*(*C.int64_t)(a[0]))
@@ -2194,7 +2252,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "InitViewItemOption", Has: func(v any) bool { _, ok := v.(interface{ InitViewItemOption(*QStyleOptionViewItem) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionViewItem), *QStyleOptionViewItem)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InitViewItemOption") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QStyleOptionViewItem), *QStyleOptionViewItem)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
@@ -2208,7 +2267,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusNextPrevChild", Has: func(v any) bool { _, ok := v.(interface{ FocusNextPrevChild(bool) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusNextPrevChild") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(bool) bool, bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			next := bool(*(*C.bool)(a[0]))
@@ -2221,7 +2281,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "DragEnterEvent", Has: func(v any) bool { _, ok := v.(interface{ DragEnterEvent(*qtgui.QDragEnterEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragEnterEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QDragEnterEvent), *qtgui.QDragEnterEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2235,7 +2296,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DragLeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ DragLeaveEvent(*qtgui.QDragLeaveEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragLeaveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QDragLeaveEvent), *qtgui.QDragLeaveEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2249,7 +2311,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusInEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2263,7 +2326,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusOutEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2277,7 +2341,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*qtgui.QResizeEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResizeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QResizeEvent), *qtgui.QResizeEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2296,6 +2361,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
 			return ok
@@ -2320,6 +2386,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -2342,7 +2409,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "MinimumSizeHint", Has: func(v any) bool { _, ok := v.(interface{ MinimumSizeHint() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MinimumSizeHint") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -2354,7 +2422,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHint") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -2366,7 +2435,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "SetupViewport", Has: func(v any) bool { _, ok := v.(interface{ SetupViewport(*QWidget) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetupViewport") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			viewport := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -2377,7 +2447,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*qtgui.QWheelEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WheelEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QWheelEvent), *qtgui.QWheelEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
@@ -2396,6 +2467,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ContextMenuEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QContextMenuEvent), *qtgui.QContextMenuEvent))
 			return ok
@@ -2415,7 +2487,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "InitStyleOption", Has: func(v any) bool { _, ok := v.(interface{ InitStyleOption(*QStyleOptionFrame) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InitStyleOption") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QStyleOptionFrame), *QStyleOptionFrame)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			optionP := *(*unsafe.Pointer)(a[0])
@@ -2429,7 +2502,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "SetVisible", Has: func(v any) bool { _, ok := v.(interface{ SetVisible(bool) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetVisible") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(bool), bool)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			visible := bool(*(*C.bool)(a[0]))
@@ -2440,7 +2514,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HeightForWidth") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
@@ -2453,7 +2528,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HasHeightForWidth") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -2465,7 +2541,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2479,7 +2556,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "EnterEvent", Has: func(v any) bool { _, ok := v.(interface{ EnterEvent(*qtgui.QEnterEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EnterEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QEnterEvent), *qtgui.QEnterEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2493,7 +2571,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "LeaveEvent", Has: func(v any) bool { _, ok := v.(interface{ LeaveEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("LeaveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2507,7 +2586,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*qtgui.QMoveEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QMoveEvent), *qtgui.QMoveEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2521,7 +2601,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*qtgui.QCloseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CloseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QCloseEvent), *qtgui.QCloseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2535,7 +2616,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*qtgui.QTabletEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TabletEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QTabletEvent), *qtgui.QTabletEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2549,7 +2631,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ActionEvent", Has: func(v any) bool { _, ok := v.(interface{ ActionEvent(*qtgui.QActionEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ActionEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QActionEvent), *qtgui.QActionEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2563,7 +2646,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*qtgui.QShowEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ShowEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QShowEvent), *qtgui.QShowEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2577,7 +2661,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*qtgui.QHideEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HideEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QHideEvent), *qtgui.QHideEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2596,6 +2681,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("NativeEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
 			return ok
@@ -2623,6 +2709,7 @@ var qTreeWidgetVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Metric") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
 			return ok
@@ -2641,7 +2728,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2655,7 +2743,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -2669,7 +2758,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -2680,7 +2770,8 @@ var qTreeWidgetVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

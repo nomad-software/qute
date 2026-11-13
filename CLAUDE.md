@@ -475,7 +475,17 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   user type that another user type embeds (`type Fancy struct{ Canvas }`)
   still counts. The answer is fixed by the type's methods, so `rt.Mask` works
   it out once per Go type and class and caches it (an icon engine per row
-  pays the reflection once). `b.Super().X()`
+  pays the reflection once). The reflection looks a method up only through
+  the dispatch table entry's `Lookup`, a generated func that calls
+  `MethodByName` with the name as a constant (`rt.MethodLookup`): the linker
+  then keeps only methods of that name. A computed name anywhere in a program
+  (`rt` once passed `v.Name`) makes it keep every exported method of every
+  type, every `Override*` setter, Base and Super method included:
+  `examples/hello` stripped goes from 13.9 MB to 30.6 MB. So library code
+  never calls reflect's `Method` or `MethodByName` with a computed name
+  (tests may; `linksize_test.go` guards it). An app that links
+  `text/template` or `html/template`, which do, gets the full size anyway;
+  the README says so. `b.Super().X()`
   calls the C++ base. An override has the Go name and signature of the
   method's binding (`IndexOfItem`; a confirmed in-out parameter is a
   parameter plus a result, `Validate(input string, pos int) (State, string,
@@ -513,7 +523,7 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   alternative. Each dispatch table entry's `Call` tries the func type first
   (`Fits` checks it when set). Costs: a shim object carries an id and a bit
   per virtual, and a binary keeps the dispatch tables of the classes it
-  constructs (`examples/hello` stripped: +9%). For the same reason a plain
+  constructs. For the same reason a plain
   object reaches its class's protected methods: `x.Protected()` returns the
   Base type over it (generated for a class with protected methods), after
   `rt.UseProtected` checks the object was built as exactly that class's shim,
@@ -894,7 +904,9 @@ Layout:
   a Go graphics item, a syntax highlighter's per-block Go state, `GoValue`,
   an abstract class with no overrides, a required override left out,
   overrides reached through an embedded user type, `inputMethodQuery` answered
-  through a query event, `metric` and `connectNotify`/`IsSignalConnected`).
+  through a query event, `metric` and `connectNotify`/`IsSignalConnected`;
+  `linksize_test.go` builds `examples/hello` and checks it links no
+  `Override*` setter, skipped with `-short`).
 - `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed),
   `input.{go,cpp,h}` (the QTest input helpers) and `wait.go` (`WaitFor`,
   `WhenModal`, `WhenPopup`), tested in `input_test.go`.

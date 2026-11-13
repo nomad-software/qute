@@ -176,6 +176,7 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Icon") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QAbstractFileIconProviderIconType) *QIcon, QAbstractFileIconProviderIconType) *QIcon)
 			return ok
@@ -199,6 +200,7 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IconFileInfo") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QFileInfo) *QIcon, *qtcore.QFileInfo) *QIcon)
 			return ok
@@ -222,6 +224,7 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Type") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QFileInfo) string, *qtcore.QFileInfo) string)
 			return ok
@@ -245,6 +248,7 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetOptions") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QAbstractFileIconProviderOptions), QAbstractFileIconProviderOptions))
 			return ok
@@ -266,6 +270,7 @@ var qAbstractFileIconProviderVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Options") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func() QAbstractFileIconProviderOptions) QAbstractFileIconProviderOptions)
 			return ok

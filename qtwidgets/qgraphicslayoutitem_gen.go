@@ -525,7 +525,8 @@ func (this *QGraphicsLayoutItem) EffectiveSizeHintFull(which qtcore.SizeHint, co
 
 var qGraphicsLayoutItemVTable = []rt.Virtual{
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetGeometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			rect := goQRectF(*(*C.qute_rectf)(a[0]))
@@ -541,6 +542,7 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("GetContentsMargins") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64))
 			return ok
@@ -569,7 +571,8 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UpdateGeometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -579,7 +582,8 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsEmpty") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -596,6 +600,7 @@ var qGraphicsLayoutItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHint") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF)
 			return ok

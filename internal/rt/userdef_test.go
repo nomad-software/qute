@@ -38,6 +38,12 @@ type userValueReceiver struct{ udBase }
 
 func (u userValueReceiver) Paint() {}
 
+// byName looks a method up by a computed name. Generated code must not (see
+// MethodLookup); a test may.
+func byName(name string) MethodLookup {
+	return func(t Type) (Method, bool) { return t.MethodByName(name) }
+}
+
 // An override counts wherever in the embedding the user declared it; what a
 // type only inherits from the generated wrapper or Base never does, or a
 // public virtual would dispatch to itself.
@@ -60,16 +66,19 @@ func TestUserDefined(t *testing.T) {
 		{"no such method", &userDirect{}, "Missing", false},
 		{"nil", nil, "SizeHint", false},
 	} {
-		if got := UserDefined(c.v, c.method); got != c.want {
+		if got := UserDefined(c.v, byName(c.method)); got != c.want {
 			t.Errorf("%s: UserDefined(%T, %q) = %v, want %v", c.name, c.v, c.method, got, c.want)
 		}
+	}
+	if UserDefined(&userDirect{}, nil) {
+		t.Error("UserDefined with no lookup = true, want false")
 	}
 }
 
 // RequireOverride lets a type through that declares the virtual and panics,
 // naming the type, the method and why Qt needs it, for one that does not.
 func TestRequireOverride(t *testing.T) {
-	vt := []Virtual{{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() int }); return ok }}}
+	vt := []Virtual{{Name: "SizeHint", Lookup: byName("SizeHint"), Has: func(v any) bool { _, ok := v.(interface{ SizeHint() int }); return ok }}}
 	RequireOverride(&userDirect{}, vt, "NewThingWith", "SizeHint", "it sizes the thing")
 	defer func() {
 		msg, _ := recover().(string)

@@ -889,7 +889,7 @@ type maskPlain struct{}
 // their own.
 func TestMaskCachedPerType(t *testing.T) {
 	has := func(v any) bool { _, ok := v.(interface{ Paint() }); return ok }
-	vt := []Virtual{{Name: "Size"}, {Name: "Paint", Has: has}}
+	vt := []Virtual{{Name: "Size"}, {Name: "Paint", Lookup: byName("Paint"), Has: has}}
 	vt[0].Has = func(any) bool { return false }
 	a := Mask(maskPaints{}, vt)
 	if len(a) != 1 || a[0] != 0b10 {
@@ -901,7 +901,7 @@ func TestMaskCachedPerType(t *testing.T) {
 	if p := Mask(maskPlain{}, vt); p[0] != 0 {
 		t.Errorf("mask of a type overriding nothing = %b", p)
 	}
-	other := []Virtual{{Name: "Paint", Has: has}}
+	other := []Virtual{{Name: "Paint", Lookup: byName("Paint"), Has: has}}
 	if o := Mask(maskPaints{}, other); o[0] != 0b1 {
 		t.Errorf("mask for another table = %b, want 1", o)
 	}

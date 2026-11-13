@@ -171,7 +171,8 @@ func QItemEditorFactorySetDefaultFactory(factory QItemEditorFactoryLike) {
 
 var qItemEditorFactoryVTable = []rt.Virtual{
 	{Name: "CreateEditor", Has: func(v any) bool { _, ok := v.(interface{ CreateEditor(int, *QWidget) *QWidget }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int, *QWidget) *QWidget, int, *QWidget) *QWidget); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CreateEditor") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int, *QWidget) *QWidget, int, *QWidget) *QWidget); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			userType := int(*(*C.int)(a[0]))
@@ -188,7 +189,8 @@ var qItemEditorFactoryVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ValuePropertyName", Has: func(v any) bool { _, ok := v.(interface{ ValuePropertyName(int) []byte }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) []byte, int) []byte); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ValuePropertyName") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) []byte, int) []byte); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			userType := int(*(*C.int)(a[0]))

@@ -129,7 +129,8 @@ func (this *QXmlStreamEntityResolver) ResolveUndeclaredEntity(name string) strin
 
 var qXmlStreamEntityResolverVTable = []rt.Virtual{
 	{Name: "ResolveUndeclaredEntity", Has: func(v any) bool { _, ok := v.(interface{ ResolveUndeclaredEntity(string) string }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(string) string, string) string); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResolveUndeclaredEntity") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(string) string, string) string); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			name := quteStr(*(*C.qute_str)(a[0]))

@@ -888,6 +888,7 @@ var qProcessVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Open") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QIODeviceBaseOpenMode) bool, QIODeviceBaseOpenMode) bool)
 			return ok
@@ -906,7 +907,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WaitForReadyRead", Has: func(v any) bool { _, ok := v.(interface{ WaitForReadyRead(int) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WaitForReadyRead") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
@@ -919,7 +921,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "WaitForBytesWritten", Has: func(v any) bool { _, ok := v.(interface{ WaitForBytesWritten(int) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WaitForBytesWritten") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) bool, int) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			msecs := int(*(*C.int)(a[0]))
@@ -932,7 +935,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "BytesToWrite", Has: func(v any) bool { _, ok := v.(interface{ BytesToWrite() int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("BytesToWrite") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int64)
@@ -944,7 +948,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "IsSequential", Has: func(v any) bool { _, ok := v.(interface{ IsSequential() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsSequential") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -956,7 +961,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Close", Has: func(v any) bool { _, ok := v.(interface{ Close() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Close") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -966,7 +972,8 @@ var qProcessVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "WriteData", Has: func(v any) bool { _, ok := v.(interface{ WriteData(string, int64) int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(string, int64) int64, string, int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WriteData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(string, int64) int64, string, int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			data := C.GoString(*(**C.char)(a[0]))
@@ -980,7 +987,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Pos", Has: func(v any) bool { _, ok := v.(interface{ Pos() int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Pos") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int64)
@@ -992,7 +1000,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Size") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int64)
@@ -1004,7 +1013,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "SeekTo", Has: func(v any) bool { _, ok := v.(interface{ SeekTo(int64) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int64) bool, int64) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SeekTo") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int64) bool, int64) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			pos := int64(*(*C.longlong)(a[0]))
@@ -1017,7 +1027,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "AtEnd", Has: func(v any) bool { _, ok := v.(interface{ AtEnd() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("AtEnd") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -1029,7 +1040,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Reset") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -1041,7 +1053,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "BytesAvailable", Has: func(v any) bool { _, ok := v.(interface{ BytesAvailable() int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("BytesAvailable") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int64)
@@ -1053,7 +1066,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "CanReadLine", Has: func(v any) bool { _, ok := v.(interface{ CanReadLine() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CanReadLine") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -1065,7 +1079,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SkipData", Has: func(v any) bool { _, ok := v.(interface{ SkipData(int64) int64 }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int64) int64, int64) int64); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SkipData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int64) int64, int64) int64); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			maxSize := int64(*(*C.longlong)(a[0]))
@@ -1078,7 +1093,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.longlong)(ret) = C.longlong(r)
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QEvent) bool, *QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1094,7 +1110,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "EventFilter", Has: func(v any) bool { _, ok := v.(interface{ EventFilter(*QObject, *QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QObject, *QEvent) bool, *QObject, *QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			watched := rt.View[QObject](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QObject", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -1111,7 +1128,8 @@ var qProcessVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QTimerEvent), *QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1125,7 +1143,8 @@ var qProcessVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QChildEvent), *QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1139,7 +1158,8 @@ var qProcessVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QEvent), *QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1153,7 +1173,8 @@ var qProcessVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -1164,7 +1185,8 @@ var qProcessVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMetaMethod), *QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

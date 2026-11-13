@@ -632,7 +632,8 @@ func (this *QGraphicsGridLayout) SizeHintFull(which qtcore.SizeHint, constraint 
 
 var qGraphicsGridLayoutVTable = []rt.Virtual{
 	{Name: "Count", Has: func(v any) bool { _, ok := v.(interface{ Count() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Count") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -649,6 +650,7 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemAt") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int) *QGraphicsLayoutItem, int) *QGraphicsLayoutItem)
 			return ok
@@ -667,7 +669,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsGridLayout.ItemAt")
 		}},
 	{Name: "RemoveAt", Has: func(v any) bool { _, ok := v.(interface{ RemoveAt(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RemoveAt") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			index := int(*(*C.int)(a[0]))
@@ -678,7 +681,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Invalidate") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -688,7 +692,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRectF) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetGeometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(qtcore.QRectF), qtcore.QRectF)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			rect := goQRectF(*(*C.qute_rectf)(a[0]))
@@ -704,6 +709,7 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHint") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF, qtcore.SizeHint, qtcore.QSizeF) qtcore.QSizeF)
 			return ok
@@ -728,6 +734,7 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("GetContentsMargins") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func() (float64, float64, float64, float64)) (float64, float64, float64, float64))
 			return ok
@@ -756,7 +763,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UpdateGeometry", Has: func(v any) bool { _, ok := v.(interface{ UpdateGeometry() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UpdateGeometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -766,7 +774,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "WidgetEvent", Has: func(v any) bool { _, ok := v.(interface{ WidgetEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WidgetEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eArgP := *(*unsafe.Pointer)(a[0])
@@ -780,7 +789,8 @@ var qGraphicsGridLayoutVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsEmpty") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)

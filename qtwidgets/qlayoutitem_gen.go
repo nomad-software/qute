@@ -316,7 +316,8 @@ func (this *QLayoutItem) ControlTypes() QSizePolicyControlTypes {
 
 var qLayoutItemVTable = []rt.Virtual{
 	{Name: "SizeHint", Has: func(v any) bool { _, ok := v.(interface{ SizeHint() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeHint") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -328,7 +329,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MinimumSize", Has: func(v any) bool { _, ok := v.(interface{ MinimumSize() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MinimumSize") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -340,7 +342,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "MaximumSize", Has: func(v any) bool { _, ok := v.(interface{ MaximumSize() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MaximumSize") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -352,7 +355,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "ExpandingDirections", Has: func(v any) bool { _, ok := v.(interface{ ExpandingDirections() qtcore.Orientations }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.Orientations) qtcore.Orientations); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ExpandingDirections") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.Orientations) qtcore.Orientations); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.Orientations)
@@ -364,7 +368,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "SetGeometry", Has: func(v any) bool { _, ok := v.(interface{ SetGeometry(qtcore.QRect) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QRect), qtcore.QRect)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetGeometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(qtcore.QRect), qtcore.QRect)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			geometry := goQRect(*(*C.qute_rect)(a[0]))
@@ -375,7 +380,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Geometry", Has: func(v any) bool { _, ok := v.(interface{ Geometry() qtcore.QRect }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRect) qtcore.QRect); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Geometry") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QRect) qtcore.QRect); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QRect)
@@ -387,7 +393,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.qute_rect)(ret) = cQRect(r)
 		}},
 	{Name: "IsEmpty", Has: func(v any) bool { _, ok := v.(interface{ IsEmpty() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsEmpty") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -399,7 +406,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "HasHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HasHeightForWidth() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HasHeightForWidth") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -411,7 +419,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "HeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ HeightForWidth(int) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HeightForWidth") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
@@ -424,7 +433,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "MinimumHeightForWidth", Has: func(v any) bool { _, ok := v.(interface{ MinimumHeightForWidth(int) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MinimumHeightForWidth") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int) int, int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			arg0 := int(*(*C.int)(a[0]))
@@ -437,7 +447,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "Invalidate", Has: func(v any) bool { _, ok := v.(interface{ Invalidate() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Invalidate") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -447,7 +458,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Widget", Has: func(v any) bool { _, ok := v.(interface{ Widget() *QWidget }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QWidget) *QWidget); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Widget") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QWidget) *QWidget); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QWidget)
@@ -459,7 +471,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayoutItem.Widget")
 		}},
 	{Name: "Layout", Has: func(v any) bool { _, ok := v.(interface{ Layout() *QLayout }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QLayout) *QLayout); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Layout") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QLayout) *QLayout); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QLayout)
@@ -471,7 +484,8 @@ var qLayoutItemVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QLayoutItem.Layout")
 		}},
 	{Name: "SpacerItem", Has: func(v any) bool { _, ok := v.(interface{ SpacerItem() *QSpacerItem }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QSpacerItem) *QSpacerItem); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SpacerItem") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QSpacerItem) *QSpacerItem); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QSpacerItem)
@@ -488,7 +502,8 @@ var qLayoutItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
-		Fits: func(f any) bool { _, ok := f.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ControlTypes") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() QSizePolicyControlTypes) QSizePolicyControlTypes); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(QSizePolicyControlTypes)

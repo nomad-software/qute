@@ -268,7 +268,8 @@ func (this *QGraphicsVideoItem) OnNativeSizeChanged(f func(size qtcore.QSizeF)) 
 
 var qGraphicsVideoItemVTable = []rt.Virtual{
 	{Name: "BoundingRect", Has: func(v any) bool { _, ok := v.(interface{ BoundingRect() qtcore.QRectF }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QRectF) qtcore.QRectF); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("BoundingRect") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QRectF) qtcore.QRectF); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QRectF)
@@ -285,6 +286,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Paint") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget), *qtgui.QPainter, *qtwidgets.QStyleOptionGraphicsItem, *qtwidgets.QWidget))
 			return ok
@@ -306,7 +308,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Type", Has: func(v any) bool { _, ok := v.(interface{ Type() int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() int) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Type") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() int) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(int)
@@ -318,7 +321,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -337,6 +341,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemChange") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant, qtwidgets.QGraphicsItemGraphicsItemChange, *qtcore.QVariant) *qtcore.QVariant)
 			return ok
@@ -356,7 +361,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.ItemChange")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			evP := *(*unsafe.Pointer)(a[0])
@@ -377,6 +383,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -399,7 +406,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -413,7 +421,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -427,7 +436,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -438,7 +448,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -449,7 +460,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Advance", Has: func(v any) bool { _, ok := v.(interface{ Advance(int) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Advance") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int), int)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			phase := int(*(*C.int)(a[0]))
@@ -460,7 +472,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Shape", Has: func(v any) bool { _, ok := v.(interface{ Shape() *qtgui.QPainterPath }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Shape") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtgui.QPainterPath)
@@ -472,7 +485,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QGraphicsVideoItem.Shape")
 		}},
 	{Name: "Contains", Has: func(v any) bool { _, ok := v.(interface{ Contains(qtcore.QPointF) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Contains") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(qtcore.QPointF) bool, qtcore.QPointF) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			point := goQPointF(*(*C.qute_pointf)(a[0]))
@@ -490,6 +504,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CollidesWithItem") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool, *qtwidgets.QGraphicsItem, qtcore.ItemSelectionMode) bool)
 			return ok
@@ -514,6 +529,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CollidesWithPath") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainterPath, qtcore.ItemSelectionMode) bool, *qtgui.QPainterPath, qtcore.ItemSelectionMode) bool)
 			return ok
@@ -538,6 +554,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsObscuredBy") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsItem) bool, *qtwidgets.QGraphicsItem) bool)
 			return ok
@@ -556,7 +573,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "OpaqueArea", Has: func(v any) bool { _, ok := v.(interface{ OpaqueArea() *qtgui.QPainterPath }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("OpaqueArea") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtgui.QPainterPath) *qtgui.QPainterPath); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtgui.QPainterPath)
@@ -573,6 +591,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SceneEventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsItem, *qtcore.QEvent) bool, *qtwidgets.QGraphicsItem, *qtcore.QEvent) bool)
 			return ok
@@ -595,7 +614,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SceneEvent", Has: func(v any) bool { _, ok := v.(interface{ SceneEvent(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SceneEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -616,6 +636,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ContextMenuEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneContextMenuEvent), *qtwidgets.QGraphicsSceneContextMenuEvent))
 			return ok
@@ -640,6 +661,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragEnterEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
 			return ok
@@ -664,6 +686,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragLeaveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
 			return ok
@@ -688,6 +711,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DragMoveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
 			return ok
@@ -712,6 +736,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DropEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneDragDropEvent), *qtwidgets.QGraphicsSceneDragDropEvent))
 			return ok
@@ -731,7 +756,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusInEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -745,7 +771,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*qtgui.QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusOutEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QFocusEvent), *qtgui.QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -764,6 +791,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HoverEnterEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
 			return ok
@@ -788,6 +816,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HoverMoveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
 			return ok
@@ -812,6 +841,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HoverLeaveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneHoverEvent), *qtwidgets.QGraphicsSceneHoverEvent))
 			return ok
@@ -831,7 +861,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyPressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -845,7 +876,8 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*qtgui.QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtgui.QKeyEvent), *qtgui.QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -864,6 +896,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MousePressEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
 			return ok
@@ -888,6 +921,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseMoveEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
 			return ok
@@ -912,6 +946,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseReleaseEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
 			return ok
@@ -936,6 +971,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseDoubleClickEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneMouseEvent), *qtwidgets.QGraphicsSceneMouseEvent))
 			return ok
@@ -960,6 +996,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WheelEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtwidgets.QGraphicsSceneWheelEvent), *qtwidgets.QGraphicsSceneWheelEvent))
 			return ok
@@ -984,6 +1021,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QInputMethodEvent), *qtgui.QInputMethodEvent))
 			return ok
@@ -1008,6 +1046,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InputMethodQuery") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.InputMethodQueries) *qtcore.QVariant, qtcore.InputMethodQueries) *qtcore.QVariant)
 			return ok
@@ -1031,6 +1070,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SupportsExtension") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtwidgets.QGraphicsItemExtension) bool, qtwidgets.QGraphicsItemExtension) bool)
 			return ok
@@ -1054,6 +1094,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetExtension") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtwidgets.QGraphicsItemExtension, *qtcore.QVariant), qtwidgets.QGraphicsItemExtension, *qtcore.QVariant))
 			return ok
@@ -1076,6 +1117,7 @@ var qGraphicsVideoItemVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Extension") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QVariant) *qtcore.QVariant, *qtcore.QVariant) *qtcore.QVariant)
 			return ok

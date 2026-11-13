@@ -68,6 +68,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawPrimitive") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStylePrimitiveElement, *QStyleOption, *qtgui.QPainter, *QWidget))
 			return ok
@@ -98,6 +99,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawControl") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget), QStyleControlElement, *QStyleOption, *qtgui.QPainter, *QWidget))
 			return ok
@@ -128,6 +130,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SubElementRect") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect, QStyleSubElement, *QStyleOption, *QWidget) qtcore.QRect)
 			return ok
@@ -156,6 +159,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawComplexControl") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget), QStyleComplexControl, *QStyleOptionComplex, *qtgui.QPainter, *QWidget))
 			return ok
@@ -186,6 +190,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HitTestComplexControl") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls, QStyleComplexControl, *QStyleOptionComplex, qtcore.QPoint, *QWidget) QStyleSubControls)
 			return ok
@@ -215,6 +220,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SubControlRect") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect, QStyleComplexControl, *QStyleOptionComplex, QStyleSubControls, *QWidget) qtcore.QRect)
 			return ok
@@ -244,6 +250,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SizeFromContents") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize, QStyleContentsType, *QStyleOption, qtcore.QSize, *QWidget) qtcore.QSize)
 			return ok
@@ -273,6 +280,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PixelMetric") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStylePixelMetric, *QStyleOption, *QWidget) int, QStylePixelMetric, *QStyleOption, *QWidget) int)
 			return ok
@@ -301,6 +309,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("StyleHint") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int, QStyleStyleHint, *QStyleOption, *QWidget, *QStyleHintReturn) int)
 			return ok
@@ -333,6 +342,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("StandardIcon") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QIcon)
 			return ok
@@ -361,6 +371,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("StandardPixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap, QStyleStandardPixmap, *QStyleOption, *QWidget) *qtgui.QPixmap)
 			return ok
@@ -389,6 +400,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("GeneratedIconPixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap, qtgui.QIconMode, *qtgui.QPixmap, *QStyleOption) *qtgui.QPixmap)
 			return ok
@@ -417,6 +429,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("LayoutSpacing") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int, QSizePolicyControlTypes, QSizePolicyControlTypes, qtcore.Orientations, *QStyleOption, *QWidget) int)
 			return ok
@@ -442,7 +455,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "PolishApplication", Has: func(v any) bool { _, ok := v.(interface{ PolishApplication(*QApplication) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PolishApplication") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			app := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -453,7 +467,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Polish", Has: func(v any) bool { _, ok := v.(interface{ Polish(*QWidget) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Polish") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -464,7 +479,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Unpolish", Has: func(v any) bool { _, ok := v.(interface{ Unpolish(*QWidget) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Unpolish") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QWidget), *QWidget)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			widget := rt.View[QWidget](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QWidget", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -475,7 +491,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "UnpolishApplication", Has: func(v any) bool { _, ok := v.(interface{ UnpolishApplication(*QApplication) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("UnpolishApplication") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QApplication), *QApplication)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			application := rt.View[QApplication](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QApplication", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))
@@ -491,6 +508,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemTextRect") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect, *qtgui.QFontMetrics, qtcore.QRect, int, bool, string) qtcore.QRect)
 			return ok
@@ -518,6 +536,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemPixmapRect") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect, qtcore.QRect, int, *qtgui.QPixmap) qtcore.QRect)
 			return ok
@@ -543,6 +562,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawItemText") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPalette, bool, string, qtgui.QPaletteColorRole))
 			return ok
@@ -573,6 +593,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DrawItemPixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap), *qtgui.QPainter, qtcore.QRect, int, *qtgui.QPixmap))
 			return ok
@@ -595,7 +616,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "StandardPalette", Has: func(v any) bool { _, ok := v.(interface{ StandardPalette() *qtgui.QPalette }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtgui.QPalette) *qtgui.QPalette); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("StandardPalette") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtgui.QPalette) *qtgui.QPalette); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtgui.QPalette)
@@ -607,7 +629,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QCommonStyle.StandardPalette")
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -628,6 +651,7 @@ var qCommonStyleVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -650,7 +674,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -664,7 +689,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -678,7 +704,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -692,7 +719,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -703,7 +731,8 @@ var qCommonStyleVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

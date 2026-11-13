@@ -205,6 +205,9 @@ func (c Connection) Disconnect() {
 // Virtual is one overridable virtual method of a generated shim class.
 type Virtual struct {
 	Name string
+	// Lookup finds the method on a type, with Name as a constant (see
+	// MethodLookup); UserDefined uses it.
+	Lookup MethodLookup
 	// Has reports whether the Go value overrides this virtual.
 	Has func(self any) bool
 	// Fits reports whether f is a per-object override of this virtual: a
@@ -267,7 +270,7 @@ func Mask(self any, vt []Virtual) []uint64 {
 	}
 	m := make([]uint64, (len(vt)+63)/64)
 	for i, v := range vt {
-		if v.Has(self) && UserDefined(self, v.Name) {
+		if v.Has(self) && UserDefined(self, v.Lookup) {
 			m[i/64] |= 1 << (i % 64)
 		}
 	}
@@ -291,7 +294,7 @@ var masks sync.Map // maskKey -> []uint64, read only once stored
 func RequireOverride(self any, vt []Virtual, ctor, name, why string) {
 	for _, v := range vt {
 		if v.Name == name {
-			if v.Has(self) && UserDefined(self, name) {
+			if v.Has(self) && UserDefined(self, v.Lookup) {
 				return
 			}
 			break

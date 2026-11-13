@@ -709,7 +709,8 @@ func (this *QStandardItemModel) OnItemChanged(f func(item *QStandardItem)) qtcor
 
 var qStandardItemModelVTable = []rt.Virtual{
 	{Name: "RoleNames", Has: func(v any) bool { _, ok := v.(interface{ RoleNames() map[int][]byte }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() map[int][]byte) map[int][]byte); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RoleNames") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() map[int][]byte) map[int][]byte); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(map[int][]byte)
@@ -726,6 +727,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Index") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex, int, int, *qtcore.QModelIndex) *qtcore.QModelIndex)
 			return ok
@@ -751,6 +753,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Parent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) *qtcore.QModelIndex, *qtcore.QModelIndex) *qtcore.QModelIndex)
 			return ok
@@ -769,7 +772,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			rt.CopyValueOut(ret, unsafe.Pointer(r), "QModelIndex", "QStandardItemModel.Parent")
 		}},
 	{Name: "RowCount", Has: func(v any) bool { _, ok := v.(interface{ RowCount(*qtcore.QModelIndex) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex) int, *qtcore.QModelIndex) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RowCount") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex) int, *qtcore.QModelIndex) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
@@ -782,7 +786,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ColumnCount", Has: func(v any) bool { _, ok := v.(interface{ ColumnCount(*qtcore.QModelIndex) int }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex) int, *qtcore.QModelIndex) int); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ColumnCount") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex) int, *qtcore.QModelIndex) int); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
@@ -800,6 +805,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HasChildren") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool)
 			return ok
@@ -823,6 +829,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Data") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int) *qtcore.QVariant, *qtcore.QModelIndex, int) *qtcore.QVariant)
 			return ok
@@ -847,6 +854,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, *qtcore.QVariant, int) bool, *qtcore.QModelIndex, *qtcore.QVariant, int) bool)
 			return ok
@@ -872,6 +880,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ClearItemData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool)
 			return ok
@@ -895,6 +904,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HeaderData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, qtcore.Orientations, int) *qtcore.QVariant, int, qtcore.Orientations, int) *qtcore.QVariant)
 			return ok
@@ -920,6 +930,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetHeaderData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, qtcore.Orientations, *qtcore.QVariant, int) bool, int, qtcore.Orientations, *qtcore.QVariant, int) bool)
 			return ok
@@ -946,6 +957,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InsertRows") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) bool, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -971,6 +983,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("InsertColumns") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) bool, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -996,6 +1009,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RemoveRows") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) bool, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -1021,6 +1035,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("RemoveColumns") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) bool, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -1046,6 +1061,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Flags") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) qtcore.ItemFlags, *qtcore.QModelIndex) qtcore.ItemFlags)
 			return ok
@@ -1064,7 +1080,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "SupportedDropActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDropActions() qtcore.DropActions }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SupportedDropActions") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.DropActions)
@@ -1081,6 +1098,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ItemData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) map[int]*qtcore.QVariant, *qtcore.QModelIndex) map[int]*qtcore.QVariant)
 			return ok
@@ -1106,6 +1124,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SetItemData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, map[int]*qtcore.QVariant) bool, *qtcore.QModelIndex, map[int]*qtcore.QVariant) bool)
 			return ok
@@ -1127,7 +1146,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Sort", Has: func(v any) bool { _, ok := v.(interface{ Sort(int, qtcore.SortOrder) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int, qtcore.SortOrder), int, qtcore.SortOrder)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Sort") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int, qtcore.SortOrder), int, qtcore.SortOrder)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			column := int(*(*C.int)(a[0]))
@@ -1139,7 +1159,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MimeTypes", Has: func(v any) bool { _, ok := v.(interface{ MimeTypes() []string }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MimeTypes") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() []string) []string); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new([]string)
@@ -1156,6 +1177,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MimeData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func([]*qtcore.QModelIndex) *qtcore.QMimeData, []*qtcore.QModelIndex) *qtcore.QMimeData)
 			return ok
@@ -1184,6 +1206,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DropMimeData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool, *qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -1211,6 +1234,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Sibling") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(int, int, *qtcore.QModelIndex) *qtcore.QModelIndex, int, int, *qtcore.QModelIndex) *qtcore.QModelIndex)
 			return ok
@@ -1236,6 +1260,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CanDropMimeData") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool, *qtcore.QMimeData, qtcore.DropActions, int, int, *qtcore.QModelIndex) bool)
 			return ok
@@ -1258,7 +1283,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SupportedDragActions", Has: func(v any) bool { _, ok := v.(interface{ SupportedDragActions() qtcore.DropActions }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SupportedDragActions") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.DropActions) qtcore.DropActions); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.DropActions)
@@ -1275,6 +1301,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveRows") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool, *qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool)
 			return ok
@@ -1302,6 +1329,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveColumns") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool, *qtcore.QModelIndex, int, int, *qtcore.QModelIndex, int) bool)
 			return ok
@@ -1324,7 +1352,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "FetchMore", Has: func(v any) bool { _, ok := v.(interface{ FetchMore(*qtcore.QModelIndex) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FetchMore") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QModelIndex), *qtcore.QModelIndex)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			parent := rt.InlineArgView[qtcore.QModelIndex](a[0], "QModelIndex")
@@ -1340,6 +1369,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CanFetchMore") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) bool, *qtcore.QModelIndex) bool)
 			return ok
@@ -1363,6 +1393,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Buddy") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) *qtcore.QModelIndex, *qtcore.QModelIndex) *qtcore.QModelIndex)
 			return ok
@@ -1386,6 +1417,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Match") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex, int, *qtcore.QVariant, int, qtcore.MatchFlags) []*qtcore.QModelIndex, *qtcore.QModelIndex, int, *qtcore.QVariant, int, qtcore.MatchFlags) []*qtcore.QModelIndex)
 			return ok
@@ -1413,6 +1445,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Span") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QModelIndex) qtcore.QSize, *qtcore.QModelIndex) qtcore.QSize)
 			return ok
@@ -1431,7 +1464,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "Submit", Has: func(v any) bool { _, ok := v.(interface{ Submit() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Submit") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -1443,7 +1477,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "Revert", Has: func(v any) bool { _, ok := v.(interface{ Revert() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Revert") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1453,7 +1488,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ResetInternalData", Has: func(v any) bool { _, ok := v.(interface{ ResetInternalData() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResetInternalData") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -1463,7 +1499,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1484,6 +1521,7 @@ var qStandardItemModelVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -1506,7 +1544,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1520,7 +1559,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1534,7 +1574,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -1548,7 +1589,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -1559,7 +1601,8 @@ var qStandardItemModelVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))

@@ -188,7 +188,8 @@ func (this *QOpenGLPaintDevice) EnsureActiveTarget() {
 
 var qOpenGLPaintDeviceVTable = []rt.Virtual{
 	{Name: "EnsureActiveTarget", Has: func(v any) bool { _, ok := v.(interface{ EnsureActiveTarget() }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func())); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EnsureActiveTarget") },
+		Fits:   func(f any) bool { _, ok := f.(func(func())); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			if f, ok := v.(func(func())); ok {
@@ -203,6 +204,7 @@ var qOpenGLPaintDeviceVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Metric") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtgui.QPaintDevicePaintDeviceMetric) int, qtgui.QPaintDevicePaintDeviceMetric) int)
 			return ok

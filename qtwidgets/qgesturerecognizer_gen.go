@@ -191,6 +191,7 @@ var qGestureRecognizerVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Create") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject) *QGesture, *qtcore.QObject) *QGesture)
 			return ok
@@ -217,6 +218,7 @@ var qGestureRecognizerVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Recognize") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult, *QGesture, *qtcore.QObject, *qtcore.QEvent) QGestureRecognizerResult)
 			return ok
@@ -240,7 +242,8 @@ var qGestureRecognizerVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Reset", Has: func(v any) bool { _, ok := v.(interface{ Reset(*QGesture) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QGesture), *QGesture)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Reset") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QGesture), *QGesture)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			state := rt.View[QGesture](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QGesture", rt.KeepOrBorrow), *(*unsafe.Pointer)(a[0]))

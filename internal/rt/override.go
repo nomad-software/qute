@@ -53,7 +53,7 @@ func Override(wrapper unsafe.Pointer, method, name string, f any) {
 	h.mu.Lock()
 	e := h.x()
 	sub := h.subLocked()
-	if sub.self != nil && f != nil && vt[idx].Has(sub.self) && UserDefined(sub.self, name) {
+	if sub.self != nil && f != nil && vt[idx].Has(sub.self) && UserDefined(sub.self, vt[idx].Lookup) {
 		h.mu.Unlock()
 		panic(fmt.Sprintf("%s: the Go type %T of this %s already defines %s; change that method instead of overriding it per object",
 			method, sub.self, h.class, name))

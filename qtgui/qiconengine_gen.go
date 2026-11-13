@@ -299,6 +299,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Paint") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QPainter, qtcore.QRect, QIconMode, QIconState), *QPainter, qtcore.QRect, QIconMode, QIconState))
 			return ok
@@ -326,6 +327,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ActualSize") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState) qtcore.QSize, qtcore.QSize, QIconMode, QIconState) qtcore.QSize)
 			return ok
@@ -351,6 +353,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Pixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState) *QPixmap, qtcore.QSize, QIconMode, QIconState) *QPixmap)
 			return ok
@@ -376,6 +379,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("AddPixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*QPixmap, QIconMode, QIconState), *QPixmap, QIconMode, QIconState))
 			return ok
@@ -399,6 +403,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("AddFile") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(string, qtcore.QSize, QIconMode, QIconState), string, qtcore.QSize, QIconMode, QIconState))
 			return ok
@@ -418,7 +423,8 @@ var qIconEngineVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Key", Has: func(v any) bool { _, ok := v.(interface{ Key() string }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() string) string); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Key") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() string) string); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(string)
@@ -430,7 +436,8 @@ var qIconEngineVTable = []rt.Virtual{
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "Clone", Has: func(v any) bool { _, ok := v.(interface{ Clone() *QIconEngine }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QIconEngine) *QIconEngine); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Clone") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QIconEngine) *QIconEngine); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QIconEngine)
@@ -450,6 +457,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Read") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool)
 			return ok
@@ -476,6 +484,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Write") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QDataStream) bool, *qtcore.QDataStream) bool)
 			return ok
@@ -502,6 +511,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("AvailableSizes") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QIconMode, QIconState) []qtcore.QSize, QIconMode, QIconState) []qtcore.QSize)
 			return ok
@@ -525,7 +535,8 @@ var qIconEngineVTable = []rt.Virtual{
 			})
 		}},
 	{Name: "IconName", Has: func(v any) bool { _, ok := v.(interface{ IconName() string }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() string) string); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IconName") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() string) string); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(string)
@@ -537,7 +548,8 @@ var qIconEngineVTable = []rt.Virtual{
 			*(*C.qute_str)(ret) = quteCStr(r)
 		}},
 	{Name: "IsNull", Has: func(v any) bool { _, ok := v.(interface{ IsNull() bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("IsNull") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() bool) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(bool)
@@ -554,6 +566,7 @@ var qIconEngineVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ScaledPixmap") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(qtcore.QSize, QIconMode, QIconState, float64) *QPixmap, qtcore.QSize, QIconMode, QIconState, float64) *QPixmap)
 			return ok
@@ -575,7 +588,8 @@ var qIconEngineVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QIconEngine.ScaledPixmap")
 		}},
 	{Name: "Virtual_hook", Has: func(v any) bool { _, ok := v.(interface{ Virtual_hook(int, unsafe.Pointer) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(int, unsafe.Pointer), int, unsafe.Pointer)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Virtual_hook") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(int, unsafe.Pointer), int, unsafe.Pointer)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 2)
 			idArg := int(*(*C.int)(a[0]))

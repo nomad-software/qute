@@ -78,6 +78,7 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Metric") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(QPaintDevicePaintDeviceMetric) int, QPaintDevicePaintDeviceMetric) int)
 			return ok
@@ -96,7 +97,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*C.int)(ret) = C.int(r)
 		}},
 	{Name: "ResizeEvent", Has: func(v any) bool { _, ok := v.(interface{ ResizeEvent(*QResizeEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QResizeEvent), *QResizeEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ResizeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QResizeEvent), *QResizeEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -110,7 +112,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ExposeEvent", Has: func(v any) bool { _, ok := v.(interface{ ExposeEvent(*QExposeEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QExposeEvent), *QExposeEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ExposeEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QExposeEvent), *QExposeEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			exposeEventP := *(*unsafe.Pointer)(a[0])
@@ -124,7 +127,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "PaintEvent", Has: func(v any) bool { _, ok := v.(interface{ PaintEvent(*QPaintEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QPaintEvent), *QPaintEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("PaintEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QPaintEvent), *QPaintEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -138,7 +142,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "Event", Has: func(v any) bool { _, ok := v.(interface{ Event(*qtcore.QEvent) bool }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Event") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent) bool, *qtcore.QEvent) bool); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -154,7 +159,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "SurfaceType", Has: func(v any) bool { _, ok := v.(interface{ SurfaceType() QSurfaceSurfaceType }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() QSurfaceSurfaceType) QSurfaceSurfaceType); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("SurfaceType") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() QSurfaceSurfaceType) QSurfaceSurfaceType); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(QSurfaceSurfaceType)
@@ -166,7 +172,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*C.int64_t)(ret) = C.int64_t(r)
 		}},
 	{Name: "Format", Has: func(v any) bool { _, ok := v.(interface{ Format() *QSurfaceFormat }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *QSurfaceFormat) *QSurfaceFormat); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Format") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *QSurfaceFormat) *QSurfaceFormat); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*QSurfaceFormat)
@@ -178,7 +185,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QRasterWindow.Format")
 		}},
 	{Name: "Size", Has: func(v any) bool { _, ok := v.(interface{ Size() qtcore.QSize }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("Size") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() qtcore.QSize) qtcore.QSize); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(qtcore.QSize)
@@ -190,7 +198,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*C.qute_size)(ret) = cQSize(r)
 		}},
 	{Name: "FocusObject", Has: func(v any) bool { _, ok := v.(interface{ FocusObject() *qtcore.QObject }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusObject") },
+		Fits:   func(f any) bool { _, ok := f.(func(func() *qtcore.QObject) *qtcore.QObject); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			_ = args
 			var r = *new(*qtcore.QObject)
@@ -202,7 +211,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*unsafe.Pointer)(ret) = rt.UseArg(unsafe.Pointer(r), "QRasterWindow.FocusObject")
 		}},
 	{Name: "MoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MoveEvent(*QMoveEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMoveEvent), *QMoveEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMoveEvent), *QMoveEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			moveEventP := *(*unsafe.Pointer)(a[0])
@@ -216,7 +226,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusInEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusInEvent(*QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusInEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
@@ -230,7 +241,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "FocusOutEvent", Has: func(v any) bool { _, ok := v.(interface{ FocusOutEvent(*QFocusEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("FocusOutEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QFocusEvent), *QFocusEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			focusEventP := *(*unsafe.Pointer)(a[0])
@@ -244,7 +256,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ShowEvent", Has: func(v any) bool { _, ok := v.(interface{ ShowEvent(*QShowEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QShowEvent), *QShowEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ShowEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QShowEvent), *QShowEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			showEventP := *(*unsafe.Pointer)(a[0])
@@ -258,7 +271,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "HideEvent", Has: func(v any) bool { _, ok := v.(interface{ HideEvent(*QHideEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QHideEvent), *QHideEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("HideEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QHideEvent), *QHideEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			hideEventP := *(*unsafe.Pointer)(a[0])
@@ -272,7 +286,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CloseEvent", Has: func(v any) bool { _, ok := v.(interface{ CloseEvent(*QCloseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QCloseEvent), *QCloseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CloseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QCloseEvent), *QCloseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			closeEventP := *(*unsafe.Pointer)(a[0])
@@ -286,7 +301,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyPressEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyPressEvent(*QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyPressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
@@ -300,7 +316,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "KeyReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ KeyReleaseEvent(*QKeyEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("KeyReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QKeyEvent), *QKeyEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			keyEventP := *(*unsafe.Pointer)(a[0])
@@ -314,7 +331,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MousePressEvent", Has: func(v any) bool { _, ok := v.(interface{ MousePressEvent(*QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MousePressEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -328,7 +346,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseReleaseEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseReleaseEvent(*QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseReleaseEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -342,7 +361,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseDoubleClickEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseDoubleClickEvent(*QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseDoubleClickEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -356,7 +376,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "MouseMoveEvent", Has: func(v any) bool { _, ok := v.(interface{ MouseMoveEvent(*QMouseEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("MouseMoveEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QMouseEvent), *QMouseEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			mouseEventP := *(*unsafe.Pointer)(a[0])
@@ -370,7 +391,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "WheelEvent", Has: func(v any) bool { _, ok := v.(interface{ WheelEvent(*QWheelEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QWheelEvent), *QWheelEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("WheelEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QWheelEvent), *QWheelEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			wheelEventP := *(*unsafe.Pointer)(a[0])
@@ -384,7 +406,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TouchEvent", Has: func(v any) bool { _, ok := v.(interface{ TouchEvent(*QTouchEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QTouchEvent), *QTouchEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TouchEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QTouchEvent), *QTouchEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			touchEventP := *(*unsafe.Pointer)(a[0])
@@ -398,7 +421,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "TabletEvent", Has: func(v any) bool { _, ok := v.(interface{ TabletEvent(*QTabletEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*QTabletEvent), *QTabletEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TabletEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*QTabletEvent), *QTabletEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			tabletEventP := *(*unsafe.Pointer)(a[0])
@@ -417,6 +441,7 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("NativeEvent") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func([]byte, unsafe.Pointer) (bool, int64), []byte, unsafe.Pointer) (bool, int64))
 			return ok
@@ -444,6 +469,7 @@ var qRasterWindowVTable = []rt.Virtual{
 		})
 		return ok
 	},
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("EventFilter") },
 		Fits: func(f any) bool {
 			_, ok := f.(func(func(*qtcore.QObject, *qtcore.QEvent) bool, *qtcore.QObject, *qtcore.QEvent) bool)
 			return ok
@@ -466,7 +492,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			*(*C.bool)(ret) = C.bool(r)
 		}},
 	{Name: "TimerEvent", Has: func(v any) bool { _, ok := v.(interface{ TimerEvent(*qtcore.QTimerEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("TimerEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QTimerEvent), *qtcore.QTimerEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -480,7 +507,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ChildEvent", Has: func(v any) bool { _, ok := v.(interface{ ChildEvent(*qtcore.QChildEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ChildEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QChildEvent), *qtcore.QChildEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -494,7 +522,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "CustomEvent", Has: func(v any) bool { _, ok := v.(interface{ CustomEvent(*qtcore.QEvent) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("CustomEvent") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QEvent), *qtcore.QEvent)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			eventP := *(*unsafe.Pointer)(a[0])
@@ -508,7 +537,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "ConnectNotify", Has: func(v any) bool { _, ok := v.(interface{ ConnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("ConnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
@@ -519,7 +549,8 @@ var qRasterWindowVTable = []rt.Virtual{
 			}
 		}},
 	{Name: "DisconnectNotify", Has: func(v any) bool { _, ok := v.(interface{ DisconnectNotify(*qtcore.QMetaMethod) }); return ok },
-		Fits: func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
+		Lookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName("DisconnectNotify") },
+		Fits:   func(f any) bool { _, ok := f.(func(func(*qtcore.QMetaMethod), *qtcore.QMetaMethod)); return ok },
 		Call: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {
 			a := unsafe.Slice((*unsafe.Pointer)(args), 1)
 			signal := rt.View[qtcore.QMetaMethod](rt.WrapClass(*(*unsafe.Pointer)(a[0]), "QMetaMethod", rt.TakeOwned), *(*unsafe.Pointer)(a[0]))
