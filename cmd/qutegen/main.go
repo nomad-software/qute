@@ -84,6 +84,9 @@ func load(root string) (*Gen, error) {
 		m := &Module{Name: md.name, Pkg: md.pkg, ImportPath: modulePath + "/" + md.pkg, PkgConfig: md.pc,
 			IR: ir, Spec: spec, Overlays: ov, Deps: depsOf(g, md.deps),
 			imports: map[string]bool{}, pkgNames: map[string]string{}, usedOver: map[string]bool{}}
+		if _, err := os.Stat(filepath.Join(root, md.pkg, "shim_manual.h")); err == nil {
+			m.ShimManual = true
+		}
 		g.modules = append(g.modules, m)
 		g.byName[md.name] = m
 	}

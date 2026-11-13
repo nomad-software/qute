@@ -144,15 +144,16 @@ type overlay struct {
 	KeepDefs bool              `yaml:"keep-defaults"`
 	// NoFull says why the method has no Full form, where one cannot or should
 	// not be built (a defaulted argument that is an input array).
-	NoFull   string `yaml:"no-full"`
-	Skip     any    `yaml:"skip"`
-	Error    bool   `yaml:"error"`
-	ErrorMsg string `yaml:"error-string"`
-	Cpp      string `yaml:"cpp"`     // C++ call expression: $self, $0, $1 ... for the arguments
-	Created  bool   `yaml:"created"` // the result is built by the binding, so its death is tracked
-	Reviewed bool   `yaml:"reviewed"`
-	Test     string `yaml:"test"`
-	Doc      string `yaml:"doc"`
+	NoFull     string `yaml:"no-full"`
+	Skip       any    `yaml:"skip"`
+	Error      bool   `yaml:"error"`
+	ErrorMsg   string `yaml:"error-string"`
+	ReturnType string `yaml:"return-type"` // an enum or flags type for an integer result
+	Cpp        string `yaml:"cpp"`         // C++ call expression: $self, $0, $1 ... for the arguments, $args for all of them
+	Created    bool   `yaml:"created"`     // the result is built by the binding, so its death is tracked
+	Reviewed   bool   `yaml:"reviewed"`
+	Test       string `yaml:"test"`
+	Doc        string `yaml:"doc"`
 	// ReleaseSlot names a keep slot the method empties: after it returns, Qt
 	// no longer uses what the slot held (QPainter::end and its device).
 	ReleaseSlot string `yaml:"release-slot"`

@@ -18,6 +18,7 @@ type Module struct {
 	Classes    []*Class
 	Enums      []*Enum
 	Deps       []*Module
+	ShimManual bool // the package has a shim_manual.h for cpp overlays to call
 
 	imports  map[string]bool
 	pkgNames map[string]string // package-level Go identifier -> what claimed it
@@ -834,14 +835,16 @@ func hasVariantConversion(c *irClass) bool {
 // fullTwin builds the Full form of a method whose trailing default arguments
 // short leaves out: the same call taking every argument (Index(row, column)
 // and IndexFull(row, column, parent)). It returns nil when nothing was left
-// out, when an overlay already decides (keep-defaults, full), or when a
+// out, when an overlay already decides (keep-defaults, full, a cpp call
+// that names its arguments one by one; one that passes $args takes either
+// count), or when a
 // defaulted argument has no Go type; the short form stands either way.
 func (g *Gen) fullTwin(c *Class, im *irMethod, ov *overlay, ctor bool, short *Method) *Method {
 	if ov != nil && ov.NoFull != "" {
 		c.NoFull = append(c.NoFull, skipNote{short.Sig, "on purpose: " + ov.NoFull})
 		return nil
 	}
-	if ov != nil && (ov.KeepDefs || ov.Full != "" || ov.Cpp != "") || short.PairRet != nil {
+	if ov != nil && (ov.KeepDefs || ov.Full != "" || ov.Cpp != "" && !strings.Contains(ov.Cpp, "$args")) || short.PairRet != nil {
 		return nil
 	}
 	skipped, warns := len(c.Skipped), len(g.report.warnings)
@@ -1003,6 +1006,9 @@ func (g *Gen) newMethod(c *Class, im *irMethod, ov *overlay, ctor, full bool) *M
 		if err != nil {
 			g.skip(c, im, "return: "+err.Error())
 			return nil
+		}
+		if ov != nil && ov.ReturnType != "" {
+			t = g.retypeReturn(mm, t, ov.ReturnType)
 		}
 		mm.Ret = t
 		if ov != nil && ov.Error {
@@ -2241,3 +2247,33 @@ func (c *Class) overridable() bool {
 // initialiser.
 func (c *Class) vtableVar() string    { return strings.ToLower(c.Name[:1]) + c.Name[1:] + "VTable" }
 func (c *Class) shimInitFunc() string { return strings.ToLower(c.Name[:1]) + c.Name[1:] + "ShimInit" }
+
+// retypeReturn gives an integer result the enum or flags type an overlay's
+// return-type names (QKeyEvent::key returns an int that is a Qt::Key), so
+// callers need no cast. Anything else is a warning and keeps the result as
+// it was: a virtual's result is also what a Go override returns, so it stays
+// as Qt declares it.
+func (g *Gen) retypeReturn(mm *Method, t *conv, cpp string) *conv {
+	if mm.IR.Virtual {
+		g.report.warn("%s: return-type on a virtual", mm.Sig)
+		return t
+	}
+	if t.k != kPrim || !isIntegerCpp(mm.IR.Return.Canonical) {
+		g.report.warn("%s: return-type on a result that is not an integer", mm.Sig)
+		return t
+	}
+	nt, err := g.resolve(irType{Spelling: cpp, Canonical: cpp}, true)
+	if err != nil || nt.k != kEnum && nt.k != kFlags {
+		g.report.warn("%s: return-type %s is not a bound enum or flags type", mm.Sig, cpp)
+		return t
+	}
+	return nt
+}
+
+func isIntegerCpp(cpp string) bool {
+	switch cpp {
+	case "int", "unsigned int", "uint", "long", "unsigned long", "long long", "unsigned long long", "short", "unsigned short", "quint32", "qint32":
+		return true
+	}
+	return false
+}

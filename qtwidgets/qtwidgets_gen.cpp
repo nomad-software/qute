@@ -270,6 +270,8 @@
 #include <QWizard>
 #include <QWizardPage>
 
+#include "shim_manual.h"
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QThread>
 #include <cstring>
@@ -85664,19 +85666,19 @@ void qute_QMessageBox_setOption_1(void *self, int64_t a0, bool a1) {
 }
 int64_t qute_QMessageBox_information(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::information(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Information, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_question(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::question(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Question, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_warning(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::warning(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Warning, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 int64_t qute_QMessageBox_critical(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::critical(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Critical, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len)));
 }
 void qute_QMessageBox_about(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len) {
 	qute_gui_only();
@@ -85688,19 +85690,19 @@ void qute_QMessageBox_aboutQt(void * a0) {
 }
 int64_t qute_QMessageBox_information_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::information(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Information, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
 }
 int64_t qute_QMessageBox_question_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::question(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Question, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
 }
 int64_t qute_QMessageBox_warning_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::warning(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Warning, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
 }
 int64_t qute_QMessageBox_critical_1(void * a0, const char *a1, ptrdiff_t a1_len, const char *a2, ptrdiff_t a2_len, int64_t a3, int64_t a4) {
 	qute_gui_only();
-	return static_cast<int64_t>(QMessageBox::critical(static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
+	return static_cast<int64_t>(qute_message_box(QMessageBox::Critical, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags<QMessageBox::StandardButton>::fromInt(static_cast<QFlags<QMessageBox::StandardButton>::Int>(a3)), static_cast<QMessageBox::StandardButton>(a4)));
 }
 void qute_QMessageBox_aboutQt_1(void * a0, const char *a1, ptrdiff_t a1_len) {
 	qute_gui_only();

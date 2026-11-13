@@ -654,6 +654,8 @@ func (this *QMessageBox) SetOptionFull(option QMessageBoxOptions, on bool) {
 //
 //	C++: StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
+//
 // Arguments with C++ defaults are left at them; QMessageBoxInformationFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#information
@@ -671,6 +673,8 @@ func QMessageBoxInformation(parent QWidgetLike, title string, text string) QMess
 // QMessageBoxQuestion wraps QMessageBox::question.
 //
 //	C++: StandardButton QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
 //
 // Arguments with C++ defaults are left at them; QMessageBoxQuestionFull takes every argument.
 //
@@ -690,6 +694,8 @@ func QMessageBoxQuestion(parent QWidgetLike, title string, text string) QMessage
 //
 //	C++: StandardButton QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
+//
 // Arguments with C++ defaults are left at them; QMessageBoxWarningFull takes every argument.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#warning
@@ -707,6 +713,8 @@ func QMessageBoxWarning(parent QWidgetLike, title string, text string) QMessageB
 // QMessageBoxCritical wraps QMessageBox::critical.
 //
 //	C++: StandardButton QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
 //
 // Arguments with C++ defaults are left at them; QMessageBoxCriticalFull takes every argument.
 //
@@ -758,6 +766,8 @@ func QMessageBoxAboutQt(parent QWidgetLike) {
 //
 //	C++: StandardButton QMessageBox::information(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
+//
 // QMessageBoxInformationFull is QMessageBoxInformation with every argument, including those QMessageBoxInformation leaves at their C++ defaults.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#information
@@ -775,6 +785,8 @@ func QMessageBoxInformationFull(parent QWidgetLike, title string, text string, b
 // QMessageBoxQuestionFull wraps QMessageBox::question.
 //
 //	C++: StandardButton QMessageBox::question(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
 //
 // QMessageBoxQuestionFull is QMessageBoxQuestion with every argument, including those QMessageBoxQuestion leaves at their C++ defaults.
 //
@@ -794,6 +806,8 @@ func QMessageBoxQuestionFull(parent QWidgetLike, title string, text string, butt
 //
 //	C++: StandardButton QMessageBox::warning(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
 //
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
+//
 // QMessageBoxWarningFull is QMessageBoxWarning with every argument, including those QMessageBoxWarning leaves at their C++ defaults.
 //
 // Qt docs: https://doc.qt.io/qt-6/qmessagebox.html#warning
@@ -811,6 +825,8 @@ func QMessageBoxWarningFull(parent QWidgetLike, title string, text string, butto
 // QMessageBoxCriticalFull wraps QMessageBox::critical.
 //
 //	C++: StandardButton QMessageBox::critical(QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = …, StandardButton defaultButton = …)
+//
+// Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice).
 //
 // QMessageBoxCriticalFull is QMessageBoxCritical with every argument, including those QMessageBoxCritical leaves at their C++ defaults.
 //

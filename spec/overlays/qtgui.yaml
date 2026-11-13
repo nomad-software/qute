@@ -1008,6 +1008,7 @@ QHoverEvent:
 QKeyEvent:
   "QKeyEvent(Type, int, Qt::KeyboardModifiers, const QString&, bool, quint16)": { name: NewQKeyEvent }
   "QKeyEvent(Type, int, Qt::KeyboardModifiers, quint32, quint32, quint32, const QString&, bool, quint16, const QInputDevice*)": { name: NewQKeyEventNative, args: { device: keep }, doc: "The event stores the pointer without owning it; it keeps the object from being garbage collected while it lives." }
+  key: { return-type: "Qt::Key", reviewed: true }
 
 QMouseEvent:
   "QMouseEvent(Type, const QPointF&, const QPointF&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers, const QPointingDevice*)": { name: NewQMouseEvent }

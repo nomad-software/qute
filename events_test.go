@@ -52,7 +52,7 @@ func TestSendGoEvents(t *testing.T) {
 type keyCatcher struct {
 	qtwidgets.QWidgetBase
 	got *qtgui.QKeyEvent
-	key int
+	key qtcore.Key
 }
 
 func (k *keyCatcher) KeyPressEvent(e *qtgui.QKeyEvent) {
@@ -68,7 +68,7 @@ func TestGoEventInOverride(t *testing.T) {
 		defer w.Delete()
 		e := qtgui.NewQKeyEvent(qtcore.QEventKeyPress, int(qtcore.Key_B), qtcore.NoModifier)
 		qtcore.QCoreApplicationSendEvent(w, e)
-		if k.key != int(qtcore.Key_B) {
+		if k.key != qtcore.Key_B {
 			t.Errorf("the override saw key %d, want B", k.key)
 		}
 		if k.got == nil || k.got.Alive() {

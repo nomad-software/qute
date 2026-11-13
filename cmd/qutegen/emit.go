@@ -592,6 +592,9 @@ func (g *Gen) emitCpp(m *Module, b *buf) {
 	for _, inc := range g.includes(m, body.String()) {
 		b.p("#include <%s>", inc)
 	}
+	if m.ShimManual {
+		b.p("\n#include \"shim_manual.h\"")
+	}
 	b.Write(body.Bytes())
 }
 
@@ -1584,6 +1587,7 @@ func (g *Gen) prepCall(c *Class, mm *Method, method string, virtualParams bool) 
 // expandCpp fills an overlay's C++ call template.
 func expandCpp(tmpl, self string, args []string) string {
 	out := strings.ReplaceAll(tmpl, "$self", self)
+	out = strings.ReplaceAll(out, "$args", strings.Join(args, ", "))
 	for i := len(args) - 1; i >= 0; i-- {
 		out = strings.ReplaceAll(out, fmt.Sprintf("$%d", i), args[i])
 	}

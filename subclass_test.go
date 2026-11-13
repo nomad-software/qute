@@ -23,7 +23,7 @@ type keyTree struct {
 }
 
 func (v *keyTree) KeyPressEvent(e *qtgui.QKeyEvent) {
-	v.keys = append(v.keys, qtcore.Key(e.Key()))
+	v.keys = append(v.keys, e.Key())
 	v.Super().KeyPressEvent(e)
 }
 

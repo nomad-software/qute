@@ -1521,7 +1521,7 @@ void * qute_QKeyEvent_new_2(int64_t a0, int a1, int64_t a2, const char *a3, ptrd
 void * qute_QKeyEvent_new_3(int64_t a0, int a1, int64_t a2, unsigned int a3, unsigned int a4, unsigned int a5, const char *a6, ptrdiff_t a6_len, bool a7, unsigned short a8, void * a9);
 void qute_QKeyEvent_delete(void *self);
 void * qute_QKeyEvent_cast(void *obj);
-int qute_QKeyEvent_key(void *self);
+int64_t qute_QKeyEvent_key(void *self);
 bool qute_QKeyEvent_matches(void *self, int64_t a0);
 void * qute_QKeyEvent_keyCombination(void *self);
 qute_str qute_QKeyEvent_text(void *self);

@@ -14,7 +14,10 @@ import (
 // QColor::red() does (qt_div_257), so a
 // single operation gives the colour Qt gives (TestColorMathMatchesQt
 // compares them over a sweep of colours). Chained operations can differ from
-// Qt, which keeps 16 bits between them. None of it calls Qt, so it works
+// Qt, which keeps 16 bits between them. The port follows Qt's source as
+// written; a Qt built with fused multiply-adds (x86-64-v3 packages, GCC on
+// ARM64) rounds some HSV and HSL conversions differently itself, so there a
+// colour built through them can be one step (1/255) off that Qt's. None of it calls Qt, so it works
 // on any goroutine and costs no cgo call.
 
 const ushrtMax = 65535

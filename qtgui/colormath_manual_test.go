@@ -19,9 +19,46 @@ func unpack(p int32) qtgui.QColor {
 	return qtgui.QColor{R: uint8(u >> 24), G: uint8(u >> 16), B: uint8(u >> 8), A: uint8(u)}
 }
 
+// fusedProbe is a colour whose HSV-to-RGB conversion tells the two kinds of
+// Qt build apart: built as written (generic x86-64), QColor gives red 127;
+// built where the compiler fuses multiply-adds into FMA instructions
+// (x86-64-v3 packages such as CachyOS's, and GCC on ARM64 by default), 128.
+var fusedProbe = [4]float32{0.77822953, 0.7154649, 0.65494317, 0.6249812}
+
+// qtFuses asks the installed Qt which kind of build it is.
+func qtFuses(t *testing.T) bool {
+	fhsv, _, _, _ := colorref.FromFloats(fusedProbe[:])
+	switch r := unpack(fhsv[0]).R; r {
+	case 127:
+		return false
+	case 128:
+		return true
+	default:
+		t.Fatalf("Qt gives red %d for the FMA probe, want 127 (unfused) or 128 (fused)", r)
+		return false
+	}
+}
+
+// near is whether two colours differ by at most one step per channel.
+func near(a, b qtgui.QColor) bool {
+	d := func(x, y uint8) bool { return x-y <= 1 || y-x <= 1 }
+	return d(a.R, b.R) && d(a.G, b.G) && d(a.B, b.B) && a.A == b.A
+}
+
 // The Go colour arithmetic gives what Qt's QColor gives, over a sweep of
 // every third value per channel (0 and 255 included) and several factors.
+// The port follows Qt's source as written, so it matches a Qt built that way
+// exactly. A Qt whose compiler fused multiply-adds (qtFuses) rounds some
+// conversions differently; there results built through HSV or HSL may be a
+// step off per channel, and everything else must still match exactly.
 func TestColorMathMatchesQt(t *testing.T) {
+	fused := qtFuses(t)
+	if fused {
+		t.Log("Qt was built with fused multiply-adds: colours from HSV or HSL may differ by one step")
+	}
+	same := func(got qtgui.QColor, qt int32) bool {
+		return pack(got) == qt || fused && near(got, unpack(qt))
+	}
 	var rgba []byte
 	var cols []qtgui.QColor
 	for r := 0; r < 256; r += 3 {
@@ -61,10 +98,10 @@ func TestColorMathMatchesQt(t *testing.T) {
 					fail("%v: Hue, Saturation, Value or Lightness differ from Hsv and Hsl", c)
 				}
 			}
-			if got := c.Lighter(f[0]); pack(got) != o[6] {
+			if got := c.Lighter(f[0]); !same(got, o[6]) {
 				fail("%v.Lighter(%d) = %v, Qt %v", c, f[0], got, unpack(o[6]))
 			}
-			if got := c.Darker(f[1]); pack(got) != o[7] {
+			if got := c.Darker(f[1]); !same(got, o[7]) {
 				fail("%v.Darker(%d) = %v, Qt %v", c, f[1], got, unpack(o[7]))
 			}
 		}
@@ -84,10 +121,10 @@ func TestColorMathMatchesQt(t *testing.T) {
 	hsv, hsl := colorref.FromInts(quads)
 	for i := range hsv {
 		q := quads[4*i : 4*i+4]
-		if got := qtgui.ColorFromHsv(int(q[0]), int(q[1]), int(q[2]), int(q[3])); pack(got) != hsv[i] {
+		if got := qtgui.ColorFromHsv(int(q[0]), int(q[1]), int(q[2]), int(q[3])); !same(got, hsv[i]) {
 			fail("ColorFromHsv%v = %v, Qt %v", q, got, unpack(hsv[i]))
 		}
-		if got := qtgui.ColorFromHsl(int(q[0]), int(q[1]), int(q[2]), int(q[3])); pack(got) != hsl[i] {
+		if got := qtgui.ColorFromHsl(int(q[0]), int(q[1]), int(q[2]), int(q[3])); !same(got, hsl[i]) {
 			fail("ColorFromHsl%v = %v, Qt %v", q, got, unpack(hsl[i]))
 		}
 	}
@@ -105,10 +142,10 @@ func TestColorMathMatchesQt(t *testing.T) {
 	fhsv, fhsl, frgb, falpha := colorref.FromFloats(fq)
 	for i := range fhsv {
 		q := fq[4*i : 4*i+4]
-		if got := qtgui.ColorFromHsvF(q[0], q[1], q[2], q[3]); pack(got) != fhsv[i] {
+		if got := qtgui.ColorFromHsvF(q[0], q[1], q[2], q[3]); !same(got, fhsv[i]) {
 			fail("ColorFromHsvF%v = %v, Qt %v", q, got, unpack(fhsv[i]))
 		}
-		if got := qtgui.ColorFromHslF(q[0], q[1], q[2], q[3]); pack(got) != fhsl[i] {
+		if got := qtgui.ColorFromHslF(q[0], q[1], q[2], q[3]); !same(got, fhsl[i]) {
 			fail("ColorFromHslF%v = %v, Qt %v", q, got, unpack(fhsl[i]))
 		}
 		if got := qtgui.ColorFromRgbF(q[0], q[1], q[2], q[3]); pack(got) != frgb[i] {

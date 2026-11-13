@@ -127,11 +127,11 @@ func NewQKeyEventNativeFull(typeArg qtcore.QEventType, key int, modifiers qtcore
 //	C++: int QKeyEvent::key() const
 //
 // Qt docs: https://doc.qt.io/qt-6/qkeyevent.html#key
-func (this *QKeyEvent) Key() int {
+func (this *QKeyEvent) Key() qtcore.Key {
 	self := rt.Use(unsafe.Pointer(this), "QKeyEvent.Key")
 	r := C.qute_QKeyEvent_key(self)
 	runtime.KeepAlive(this)
-	return int(r)
+	return qtcore.Key(r)
 }
 
 // Matches wraps QKeyEvent::matches.

@@ -10631,9 +10631,9 @@ void * qute_QKeyEvent_cast(void *obj) {
 	qute_gui_only();
 	return static_cast<void *>(dynamic_cast<QKeyEvent *>(static_cast<QEvent *>(obj)));
 }
-int qute_QKeyEvent_key(void *self) {
+int64_t qute_QKeyEvent_key(void *self) {
 	qute_gui_only();
-	return static_cast<int>(static_cast<QKeyEvent *>(self)->key());
+	return static_cast<int64_t>(static_cast<QKeyEvent *>(self)->key());
 }
 bool qute_QKeyEvent_matches(void *self, int64_t a0) {
 	qute_gui_only();

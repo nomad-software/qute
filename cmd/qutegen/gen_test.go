@@ -1595,3 +1595,59 @@ func TestOverlayMergeCarriesEveryKey(t *testing.T) {
 		}
 	}
 }
+
+// A cpp overlay that passes $args serves both the short and the Full form:
+// each call gets its own arguments (QMessageBox's statics build the box on
+// the heap through qtwidgets/shim_manual.h, which the module's C++ includes).
+func TestCppArgsAndShimManual(t *testing.T) {
+	g := gen(t)
+	m := g.byName["QtWidgets"]
+	if !m.ShimManual {
+		t.Fatal("qtwidgets has a shim_manual.h but the module does not include it")
+	}
+	if g.byName["QtSvg"].ShimManual {
+		t.Error("qtsvg has no shim_manual.h but is marked as having one")
+	}
+	var cpp buf
+	g.emitCpp(m, &cpp)
+	out := cpp.String()
+	if !strings.Contains(out, "#include \"shim_manual.h\"") {
+		t.Error("qtwidgets_gen.cpp does not include shim_manual.h")
+	}
+	short := "qute_message_box(QMessageBox::Question, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len))"
+	full := "qute_message_box(QMessageBox::Question, static_cast<QWidget *>(a0), QString::fromUtf8(a1, a1_len), QString::fromUtf8(a2, a2_len), QFlags"
+	if !strings.Contains(out, short) || !strings.Contains(out, full) {
+		t.Error("QMessageBox::question's short and Full forms do not both call qute_message_box with their own arguments")
+	}
+	if got := expandCpp("f($self, $args)", "s", []string{"a0", "a1"}); got != "f(s, a0, a1)" {
+		t.Errorf("expandCpp $args = %q", got)
+	}
+}
+
+// return-type gives an integer result its enum type (QKeyEvent::key is a
+// Qt::Key), and is refused where it would lie.
+func TestReturnType(t *testing.T) {
+	m := method(t, "QKeyEvent", "key(")
+	if m.Ret == nil || m.Ret.k != kEnum || m.Ret.enum.cpp != "Qt::Key" {
+		t.Errorf("QKeyEvent.Key returns %+v, want qtcore.Key", m.Ret)
+	}
+	g := gen(t)
+	before := len(g.report.warnings)
+	defer func() { g.report.warnings = g.report.warnings[:before] }()
+	intRet := &conv{k: kPrim}
+	virt := &Method{Sig: "v()", IR: &irMethod{Virtual: true, Return: irType{Canonical: "int"}}}
+	if got := g.retypeReturn(virt, intRet, "Qt::Key"); got != intRet {
+		t.Error("return-type changed a virtual's result")
+	}
+	str := &Method{Sig: "s()", IR: &irMethod{Return: irType{Canonical: "QString"}}}
+	if got := g.retypeReturn(str, &conv{k: kString}, "Qt::Key"); got.k != kString {
+		t.Error("return-type changed a string result")
+	}
+	bad := &Method{Sig: "b()", IR: &irMethod{Return: irType{Canonical: "int"}}}
+	if got := g.retypeReturn(bad, intRet, "QNoSuchEnum"); got != intRet {
+		t.Error("return-type accepted an unknown type")
+	}
+	if n := len(g.report.warnings) - before; n != 3 {
+		t.Errorf("%d warnings for 3 bad return-types: %v", n, g.report.warnings[before:])
+	}
+}

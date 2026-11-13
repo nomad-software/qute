@@ -312,7 +312,11 @@ class: <bound class>}` when Qt has no getter; a class may list several
 8-bit RGBA, with QColor's arithmetic (`Lighter`, `Darker`, HSV, HSL, the
 float channels) ported to Go step for step from Qt 6.12's `qcolor.cpp`, so
 no call reaches C++ (Qt 6.12 rewrote `toHsv`/`toHsl`; a newer Qt that
-changes them again fails the comparison test).
+changes them again fails the comparison test). It follows the source as
+written; a Qt whose compiler fused multiply-adds (x86-64-v3 builds such as
+CachyOS's, GCC on ARM64) rounds HSV and HSL conversions differently, so the
+test probes which kind is installed (`qtFuses`) and allows one step per
+channel there.
 `colormath_manual_test.go` compares it with Qt's QColor through
 `internal/colorref`, a cgo package only tests import.
 
@@ -586,7 +590,13 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   so a new key needs no merge code; arg rules are added together).
   Other keys: `name`, `skip`, `keep-defaults`, `full`, `no-full: <why>` (the
   method has no Full form on purpose: a defaulted input array), `error`,
-  `error-string`, `reviewed`, `doc`, `test`, `cpp` (a custom C++ call: `$self`, `$0`, `$1`…; on a
+  `error-string`, `reviewed`, `doc`, `test`, `return-type: <enum>` (an
+  integer result that is an enum or flags value: `QKeyEvent::key` returns
+  `qtcore.Key`; not on virtuals, whose result a Go override returns), `cpp`
+  (a custom C++ call: `$self`, `$0`, `$1`…, or `$args` for all the
+  arguments, which keeps the Full form since each form passes its own; it
+  may call helpers in the package's `shim_manual.h`, which the module's
+  generated C++ includes when it exists; on a
   constructor it builds the object, `$class` naming the class to construct,
   the shim when there is one: `QLoggingCategory` copies the name Qt keeps), `created: true` (the
   result is built by the binding, so it is registered and its death seen),
@@ -594,14 +604,20 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `required: <when Qt calls it>` (a pure virtual a Go subclass must define).
   `QGraphicsScene::addRect` and friends use `cpp` + `created` to build
   qute's notifying item subclasses instead of Qt's, so those items report
-  their death however they die.
+  their death however they die. `QMessageBox::question` and the other
+  message statics call `qute_message_box` (`qtwidgets/shim_manual.h`), which
+  builds the box on the heap: Qt's is on the stack, and a parent deleted
+  while it is open would destroy it twice; qute's returns `NoButton`
+  (`qtwidgets/parentdies_test.go`, which also checks the other static
+  dialogs). `QMessageBox.ExecButton` (`messagebox_manual.go`) is `Exec`
+  with a typed answer.
 - **Defaults** (Shiboken-style): a constructor argument named `parent` is
   `transfer-this`; other object pointers and returned objects are
   `borrowed`; value results are Owned copies; trailing default arguments are
   dropped (a constructor's `parent` is kept), and the method also gets a
   `Full` form, `<Name>Full`, that takes every argument (`IndexFull`,
   `NewQFontWithFamilyFull`). There is none when an overlay has
-  `keep-defaults`, `full`, `no-full` or `cpp`, when a defaulted argument has
+  `keep-defaults`, `full`, `no-full` or a `cpp` without `$args`, when a defaulted argument has
   no Go type (a defaulted `bool *ok` needs its `out` rule: an out-parameter is
   never guessed when it has a default), or when another overload already has
   its Go signature (out-parameters count: `ToIntFull` returns the `ok`
@@ -671,8 +687,13 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   `qute.SaveScreenshot`; `go run ./examples/hello -screenshot out.png`.
 - `qute.DumpTree(w)`: class, objectName, ownership, pins, anchoring
   (`root` or `global`, see Pinning and anchoring), geometry as JSON.
-- `qutetest.Click`, `ClickAt`, `DoubleClick`, `Type` (handles non-ASCII), `Key`,
-  `Wait`, over QTest, and `qute.ProcessEvents`.
+- `qutetest.Click`, `ClickAt`, `DoubleClick`, `Press`/`Move`/`Release` and
+  `Drag` (QTest keeps the held buttons between them), `Type` (handles
+  non-ASCII), `Key`, `Wait`, over QTest, and `qute.ProcessEvents`.
+  `WaitFor(cond, timeout)` runs the event loop until `cond` holds
+  (QTRY_VERIFY). `WhenModal(t, f)`/`WhenPopup(t, f)` run `f` on the next
+  modal widget or popup once it is active (a timer polls), to answer an
+  `Exec` that blocks in its own loop; the test fails if none appears.
 - `qutetest.TestMain(m)` and `qutetest.Run(t, f)` run tests on the GUI thread,
   offscreen; `qutetest.CollectGarbage()` / `qutetest.Freed()` check that GC frees.
   `TestMain` turns off Qt's quit-on-last-window-closed, so a test that closes
@@ -874,8 +895,9 @@ Layout:
   an abstract class with no overrides, a required override left out,
   overrides reached through an embedded user type, `inputMethodQuery` answered
   through a query event, `metric` and `connectNotify`/`IsSignalConnected`).
-- `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed) and
-  `input.{go,cpp,h}` (the QTest input helpers, tested in `input_test.go`).
+- `qutetest`: `qutetest.go` (TestMain, Run, CollectGarbage, Freed),
+  `input.{go,cpp,h}` (the QTest input helpers) and `wait.go` (`WaitFor`,
+  `WhenModal`, `WhenPopup`), tested in `input_test.go`.
 - `internal/rt/rt_test.go` and `cmd/qutegen/gen_test.go` test the runtime and
   the generator directly (no QApplication; the generator test loads the real
   spec). The runtime tests use fake addresses and stub the Qt hooks

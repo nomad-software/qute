@@ -146,8 +146,8 @@ Not bound yet:
   Qt5Compat. Go's standard library covers much of what some of them do
   (`net/http`, `database/sql`, `encoding/xml`).
 - **Not planned**: QtConcurrent (templates; use goroutines and `qute.Post`),
-  QtTest (the `qutetest` package wraps what tests need: `Click`, `Type`,
-  `Key`, `Wait`), and tool or internal libraries (Designer, Linguist, QmlCompiler,
+  QtTest (the `qutetest` package wraps what tests need: `Click`, `Drag`,
+  `Type`, `Key`, `Wait`, `WaitFor`), and tool or internal libraries (Designer, Linguist, QmlCompiler,
   ShaderTools, UiPlugin, platform plugins).
 
 Adding a module is mostly spec work (see [How the bindings are made](#how-the-bindings-are-made)).
@@ -171,9 +171,12 @@ to see the UI:
   tree as JSON: class, `objectName`, ownership state, pins, what holds its Go
   state (`anchored`), geometry and visibility. It is a precise, text-only view of what is on screen.
 - **The agent can use the window.** `qutetest.Click`, `ClickAt`,
-  `DoubleClick`, `Type` (including non-ASCII text), `Key` and `Wait` drive
-  real Qt input events through QTest, so behaviour tests exercise signals and
-  handlers the way a user would. They live in their own package, so a
+  `DoubleClick`, `Press`, `Move`, `Release`, `Drag`, `Type` (including
+  non-ASCII text), `Key` and `Wait` drive real Qt input events through QTest,
+  so behaviour tests exercise signals and handlers the way a user would.
+  `WaitFor` waits for a condition instead of a guessed delay, and
+  `WhenModal` and `WhenPopup` answer a dialog's or menu's `Exec`, which
+  blocks in its own event loop, as soon as it is up. They live in their own package, so a
   program's binary doesn't link QtTest.
 - **Errors explain themselves.** Panics name the method, say what happened,
   give the fix and, where an ownership rule applies, cite its number.
@@ -228,7 +231,8 @@ lines are a good start:
 - GUI code uses qute (Qt 6 for Go). Run `go test ./...`; tests are headless.
 - To check a layout, save a screenshot with qute.SaveScreenshot and open
   the PNG; use qute.DumpTree for exact geometry.
-- Drive the UI in tests with qutetest.Click/Type/Key inside qutetest.Run.
+- Drive the UI in tests with qutetest.Click/Drag/Type/Key inside qutetest.Run;
+  wait with qutetest.WaitFor, answer dialogs and menus with WhenModal/WhenPopup.
 - Run `qute vet ./...` before finishing. Inside handlers delete QObjects
   with DeleteLater, never Delete. From goroutines use qute.Post.
 ```
@@ -468,6 +472,13 @@ same time, or when one deletes it while another uses it. GC still frees them
 through the GUI thread, so the application must be running for them to be
 freed.
 
+Qt's static `QMessageBox` functions (`question`, `information`, `warning`,
+`critical`) build the box on the stack with your widget as its parent, so a
+handler that deletes that widget while the box is open would destroy the box
+twice. qute's `QMessageBoxQuestion` and the rest build it on the heap instead:
+the box goes with its parent and `NoButton` is returned. A box you build
+yourself returns its typed answer from `ExecButton`.
+
 In tests, `t.Fatal` and `t.Skip` work inside `qutetest.Run` and end the test
 as usual. A test may close or delete its windows: under `qutetest.TestMain`
 closing the last window does not quit the application, as it does under
@@ -539,7 +550,7 @@ flowchart TB
     app["Your app<br/>main.go, handlers, Go subclasses"]
     tests["Your tests"]
     qute["qute<br/>Main, Post, PostSync,<br/>Screenshot, DumpTree"]
-    qutetest["qutetest<br/>TestMain, Run, Click, Type,<br/>Key, Wait, CollectGarbage"]
+    qutetest["qutetest<br/>TestMain, Run, Click, Drag, Type,<br/>Key, Wait, WaitFor, WhenModal, CollectGarbage"]
     gen["Generated packages<br/>qtcore, qtgui, qtwidgets, ...<br/>Go wrappers: one checked call per method"]
     shim["C++ shims, *_gen.cpp<br/>thread check, conversions,<br/>subclasses for virtuals and death notices"]
     rt["internal/rt<br/>handles and registry, ownership states,<br/>pins and anchors, kept references,<br/>cleanup queue, Post and PostSync"]
@@ -701,7 +712,7 @@ flowchart LR
 | Path                 | What                                                       |
 | -------------------- | ---------------------------------------------------------- |
 | `.` (package `qute`) | `Main`, `Post`, `Screenshot`, `DumpTree`, `ProcessEvents`    |
-| `qutetest`           | `TestMain`, `Run`, `Click`, `Type`, `Key`, `Wait`, GC checks |
+| `qutetest`           | `TestMain`, `Run`, `Click`, `Drag`, `Type`, `Key`, `Wait`, `WaitFor`, `WhenModal`, GC checks |
 | `internal/rt`        | runtime: handles, registry, pins, cleanup queue, threads   |
 | `qtcore`, `qtgui`, `qtwidgets`, `qtopengl`, `qtopenglwidgets`, `qtsvg`, `qtsvgwidgets`, `qtmultimedia`, `qtmultimediawidgets`, `qtwebenginecore`, `qtwebenginewidgets` | generated packages (plus `*_manual` files) |
 | `cmd/qutegen`        | the generator                                              |

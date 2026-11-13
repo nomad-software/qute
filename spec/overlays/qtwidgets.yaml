@@ -490,10 +490,10 @@ QMessageBox:
   clickedButton: { return: borrowed }
   setCheckBox: { args: { cb: transfer-to-cpp } }
   checkBox: { return: borrowed }
-  information(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxInformation, reviewed: true }
-  question(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxQuestion, reviewed: true }
-  warning(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxWarning, reviewed: true }
-  critical(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxCritical, reviewed: true }
+  information(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxInformation, reviewed: true, cpp: "qute_message_box(QMessageBox::Information, $args)", doc: "Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice)." }
+  question(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxQuestion, reviewed: true, cpp: "qute_message_box(QMessageBox::Question, $args)", doc: "Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice)." }
+  warning(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxWarning, reviewed: true, cpp: "qute_message_box(QMessageBox::Warning, $args)", doc: "Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice)." }
+  critical(QWidget*, const QString&, const QString&, QMessageBox::StandardButtons, QMessageBox::StandardButton): { name: QMessageBoxCritical, reviewed: true, cpp: "qute_message_box(QMessageBox::Critical, $args)", doc: "Unlike Qt's, the box is built on the heap: if parent is deleted while it is open, the box goes with it and NoButton is returned (Qt's stack-built box would be destroyed twice)." }
   information(QWidget*, const QString&, const QString&, QMessageBox::StandardButton, QMessageBox::StandardButton): { skip: "obsolete overload" }
   question(QWidget*, const QString&, const QString&, QMessageBox::StandardButton, QMessageBox::StandardButton): { skip: "obsolete overload" }
   warning(QWidget*, const QString&, const QString&, QMessageBox::StandardButton, QMessageBox::StandardButton): { skip: "obsolete overload" }
