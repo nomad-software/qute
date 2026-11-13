@@ -13,6 +13,9 @@
 #   enums-only: true   emit the enums but no wrapper (QChar is a rune in Go)
 #   depends-on: x      the object(s) a value is only valid with: a getter name,
 #                      or {cpp: <expr over $self>, class: <class>}; a list for several
+#   reentrant: true    Qt documents it as reentrant: usable on any goroutine,
+#                      not by two at once; methods whose signature names a
+#                      class that is not reentrant keep the GUI-thread check
 #   reviewed: true     every default rule on the class was checked; avoid it,
 #                      it hides methods nobody looked at (review per method)
 module: QtCore
@@ -48,8 +51,8 @@ classes:
   QCalendar: { kind: value }
   QTimeZone: { kind: value }
   QLocale: { kind: value }
-  QRegularExpression: { kind: value }
-  QRegularExpressionMatch: { kind: value }
+  QRegularExpression: { kind: value, reentrant: true }
+  QRegularExpressionMatch: { kind: value, reentrant: true }
   QItemSelection: { kind: value }
   QItemSelectionRange: { kind: value }
   QDataStream: {}
@@ -72,7 +75,7 @@ classes:
   QKeyCombination: { kind: value }
   QDeadlineTimer: { kind: value }
   QFileInfo: { kind: value }
-  QRegularExpressionMatchIterator: { kind: value }
+  QRegularExpressionMatchIterator: { kind: value, reentrant: true }
   "QCalendar::YearMonthDay": { kind: value }
   "QCalendar::SystemId": { kind: value }
   "QTimeZone::OffsetData": { kind: value }

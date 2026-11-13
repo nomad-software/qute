@@ -1283,3 +1283,49 @@ func BenchmarkClassesSyncMap(b *testing.B) {
 		classes.Load("BenchClass")
 	}
 }
+
+// A reentrant class is registered as such. In qute_debug builds two
+// goroutines inside one object at once panic, and so does Delete() of an
+// object another goroutine is using; release builds check nothing.
+func TestReentrantBusy(t *testing.T) {
+	RegisterClass("Reentrant1", KindValue, func(unsafe.Pointer) {})
+	RegisterReentrant("Reentrant1")
+	if !isReentrant("Reentrant1") || isReentrant("PlainItem") {
+		t.Fatal("isReentrant does not follow RegisterReentrant")
+	}
+	h := Wrap(fakePtr(0), "Reentrant1", KindValue, TakeOwned, func(unsafe.Pointer) {})
+	r := &Ref{H: h, P: h.ptr}
+	w := unsafe.Pointer(r)
+	if Use(w, "Reentrant1.Use") != h.ptr {
+		t.Fatal("Use of a reentrant object")
+	}
+	panics := func(f func()) (msg string) {
+		defer func() {
+			if p := recover(); p != nil {
+				msg, _ = p.(string)
+			}
+		}()
+		f()
+		return ""
+	}
+	Enter(w, "Reentrant1.First")
+	second := panics(func() { Enter(w, "Reentrant1.Second") })
+	del := panics(func() { h.Delete("Reentrant1.Delete") })
+	Leave(w)
+	if debugEnabled {
+		if !strings.Contains(second, "Reentrant1.Second") || !strings.Contains(second, "Reentrant1.First") {
+			t.Errorf("second Enter: panic %q, want one naming both methods", second)
+		}
+		if !strings.Contains(del, "Reentrant1.First") {
+			t.Errorf("Delete while busy: panic %q, want one naming the busy method", del)
+		}
+	} else if second != "" || del != "" {
+		t.Errorf("release build checked concurrent use: %q, %q", second, del)
+	}
+	Enter(w, "Reentrant1.Again") // Leave ended the first
+	Leave(w)
+	h.Delete("Reentrant1.Delete")
+	if h.State() != Dead {
+		t.Error("Delete after Leave did not delete")
+	}
+}

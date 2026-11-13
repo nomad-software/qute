@@ -520,6 +520,72 @@ func TestDependsOnQObjectWarns(t *testing.T) {
 	}
 }
 
+// A reentrant class's functions skip the GUI-thread check (C shim and Go),
+// unless their signature names a class that is not reentrant; its methods
+// bracket the call with rt.Enter and rt.Leave; a reentrant QObject warns.
+func TestReentrant(t *testing.T) {
+	g := gen(t)
+	re := class(t, "QRegularExpression")
+	if !re.Opts.Reentrant {
+		t.Fatal("QRegularExpression is not marked reentrant in the spec")
+	}
+	var cpp buf
+	g.emitCppBody(re.Module, &cpp)
+	src := cpp.String()
+	for _, f := range []string{"qute_QRegularExpression_match(", "qute_QRegularExpression_delete(", "qute_QRegularExpression_escape(", "qute_QRegularExpressionMatch_captured("} {
+		i := strings.Index(src, f)
+		if i < 0 {
+			t.Fatalf("%s not emitted", f)
+		}
+		if body := src[i : i+strings.Index(src[i:], "\n}")]; strings.Contains(body, "qute_gui_only") {
+			t.Errorf("%s keeps the GUI-thread check:\n%s", f, body)
+		}
+	}
+	if i := strings.Index(src, "qute_QObject_objectName("); i < 0 || !strings.Contains(src[i:i+strings.Index(src[i:], "\n}")], "qute_gui_only") {
+		t.Error("a class that is not reentrant lost its GUI-thread check")
+	}
+	gosrc := string(g.emitClass(re))
+	if !strings.Contains(gosrc, `rt.RegisterReentrant("QRegularExpression")`) {
+		t.Error("no RegisterReentrant")
+	}
+	if !strings.Contains(gosrc, `rt.Enter(unsafe.Pointer(this), "QRegularExpression.Match")`) || !strings.Contains(gosrc, "rt.Leave(unsafe.Pointer(this))") {
+		t.Error("Match does not bracket its call with rt.Enter and rt.Leave")
+	}
+	if strings.Contains(gosrc, `rt.CheckThread("NewQRegularExpressionWithPattern")`) || strings.Contains(gosrc, `rt.CheckThread("QRegularExpression.Delete")`) {
+		t.Error("a reentrant constructor or Delete checks the thread")
+	}
+
+	// a signature naming a class that is not reentrant keeps the check
+	var mm *Method
+	for _, m := range re.Methods {
+		if m.GoName == "Match" {
+			mm = m
+		}
+	}
+	if mm == nil || !anyThread(re, mm) {
+		t.Fatal("Match is not anyThread")
+	}
+	if anyThread(re, &Method{IR: mm.IR, Ret: &conv{k: kObj, cls: class(t, "QTimer")}}) {
+		t.Error("a method returning a QTimer (not reentrant) runs on any thread")
+	}
+	if anyThread(re, &Method{IR: mm.IR, Params: []*Param{{T: &conv{k: kFunc}}}}) {
+		t.Error("a method taking a callback runs on any thread")
+	}
+
+	c := class(t, "QTimer")
+	warns := len(g.report.warnings)
+	c.Opts.Reentrant = true
+	defer func() { c.Opts.Reentrant, g.report.warnings = false, g.report.warnings[:warns] }()
+	g.emitClass(c)
+	found := false
+	for _, w := range g.report.warnings[warns:] {
+		found = found || strings.Contains(w, "reentrant, but")
+	}
+	if !found {
+		t.Error("no warning for a reentrant QObject class")
+	}
+}
+
 // An object reference in a virtual (interceptRequest(QWebEngineUrlRequestInfo &))
 // is Qt's object on its stack: the override gets it in place and scoped, and
 // the class stays subclassable.

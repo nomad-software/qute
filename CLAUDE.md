@@ -408,6 +408,20 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   application exists nothing is checked, which is how init-time registration
   (`QWebEngineUrlScheme`) works. The hand-written helpers (`Tree`,
   `Screenshot`, `qutetest.Click`, `Wait`...) call `rt.GUIOnly`.
+- Reentrant classes (class option `reentrant`, for classes Qt documents as
+  reentrant: `QRegularExpression` and its match types) may be used on any
+  goroutine, but no two goroutines may use one object at once. Their C
+  functions leave out `qute_gui_only()`, and so do their Go constructors,
+  statics and `Delete()`, when the signature names only reentrant classes and
+  plain data and takes no callback or kept argument (`anyThread` in
+  `emit.go`); any other method keeps both checks. `rt.Use` skips its debug
+  check for an object of a reentrant class (`RegisterReentrant`,
+  `reentrant.go`). In `qute_debug` builds each such method brackets its C
+  call with `rt.Enter`/`rt.Leave`, which panic when two goroutines are inside
+  one object at once, as does `Delete()` of an object in use. The generator
+  warns when `reentrant` is set on a QObject, an event, a class with signals,
+  `depends-on` or a Go subclass, or below a base that is not reentrant. GC
+  cleanups still free these objects on the GUI thread.
 - Every entry from Qt into a Go handler (signal, virtual, `std::function`)
   checks it runs on the GUI thread (the generated C++ looks the thread up,
   `qute_off_gui`, and passes the answer in, so Go need not call C++ to ask) and panics otherwise: handlers use Qt
@@ -541,7 +555,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   class below it an `XCast`: `qstyleoption_cast`), `parented-delete` (the fix Delete()
   names when it refuses a Parented object of the class or of a non-QObject
   subclass, because the container does not notice its destructor:
-  `QLayoutItem`), `reviewed`. A class's primary base must
+  `QLayoutItem`), `reentrant` (see Threading), `reviewed`. A class's primary base must
   be bound too. Don't use class-level `reviewed`: it hides methods nobody
   looked at (it hid `QTextCursor::insertList` and `QGraphicsWidget::setLayout`).
 - **Overlays** (`spec/overlays/<module>.yaml`), keyed by class (a nested
@@ -736,7 +750,9 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   with a nil callback). Behaviour tests cover the later qtcore,
   qtgui and qtwidgets classes: `qtcore/{animation,system,data,objects}_test.go`
   (animations, files, processes, command lines, MIME, XML and CBOR streams,
-  meta-objects, proxy models, socket notifiers), `qtgui/undo_test.go`
+  meta-objects, proxy models, socket notifiers), `qtcore/reentrant_test.go`
+  (regular expressions on worker goroutines, freed by GC; a QObject off the
+  GUI thread still panics), `qtgui/undo_test.go`
   and `qtgui/newclasses_test.go` (drags, file system model, writers, the
   event casts on events Qt really sends), `qtwidgets/newclasses_test.go`
   (wizard, column view, mapper, anchors, scroller and its events, style
@@ -866,7 +882,7 @@ Layout:
   (`rootOfC`, `subtreeC`, `hasParentC`), which is how the queue, keep and
   anchoring edge cases (a nested drain, a re-wrapped keeper) are reached.
 - `internal/rt`: runtime (hand-written): `handle.go` (states, registry,
-  wrapping), `anchor.go` (Go state held by tree roots), `keep.go` (kept
+  wrapping), `reentrant.go` (classes usable off the GUI thread), `anchor.go` (Go state held by tree roots), `keep.go` (kept
   references, depends-on), `adopt.go` (parentless transfers), `memory.go`
   (value-object bytes), `inline.go` (inline values), `dying.go` (objects
   wrapped while Qt destroys them), `queue.go` (cleanup queue, Post/PostSync),

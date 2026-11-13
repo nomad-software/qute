@@ -190,6 +190,82 @@ func retCType(mm *Method) string {
 type cFunc struct {
 	decl string
 	body string
+	// anyThread leaves out the GUI-thread check: a function of a reentrant
+	// class whose signature allows it (anyThread)
+	anyThread bool
+}
+
+// anyThread reports whether mm, a method, static, constructor or field
+// accessor of c, may run on any thread: c is reentrant, every class its
+// signature names is reentrant too, and it takes no callback (Qt would call
+// it on that thread, and handlers run on the GUI thread only) and keeps no
+// argument (kept references anchor objects, which is GUI-thread state).
+func anyThread(c *Class, mm *Method) bool {
+	if !c.Opts.Reentrant || mm.Emit || mm.Overlay != nil && mm.Overlay.Created {
+		return false
+	}
+	if !reentrantType(mm.Ret) {
+		return false
+	}
+	for _, t := range mm.PairRet {
+		if !reentrantType(t) {
+			return false
+		}
+	}
+	for _, p := range mm.Params {
+		if p.Keep != "" || !reentrantType(p.T) {
+			return false
+		}
+	}
+	return true
+}
+
+// checkReentrant warns where a class marked reentrant uses what lives on the
+// GUI thread: QObjects and events (thread affinity, death notices), signals,
+// Go subclasses and per-object overrides (handlers run on the GUI thread),
+// depends-on (a value tied to another object), and a base that is not
+// reentrant (its methods, Delete among them, keep the check).
+func (g *Gen) checkReentrant(c *Class) {
+	why := ""
+	switch {
+	case c.QObject:
+		why = "it is a QObject, which belongs to the thread that made it"
+	case c.Event:
+		why = "it is an event"
+	case len(c.Signals) > 0:
+		why = "it has signals, whose handlers run on the GUI thread"
+	case c.Shim && c.Opts.Subclass:
+		why = "Go can subclass it, and its overrides run on the GUI thread (set subclass: false)"
+	case len(c.Opts.DependsOn) > 0:
+		why = "it depends on another object (depends-on)"
+	case c.Base != nil && !c.Base.Opts.Reentrant:
+		why = "its base " + c.Base.Name + " is not"
+	default:
+		return
+	}
+	g.report.warn("%s: reentrant, but %s", c.Name, why)
+}
+
+// reentrantType reports whether a value of type t may cross threads: plain
+// data, or an object or value of a reentrant class.
+func reentrantType(t *conv) bool {
+	if t == nil {
+		return true
+	}
+	switch t.k {
+	case kValue, kObj:
+		if t.cls == nil || !t.cls.Opts.Reentrant {
+			return false
+		}
+	case kFunc:
+		return false
+	}
+	for _, f := range t.fparams {
+		if !reentrantType(f) {
+			return false
+		}
+	}
+	return reentrantType(t.elem) && reentrantType(t.key)
 }
 
 func (g *Gen) classCFuncs(c *Class) []cFunc {
@@ -197,7 +273,11 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 	if c.Opts.EnumsOnly {
 		return nil
 	}
-	add := func(decl, body string) { out = append(out, cFunc{decl, body}) }
+	add := func(decl, body string) { out = append(out, cFunc{decl, body, false}) }
+	// a reentrant class's own helpers (delete, memory, inline, value casts)
+	// run wherever its objects do; its methods ask anyThread
+	addAny := func(decl, body string) { out = append(out, cFunc{decl, body, c.Opts.Reentrant}) }
+	addM := func(mm *Method, decl, body string) { out = append(out, cFunc{decl, body, anyThread(c, mm)}) }
 	cls, cpp := c.Name, c.Cpp
 	self := fmt.Sprintf("static_cast<%s *>(self)", cpp)
 	ctorClass := cpp
@@ -216,7 +296,7 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			// construct (the shim when there is one), $0... the arguments
 			build = expandCpp(strings.ReplaceAll(mm.Overlay.Cpp, "$class", ctorClass), self, args)
 		}
-		add(cDecl("void *", mm.CName, methodCParams(mm, false)),
+		addM(mm, cDecl("void *", mm.CName, methodCParams(mm, false)),
 			strings.Join(append(pre, fmt.Sprintf("return static_cast<%s *>(%s);", cpp, build)), "\n\t"))
 	}
 	if c.Opts.Subclass && c.Shim {
@@ -265,19 +345,19 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 		}
 	}
 	if c.Kind != KindObject && c.HasDtor && (c.IR.Dtor == nil || c.IR.Dtor.Access == "public") {
-		add(cDecl("void", "qute_"+cls+"_delete", []string{"void *self"}), fmt.Sprintf("delete %s;", self))
+		addAny(cDecl("void", "qute_"+cls+"_delete", []string{"void *self"}), fmt.Sprintf("delete %s;", self))
 	}
 	if c.QBase {
 		add(cDecl("void *", "qute_"+cls+"_qobject", []string{"void *self"}),
 			fmt.Sprintf("return static_cast<void *>(dynamic_cast<QObject *>(%s));", self))
 	}
 	if c.Opts.Inline {
-		add(cDecl("void", "qute_"+cls+"_construct", []string{"void *p"}), fmt.Sprintf("new (p) %s();", cpp))
-		add(cDecl("int64_t", "qute_"+cls+"_sizeof", nil),
+		addAny(cDecl("void", "qute_"+cls+"_construct", []string{"void *p"}), fmt.Sprintf("new (p) %s();", cpp))
+		addAny(cDecl("int64_t", "qute_"+cls+"_sizeof", nil),
 			fmt.Sprintf("static_assert(std::is_trivially_copyable_v<%s> && std::is_trivially_destructible_v<%s>, \"inline: %s must be trivially copyable and destructible\");\n\treturn static_cast<int64_t>(sizeof(%s));", cpp, cpp, cls, cpp))
 	}
 	if c.Opts.Memory != nil {
-		add(cDecl("int64_t", "qute_"+cls+"_memory", []string{"void *self"}),
+		addAny(cDecl("int64_t", "qute_"+cls+"_memory", []string{"void *self"}),
 			fmt.Sprintf("return static_cast<int64_t>(%s);", expandCpp(c.Opts.Memory.Size, fmt.Sprintf("static_cast<const %s *>(self)", cpp), nil)))
 	}
 	if c.QObject {
@@ -285,7 +365,7 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			fmt.Sprintf("return static_cast<void *>(qobject_cast<%s *>(static_cast<QObject *>(obj)));", cpp))
 	}
 	if valueCast(c) {
-		add(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
+		addAny(cDecl("void *", "qute_"+cls+"_cast", []string{"void *obj"}),
 			fmt.Sprintf("return static_cast<void *>(%s<%s *>(static_cast<%s *>(obj)));", c.Root.Opts.Cast, cpp, c.Root.Cpp))
 	}
 	if c.Event && c.Base != nil {
@@ -303,11 +383,11 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 		pre, args, post := g.cppCall(mm.Params)
 		var call string
 		if mm.Field == "get" {
-			add(cDecl(retCType(mm), mm.CName, methodCParams(mm, true)), "return "+g.cppRet(mm.Ret, self+"->"+mm.IR.Name)+";")
+			addM(mm, cDecl(retCType(mm), mm.CName, methodCParams(mm, true)), "return "+g.cppRet(mm.Ret, self+"->"+mm.IR.Name)+";")
 			continue
 		}
 		if mm.Field == "set" {
-			add(cDecl("void", mm.CName, methodCParams(mm, true)), fmt.Sprintf("%s->%s = %s;", self, mm.IR.Name, args[0]))
+			addM(mm, cDecl("void", mm.CName, methodCParams(mm, true)), fmt.Sprintf("%s->%s = %s;", self, mm.IR.Name, args[0]))
 			continue
 		}
 		if mm.Overlay != nil && mm.Overlay.Cpp != "" {
@@ -321,10 +401,10 @@ func (g *Gen) classCFuncs(c *Class) []cFunc {
 			body := strings.Join(append(pre, "auto &&r = "+call+";",
 				"*r0_out = "+g.cppRet(mm.PairRet[0], "r.first")+";",
 				"*r1_out = "+g.cppRet(mm.PairRet[1], "r.second")+";"), "\n\t")
-			add(cDecl("void", mm.CName, methodCParams(mm, !mm.IR.Static)), body)
+			addM(mm, cDecl("void", mm.CName, methodCParams(mm, !mm.IR.Static)), body)
 			continue
 		}
-		add(cDecl(retCType(mm), mm.CName, methodCParams(mm, !mm.IR.Static)), g.cppBody(mm.Ret, call, pre, post))
+		addM(mm, cDecl(retCType(mm), mm.CName, methodCParams(mm, !mm.IR.Static)), g.cppBody(mm.Ret, call, pre, post))
 	}
 	for _, sg := range c.Signals {
 		out = append(out, g.signalCFunc(c, sg))
@@ -584,7 +664,11 @@ func (g *Gen) emitCppBody(m *Module, b *buf) {
 	for _, c := range m.Classes {
 		b.p("// ---- %s", c.Name)
 		for _, f := range g.classCFuncs(c) {
-			b.p("%s {\n\tqute_gui_only();\n\t%s\n}", f.decl, f.body)
+			if f.anyThread {
+				b.p("%s {\n\t%s\n}", f.decl, f.body) // reentrant: any thread
+			} else {
+				b.p("%s {\n\tqute_gui_only();\n\t%s\n}", f.decl, f.body)
+			}
 		}
 		b.p("")
 	}
@@ -1114,6 +1198,10 @@ func (g *Gen) emitClass(c *Class) []byte {
 	b.p("// As%s returns the receiver; it lets derived types be passed as %sLike.", cls, cls)
 	b.p("func (this *%s) As%s() *%s { return this }\n", cls, cls, cls)
 	b.p("func init() { rt.RegisterClass(%q, %s, %s) }\n", cls, kindConst(c), g.deleterExpr(c))
+	if c.Opts.Reentrant {
+		b.p("// A %s may be used on any goroutine, but not by two at once (Qt: reentrant).", cls)
+		b.p("func init() { rt.RegisterReentrant(%q) }\n", cls)
+	}
 	if c.Opts.Inline {
 		b.p("// A %s is an inline value: its bytes are kept in Go memory.", cls)
 		b.p("func init() {\n\trt.RegisterInline(%q, int(C.qute_%s_sizeof()), func(p unsafe.Pointer) { C.qute_%s_construct(p) })\n}\n", cls, cls, cls)
@@ -1145,6 +1233,9 @@ func (g *Gen) emitClass(c *Class) []byte {
 	}
 	if len(c.Opts.DependsOn) > 0 && c.QObject {
 		g.report.warn("%s: depends-on on a QObject class does nothing; its death is watched directly", cls)
+	}
+	if c.Opts.Reentrant {
+		g.checkReentrant(c)
 	}
 	for i, dep := range c.Opts.DependsOn {
 		if dep.Cpp != "" {
@@ -1271,7 +1362,11 @@ func (g *Gen) emitRootMethods(c *Class, b *buf) {
 	b.p("// Delete destroys the C++ object now. It is idempotent and works on Owned and")
 	b.p("// Parented objects; on Borrowed objects it panics. Inside a signal or event")
 	b.p("// handler use DeleteLater() instead.")
-	b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\trt.CheckThread(%q)\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete", cls+".Delete")
+	if c.Opts.Reentrant {
+		b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete")
+	} else {
+		b.p("func (this *%s) Delete() {\n\tif this == nil {\n\t\treturn\n\t}\n\trt.CheckThread(%q)\n\tthis.quteRef.H.Delete(%q)\n}\n", cls, cls+".Delete", cls+".Delete")
+	}
 	if c.Kind != KindValue {
 		b.p("// GoValue returns the Go value the object was built from with a")
 		b.p("// New<Class>With constructor (the Go subclass), or nil for an object Qt or")
@@ -1516,7 +1611,9 @@ func (g *Gen) emitCtor(c *Class, mm *Method, b *buf) {
 	gc := g.prepCall(c, mm, method, false)
 	g.docLines(c, mm, b, fmt.Sprintf("the %s constructor", c.Name))
 	b.p("func %s(%s) *%s {", mm.GoName, strings.Join(gc.params, ", "), c.Name)
-	b.p("\trt.CheckThread(%q)", method)
+	if !anyThread(c, mm) {
+		b.p("\trt.CheckThread(%q)", method)
+	}
 	for _, s := range gc.pre {
 		b.p("\t%s", s)
 	}
@@ -1599,10 +1696,18 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 	b.p("func %s%s(%s) %s {", recv, mm.GoName, strings.Join(gc.params, ", "), ret)
 	args := gc.args
 	recvName := "this"
+	anyT := anyThread(c, mm)
 	if static {
 		recvName = ""
-		b.p("\trt.CheckThread(%q)", method)
+		if !anyT {
+			b.p("\trt.CheckThread(%q)", method)
+		}
 	} else {
+		if c.Opts.Reentrant && !anyT {
+			// Use skips the debug check for a reentrant class's object
+			// (an argument of an anyThread method), so ask here
+			b.p("\trt.CheckThread(%q)", method)
+		}
 		b.p("\tself := rt.Use(unsafe.Pointer(this), %q)", method)
 		args = append([]string{"self"}, args...)
 	}
@@ -1611,6 +1716,11 @@ func (g *Gen) emitMethod(c *Class, mm *Method, b *buf, static bool) {
 	}
 	call := fmt.Sprintf("C.%s(%s)", mm.CName, strings.Join(args, ", "))
 	keep := keepAlive(recvName, gc)
+	if anyT && !static {
+		// qute_debug builds catch two goroutines in one object (rt.Enter)
+		b.p("\trt.Enter(unsafe.Pointer(this), %q)", method)
+		keep = append([]string{"rt.Leave(unsafe.Pointer(this))"}, keep...)
+	}
 	if mm.Ret.k == kVoid || mm.Ret.k == kSelf {
 		b.p("\t%s", call)
 		for _, s := range keep {

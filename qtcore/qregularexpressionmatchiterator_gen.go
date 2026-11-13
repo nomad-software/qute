@@ -31,6 +31,9 @@ func init() {
 	rt.RegisterClass("QRegularExpressionMatchIterator", rt.KindValue, func(p unsafe.Pointer) { C.qute_QRegularExpressionMatchIterator_delete(p) })
 }
 
+// A QRegularExpressionMatchIterator may be used on any goroutine, but not by two at once (Qt: reentrant).
+func init() { rt.RegisterReentrant("QRegularExpressionMatchIterator") }
+
 // QRegularExpressionMatchIteratorFromPtr wraps an existing C++ QRegularExpressionMatchIterator. This is an unsafe escape hatch: own says
 // who frees the object (Borrowed keeps the state of an already wrapped object).
 func QRegularExpressionMatchIteratorFromPtr(p unsafe.Pointer, own Ownership) *QRegularExpressionMatchIterator {
@@ -65,7 +68,6 @@ func (this *QRegularExpressionMatchIterator) Delete() {
 	if this == nil {
 		return
 	}
-	rt.CheckThread("QRegularExpressionMatchIterator.Delete")
 	this.quteRef.H.Delete("QRegularExpressionMatchIterator.Delete")
 }
 
@@ -89,7 +91,6 @@ func (this *QRegularExpressionMatchIterator) Unkeep() {
 //
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#QRegularExpressionMatchIterator
 func NewQRegularExpressionMatchIterator() *QRegularExpressionMatchIterator {
-	rt.CheckThread("NewQRegularExpressionMatchIterator")
 	p := C.qute_QRegularExpressionMatchIterator_new()
 	h := rt.WrapNew[QRegularExpressionMatchIterator](p, "QRegularExpressionMatchIterator", rt.NewOwned)
 	return rt.View[QRegularExpressionMatchIterator](h, p)
@@ -102,7 +103,9 @@ func NewQRegularExpressionMatchIterator() *QRegularExpressionMatchIterator {
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#isValid
 func (this *QRegularExpressionMatchIterator) IsValid() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.IsValid")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.IsValid")
 	r := C.qute_QRegularExpressionMatchIterator_isValid(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return bool(r)
 }
@@ -114,7 +117,9 @@ func (this *QRegularExpressionMatchIterator) IsValid() bool {
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#hasNext
 func (this *QRegularExpressionMatchIterator) HasNext() bool {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.HasNext")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.HasNext")
 	r := C.qute_QRegularExpressionMatchIterator_hasNext(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return bool(r)
 }
@@ -128,7 +133,9 @@ func (this *QRegularExpressionMatchIterator) HasNext() bool {
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#next
 func (this *QRegularExpressionMatchIterator) Next() *QRegularExpressionMatch {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.Next")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.Next")
 	r := C.qute_QRegularExpressionMatchIterator_next(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
 }
@@ -142,7 +149,9 @@ func (this *QRegularExpressionMatchIterator) Next() *QRegularExpressionMatch {
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#peekNext
 func (this *QRegularExpressionMatchIterator) PeekNext() *QRegularExpressionMatch {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.PeekNext")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.PeekNext")
 	r := C.qute_QRegularExpressionMatchIterator_peekNext(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return rt.View[QRegularExpressionMatch](rt.WrapClass(r, "QRegularExpressionMatch", rt.TakeOwned), r)
 }
@@ -156,7 +165,9 @@ func (this *QRegularExpressionMatchIterator) PeekNext() *QRegularExpressionMatch
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#regularExpression
 func (this *QRegularExpressionMatchIterator) RegularExpression() *QRegularExpression {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.RegularExpression")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.RegularExpression")
 	r := C.qute_QRegularExpressionMatchIterator_regularExpression(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return rt.View[QRegularExpression](rt.WrapClass(r, "QRegularExpression", rt.TakeOwned), r)
 }
@@ -168,7 +179,9 @@ func (this *QRegularExpressionMatchIterator) RegularExpression() *QRegularExpres
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#matchType
 func (this *QRegularExpressionMatchIterator) MatchType() QRegularExpressionMatchType {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.MatchType")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.MatchType")
 	r := C.qute_QRegularExpressionMatchIterator_matchType(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return QRegularExpressionMatchType(r)
 }
@@ -180,7 +193,9 @@ func (this *QRegularExpressionMatchIterator) MatchType() QRegularExpressionMatch
 // Qt docs: https://doc.qt.io/qt-6/qregularexpressionmatchiterator.html#matchOptions
 func (this *QRegularExpressionMatchIterator) MatchOptions() QRegularExpressionMatchOptions {
 	self := rt.Use(unsafe.Pointer(this), "QRegularExpressionMatchIterator.MatchOptions")
+	rt.Enter(unsafe.Pointer(this), "QRegularExpressionMatchIterator.MatchOptions")
 	r := C.qute_QRegularExpressionMatchIterator_matchOptions(self)
+	rt.Leave(unsafe.Pointer(this))
 	runtime.KeepAlive(this)
 	return QRegularExpressionMatchOptions(r)
 }

@@ -73,6 +73,12 @@ type classOpts struct {
 	// class below the root gets <Class>Cast(o <Root>Like), whose result
 	// depends on o.
 	Cast string `yaml:"cast"`
+	// Reentrant marks a class Qt documents as reentrant (QRegularExpression):
+	// its methods may run on any goroutine, as long as no two goroutines use
+	// one object at once. A function whose signature names a class that is
+	// not reentrant, or takes a callback or a kept argument, keeps the
+	// GUI-thread check (anyThread).
+	Reentrant bool `yaml:"reentrant"`
 }
 
 type memSpec struct {

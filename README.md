@@ -458,6 +458,16 @@ is re-raised by `PostSync` with the handler's stack (`*qute.CallbackPanic`), and
 panic in `f` itself, off the GUI thread, with the stack where it happened
 (`*qute.PostSyncPanic`).
 
+The exception is the classes Qt documents as reentrant, marked `reentrant`
+in the spec (today `QRegularExpression`, `QRegularExpressionMatch` and
+`QRegularExpressionMatchIterator`): they work on any goroutine, provided no
+two goroutines use the same object at once. Give each goroutine its own
+objects; copies are cheap, since Qt shares their data. A `-tags qute_debug`
+build panics when two goroutines are inside methods of one such object at the
+same time, or when one deletes it while another uses it. GC still frees them
+through the GUI thread, so the application must be running for them to be
+freed.
+
 In tests, `t.Fatal` and `t.Skip` work inside `qutetest.Run` and end the test
 as usual. A test may close or delete its windows: under `qutetest.TestMain`
 closing the last window does not quit the application, as it does under
@@ -661,7 +671,7 @@ flowchart LR
 - `tools/irgen/irgen.py` parses the Qt headers into the IR. The IR is
   checked in, so the generator runs without Qt or libclang.
 - `spec/classes/<module>.yaml` picks the classes and their options (`kind:
-  value|event`, `notify-dtor`, `subclass: false`, ...). Classes with
+  value|event`, `notify-dtor`, `subclass: false`, `reentrant`, ...). Classes with
   virtuals are subclassable unless the spec says otherwise.
 - `spec/overlays/<module>.yaml` holds the ownership rules per method, using
   PyQt's vocabulary:

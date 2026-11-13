@@ -20307,263 +20307,199 @@ void qute_QPropertyAnimation_setPropertyName(void *self, const char *a0, ptrdiff
 
 // ---- QRegularExpression
 void * qute_QRegularExpression_new(void) {
-	qute_gui_only();
 	return static_cast<QRegularExpression *>(new QRegularExpression());
 }
 void * qute_QRegularExpression_new_1(const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<QRegularExpression *>(new QRegularExpression(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QRegularExpression_new_2(const char *a0, ptrdiff_t a0_len, int64_t a1) {
-	qute_gui_only();
 	return static_cast<QRegularExpression *>(new QRegularExpression(QString::fromUtf8(a0, a0_len), QFlags<QRegularExpression::PatternOption>::fromInt(static_cast<QFlags<QRegularExpression::PatternOption>::Int>(a1))));
 }
 void qute_QRegularExpression_delete(void *self) {
-	qute_gui_only();
 	delete static_cast<QRegularExpression *>(self);
 }
 int64_t qute_QRegularExpression_patternOptions(void *self) {
-	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QRegularExpression *>(self)->patternOptions()).toInt());
 }
 void qute_QRegularExpression_setPatternOptions(void *self, int64_t a0) {
-	qute_gui_only();
 	static_cast<QRegularExpression *>(self)->setPatternOptions(QFlags<QRegularExpression::PatternOption>::fromInt(static_cast<QFlags<QRegularExpression::PatternOption>::Int>(a0)));
 }
 qute_str qute_QRegularExpression_pattern(void *self) {
-	qute_gui_only();
 	return qute_ret_str(static_cast<QRegularExpression *>(self)->pattern());
 }
 void qute_QRegularExpression_setPattern(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	static_cast<QRegularExpression *>(self)->setPattern(QString::fromUtf8(a0, a0_len));
 }
 bool qute_QRegularExpression_isValid(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpression *>(self)->isValid());
 }
 long long qute_QRegularExpression_patternErrorOffset(void *self) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpression *>(self)->patternErrorOffset());
 }
 qute_str qute_QRegularExpression_errorString(void *self) {
-	qute_gui_only();
 	return qute_ret_str(static_cast<QRegularExpression *>(self)->errorString());
 }
 int qute_QRegularExpression_captureCount(void *self) {
-	qute_gui_only();
 	return static_cast<int>(static_cast<QRegularExpression *>(self)->captureCount());
 }
 qute_list qute_QRegularExpression_namedCaptureGroups(void *self) {
-	qute_gui_only();
 	return qute_ret_strlist(static_cast<QRegularExpression *>(self)->namedCaptureGroups());
 }
 void * qute_QRegularExpression_match(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpression *>(self)->match(QString::fromUtf8(a0, a0_len))));
 }
 void * qute_QRegularExpression_matchView(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpression *>(self)->matchView(QString::fromUtf8(a0, a0_len))));
 }
 void * qute_QRegularExpression_globalMatch(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatch(QString::fromUtf8(a0, a0_len))));
 }
 void * qute_QRegularExpression_globalMatchView(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatchView(QString::fromUtf8(a0, a0_len))));
 }
 void qute_QRegularExpression_optimize(void *self) {
-	qute_gui_only();
 	static_cast<QRegularExpression *>(self)->optimize();
 }
 void * qute_QRegularExpression_match_1(void *self, const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, int64_t a3) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpression *>(self)->match(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QRegularExpression::MatchType>(a2), QFlags<QRegularExpression::MatchOption>::fromInt(static_cast<QFlags<QRegularExpression::MatchOption>::Int>(a3)))));
 }
 void * qute_QRegularExpression_matchView_1(void *self, const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, int64_t a3) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpression *>(self)->matchView(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QRegularExpression::MatchType>(a2), QFlags<QRegularExpression::MatchOption>::fromInt(static_cast<QFlags<QRegularExpression::MatchOption>::Int>(a3)))));
 }
 void * qute_QRegularExpression_globalMatch_1(void *self, const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, int64_t a3) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatch(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QRegularExpression::MatchType>(a2), QFlags<QRegularExpression::MatchOption>::fromInt(static_cast<QFlags<QRegularExpression::MatchOption>::Int>(a3)))));
 }
 void * qute_QRegularExpression_globalMatchView_1(void *self, const char *a0, ptrdiff_t a0_len, long long a1, int64_t a2, int64_t a3) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatchIterator(static_cast<QRegularExpression *>(self)->globalMatchView(QString::fromUtf8(a0, a0_len), static_cast<long long>(a1), static_cast<QRegularExpression::MatchType>(a2), QFlags<QRegularExpression::MatchOption>::fromInt(static_cast<QFlags<QRegularExpression::MatchOption>::Int>(a3)))));
 }
 qute_str qute_QRegularExpression_escape(const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return qute_ret_str(QRegularExpression::escape(QString::fromUtf8(a0, a0_len)));
 }
 qute_str qute_QRegularExpression_wildcardToRegularExpression(const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return qute_ret_str(QRegularExpression::wildcardToRegularExpression(QString::fromUtf8(a0, a0_len)));
 }
 qute_str qute_QRegularExpression_anchoredPattern(const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return qute_ret_str(QRegularExpression::anchoredPattern(QString::fromUtf8(a0, a0_len)));
 }
 void * qute_QRegularExpression_fromWildcard(const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpression(QRegularExpression::fromWildcard(QString::fromUtf8(a0, a0_len))));
 }
 qute_str qute_QRegularExpression_wildcardToRegularExpression_1(const char *a0, ptrdiff_t a0_len, int64_t a1) {
-	qute_gui_only();
 	return qute_ret_str(QRegularExpression::wildcardToRegularExpression(QString::fromUtf8(a0, a0_len), QFlags<QRegularExpression::WildcardConversionOption>::fromInt(static_cast<QFlags<QRegularExpression::WildcardConversionOption>::Int>(a1))));
 }
 void * qute_QRegularExpression_fromWildcard_1(const char *a0, ptrdiff_t a0_len, int64_t a1, int64_t a2) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpression(QRegularExpression::fromWildcard(QString::fromUtf8(a0, a0_len), static_cast<Qt::CaseSensitivity>(a1), QFlags<QRegularExpression::WildcardConversionOption>::fromInt(static_cast<QFlags<QRegularExpression::WildcardConversionOption>::Int>(a2)))));
 }
 
 // ---- QRegularExpressionMatch
 void * qute_QRegularExpressionMatch_new(void) {
-	qute_gui_only();
 	return static_cast<QRegularExpressionMatch *>(new QRegularExpressionMatch());
 }
 void qute_QRegularExpressionMatch_delete(void *self) {
-	qute_gui_only();
 	delete static_cast<QRegularExpressionMatch *>(self);
 }
 void * qute_QRegularExpressionMatch_regularExpression(void *self) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpression(static_cast<QRegularExpressionMatch *>(self)->regularExpression()));
 }
 int64_t qute_QRegularExpressionMatch_matchType(void *self) {
-	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QRegularExpressionMatch *>(self)->matchType());
 }
 int64_t qute_QRegularExpressionMatch_matchOptions(void *self) {
-	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QRegularExpressionMatch *>(self)->matchOptions()).toInt());
 }
 bool qute_QRegularExpressionMatch_hasMatch(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatch *>(self)->hasMatch());
 }
 bool qute_QRegularExpressionMatch_hasPartialMatch(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatch *>(self)->hasPartialMatch());
 }
 bool qute_QRegularExpressionMatch_isValid(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatch *>(self)->isValid());
 }
 int qute_QRegularExpressionMatch_lastCapturedIndex(void *self) {
-	qute_gui_only();
 	return static_cast<int>(static_cast<QRegularExpressionMatch *>(self)->lastCapturedIndex());
 }
 bool qute_QRegularExpressionMatch_hasCaptured(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatch *>(self)->hasCaptured(QString::fromUtf8(a0, a0_len)));
 }
 bool qute_QRegularExpressionMatch_hasCaptured_1(void *self, int a0) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatch *>(self)->hasCaptured(static_cast<int>(a0)));
 }
 qute_str qute_QRegularExpressionMatch_captured(void *self) {
-	qute_gui_only();
 	return qute_ret_str(static_cast<QRegularExpressionMatch *>(self)->captured());
 }
 qute_str qute_QRegularExpressionMatch_capturedView(void *self) {
-	qute_gui_only();
 	return qute_ret_str((static_cast<QRegularExpressionMatch *>(self)->capturedView()).toString());
 }
 qute_str qute_QRegularExpressionMatch_captured_1(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return qute_ret_str(static_cast<QRegularExpressionMatch *>(self)->captured(QString::fromUtf8(a0, a0_len)));
 }
 qute_str qute_QRegularExpressionMatch_capturedView_1(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return qute_ret_str((static_cast<QRegularExpressionMatch *>(self)->capturedView(QString::fromUtf8(a0, a0_len))).toString());
 }
 qute_list qute_QRegularExpressionMatch_capturedTexts(void *self) {
-	qute_gui_only();
 	return qute_ret_strlist(static_cast<QRegularExpressionMatch *>(self)->capturedTexts());
 }
 long long qute_QRegularExpressionMatch_capturedStart(void *self) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedStart());
 }
 long long qute_QRegularExpressionMatch_capturedLength(void *self) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedLength());
 }
 long long qute_QRegularExpressionMatch_capturedEnd(void *self) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedEnd());
 }
 long long qute_QRegularExpressionMatch_capturedStart_1(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedStart(QString::fromUtf8(a0, a0_len)));
 }
 long long qute_QRegularExpressionMatch_capturedLength_1(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedLength(QString::fromUtf8(a0, a0_len)));
 }
 long long qute_QRegularExpressionMatch_capturedEnd_1(void *self, const char *a0, ptrdiff_t a0_len) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedEnd(QString::fromUtf8(a0, a0_len)));
 }
 qute_str qute_QRegularExpressionMatch_captured_2(void *self, int a0) {
-	qute_gui_only();
 	return qute_ret_str(static_cast<QRegularExpressionMatch *>(self)->captured(static_cast<int>(a0)));
 }
 qute_str qute_QRegularExpressionMatch_capturedView_2(void *self, int a0) {
-	qute_gui_only();
 	return qute_ret_str((static_cast<QRegularExpressionMatch *>(self)->capturedView(static_cast<int>(a0))).toString());
 }
 long long qute_QRegularExpressionMatch_capturedStart_2(void *self, int a0) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedStart(static_cast<int>(a0)));
 }
 long long qute_QRegularExpressionMatch_capturedLength_2(void *self, int a0) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedLength(static_cast<int>(a0)));
 }
 long long qute_QRegularExpressionMatch_capturedEnd_2(void *self, int a0) {
-	qute_gui_only();
 	return static_cast<long long>(static_cast<QRegularExpressionMatch *>(self)->capturedEnd(static_cast<int>(a0)));
 }
 
 // ---- QRegularExpressionMatchIterator
 void * qute_QRegularExpressionMatchIterator_new(void) {
-	qute_gui_only();
 	return static_cast<QRegularExpressionMatchIterator *>(new QRegularExpressionMatchIterator());
 }
 void qute_QRegularExpressionMatchIterator_delete(void *self) {
-	qute_gui_only();
 	delete static_cast<QRegularExpressionMatchIterator *>(self);
 }
 bool qute_QRegularExpressionMatchIterator_isValid(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatchIterator *>(self)->isValid());
 }
 bool qute_QRegularExpressionMatchIterator_hasNext(void *self) {
-	qute_gui_only();
 	return static_cast<bool>(static_cast<QRegularExpressionMatchIterator *>(self)->hasNext());
 }
 void * qute_QRegularExpressionMatchIterator_next(void *self) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpressionMatchIterator *>(self)->next()));
 }
 void * qute_QRegularExpressionMatchIterator_peekNext(void *self) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpressionMatch(static_cast<QRegularExpressionMatchIterator *>(self)->peekNext()));
 }
 void * qute_QRegularExpressionMatchIterator_regularExpression(void *self) {
-	qute_gui_only();
 	return static_cast<void *>(new QRegularExpression(static_cast<QRegularExpressionMatchIterator *>(self)->regularExpression()));
 }
 int64_t qute_QRegularExpressionMatchIterator_matchType(void *self) {
-	qute_gui_only();
 	return static_cast<int64_t>(static_cast<QRegularExpressionMatchIterator *>(self)->matchType());
 }
 int64_t qute_QRegularExpressionMatchIterator_matchOptions(void *self) {
-	qute_gui_only();
 	return static_cast<int64_t>((static_cast<QRegularExpressionMatchIterator *>(self)->matchOptions()).toInt());
 }
 

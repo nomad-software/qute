@@ -740,6 +740,9 @@ func (h *Handle) Delete(method string) {
 		panic(fmt.Sprintf("%s: Delete() inside a signal or event handler (rule 5); Qt may still be using the object, "+
 			"call DeleteLater() instead", method))
 	}
+	if debugEnabled {
+		checkNotBusy(h, method)
+	}
 	if keeper := guardingKeeper(h.serial); keeper != "" {
 		panic(fmt.Sprintf("%s: a %s still uses this %s, and deleting it would leave Qt with a dangling pointer (rule 4); "+
 			"end or delete the %s first, or pass another object or nil to the method that gave it the %s",
@@ -788,7 +791,7 @@ func Use(wrapper unsafe.Pointer, method string) unsafe.Pointer {
 		panic(deadMessage(r.H, method))
 	}
 	checkDependency(r.H, method)
-	if debugEnabled {
+	if debugEnabled && !isReentrant(r.H.class) {
 		GUIOnly(method)
 	}
 	return r.P
@@ -932,6 +935,8 @@ type classInfo struct {
 	// can override virtuals per object (RegisterShim, Override)
 	vtable   []Virtual
 	shimInit func(p unsafe.Pointer, id uintptr, mask *uint64)
+	// reentrant says the class may be used on any goroutine (reentrant.go)
+	reentrant bool
 }
 
 var classes sync.Map // name -> classInfo
