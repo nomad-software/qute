@@ -11,6 +11,7 @@ import (
 	"image"
 	"image/png"
 	"os"
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -32,6 +33,7 @@ func widgetPtr(w qtwidgets.QWidgetLike, method string) unsafe.Pointer {
 // out and sized to its size hint first.
 func Screenshot(w qtwidgets.QWidgetLike) *image.NRGBA {
 	p := widgetPtr(w, "qute.Screenshot")
+	defer runtime.KeepAlive(w) // rendering runs Go handlers, which may run the GC
 	r := C.qute_tools_grab(p)
 	defer C.free(unsafe.Pointer(r.data))
 	img := image.NewNRGBA(image.Rect(0, 0, int(r.w), int(r.h)))

@@ -7,7 +7,6 @@
 #   notify-dtor: true  shim destructor tells Go when a non-QObject dies; only
 #                      needed with subclass: false (a subclass shim does it)
 #   no-construct: true hide constructors
-#   skip-virtuals: [x] virtuals Go may not override
 #   raw-pointers: true pass pointer-to-number arguments as unsafe.Pointer (GL)
 #   inline: true       a trivially copyable value kept in Go memory, not a C++ heap copy
 #   enums-only: true   emit the enums but no wrapper (QChar is a rune in Go)

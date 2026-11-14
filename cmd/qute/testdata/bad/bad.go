@@ -2,6 +2,8 @@
 package bad
 
 import (
+	"fmt"
+
 	"github.com/nomad-software/qute"
 	"github.com/nomad-software/qute/qtgui"
 	"github.com/nomad-software/qute/qtopengl"
@@ -228,4 +230,28 @@ func OverrideHandler(parent *qtwidgets.QWidget) {
 		lastKey = e // want scoped-escape
 		b.Delete()  // want delete-handler
 	})
+}
+
+// A handler that mentions its own widget, or a call that only reads from
+// it, does not hand the widget on.
+func LeakSelfHandler() {
+	btn := qtwidgets.NewQPushButtonWithText("x", nil) // want owned-leak
+	btn.OnClicked(func(bool) { btn.SetText("y") })
+	fmt.Println(btn.Text())
+}
+
+// A goroutine's arguments are evaluated by the caller, on the GUI thread.
+func GoArgs(w *qtwidgets.QLabel) {
+	go fmt.Println(w.Text())
+	go w.SetText("x") // want gui-goroutine
+}
+
+// Discarding a scoped argument does not store it.
+func (c *Canvas) KeyPressEvent(e *qtgui.QKeyEvent) {
+	_ = e
+}
+
+// Main makes the application on the main goroutine.
+func MainInGoroutine() {
+	go qute.Main(func() {}) // want gui-goroutine
 }

@@ -10,8 +10,10 @@ import (
 // documents as reentrant: QRegularExpression) may be used on any goroutine,
 // as long as no two goroutines use the same object at once. Their generated
 // C functions skip the GUI-thread check, and so does Use in qute_debug
-// builds. A GC cleanup still frees them on the GUI thread, which is fine:
-// by then nothing else uses the object.
+// builds. A GC cleanup still frees them on the GUI thread once the event
+// loop runs, which is fine: by then nothing else uses the object. Before it
+// runs (or in a program that never starts one) the cleanup frees them where
+// it runs, since no drain would (enqueueCleanup).
 //
 // Qt promises reentrancy, not thread safety, so qute_debug builds also catch
 // two goroutines inside methods of the same object at once: a generated

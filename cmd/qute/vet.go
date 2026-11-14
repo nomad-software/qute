@@ -149,8 +149,10 @@ func (v *vetter) file(f *ast.File) {
 
 // rootAnyThread are the qute and qutetest functions any goroutine may call;
 // the rest of those packages (Screenshot, DumpTree, Click, Type...) drives Qt.
+// Main and TestMain are not among them: they make the application, on the
+// main goroutine.
 var rootAnyThread = map[string]bool{"Post": true, "PostSync": true, "Run": true, "Quit": true,
-	"IsGUIThread": true, "CollectGarbage": true, "Freed": true, "Main": true, "TestMain": true}
+	"IsGUIThread": true, "CollectGarbage": true, "Freed": true}
 
 // helperPkg returns the name of the qute package with hand-written helpers
 // (qute or qutetest) that fn belongs to, or "".
@@ -171,14 +173,20 @@ func (v *vetter) checkGoroutines(f *ast.File) {
 		if !ok {
 			return true
 		}
+		// Only the call itself runs on the new goroutine: its receiver and
+		// arguments are evaluated by the caller (go f(w.Text()) is fine).
 		var body ast.Node = g.Call
+		top := true
 		if lit, ok := g.Call.Fun.(*ast.FuncLit); ok {
-			body = lit.Body
+			body, top = lit.Body, false
 		}
 		ast.Inspect(body, func(n ast.Node) bool {
 			call, ok := n.(*ast.CallExpr)
 			if !ok {
 				return true
+			}
+			if top && call != g.Call {
+				return false
 			}
 			if fn, _ := isQtFunc(v.pkg.TypesInfo, call); fn != nil && helperPkg(fn) != "" {
 				if sig, ok := fn.Type().(*types.Signature); ok && sig.Recv() != nil {
@@ -402,6 +410,9 @@ func (v *vetter) checkScoped(f *ast.File) {
 						continue
 					}
 					if lid, ok := x.Lhs[i].(*ast.Ident); ok {
+						if lid.Name == "_" {
+							continue // discarded
+						}
 						if obj := v.pkg.TypesInfo.ObjectOf(lid); obj != nil && obj.Parent() != nil && body.Pos() <= obj.Pos() && obj.Pos() <= body.End() {
 							continue // a local variable
 						}
@@ -520,18 +531,18 @@ func (v *vetter) checkLeaks(f *ast.File) {
 						}
 					}
 				}
+				// An argument that is the object (x, &x, an embedded field, an
+				// upcast) hands it to something that may own it. A use inside
+				// an argument does not: btn.Text(), or a closure that mentions
+				// btn (calls inside a closure are visited on their own).
 				for _, a := range x.Args {
-					ast.Inspect(a, func(n ast.Node) bool {
-						if id, ok := n.(*ast.Ident); ok {
-							if obj := v.pkg.TypesInfo.Uses[id]; origin[x] == obj && obj != nil {
-								return true // its own constructor call
-							}
-							if c := cands[v.pkg.TypesInfo.Uses[id]]; c != nil {
-								c.released = true // handed to something that may own it
-							}
-						}
-						return true
-					})
+					obj := v.objectOf(a)
+					if obj == nil || origin[x] == obj {
+						continue // not the object, or its own constructor call
+					}
+					if c := cands[obj]; c != nil {
+						c.released = true
+					}
 				}
 			case *ast.ReturnStmt:
 				for _, r := range x.Results {

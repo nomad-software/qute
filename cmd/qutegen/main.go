@@ -77,6 +77,10 @@ func load(root string) (*Gen, error) {
 		if err := loadYAML(filepath.Join(root, "spec", "classes", md.pkg+".yaml"), spec); err != nil {
 			return nil, err
 		}
+		if spec.Module != md.name || spec.Package != md.pkg {
+			return nil, fmt.Errorf("spec/classes/%s.yaml: module %q, package %q; want %q, %q",
+				md.pkg, spec.Module, spec.Package, md.name, md.pkg)
+		}
 		ov := overlayFile{}
 		if err := loadYAML(filepath.Join(root, "spec", "overlays", md.pkg+".yaml"), &ov); err != nil {
 			return nil, err

@@ -42,6 +42,8 @@ def has_default(param):
             depth += 1
         elif t.spelling in (")", "]", ">"):
             depth -= 1
+        elif t.spelling == ">>":  # closes two templates: QList<QList<int>> x = {}
+            depth -= 2
         elif t.spelling == "=" and depth == 0:
             return True
     return False

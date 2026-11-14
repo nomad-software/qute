@@ -6,6 +6,7 @@ package qutetest
 import "C"
 
 import (
+	"runtime"
 	"unsafe"
 
 	rt "github.com/nomad-software/qute/internal/rt"
@@ -23,6 +24,7 @@ func widgetPtr(w qtwidgets.QWidgetLike, method string) unsafe.Pointer {
 
 // Click sends a left mouse click to the centre of w, as a user would.
 func Click(w qtwidgets.QWidgetLike) {
+	defer runtime.KeepAlive(w) // the events run Go handlers, which may run the GC
 	C.qute_tools_click(widgetPtr(w, "qutetest.Click"), C.int(qtcore.LeftButton))
 	rt.RethrowCallbackPanic()
 }
@@ -35,18 +37,21 @@ func ClickAt(w qtwidgets.QWidgetLike, button qtcore.MouseButton, pos qtcore.QPoi
 
 // DoubleClick sends a left double click to the centre of w.
 func DoubleClick(w qtwidgets.QWidgetLike) {
+	defer runtime.KeepAlive(w) // the events run Go handlers, which may run the GC
 	C.qute_tools_dblclick(widgetPtr(w, "qutetest.DoubleClick"), C.int(qtcore.LeftButton))
 	rt.RethrowCallbackPanic()
 }
 
 // Type sends text to w as key presses.
 func Type(w qtwidgets.QWidgetLike, text string) {
+	defer runtime.KeepAlive(w) // the events run Go handlers, which may run the GC
 	C.qute_tools_type(widgetPtr(w, "qutetest.Type"), (*C.char)(unsafe.Pointer(unsafe.StringData(text))), C.ptrdiff_t(len(text)))
 	rt.RethrowCallbackPanic()
 }
 
 // Key sends one key press with modifiers, e.g. Key(edit, qtcore.Key_Return, 0).
 func Key(w qtwidgets.QWidgetLike, key qtcore.Key, mods qtcore.KeyboardModifiers) {
+	defer runtime.KeepAlive(w) // the events run Go handlers, which may run the GC
 	C.qute_tools_key(widgetPtr(w, "qutetest.Key"), C.int(key), C.int(mods))
 	rt.RethrowCallbackPanic()
 }
@@ -66,6 +71,7 @@ const (
 )
 
 func mouse(w qtwidgets.QWidgetLike, method string, action int, button qtcore.MouseButton, mods qtcore.KeyboardModifiers, pos qtcore.QPoint) {
+	defer runtime.KeepAlive(w)
 	C.qute_tools_mouse(widgetPtr(w, method), C.int(action), C.int(button), C.int(mods), C.int(pos.X), C.int(pos.Y))
 	rt.RethrowCallbackPanic()
 }

@@ -1984,7 +1984,7 @@ func (g *Gen) emitSubclass(c *Class, b *buf) {
 		iface := fmt.Sprintf("interface{ %s }", g.virtualSig(c, v))
 		ftype := g.overrideFuncType(c, v, false)
 		b.p("\t{Name: %q, Has: func(v any) bool { _, ok := v.(%s); return ok },", v.GoName, iface)
-		// a constant name, so the linker keeps only methods of that name (rt.Lookup)
+		// a constant name, so the linker keeps only methods of that name (rt.MethodLookup)
 		b.p("\t\tLookup: func(t rt.Type) (rt.Method, bool) { return t.MethodByName(%q) },", v.GoName)
 		b.p("\t\tFits: func(f any) bool { _, ok := f.(%s); return ok },", ftype)
 		b.p("\t\tCall: func(v any, h *rt.Handle, args, ret unsafe.Pointer) {")

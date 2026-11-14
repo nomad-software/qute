@@ -87,6 +87,7 @@ void *qute_gui_image_from_bytes(const char *data, ptrdiff_t n, int width, int he
     QImage img(width, height, QImage::Format(format));
     if (img.isNull()) return new QImage();
     img.fill(0);
+    if (bytesPerLine < 0) return new QImage(); // Go panics first; never index before data
     qsizetype rows = height, line = qsizetype(bytesPerLine), copy = qMin<qsizetype>(line, img.bytesPerLine());
     for (qsizetype y = 0; y < rows && (y + 1) * line <= n; y++) {
         std::memcpy(img.scanLine(int(y)), data + y * line, size_t(copy));

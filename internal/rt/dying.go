@@ -54,8 +54,7 @@ func isDying(p unsafe.Pointer) bool {
 }
 
 type tombstone struct {
-	w      weak.Pointer[Handle]
-	serial uint64
+	w weak.Pointer[Handle]
 }
 
 var (
@@ -66,7 +65,7 @@ var (
 // buryLocked remembers the handle of a QObject whose death notice came; the
 // caller holds regMu.
 func buryLocked(key unsafe.Pointer, h *Handle) {
-	dying[key] = tombstone{w: weak.Make(h), serial: h.serial}
+	dying[key] = tombstone{w: weak.Make(h)}
 	if dyingSweepPost.CompareAndSwap(false, true) {
 		// once the event loop runs again, every destructor has returned
 		if !post(sweepDying) {

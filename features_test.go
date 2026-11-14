@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -170,6 +171,15 @@ func TestImageFromBytesCopies(t *testing.T) {
 		if got := short.Pixel(0, 1); got != 0 {
 			t.Errorf("a row missing from the data = %#x, want 0", got)
 		}
+		// a negative row length used to index before the slice
+		func() {
+			defer func() {
+				if p, _ := recover().(string); !strings.Contains(p, "none may be negative") {
+					t.Errorf("negative bytesPerLine: panic %q", p)
+				}
+			}()
+			qtgui.NewQImageFromBytes(data, 2, 2, -8, qtgui.QImageFormat_ARGB32)
+		}()
 	})
 }
 

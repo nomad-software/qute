@@ -144,6 +144,7 @@
 #include <QMessageBox>
 #include <QMetaMethod>
 #include <QMetaObject>
+#include <QMetaType>
 #include <QMimeData>
 #include <QModelIndex>
 #include <QMouseEvent>
@@ -65002,21 +65003,25 @@ void * qute_QDateEdit_userDateChanged(void *self, uintptr_t id) {
 }
 
 // ---- QDateTimeEdit
-void * qute_QDateTimeEdit_new_1(void * a0) {
+void * qute_QDateTimeEdit_new(void * a0) {
 	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit(static_cast<QWidget *>(a0)));
 }
-void * qute_QDateTimeEdit_new_2(void * a0, void * a1) {
+void * qute_QDateTimeEdit_new_1(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QDateTime *>(a0) : QDateTime()), static_cast<QWidget *>(a1)));
 }
-void * qute_QDateTimeEdit_new_3(void * a0, void * a1) {
+void * qute_QDateTimeEdit_new_2(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QDate *>(a0) : QDate()), static_cast<QWidget *>(a1)));
 }
-void * qute_QDateTimeEdit_new_4(void * a0, void * a1) {
+void * qute_QDateTimeEdit_new_3(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QTime *>(a0) : QTime()), static_cast<QWidget *>(a1)));
+}
+void * qute_QDateTimeEdit_new_4(void * a0, int64_t a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QVariant *>(a0) : QVariant()), static_cast<QMetaType::Type>(a1), static_cast<QWidget *>(a2)));
 }
 void * qute_QDateTimeEdit_new_shim(void * a0) {
 	qute_gui_only();
@@ -65033,6 +65038,10 @@ void * qute_QDateTimeEdit_new_shim_2(void * a0, void * a1) {
 void * qute_QDateTimeEdit_new_shim_3(void * a0, void * a1) {
 	qute_gui_only();
 	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QTime *>(a0) : QTime()), static_cast<QWidget *>(a1)));
+}
+void * qute_QDateTimeEdit_new_shim_4(void * a0, int64_t a1, void * a2) {
+	qute_gui_only();
+	return static_cast<QDateTimeEdit *>(new qute_QDateTimeEdit((a0 ? *static_cast<QVariant *>(a0) : QVariant()), static_cast<QMetaType::Type>(a1), static_cast<QWidget *>(a2)));
 }
 void qute_QDateTimeEdit_shim_init(void *self, uintptr_t id, const uint64_t *mask) {
 	qute_gui_only();

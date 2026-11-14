@@ -36,6 +36,14 @@ func enqueueCleanup(arg cleanupArg) {
 	if appExited.Load() {
 		return
 	}
+	if !appRunning.Load() && !arg.registered && isReentrant(arg.class) && !(arg.serial != 0 && isKept(arg.serial)) {
+		// No event loop runs yet to drain the queue, and a program that only
+		// uses reentrant classes (regular expressions in a command-line
+		// tool) may never start one. Such an object may be freed on any
+		// goroutine, and nothing uses it now that it is unreachable.
+		freeNode(arg)
+		return
+	}
 	push(&qnode{arg: arg})
 	scheduleDrain()
 }
@@ -125,6 +133,11 @@ func freeNode(a cleanupArg) {
 		var revived *Handle
 		if found && !ok && e.prevSerial == a.serial {
 			revived = e.w.Value()
+			e.prevFree = false // this was the queued free
+			registry[a.key] = e
+			// the later handle was collected too, and queued no free of its
+			// own: Go still owns the object and nothing else will free it
+			ok = revived == nil && !e.freeable
 		}
 		regMu.Unlock()
 		if revived != nil && revived.State() == Borrowed {
@@ -168,10 +181,10 @@ var (
 	warned   = map[string]bool{}
 )
 
-// warnParentedFree reports, once per class, that GC collected the Owned
-// handle of an object Qt had given a parent (rule 7).
 var warnOut io.Writer = os.Stderr // tests capture it
 
+// warnParentedFree reports, once per class, that GC collected the Owned
+// handle of an object Qt had given a parent (rule 7).
 func warnParentedFree(class string) {
 	warnedMu.Lock()
 	seen := warned[class]

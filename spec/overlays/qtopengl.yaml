@@ -55,6 +55,9 @@ QOpenGLTexture:
       view.Delete()
 
 QOpenGLShaderProgram:
+  "setUniformValue(int, const GLfloat[2][2])": { skip: "a C array; use QOpenGLFunctions.GlUniformMatrix2fv" }
+  "setUniformValue(int, const GLfloat[3][3])": { skip: "a C array; use QOpenGLFunctions.GlUniformMatrix3fv" }
+  "setUniformValue(int, const GLfloat[4][4])": { skip: "a C array; use SetUniformMatrix4x4" }
   hasOpenGLShaderPrograms: { reviewed: true }
   setAttributeValue(int, GLfloat): { name: SetAttributeFloat }
   setAttributeValue(int, GLfloat, GLfloat): { name: SetAttributeFloat2 }
@@ -102,6 +105,22 @@ QOpenGLShaderProgram:
   setUniformValue(int, const QSize &): { name: SetUniformSize }
   setUniformValue(int, const QSizeF &): { name: SetUniformSizeF }
   setUniformValue(int, const QMatrix4x4 &): { name: SetUniformMatrix4x4 }
+  setUniformValue(int, const QMatrix2x2 &): { skip: "a template class; use QOpenGLFunctions.GlUniformMatrix2fv" }
+  setUniformValue(int, const QMatrix2x3 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x3fv" }
+  setUniformValue(int, const QMatrix2x4 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x4fv" }
+  setUniformValue(int, const QMatrix3x2 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x2fv" }
+  setUniformValue(int, const QMatrix3x3 &): { skip: "a template class; use QOpenGLFunctions.GlUniformMatrix3fv" }
+  setUniformValue(int, const QMatrix3x4 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x4fv" }
+  setUniformValue(int, const QMatrix4x2 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x2fv" }
+  setUniformValue(int, const QMatrix4x3 &): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x3fv" }
+  setUniformValueArray(int, const QMatrix2x2 *, int): { skip: "a template class; use QOpenGLFunctions.GlUniformMatrix2fv" }
+  setUniformValueArray(int, const QMatrix2x3 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x3fv" }
+  setUniformValueArray(int, const QMatrix2x4 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x4fv" }
+  setUniformValueArray(int, const QMatrix3x2 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x2fv" }
+  setUniformValueArray(int, const QMatrix3x3 *, int): { skip: "a template class; use QOpenGLFunctions.GlUniformMatrix3fv" }
+  setUniformValueArray(int, const QMatrix3x4 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x4fv" }
+  setUniformValueArray(int, const QMatrix4x2 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x2fv" }
+  setUniformValueArray(int, const QMatrix4x3 *, int): { skip: "a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x3fv" }
   setUniformValue(int, const QTransform &): { name: SetUniformTransform }
   setUniformValue(const char *, GLfloat): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValue(const char *, GLint): { skip: "use UniformLocation(name) with the location overload" }
@@ -117,14 +136,14 @@ QOpenGLShaderProgram:
   setUniformValue(const char *, const QPointF &): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValue(const char *, const QSize &): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValue(const char *, const QSizeF &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix2x2 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix2x3 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix2x4 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix3x2 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix3x3 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix3x4 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix4x2 &): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValue(const char *, const QMatrix4x3 &): { skip: "use UniformLocation(name) with the location overload" }
+  setUniformValue(const char *, const QMatrix2x2 &): { skip: "a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix2fv" }
+  setUniformValue(const char *, const QMatrix2x3 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x3fv" }
+  setUniformValue(const char *, const QMatrix2x4 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x4fv" }
+  setUniformValue(const char *, const QMatrix3x2 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x2fv" }
+  setUniformValue(const char *, const QMatrix3x3 &): { skip: "a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix3fv" }
+  setUniformValue(const char *, const QMatrix3x4 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x4fv" }
+  setUniformValue(const char *, const QMatrix4x2 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x2fv" }
+  setUniformValue(const char *, const QMatrix4x3 &): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x3fv" }
   setUniformValue(const char *, const QMatrix4x4 &): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValue(const char *, const GLfloat[2][2]): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValue(const char *, const GLfloat[3][3]): { skip: "use UniformLocation(name) with the location overload" }
@@ -143,14 +162,14 @@ QOpenGLShaderProgram:
   setUniformValueArray(const char *, const QVector2D *, int): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValueArray(const char *, const QVector3D *, int): { skip: "use UniformLocation(name) with the location overload" }
   setUniformValueArray(const char *, const QVector4D *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix2x2 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix2x3 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix2x4 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix3x2 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix3x3 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix3x4 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix4x2 *, int): { skip: "use UniformLocation(name) with the location overload" }
-  setUniformValueArray(const char *, const QMatrix4x3 *, int): { skip: "use UniformLocation(name) with the location overload" }
+  setUniformValueArray(const char *, const QMatrix2x2 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix2fv" }
+  setUniformValueArray(const char *, const QMatrix2x3 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x3fv" }
+  setUniformValueArray(const char *, const QMatrix2x4 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x4fv" }
+  setUniformValueArray(const char *, const QMatrix3x2 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x2fv" }
+  setUniformValueArray(const char *, const QMatrix3x3 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix3fv" }
+  setUniformValueArray(const char *, const QMatrix3x4 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x4fv" }
+  setUniformValueArray(const char *, const QMatrix4x2 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x2fv" }
+  setUniformValueArray(const char *, const QMatrix4x3 *, int): { skip: "a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x3fv" }
   setUniformValueArray(const char *, const QMatrix4x4 *, int): { skip: "use UniformLocation(name) with the location overload" }
   addShader: { reviewed: true, doc: "The caller keeps ownership of the shader (Qt docs)." }
   removeShader: { reviewed: true }

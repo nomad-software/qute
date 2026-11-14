@@ -215,3 +215,21 @@ func TestRunJavaScriptNilCallback(t *testing.T) {
 		}
 	})
 }
+
+// SetCookieFilter is hand-written, so it checks the thread itself: from
+// another goroutine it panics in release builds too.
+func TestCookieFilterOffThreadPanics(t *testing.T) {
+	var prof *qtwebenginecore.QWebEngineProfile
+	var store *qtwebenginecore.QWebEngineCookieStore
+	qutetest.Run(t, func() {
+		prof = qtwebenginecore.NewQWebEngineProfile(nil)
+		store = prof.CookieStore()
+	})
+	defer qutetest.Run(t, func() { prof.Delete() })
+	defer func() {
+		if p, _ := recover().(string); !strings.Contains(p, "off the GUI thread") {
+			t.Errorf("SetCookieFilter off the GUI thread: panic %q", p)
+		}
+	}()
+	store.SetCookieFilter(nil) // the test goroutine is not the GUI thread
+}

@@ -682,6 +682,74 @@ func TestQueuedFreeOfRewrappedObject(t *testing.T) {
 	h.stopCleanup()
 }
 
+// collectHandle makes the registry entry of key look as it does once GC has
+// collected its handle (an empty weak pointer).
+func collectHandle(key unsafe.Pointer) {
+	regMu.Lock()
+	e := registry[key]
+	e.w = weak.Pointer[Handle]{}
+	registry[key] = e
+	regMu.Unlock()
+}
+
+// An object handed out twice more after GC collected its Owned handle, the
+// Borrowed handle between collected too: the queued free still finds it and
+// hands it to the newest handle, and what the middle handle kept moves to
+// the serial the entry keeps, for the death notice to release.
+func TestQueuedFreeOfObjectRewrappedTwice(t *testing.T) {
+	key := fakePtr(3)
+	old := serialCounter.Add(1)
+	regMu.Lock()
+	registry[key] = regEntry{serial: old, freeable: true} // collected, free queued
+	regMu.Unlock()
+	del := func(unsafe.Pointer) { t.Error("object deleted under its new handle") }
+	mid := Wrap(key, "Obj", KindNotify, KeepOrBorrow, del)
+	keepMu.Lock()
+	holds[mid.serial] = []hold{{kept: 987654}}
+	keptBy[987654]++
+	keepMu.Unlock()
+	collectHandle(key) // mid: Borrowed, so no free of its own
+	h := Wrap(key, "Obj", KindNotify, KeepOrBorrow, del)
+	keepMu.Lock()
+	moved := len(holds[old]) == 1 && len(holds[mid.serial]) == 0
+	keepMu.Unlock()
+	if !moved {
+		t.Error("what the collected middle handle kept did not move to the remembered serial")
+	}
+	freeNode(cleanupArg{key: key, serial: old, kind: KindNotify, registered: true, deleter: del})
+	if h.State() != Owned {
+		t.Fatalf("after the stale free: %v, want Owned (Go still owns it)", h.State())
+	}
+	h.stopCleanup()
+	Destroyed(key, "test")
+	keepMu.Lock()
+	_, held := keptBy[987654]
+	keepMu.Unlock()
+	if held {
+		t.Error("the death notice did not release what the middle handle kept")
+	}
+}
+
+// The free of a collected Owned handle runs while the Borrowed handle Qt
+// handed out since was collected too, and nothing wrapped the object again:
+// Go still owns it, so the free deletes it instead of dropping it.
+func TestQueuedFreeAfterRewrapCollected(t *testing.T) {
+	key := fakePtr(3)
+	old := serialCounter.Add(1)
+	regMu.Lock()
+	registry[key] = regEntry{serial: old, freeable: true}
+	regMu.Unlock()
+	deleted := 0
+	del := func(unsafe.Pointer) { deleted++ }
+	Wrap(key, "Obj", KindNotify, KeepOrBorrow, del)
+	collectHandle(key)
+	freeNode(cleanupArg{key: key, serial: old, kind: KindNotify, registered: true, deleter: del})
+	if deleted != 1 {
+		t.Fatalf("object deleted %d times, want once", deleted)
+	}
+	Destroyed(key, "test")
+}
+
 // When the safety net refuses to free an object Qt has parented, it says so
 // once per class instead of letting the tree's handlers stop silently.
 func TestParentedFreeWarns(t *testing.T) {
@@ -1328,4 +1396,26 @@ func TestReentrantBusy(t *testing.T) {
 	if h.State() != Dead {
 		t.Error("Delete after Leave did not delete")
 	}
+}
+
+// With no event loop to drain the queue (a command-line program that only
+// uses regular expressions), an unreachable object of a reentrant class is
+// freed by its cleanup at once; others wait for the loop.
+func TestReentrantFreedWithoutEventLoop(t *testing.T) {
+	if appRunning.Load() {
+		t.Skip("an event loop is running")
+	}
+	RegisterClass("RtReentrant", KindValue, nil)
+	RegisterReentrant("RtReentrant")
+	freed := 0
+	del := func(unsafe.Pointer) { freed++ }
+	enqueueCleanup(cleanupArg{key: fakePtr(8), class: "RtReentrant", kind: KindValue, deleter: del, quiet: true})
+	if freed != 1 {
+		t.Fatalf("reentrant object freed %d times, want once", freed)
+	}
+	enqueueCleanup(cleanupArg{key: fakePtr(8), class: "RtNotReentrant", kind: KindValue, deleter: del, quiet: true})
+	if freed != 1 {
+		t.Fatal("an object of a class that is not reentrant was freed off the GUI thread")
+	}
+	queueHead.Store(nil) // drop the queued one
 }

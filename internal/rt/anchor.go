@@ -37,7 +37,7 @@ var (
 
 	// Hooks into Qt, replaced in tests that have no QApplication.
 	rootOfC    func(unsafe.Pointer) unsafe.Pointer
-	hasParentC = HasParent // stubbed by tests that have no Qt
+	hasParentC = HasParent // the safety net in freeNode; stubbed by tests that have no Qt
 	subtreeC   func(unsafe.Pointer) []unsafe.Pointer
 	classNameC func(unsafe.Pointer) string
 )

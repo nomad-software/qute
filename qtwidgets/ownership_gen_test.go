@@ -1111,6 +1111,29 @@ func TestOwnership_NewQDateTimeEditWithTime(t *testing.T) {
 	})
 }
 
+// QDateTimeEdit::QDateTimeEdit(const QVariant & val, QMetaType::Type parserType, QWidget * parent = …): a non-nil parent makes the object Parented, nil makes it Owned.
+func TestOwnership_NewQDateTimeEditWithVariant(t *testing.T) {
+	qutetest.Run(t, func() {
+		root := qtwidgets.NewQWidget(nil)
+		x := qtwidgets.NewQDateTimeEditWithVariant(nil, qtcore.QMetaTypeType(1), root)
+		if got := x.Ownership(); got != qtcore.Parented {
+			t.Errorf("with parent: %v, want Parented", got)
+		}
+		root.Delete()
+		if x.Alive() {
+			t.Error("still alive after its parent was deleted")
+		}
+		y := qtwidgets.NewQDateTimeEditWithVariant(nil, qtcore.QMetaTypeType(1), nil)
+		if got := y.Ownership(); got != qtcore.Owned {
+			t.Errorf("without parent: %v, want Owned", got)
+		}
+		y.Delete()
+		if y.Alive() {
+			t.Error("alive after Delete")
+		}
+	})
+}
+
 // void QDateTimeEdit::setCalendarWidget(QCalendarWidget * calendarWidget): keep rules
 func TestKeep_QDateTimeEdit_SetCalendarWidget(t *testing.T) {
 	qutetest.Run(t, func() {

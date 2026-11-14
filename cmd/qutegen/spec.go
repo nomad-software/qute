@@ -39,8 +39,6 @@ type classOpts struct {
 	NotifyDtor bool `yaml:"notify-dtor"`
 	// NoConstruct hides constructors.
 	NoConstruct bool `yaml:"no-construct"`
-	// SkipVirtuals lists virtuals that may not be overridden from Go.
-	SkipVirtuals []string `yaml:"skip-virtuals"`
 	// Reviewed marks every default rule on the class as reviewed.
 	Reviewed bool `yaml:"reviewed"`
 	// RawPointers passes every pointer to a number as unsafe.Pointer instead of

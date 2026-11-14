@@ -534,7 +534,9 @@ a triangle with a shader program, a vertex buffer and a VAO.
 `go install github.com/nomad-software/qute/cmd/qute@latest`
 
 - `qute new app <dir> [module]` writes `main.go`, a window, a behaviour test
-  and a screenshot test.
+  and a screenshot test, plus a `go.mod` for the module path when `<dir>` is
+  not already inside a Go module (passing a module path inside one is an
+  error).
 - `qute vet ./...` reports Owned objects with connections or per-object
   overrides, and parentless Go subclasses, that are never deleted or parented, `Delete()` of a QObject
   inside handlers and overrides (a painter, image or other non-QObject made

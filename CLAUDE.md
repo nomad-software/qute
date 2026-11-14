@@ -236,7 +236,9 @@ class: <bound class>}` when Qt has no getter; a class may list several
   `QObject::destroyed`, with a separate never-destroyed context object
   (`~QVideoSink` drops connections whose receiver is itself before
   `destroyed` is emitted, which would lose the notice); it marks the handle Dead, removes the registry entry
-  and releases its Go callbacks. The entry goes before the memory is freed, so
+  and drops its Go state (subclass value, overrides, pins, keeps, anchoring);
+  the connection closures go when Qt destroys their slot objects right
+  after (`ReleaseCallback`). The entry goes before the memory is freed, so
   a new object at a reused address gets a fresh handle. Queued cleanups carry
   a serial number for the same reason.
 - **Wrapped while dying.** Qt still hands a QObject to Go while destroying it
@@ -295,7 +297,12 @@ class: <bound class>}` when Qt has no getter; a class may list several
 - **Re-wrapped before freed.** If Qt hands out an object after GC collected
   its Owned handle but before the queued free ran, the new handle is
   Borrowed; the registry entry remembers the old serial, and the stale free
-  makes the new handle Owned instead of freeing the object under it.
+  makes the new handle Owned instead of freeing the object under it. The
+  entry keeps one earlier serial: the newest whose free may still be queued
+  (`freeable`, `prevFree`, `replaceCollectedLocked`), so a Borrowed handle
+  collected in between cannot hide it, and what that handle kept moves to it
+  (`moveHolds`) for the death notice to release. A free that finds the later
+  handle collected too, with no free of its own, deletes the object.
 
 ## Marshalling
 
@@ -318,7 +325,11 @@ CachyOS's, GCC on ARM64) rounds HSV and HSL conversions differently, so the
 test probes which kind is installed (`qtFuses`) and allows one step per
 channel there.
 `colormath_manual_test.go` compares it with Qt's QColor through
-`internal/colorref`, a cgo package only tests import.
+`internal/colorref`, a cgo package only tests import. The geometry structs'
+methods (`QRect.Center`, `Contains`, `Intersects`, `QRectF.ToRect`...,
+`qtcore/geometry_manual.go`) follow Qt's code for negative and empty sizes
+too; `geometry_manual_test.go` compares them with Qt's through
+`internal/georef`.
 
 Beyond the table, the generator maps (see `cmd/qutegen/types.go`):
 
@@ -411,7 +422,12 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   `qute_<pkg>_wrong_thread` otherwise, in release builds too. Before the
   application exists nothing is checked, which is how init-time registration
   (`QWebEngineUrlScheme`) works. The hand-written helpers (`Tree`,
-  `Screenshot`, `qutetest.Click`, `Wait`...) call `rt.GUIOnly`.
+  `Screenshot`, `qutetest.Click`, `Wait`, `NewQImageFromBytes`,
+  `SetCookieFilter`...) call `rt.GUIOnly`. The variant helpers
+  (`NewQVariantOf`, `QVariant.Value`, `qtgui.VariantValue`) check only in
+  `qute_debug` builds: a model's `Data` override makes a variant for every
+  cell and role, and `rt.GUIOnly` costs two calls into C++ (the generated
+  shims' check is a static function hand-written C++ cannot reach).
 - Reentrant classes (class option `reentrant`, for classes Qt documents as
   reentrant: `QRegularExpression` and its match types) may be used on any
   goroutine, but no two goroutines may use one object at once. Their C
@@ -425,7 +441,8 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   one object at once, as does `Delete()` of an object in use. The generator
   warns when `reentrant` is set on a QObject, an event, a class with signals,
   `depends-on` or a Go subclass, or below a base that is not reentrant. GC
-  cleanups still free these objects on the GUI thread.
+  cleanups free these objects on the GUI thread once the event loop runs
+  (before that, at once: see the cleanup queue below).
 - Every entry from Qt into a Go handler (signal, virtual, `std::function`)
   checks it runs on the GUI thread (the generated C++ looks the thread up,
   `qute_off_gui`, and passes the answer in, so Go need not call C++ to ask) and panics otherwise: handlers use Qt
@@ -436,7 +453,10 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
 - GC cleanups never call `delete`: they push onto a lock-free queue that the
   GUI thread drains from a posted event. `rt.Drain` may be re-entered (a
   destructor runs a Go handler that runs the event loop), so it merges what
-  a nested drain left waiting instead of overwriting it. After the event loop exits, queued
+  a nested drain left waiting instead of overwriting it. The one exception:
+  before an event loop runs, an unkept object of a `reentrant` class that is
+  not registered is freed by its cleanup at once, wherever it runs, since a
+  program that only uses such classes may never start one. After the event loop exits, queued
   cleanups are dropped, since deleting after the app is gone crashes Qt.
   Unreachable `qtcore.Connection`s are freed through the same queue.
 - Build tag `qute_debug` adds a Go-side GUI-thread check that names the
@@ -467,6 +487,11 @@ the same generated wrapper; C memory never reaches user code. `nil` maps to
   it cannot be). The shim subclass (`qute_QWidget`) has a forwarding
   constructor, so it also reaches protected constructors (those taking Qt's
   d-pointer are left out), and an abstract class is built only through it.
+  Since every constructor of such a class builds the shim, a protected
+  constructor is bound like a public one (`Method.Protected`:
+  `NewQDateTimeEditWithVariant`); a class with only protected constructors
+  gets just the `…With` forms (`ShimCtors`), and if subclassing is turned
+  off after all, its protected constructors are listed as skipped.
   It checks a per-instance bitmask, so non-overridden virtuals
   skip the cgo hop. Overrides are detected with interface assertions plus
   `rt.UserDefined`, which follows a promoted method to the type that declares
@@ -561,7 +586,7 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   shim, so a posted event Qt deletes is seen to die), `inline` (see Inline
   values), `subclass: false` (see Signals and
   subclassing), `notify-dtor`, `no-construct` (only Qt creates it),
-  `skip-virtuals`, `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
+  `raw-pointers`, `enums-only` (enums but no wrapper, e.g.
   `QChar`, which is a `rune` in Go), `depends-on` (see Kept references; on a
   QObject class it does nothing and the generator warns), `memory` (`size:`
   a C++ expression over `$self`, `changed-by:` the methods after which it is
@@ -733,7 +758,8 @@ qtwidgets.NewQWidgetWith(&Canvas{}, nil)
   checked for scoped-escape too (its painter is scoped); it runs at once,
   so a handler's event used inside it does not escape.
 - `qute new app <dir> [module]`: main.go, a window, a behaviour test and a
-  screenshot test.
+  screenshot test. Inside an existing module it writes no go.mod, so a
+  module argument there is an error rather than ignored.
 
 ## Testing
 
@@ -968,8 +994,11 @@ Invariants:
 - Only C types cross cgo. Each generated package exports its own
   `qute_<pkg>_signal/release/virtual/dead/call` callbacks; C code never calls a
   function exported by another Go package.
-- All Qt calls happen on the GUI thread; only `rt.Drain` deletes for GC.
-- Generation is idempotent and warning-free. Unmatched overlay keys warn.
+- All Qt calls happen on the GUI thread; only `rt.Drain` deletes for GC
+  (and a cleanup before any event loop runs, for reentrant classes).
+- Generation is idempotent and warning-free. Unmatched overlay keys warn;
+  warnings are sorted in COVERAGE.md so the report is the same on every run.
+  Each spec file's `module`/`package` must match its entry in `mods`.
 
 Conventions:
 

@@ -46,8 +46,10 @@ type Class struct {
 	Secondary []*Class
 	Root      *Class
 
-	Ctors     []*Method
-	ShimCtors []*Method // constructors of an abstract class, used only by its shim
+	Ctors []*Method
+	// ShimCtors are the constructors only a Go subclass calls: those of an
+	// abstract class, and the protected ones of a class with no public one
+	ShimCtors []*Method
 	// SubCtors are the constructors of a Go subclass (New<Ctor>With), the
 	// primary one first (see subCtors)
 	SubCtors  []subCtor
@@ -148,10 +150,13 @@ type Method struct {
 	FullOf   *Method // for an automatic Full form: the short form it extends
 	FullName string  // for a short form: the Go name of its Full form
 	Emit     bool    // emits a signal
-	Field    string  // "get" or "set": a public data member accessor
-	PairRet  []*conv // a std::pair result, returned to Go as two results
-	VIndex   int
-	Sig      string
+	// Protected marks a protected constructor bound as a plain one: every
+	// constructor of an overridable class builds the shim, which reaches it
+	Protected bool
+	Field     string  // "get" or "set": a public data member accessor
+	PairRet   []*conv // a std::pair result, returned to Go as two results
+	VIndex    int
+	Sig       string
 }
 
 type Gen struct {
@@ -181,12 +186,9 @@ var goKeywords = map[string]bool{
 // they are left out silently. Anything else left out goes through a reason
 // (idiomSkip, an overlay's skip, a type-wide deliberate reason) so that
 // COVERAGE.md lists it: a name here hides the method on every class, as
-// inputMethodQuery once was hidden.
-var globalSkip = map[string]bool{
-	"tr": true, "trUtf8": true, "metaObject": true, "staticMetaObject": true, "d_func": true,
-	"qt_metacast": true, "qt_metacall": true, "qt_static_metacall": true,
-	"qt_check_for_QGADGET_macro": true, "setupUi": true,
-}
+// inputMethodQuery once was hidden. irgen already drops the rest of moc's
+// output (qt_*, d_func, staticMetaObject).
+var globalSkip = map[string]bool{"tr": true, "metaObject": true}
 
 // idiomSkip returns why a method is a C++ idiom with no meaning in Go, or
 // "": the implicit-sharing plumbing of value classes. A QObject's method of
@@ -467,6 +469,18 @@ func (g *Gen) noSubclass(c *Class, why string) {
 	c.Virtuals = nil
 	c.Protected = nil
 	c.ShimCtors = nil
+	// a protected constructor is reached only through the shim
+	ctors := c.Ctors[:0]
+	for _, mm := range c.Ctors {
+		if mm.Protected {
+			if mm.FullOf == nil {
+				g.skip(c, mm.IR, "protected constructor, and the class cannot be subclassed ("+why+")")
+			}
+			continue
+		}
+		ctors = append(ctors, mm)
+	}
+	c.Ctors = ctors
 	c.Shim = c.Opts.NotifyDtor && !c.Opts.NoConstruct
 }
 
@@ -634,18 +648,17 @@ func (g *Gen) buildMembers(c *Class) {
 	var ctors, methods, statics, signals, emits []*Method
 	var ctorTwins, methodTwins, staticTwins []*Method // Full forms of methods with dropped defaults
 	inherited := map[string]bool{}                    // names whose inherited binding must stay visible
+	publicCtor := false
+	for i := range c.IR.Methods {
+		publicCtor = publicCtor || c.IR.Methods[i].Kind == "ctor" && c.IR.Methods[i].Access == "public"
+	}
 	for i := range c.IR.Methods {
 		im := &c.IR.Methods[i]
-		if im.Access == "protected" && im.Kind == "ctor" && c.Opts.Subclass && !im.Copy && !im.Move && !privateCtor(im) {
-			// a protected constructor (QTextObject(QTextDocument *)) is only
-			// callable by a subclass, so it builds the shim
-			if mm := g.newMethod(c, im, nil, true, false); mm != nil {
-				mm.CName = c.cName("new")
-				c.ShimCtors = append(c.ShimCtors, mm)
-			}
-			continue
-		}
-		if im.Access != "public" {
+		// a protected constructor (QTextObject(QTextDocument *)) is only
+		// callable by a subclass; every constructor of a class Go subclasses
+		// builds the shim, which reaches it
+		protCtor := im.Access == "protected" && im.Kind == "ctor" && c.Opts.Subclass && !privateCtor(im)
+		if im.Access != "public" && !protCtor {
 			continue // protected members are bound on the Base type by buildShim
 		}
 		if globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || strings.HasPrefix(im.Name, "~") {
@@ -683,8 +696,9 @@ func (g *Gen) buildMembers(c *Class) {
 			if c.Opts.NoConstruct || !c.HasDtor && c.Kind != KindObject {
 				continue
 			}
-			if c.Abstract {
-				// abstract classes are only constructible through their shim
+			if c.Abstract || protCtor && !publicCtor {
+				// abstract classes are only constructible through their
+				// shim, and so are those with only protected constructors
 				if c.Opts.Subclass {
 					if mm := g.newMethod(c, im, ov, true, false); mm != nil {
 						mm.CName = c.cName("new")
@@ -694,8 +708,10 @@ func (g *Gen) buildMembers(c *Class) {
 				continue
 			}
 			if mm := g.newMethod(c, im, ov, true, false); mm != nil {
+				mm.Protected = protCtor
 				ctors = append(ctors, mm)
 				if tw := g.fullTwin(c, im, ov, true, mm); tw != nil {
+					tw.Protected = protCtor
 					ctorTwins = append(ctorTwins, tw)
 				}
 			}
@@ -1402,10 +1418,6 @@ func (g *Gen) buildShim(c *Class) {
 	if !c.Opts.Subclass {
 		return
 	}
-	skipV := map[string]bool{}
-	for _, s := range c.Opts.SkipVirtuals {
-		skipV[s] = true
-	}
 	seen := map[string]bool{}
 	var chain []*Class
 	var walk func(x *Class)
@@ -1459,7 +1471,7 @@ func (g *Gen) buildShim(c *Class) {
 			if _, ok := hidden[im.Name]; !ok {
 				hidden[im.Name] = x
 			}
-			if im.Final || globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || skipV[im.Name] || im.Deprecated {
+			if im.Final || globalSkip[im.Name] || strings.HasPrefix(im.Name, "operator") || im.Deprecated {
 				if im.Pure && pureMissing == "" {
 					pureMissing = x.Cpp + "::" + im.Name
 				}

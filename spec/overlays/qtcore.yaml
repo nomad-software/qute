@@ -209,6 +209,7 @@ QBasicTimer:
   start: { reviewed: true }
 
 QDataStream:
+  "readBytes(char *&, qint64 &)": { skip: "returns memory allocated with new[]; use the QByteArray overload" }
   QDataStream(QIODevice*): { args: { 0: keep:device }, reviewed: true }
   device: { return: borrowed }
   setDevice: { args: { 0: keep:device }, reviewed: true }

@@ -1651,3 +1651,42 @@ func TestReturnType(t *testing.T) {
 		t.Errorf("%d warnings for 3 bad return-types: %v", n, g.report.warnings[before:])
 	}
 }
+
+// Warnings come from map walks; the report lists them sorted, so it is the
+// same on every run.
+func TestReportWarningsSorted(t *testing.T) {
+	g := gen(t)
+	saved := g.report.warnings
+	defer func() { g.report.warnings = saved }()
+	g.report.warnings = []string{"b: second", "a: first"}
+	path := filepath.Join(t.TempDir(), "COVERAGE.md")
+	if err := g.writeReport(path); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(b)
+	if i, j := strings.Index(s, "a: first"), strings.Index(s, "b: second"); i < 0 || j < 0 || i > j {
+		t.Errorf("warnings not listed in sorted order (a at %d, b at %d)", i, j)
+	}
+}
+
+// A protected constructor of a class Go subclasses is bound like a public
+// one, since every constructor builds the shim (it used to be dropped
+// without a word when the class also had public constructors).
+func TestProtectedConstructorBound(t *testing.T) {
+	c := class(t, "QDateTimeEdit")
+	for _, mm := range c.Ctors {
+		if mm.Protected && strings.Contains(mm.Sig, "QMetaType::Type") {
+			for _, sc := range c.SubCtors {
+				if sc.M == mm {
+					return
+				}
+			}
+			t.Fatalf("%s is bound but has no subclass form", mm.Sig)
+		}
+	}
+	t.Fatal("QDateTimeEdit(const QVariant &, QMetaType::Type, QWidget *) is not bound")
+}

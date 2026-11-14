@@ -52,8 +52,9 @@ const (
 	// KindPlain objects have no death notice, so they are never registered and
 	// every wrap yields a fresh handle.
 	KindPlain
-	// KindValue objects are heap copies of Qt value classes, always owned by
-	// the handle that created them.
+	// KindValue objects are heap copies of Qt value classes. A copy Go made
+	// is Owned; one Qt passes a handler or a method hands out is Borrowed
+	// or scoped (KeepOrBorrow, WrapScoped).
 	KindValue
 )
 
@@ -95,10 +96,14 @@ type handleExt struct {
 	// guarded by Handle.mu
 	visiblePin bool
 	keepPins   int32
-	selfSlot   uintptr                               // the id the shim dispatches virtuals with
-	deathNote  string                                // why it died, when note cannot say (noteOther)
-	callbacks  map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
-	memBytes   int64                                 // external memory counted for this value (memory.go)
+	selfSlot   uintptr // the id the shim dispatches virtuals with
+	// the cleanup that drops an override-only selfSlot (Override), stopped
+	// when the last override is cleared
+	slotCleanup    runtime.Cleanup
+	hasSlotCleanup bool
+	deathNote      string                                // why it died, when note cannot say (noteOther)
+	callbacks      map[uintptr]func(args unsafe.Pointer) // closures of the connections it sends
+	memBytes       int64                                 // external memory counted for this value (memory.go)
 
 	keeps map[string]*Handle // kept references, by slot (guarded by keepMu)
 	// release drops what an unregistered keeper holds once its handle is
@@ -182,9 +187,47 @@ type regEntry struct {
 	w       weak.Pointer[Handle]
 	serial  uint64
 	watched bool
+	// freeable: the handle has a GC cleanup, so its collection queues a free
+	freeable bool
+	// prevFree: the free of prevSerial may still be queued
+	prevFree bool
 	// prevSerial is the serial of a collected handle this entry's handle
 	// replaced; a queued free of that one hands the object to the new handle.
+	// When an object is handed out again more than once before the drain,
+	// it is the one whose free is still queued (see replaceCollectedLocked),
+	// and what the other kept moves to it.
 	prevSerial uint64
+}
+
+// replaceCollectedLocked makes h the handle of an entry whose handle was
+// collected. It returns a serial whose holds must move to the entry's
+// prevSerial, to (moveHolds, without regMu), or 0. The caller holds regMu.
+//
+// Only one earlier serial is remembered: the newest one whose free may be
+// queued. A collected handle that queued no free (Borrowed, Parented) gives
+// way to an older one that did, or its free would never find the object
+// again and nobody would free it.
+func replaceCollectedLocked(key unsafe.Pointer, e regEntry, h *Handle, watched bool) (move, to uint64) {
+	prev, free := e.serial, e.freeable
+	if e.prevSerial != 0 {
+		if !e.freeable && e.prevFree {
+			prev, free, move = e.prevSerial, true, e.serial
+		} else {
+			move = e.prevSerial
+		}
+	}
+	registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: watched, prevSerial: prev, prevFree: free}
+	return move, prev
+}
+
+// setFreeable records on h's registry entry whether h has a GC cleanup.
+func setFreeable(h *Handle, v bool) {
+	regMu.Lock()
+	if e, ok := registry[h.ptr]; ok && e.serial == h.serial && e.freeable != v {
+		e.freeable = v
+		registry[h.ptr] = e
+	}
+	regMu.Unlock()
 }
 
 var (
@@ -309,14 +352,18 @@ func wrap(key unsafe.Pointer, class string, kind Kind, mode WrapMode, deleter fu
 	}
 	h := newHandleIn(fresh, key, class, kind, st, deleter)
 	needWatch := kind == KindQObject
+	var move, to uint64
 	if found {
 		needWatch = needWatch && !e.watched
-		registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: e.watched || needWatch, prevSerial: e.serial}
+		move, to = replaceCollectedLocked(key, e, h, e.watched || needWatch)
 	} else {
 		registry[key] = regEntry{w: weak.Make(h), serial: h.serial, watched: needWatch}
 	}
 	delete(dying, key) // a new object at the address of one destroyed earlier
 	regMu.Unlock()
+	if move != 0 {
+		moveHolds(move, to)
+	}
 	if needWatch {
 		watch(key)
 	}
@@ -396,9 +443,7 @@ func View[T any](h *Handle, p unsafe.Pointer) *T {
 		// the first wrapper (most handles have only one), with no slice to
 		// allocate: cache starts on the array inside the handle
 		v := new(T)
-		*RefOf(unsafe.Pointer(v)) = Ref{H: h, P: p}
-		h.cache1[0] = v
-		h.cache = h.cache1[:1]
+		cacheFirst(h, v, p)
 		return v
 	}
 	for _, c := range h.cache {
@@ -509,6 +554,9 @@ func (h *Handle) attachCleanup() {
 	h.cleanup = runtime.AddCleanup(h, enqueueCleanup, arg)
 	h.hasCleanup = true
 	h.mu.Unlock()
+	if arg.registered {
+		setFreeable(h, true)
+	}
 	h.syncRelease() // keepMu comes before h.mu, so only once h.mu is free
 }
 
@@ -527,6 +575,9 @@ func (h *Handle) stopCleanup() {
 		h.hasCleanup = false
 	}
 	h.mu.Unlock()
+	if stopped && h.registeredKind() {
+		setFreeable(h, false)
+	}
 	if stopped {
 		h.syncRelease()
 	}
@@ -1067,9 +1118,7 @@ func WrapNew[T any](p unsafe.Pointer, class string, mode WrapMode) *Handle {
 	x := new(viewPair[T])
 	h := wrapNew(p, class, ci, mode, &x.h)
 	if h == &x.h {
-		*RefOf(unsafe.Pointer(&x.v)) = Ref{H: h, P: p}
-		h.cache1[0] = &x.v
-		h.cache = h.cache1[:1]
+		cacheFirst(h, &x.v, p)
 	}
 	return h
 }
@@ -1116,9 +1165,7 @@ func WrapScoped[T any](p unsafe.Pointer, class string) *Handle {
 	h := &x.h
 	h.init(p, class, KindPlain, Borrowed, nil)
 	h.scoped = true
-	*RefOf(unsafe.Pointer(&x.v)) = Ref{H: h, P: p}
-	h.cache1[0] = &x.v
-	h.cache = h.cache1[:1]
+	cacheFirst(h, &x.v, p)
 	return h
 }
 
@@ -1168,4 +1215,13 @@ func Arg(wrapper unsafe.Pointer, method string) (unsafe.Pointer, *Handle) {
 func WrongThread() {
 	panic("qute: a Qt method was called off the GUI thread; Qt objects may only be used on the GUI thread, " +
 		"wrap the call in qute.Post(func() { ... }) (build with -tags qute_debug to have the method named)")
+}
+
+// cacheFirst makes v, a new wrapper of the object p, h's first cached
+// wrapper: most handles have only one, so cache starts on the array inside
+// the handle and no slice is allocated.
+func cacheFirst[T any](h *Handle, v *T, p unsafe.Pointer) {
+	*RefOf(unsafe.Pointer(v)) = Ref{H: h, P: p}
+	h.cache1[0] = v
+	h.cache = h.cache1[:1]
 }

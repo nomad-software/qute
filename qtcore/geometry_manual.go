@@ -66,17 +66,45 @@ func (r QRect) Size() QSize { return QSize{r.Width, r.Height} }
 // TopLeft returns the origin.
 func (r QRect) TopLeft() QPoint { return QPoint{r.X, r.Y} }
 
-// Center returns the centre point (rounded down, as Qt does).
-func (r QRect) Center() QPoint { return QPoint{r.X + (r.Width-1)/2, r.Y + (r.Height-1)/2} }
+// The QRect methods below follow Qt's code, which keeps the corners x1, y1
+// and x2, y2 = x1+width-1, y1+height-1, so they agree with Qt for negative
+// sizes too (geometry_manual_test.go compares them with Qt's).
 
-// Contains reports whether p lies inside the rectangle.
-func (r QRect) Contains(p QPoint) bool {
-	return !r.IsEmpty() && p.X >= r.X && p.X < r.X+r.Width && p.Y >= r.Y && p.Y < r.Y+r.Height
+// Center returns the centre point: Qt's (x1+x2)/2, rounded toward zero.
+func (r QRect) Center() QPoint {
+	return QPoint{int((int64(r.X) + int64(r.Right())) / 2), int((int64(r.Y) + int64(r.Bottom())) / 2)}
 }
 
-// Intersects reports whether the rectangles overlap.
+// span returns the inclusive range a rectangle side covers, as QRect does
+// for a negative size (x2 < x1-1); it is empty (lo > hi) for a zero size.
+func span(x1, x2 int) (lo, hi int) {
+	if x2 < x1-1 {
+		return x2 + 1, x1 - 1
+	}
+	return x1, x2
+}
+
+// Contains reports whether p lies inside the rectangle (on its edge
+// included), as QRect::contains(p).
+func (r QRect) Contains(p QPoint) bool {
+	l, rr := span(r.X, r.Right())
+	t, b := span(r.Y, r.Bottom())
+	return p.X >= l && p.X <= rr && p.Y >= t && p.Y <= b
+}
+
+// Intersects reports whether the rectangles overlap, as QRect::intersects:
+// a null rectangle (no width and no height) never does; otherwise each side
+// is normalised as for Contains, with no check that it is empty, so a
+// rectangle with only a zero width or height can, as in Qt.
 func (r QRect) Intersects(o QRect) bool {
-	return !r.IsEmpty() && !o.IsEmpty() && r.X < o.X+o.Width && o.X < r.X+r.Width && r.Y < o.Y+o.Height && o.Y < r.Y+r.Height
+	if r.Width == 0 && r.Height == 0 || o.Width == 0 && o.Height == 0 {
+		return false
+	}
+	l1, r1 := span(r.X, r.Right())
+	l2, r2 := span(o.X, o.Right())
+	t1, b1 := span(r.Y, r.Bottom())
+	t2, b2 := span(o.Y, o.Bottom())
+	return l1 <= r2 && l2 <= r1 && t1 <= b2 && t2 <= b1
 }
 
 // Translated returns the rectangle moved by d.
@@ -93,16 +121,30 @@ func (r QRect) ToF() QRectF {
 	return QRectF{float64(r.X), float64(r.Y), float64(r.Width), float64(r.Height)}
 }
 
-// Contains reports whether p lies inside the rectangle.
+// Contains reports whether p lies inside the rectangle (on its edge
+// included), as QRectF::contains(p): never for a rectangle of no width or
+// height, and over the covered area for a negative size.
 func (r QRectF) Contains(p QPointF) bool {
-	return p.X >= r.X && p.X <= r.X+r.Width && p.Y >= r.Y && p.Y <= r.Y+r.Height
+	inside := func(x, w, px float64) bool {
+		l, rr := x, x
+		if w < 0 {
+			l += w
+		} else {
+			rr += w
+		}
+		return l != rr && px >= l && px <= rr
+	}
+	return inside(r.X, r.Width, p.X) && inside(r.Y, r.Height, p.Y)
 }
 
-// ToRect rounds to a QRect.
+// ToRect rounds to a QRect as Qt does: the origin to the nearest integer,
+// and the size so that no edge moves by more than 0.75.
 func (r QRectF) ToRect() QRect {
-	return QRect{roundInt(r.X), roundInt(r.Y), roundInt(r.Width), roundInt(r.Height)}
+	x, y := roundInt(r.X), roundInt(r.Y)
+	return QRect{x, y, roundInt(r.Width + (r.X-float64(x))/2), roundInt(r.Height + (r.Y-float64(y))/2)}
 }
 
+// roundInt is Qt's qRound: halves away from zero.
 func roundInt(f float64) int {
 	if f < 0 {
 		return int(f - 0.5)

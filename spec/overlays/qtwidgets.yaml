@@ -1062,6 +1062,7 @@ QMdiSubWindow:
   systemMenu: { return: borrowed }
 
 QGraphicsScene:
+  drawItems: { skip: "a C array of items; reimplement QGraphicsItem.Paint instead" }
   addRect(const QRectF&, const QPen&, const QBrush&):
     name: AddRect
     return: parented
@@ -1163,6 +1164,7 @@ QGraphicsScene:
   style: { return: borrowed }
 
 QGraphicsView:
+  drawItems: { skip: "a C array of items; reimplement QGraphicsItem.Paint instead" }
   setSceneRect(qreal, qreal, qreal, qreal): { skip: "use the QRectF overload" }
   centerOn(qreal, qreal): { skip: "use the QPointF overload" }
   centerOn(const QGraphicsItem*): { name: CenterOnItem }

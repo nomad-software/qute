@@ -13,6 +13,10 @@ import (
 // newApp writes a known-good starter: main.go, a window, a behaviour test and
 // a screenshot test. If dir is not inside a Go module, it also writes go.mod.
 func newApp(dir, module string) error {
+	if a, _ := filepath.Abs(dir); module != "" && insideModule(a) {
+		// the module path only goes into a new go.mod
+		return fmt.Errorf("%s is inside an existing Go module, so no go.mod is written and the module path %q would be ignored; leave it out", dir, module)
+	}
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
 	}

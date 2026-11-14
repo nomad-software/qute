@@ -80,7 +80,8 @@ func setMemory(h *Handle, n int64) {
 	}
 }
 
-// untrackMemory forgets the bytes of a handle that died through Delete().
+// untrackMemory forgets the bytes of a handle that died (markDead): through
+// Delete(), Expire or Qt destroying it.
 func untrackMemory(h *Handle) {
 	e := h.ext.Load()
 	if e == nil {

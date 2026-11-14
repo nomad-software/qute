@@ -41,6 +41,7 @@ type CookieFilterRequest struct {
 //
 // Qt docs: https://doc.qt.io/qt-6/qwebenginecookiestore.html#setCookieFilter
 func (this *QWebEngineCookieStore) SetCookieFilter(filter func(r CookieFilterRequest) bool) {
+	rt.GUIOnly("QWebEngineCookieStore.SetCookieFilter")
 	self := rt.Use(unsafe.Pointer(this), "QWebEngineCookieStore.SetCookieFilter")
 	var id uintptr
 	if filter != nil {

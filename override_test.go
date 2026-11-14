@@ -54,6 +54,14 @@ func TestOverrideEvent(t *testing.T) {
 		if n := handleOf(e).OverrideCount(); n != 0 {
 			t.Errorf("OverrideCount after nil = %d", n)
 		}
+		if handleOf(e).SlotCleanupSet() {
+			t.Error("the dispatch id's cleanup outlived the last override")
+		}
+		e.OverrideKeyPressEvent(func(super func(*qtgui.QKeyEvent), ev *qtgui.QKeyEvent) { super(ev) })
+		if !handleOf(e).SlotCleanupSet() {
+			t.Error("an override set again has no cleanup for its dispatch id")
+		}
+		e.OverrideKeyPressEvent(nil)
 	})
 }
 

@@ -16,10 +16,10 @@ wants an array or also reads the value.
 
 | | Count |
 | --- | --- |
-| Bound constructors, methods and functions | 12285 |
+| Bound constructors, methods and functions | 12286 |
 | of which Full forms (every argument, defaults included) | 776 |
 | Plain-object results that depend on their receiver | 101 |
-| Skipped on purpose (with reasons below) | 969 |
+| Skipped on purpose (with reasons below) | 974 |
 | Classes Go can subclass | 237 |
 | Classes Go cannot subclass (with reasons below) | 32 |
 | Virtuals Go cannot override (with reasons below) | 40 |
@@ -50,7 +50,7 @@ These bind once the generator learns the type. Counts by type:
 ## Skipped: missing type support, by class (0)
 
 
-## Skipped on purpose (969)
+## Skipped on purpose (974)
 
 
 ### QAbstractAnimation
@@ -310,7 +310,7 @@ These bind once the generator learns the type. Counts by type:
 ### QDataStream
 
 - `QDataStream::QDataStream(QByteArray *, OpenMode flags)`: skipped by overlay (on purpose: the stream keeps a pointer to the byte array, which Go cannot keep alive; use NewQDataStreamWithIODevice over a QBuffer (NewQBuffer, then Data()))
-- `QDataStream & QDataStream::readBytes(char *&, qint64 & len)`: on purpose: returns memory allocated with new[]; use the QByteArray overload
+- `QDataStream & QDataStream::readBytes(char *&, qint64 & len)`: skipped by overlay (returns memory allocated with new[]; use the QByteArray overload)
 
 ### QDate
 
@@ -586,6 +586,11 @@ These bind once the generator learns the type. Counts by type:
 ### QImageCapture
 
 - `void QImageCapture::setResolution(int width, int height)`: on purpose: plain-number twin of the struct overload
+
+### QInputDevice
+
+- `QInputDevice::QInputDevice(const QInputDevice &)`: deprecated or variadic
+- `QInputDevice::QInputDevice(QInputDevice &&)`: deprecated or variadic
 
 ### QInputDialog
 
@@ -902,6 +907,7 @@ These bind once the generator learns the type. Counts by type:
 
 ### QOpenGLPaintDevice
 
+- `QOpenGLPaintDevice::QOpenGLPaintDevice(const QOpenGLPaintDevice &)`: deprecated or variadic
 - `QOpenGLPaintDevice::QOpenGLPaintDevice(int width, int height)`: on purpose: plain-number twin of the struct overload
 
 ### QOpenGLPixelTransferOptions
@@ -934,17 +940,17 @@ These bind once the generator learns the type. Counts by type:
 - `void QOpenGLShaderProgram::setAttributeBuffer(const char * name, GLenum type, int offset, int tupleSize, int stride = …)`: skipped by overlay (use AttributeLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::enableAttributeArray(const char * name)`: skipped by overlay (use AttributeLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::disableAttributeArray(const char * name)`: skipped by overlay (use AttributeLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x2 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x3 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x4 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x2 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x3 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x4 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x2 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x3 & value)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[2][2] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[3][3] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
-- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[4][4] value)`: on purpose: a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x2 & value)`: skipped by overlay (a template class; use QOpenGLFunctions.GlUniformMatrix2fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x3 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x3fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x4 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x4fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x2 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x2fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x3 & value)`: skipped by overlay (a template class; use QOpenGLFunctions.GlUniformMatrix3fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x4 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x4fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x2 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x2fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix4x3 & value)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x3fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[2][2] value)`: skipped by overlay (a C array; use QOpenGLFunctions.GlUniformMatrix2fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[3][3] value)`: skipped by overlay (a C array; use QOpenGLFunctions.GlUniformMatrix3fv)
+- `void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat[4][4] value)`: skipped by overlay (a C array; use SetUniformMatrix4x4)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLfloat value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLint value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, GLuint value)`: skipped by overlay (use UniformLocation(name) with the location overload)
@@ -959,41 +965,41 @@ These bind once the generator learns the type. Counts by type:
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const QPointF & point)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const QSize & size)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const QSizeF & size)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x2 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x3 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x4 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x2 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x3 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x4 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix4x2 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix4x3 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x2 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix2fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x3 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x3fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix2x4 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x4fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x2 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x2fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x3 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix3fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix3x4 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x4fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix4x2 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x2fv)
+- `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix4x3 & value)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x3fv)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const QMatrix4x4 & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const GLfloat[2][2] value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const GLfloat[3][3] value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const GLfloat[4][4] value)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValue(const char * name, const QTransform & value)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 * values, int count)`: on purpose: a template class; use QMatrix4x4
-- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 * values, int count)`: on purpose: a template class; use QMatrix4x4
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 * values, int count)`: skipped by overlay (a template class; use QOpenGLFunctions.GlUniformMatrix2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x3fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix2x4fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 * values, int count)`: skipped by overlay (a template class; use QOpenGLFunctions.GlUniformMatrix3fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix3x4fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 * values, int count)`: skipped by overlay (a template class; use QOpenGLExtraFunctions.GlUniformMatrix4x3fv)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const GLfloat * values, int count, int tupleSize)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const GLint * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const GLuint * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QVector2D * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QVector3D * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QVector4D * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x2 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x3 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x4 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x2 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x3 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x4 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix4x2 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
-- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix4x3 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x2 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x3 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x3fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix2x4 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix2x4fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x2 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x3 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLFunctions.GlUniformMatrix3fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix3x4 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix3x4fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix4x2 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x2fv)
+- `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix4x3 * values, int count)`: skipped by overlay (a template class; use UniformLocation(name) with QOpenGLExtraFunctions.GlUniformMatrix4x3fv)
 - `void QOpenGLShaderProgram::setUniformValueArray(const char * name, const QMatrix4x4 * values, int count)`: skipped by overlay (use UniformLocation(name) with the location overload)
 - `bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType type, const QString & source)`: on purpose: same Go signature as another overload (often a QStringView twin)
 - `bool QOpenGLShaderProgram::addCacheableShaderFromSourceCode(QOpenGLShader::ShaderType type, const QString & source)`: on purpose: same Go signature as another overload (often a QStringView twin)
@@ -1173,6 +1179,11 @@ These bind once the generator learns the type. Counts by type:
 ### QPlaybackOptions
 
 - `void QPlaybackOptions::swap(QPlaybackOptions & other)`: on purpose: C++ swap; swap the Go variables instead
+
+### QPointingDevice
+
+- `QPointingDevice::QPointingDevice(const QPointingDevice &)`: deprecated or variadic
+- `QPointingDevice::QPointingDevice(QPointingDevice &&)`: deprecated or variadic
 
 ### QProcess
 
@@ -1662,11 +1673,11 @@ These bind once the generator learns the type. Counts by type:
 
 ### QGraphicsScene
 
-- `void QGraphicsScene::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options, QWidget * widget = …)`: parameter items: on purpose: a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)
+- `void QGraphicsScene::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options, QWidget * widget = …)`: skipped by overlay (a C array of items; reimplement QGraphicsItem.Paint instead)
 
 ### QGraphicsView
 
-- `void QGraphicsView::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options)`: parameter items: on purpose: a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)
+- `void QGraphicsView::drawItems(QPainter * painter, int numItems, QGraphicsItem *[] items, const QStyleOptionGraphicsItem[] options)`: skipped by overlay (a C array of items; reimplement QGraphicsItem.Paint instead)
 
 ### QIODevice
 

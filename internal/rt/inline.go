@@ -44,12 +44,19 @@ func newInline(p unsafe.Pointer, class string, size int) *Handle {
 
 // newInlineCopy is newInline without its dependencies.
 func newInlineCopy(p unsafe.Pointer, class string, size int) *Handle {
-	buf := make([]uint64, (size+7)/8) // pointer-free and 8-byte aligned
-	dst := unsafe.Pointer(unsafe.SliceData(buf))
-	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
+	dst := inlineBytes(p, size)
 	h := newHandle(dst, class, KindValue, Owned, nil)
 	h.inline = true
 	return h
+}
+
+// inlineBytes copies the size bytes of the value at p into Go memory that
+// holds no pointers (C++ may be given it) and is 8-byte aligned.
+func inlineBytes(p unsafe.Pointer, size int) unsafe.Pointer {
+	buf := make([]uint64, (size+7)/8)
+	dst := unsafe.Pointer(unsafe.SliceData(buf))
+	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
+	return dst
 }
 
 // maxInlineDeps is how many dependencies an inline argument carries
@@ -75,16 +82,12 @@ type viewPair[T any] struct {
 // newInlineView copies the value at p into Go memory and returns its handle
 // and wrapper, made together, with the wrapper cached as View would.
 func newInlineView[T any](p unsafe.Pointer, class string, size int) (*Handle, *T) {
-	buf := make([]uint64, (size+7)/8) // pointer-free and 8-byte aligned
-	dst := unsafe.Pointer(unsafe.SliceData(buf))
-	copy(unsafe.Slice((*byte)(dst), size), unsafe.Slice((*byte)(p), size))
+	dst := inlineBytes(p, size)
 	x := new(viewPair[T])
 	h, v := &x.h, &x.v
 	h.init(dst, class, KindValue, Owned, nil)
 	h.inline = true
-	*RefOf(unsafe.Pointer(v)) = Ref{H: h, P: dst}
-	h.cache1[0] = v
-	h.cache = h.cache1[:1]
+	cacheFirst(h, v, dst)
 	return h, v
 }
 

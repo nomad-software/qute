@@ -169,6 +169,9 @@ func TestOffThreadCallPanics(t *testing.T) {
 		"ObjectName":     func() { _ = w.ObjectName() },
 		"qutetest.Click": func() { qutetest.Click(w) },
 		"qute.Tree":      func() { qute.Tree(w) },
+		"qtgui.NewQImageFromBytes": func() {
+			qtgui.NewQImageFromBytes(make([]byte, 4), 1, 1, 4, qtgui.QImageFormat_ARGB32)
+		},
 	} {
 		func() {
 			defer func() {

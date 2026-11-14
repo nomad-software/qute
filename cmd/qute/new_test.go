@@ -33,3 +33,19 @@ func TestNewAppFiles(t *testing.T) {
 		t.Error("newApp wrote into a directory that is not empty")
 	}
 }
+
+// Inside an existing module no go.mod is written, so a module path would be
+// ignored: newApp says so instead of dropping it.
+func TestNewModuleInsideModule(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/outer\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	dir := filepath.Join(root, "app")
+	if err := newApp(dir, "example.com/inner"); err == nil || !strings.Contains(err.Error(), "would be ignored") {
+		t.Fatalf("newApp inside a module with a module path: %v, want an error", err)
+	}
+	if err := newApp(dir, ""); err != nil {
+		t.Fatalf("newApp inside a module: %v", err)
+	}
+}

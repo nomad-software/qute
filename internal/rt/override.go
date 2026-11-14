@@ -77,10 +77,18 @@ func Override(wrapper unsafe.Pointer, method, name string, f any) {
 	case has && e.selfSlot == 0:
 		e.selfSlot = newSlot(h)
 		newID = e.selfSlot
+		// as SetSelf: the death notice or the handle's collection drops it
+		e.slotCleanup, e.hasSlotCleanup = runtime.AddCleanup(h, dropSlot, newID), true
 	case !has && sub.self == nil && e.selfSlot != 0:
 		// nothing left to dispatch to: drop the id, so the object is no
 		// longer anchored for it (and can be collected as before)
 		oldID, e.selfSlot = e.selfSlot, 0
+		if e.hasSlotCleanup {
+			// its cleanup too, or setting and clearing an override again
+			// and again would pile them up on the handle
+			e.slotCleanup.Stop()
+			e.hasSlotCleanup = false
+		}
 		sub.overrides = nil
 	}
 	id := e.selfSlot
@@ -99,8 +107,6 @@ func Override(wrapper unsafe.Pointer, method, name string, f any) {
 	h.mu.Unlock()
 
 	if newID != 0 {
-		// as SetSelf: the death notice or the handle's collection drops it
-		runtime.AddCleanup(h, dropSlot, newID)
 		h.anchorPin()
 	}
 	if oldID != 0 {
@@ -124,6 +130,15 @@ func (h *Handle) OverrideCount() int {
 		}
 	}
 	return n
+}
+
+// SlotCleanupSet reports whether the handle has a cleanup registered for an
+// override-only dispatch id (tests): clearing the last override stops it.
+func (h *Handle) SlotCleanupSet() bool {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	e := h.ext.Load()
+	return e != nil && e.hasSlotCleanup
 }
 
 // IsShim reports whether a qute constructor built the object as its class's

@@ -1621,14 +1621,16 @@ void qute_QDateEdit_userDateChanged_1(void *self, void * a0);
 void * qute_QDateEdit_userDateChanged(void *self, uintptr_t id);
 
 // QDateTimeEdit
-void * qute_QDateTimeEdit_new_1(void * a0);
+void * qute_QDateTimeEdit_new(void * a0);
+void * qute_QDateTimeEdit_new_1(void * a0, void * a1);
 void * qute_QDateTimeEdit_new_2(void * a0, void * a1);
 void * qute_QDateTimeEdit_new_3(void * a0, void * a1);
-void * qute_QDateTimeEdit_new_4(void * a0, void * a1);
+void * qute_QDateTimeEdit_new_4(void * a0, int64_t a1, void * a2);
 void * qute_QDateTimeEdit_new_shim(void * a0);
 void * qute_QDateTimeEdit_new_shim_1(void * a0, void * a1);
 void * qute_QDateTimeEdit_new_shim_2(void * a0, void * a1);
 void * qute_QDateTimeEdit_new_shim_3(void * a0, void * a1);
+void * qute_QDateTimeEdit_new_shim_4(void * a0, int64_t a1, void * a2);
 void qute_QDateTimeEdit_shim_init(void *self, uintptr_t id, const uint64_t *mask);
 qute_size qute_QDateTimeEdit_super_0(void *self);
 void qute_QDateTimeEdit_super_1(void *self);

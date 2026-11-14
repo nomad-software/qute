@@ -118,7 +118,6 @@ var deliberateBases = map[string]string{
 	"QAbstractUndoItem":           "custom undo items need C++ subclassing",
 	"QPermission":                 "a templated API",
 	"QLatin1String":               "use the string overload",
-	"QFunctionPointer":            "C function pointer",
 	"QAccessibilityHints":         "the accessibility API is not bound",
 	"QAccessibleInterface":        "the accessibility API is not bound",
 	"QDebug":                      "debug streams; use fmt with the Go values",
@@ -135,7 +134,6 @@ var deliberateBases = map[string]string{
 	"QWebChannel":                 "QtWebChannel is not bound",
 	"QPrinter":                    "QtPrintSupport is not bound",
 	"QRhi":                        "Qt's rendering hardware interface is not bound",
-	"QAbstractVideoBuffer":        "custom video buffers need C++ subclassing",
 	"QRawFont":                    "low-level font internals",
 	"Qt::Disambiguated_t":         "a tag type that only picks an overload",
 	"QFontVariableAxis":           "low-level font internals",
@@ -210,12 +208,10 @@ func deliberate(can, base string, ptr, ref, rref, ret bool) string {
 		return "a map keyed by a value class; use the single-tag methods"
 	case strings.Contains(can, "[") && (strings.Contains(can, "char") || strings.HasPrefix(can, "uchar")):
 		return "a C array; use the string or byte-array form"
-	case strings.Contains(can, "[") && strings.Contains(can, "float"):
-		return "a C array; use the QMatrix4x4 overload (SetUniformMatrix4x4)"
 	case strings.Contains(can, "["):
-		return "a C array of objects; reimplement the per-item method instead (QGraphicsItem.Paint)"
+		return "a C array"
 	case base == "char" && ptr && ref:
-		return "returns memory allocated with new[]; use the QByteArray overload"
+		return "returns memory allocated with new[]"
 	case has("QMap<") && strings.Contains(base, "QDate,"):
 		return "a map keyed by a value class; use the single-key getter"
 	case base == "QTransform::Affine":

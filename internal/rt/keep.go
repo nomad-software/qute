@@ -115,6 +115,22 @@ func releaseHolds(keeper uint64) {
 	}
 }
 
+// moveHolds gives what the collected keeper from holds to to, an earlier
+// handle of the same object whose serial its registry entry still keeps
+// (replaceCollectedLocked), so the death notice releases both.
+func moveHolds(from, to uint64) {
+	keepMu.Lock()
+	if hs, ok := holds[from]; ok {
+		holds[to] = append(holds[to], hs...)
+		delete(holds, from)
+		if c, ok := keeperClass[from]; ok {
+			keeperClass[to] = c
+			delete(keeperClass, from)
+		}
+	}
+	keepMu.Unlock()
+}
+
 // A lend is a guarded use of an object that lasts one call (the device of
 // the painter qtgui.PaintOn draws with): cheaper than a keep, since the
 // caller's own reference keeps the object from the GC and the user is

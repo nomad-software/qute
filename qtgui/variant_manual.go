@@ -124,8 +124,13 @@ func VariantValue(v *qtcore.QVariant) any {
 // a copy of data, which holds height rows of bytesPerLine bytes each (rows
 // missing from a short slice are zero). Unlike NewQImageOverMemory
 // the image does not refer to data afterwards, so data may be any Go slice.
+// A negative size or bytesPerLine panics.
 func NewQImageFromBytes(data []byte, width, height, bytesPerLine int, format QImageFormat) *QImage {
-	rt.CheckThread("NewQImageFromBytes")
+	rt.GUIOnly("NewQImageFromBytes")
+	if width < 0 || height < 0 || bytesPerLine < 0 {
+		panic(fmt.Sprintf("NewQImageFromBytes: width %d, height %d, bytesPerLine %d; none may be negative "+
+			"(bytesPerLine is the length of one row in data)", width, height, bytesPerLine))
+	}
 	p := C.qute_gui_image_from_bytes((*C.char)(unsafe.Pointer(unsafe.SliceData(data))), C.ptrdiff_t(len(data)),
 		C.int(width), C.int(height), C.longlong(bytesPerLine), C.int64_t(format))
 	return rt.View[QImage](rt.WrapClass(p, "QImage", rt.NewOwned), p)
